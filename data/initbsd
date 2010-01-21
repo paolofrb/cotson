@@ -1,0 +1,73 @@
+#!/bin/bash
+
+simnow_dir="$1"
+machine_id="$2"
+
+if [[ ! -f "$simnow_dir/simnow" ]]; then
+    echo "Usage: $0 /path/to/simnow/dir machine"
+    exit 1
+fi
+simnow_dir="`cd $simnow_dir; pwd`"
+datadir=`pwd`
+
+bsd="$datadir/$machine_id.bsd"
+bsd0="$datadir/$machine_id-reset.bsd"
+if [[ ! -f "$bsd0" ]]; then
+    echo "Cannot find $bsd0"
+    exit 1
+fi
+if [[ -f $bsd ]]; then
+    echo "Found $bsd: skipping"
+    exit 0
+fi
+
+## Do we have a display?
+df="-c"
+if [[ "$DISPLAY" != "" ]]; then
+    df=""
+fi
+
+####################################################
+function run_1s {
+    echo "getruntimeduration" >> $1
+    echo "runtimeduration 1000000" >> $1
+    echo "go" >> $1
+}
+
+function send_root {
+    echo "keyboard.key 13 93" >> $1      ## "r"
+    echo "keyboard.key 18 98" >> $1      ## "o"
+    echo "keyboard.key 18 98" >> $1      ## "o"
+    echo "keyboard.key 14 94" >> $1      ## "t"
+    echo "keyboard.key 1C 9C" >> $1      ## <RET>
+}
+
+############# Create bsds ##########
+bootscript="$datadir/$machine_id-boot"
+
+echo "################ CREATING $bsd ############"
+cat > $bootscript << EOF
+open $bsd0
+SetLogConsoleEnabled 1
+ide:0.image master $datadir/karmic64.img
+ide:0.journal master on
+e1000.linkconnect down
+e1000.setmediatorhost off
+e1000.setmacaddress fa:cd:00:00:00:00
+EOF
+## Run 18s to boot
+for i in {1..18}; do 
+    run_1s $bootscript
+done
+## Send login and passwd (root/root) 
+send_root $bootscript
+run_1s $bootscript
+send_root $bootscript
+run_1s $bootscript
+
+## Save and quit (don't worry about crashes after save)
+echo "shell.save $bsd" >> $bootscript
+echo "quit" >> $bootscript
+( cd $simnow_dir; ./simnow $df -d -i $datadir -e $bootscript )
+
+exit 0

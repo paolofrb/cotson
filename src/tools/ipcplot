@@ -1,0 +1,351 @@
+#!/usr/bin/perl
+## (C) Copyright 2006-2009 Hewlett-Packard Development Company, L.P.
+## $Id$
+use DBI;
+use strict;
+
+$SIG{INT} = sub { die("caught ctrl-c, goodbye\n"); };
+
+my %BUILTINS = ( 
+    ipc     => "~'cpu.*\.instcount'",
+    idle    => "~'cpu.*\.idlecount'",
+	packets => "~'nic.*\.pack_read'",
+	bytes   => "~'nic.*\.bytes_read'"
+);
+my $builtins = join('|', (sort keys %BUILTINS));
+
+my $refresh = 30;
+my $qms = 10;
+my $qms2 = 10;
+my $met1match = $BUILTINS{ipc};
+my $met2match;
+my $host=$ARGV[0] or usage($0); shift;
+my $exp=$ARGV[0] or usage($0); shift;
+my $png;
+my $geometry = "800x300+0+0";
+my $pngsz = "1024,768";
+my $freq = "2.2"; # GHz
+my $nnodes = 0;
+my $mintime = 0.0;
+my $maxtime;
+my $nplot1 = 1;
+my $nplot2 = 1;
+my $scale = 1.0;
+my $scale2 = 1.0;
+my $diff = 0;
+my $accum = 0;
+my $verbose = 0;
+while ($#ARGV >= 0) {
+    my $arg = $ARGV[0];
+       if ($arg eq "-a")  { $accum = 1; }
+    elsif ($arg eq "-d")  { $diff = 1; }
+    elsif ($arg eq "-f")  { shift; $freq = $ARGV[0]; }
+    elsif ($arg eq "-g")  { shift; $qms = $ARGV[0]; }
+    elsif ($arg eq "-g2") { shift; $qms2 = $ARGV[0]; }
+    elsif ($arg eq "-m")  { shift; $met1match = "$ARGV[0]"; }
+    elsif ($arg eq "-m2") { shift; $met2match = "$ARGV[0]"; }
+    elsif ($arg eq "-mm") { shift; $met1match = $BUILTINS{$ARGV[0]} or usage($0); }
+    elsif ($arg eq "-mm2"){ shift; $met2match = $BUILTINS{$ARGV[0]} or usage($0); }
+    elsif ($arg eq "-nn") { $nnodes = 1; }
+    elsif ($arg eq "-np") { shift; $nplot1 = $ARGV[0]; }
+    elsif ($arg eq "-np2"){ shift; $nplot2 = $ARGV[0]; }
+    elsif ($arg eq "-p")  { shift; $png = $ARGV[0]; }
+    elsif ($arg eq "-ps") { shift; $pngsz = $ARGV[0]; }
+    elsif ($arg eq "-r")  { shift; $refresh = $ARGV[0]; }
+    elsif ($arg eq "-s")  { shift; $scale = $ARGV[0]; }
+    elsif ($arg eq "-s2") { shift; $scale2 = $ARGV[0]; }
+    elsif ($arg eq "-sz") { shift; $geometry = $ARGV[0]; }
+    elsif ($arg eq "-t")  { shift; ($mintime,$maxtime) = interval($ARGV[0]); }
+    elsif ($arg eq "-v")  { $verbose = 1; }
+    else { usage($0); }
+    shift;
+}
+
+die("ERROR: Granularity must be > 0\n") if ($qms <= 0 or $qms2 <= 0);
+
+my $maxnanos = $mintime;
+my $dbh;
+if ($host =~ s/file://) {
+    ## sqlite
+	print "Using SQLite connector\n";
+    $dbh = DBI->connect("dbi:SQLite:dbname=$host;");
+	$dbh->func('regexp',2,sub{my($r,$s)=@_;return $s=~/$r/;},'create_function'); 
+	$met1match=~s/~/REGEXP /;
+	$met2match=~s/~/REGEXP /;
+}
+else {
+	print "Using PostgreSQL connector\n";
+    my $username="cotson";
+    my $dbname="cotson";
+    $dbh = DBI->connect("dbi:Pg:dbname=$dbname;host=$host","$username");
+}
+
+my $expdesc = get_description($dbh);
+my $freq = get_frequency($dbh,$freq);
+
+## Metrics query
+my %MET1;
+my %MET2;
+my %NODES1;
+my %NODES2;
+my %TIMES;
+print "refresh rate is $refresh s\n";
+print "granularity is is $qms ms\n";
+print "ctrl-c to stop\n";
+my $q = $qms * 1e6;
+my $q2 = $qms2 * 1e6;
+do {
+    print "========================================\n";
+    print "start from time ",$maxnanos*1e-6," ms\n";
+
+	my $tmax = 0;
+	if ($met1match) {
+        my $query = metquery($exp,$met1match,$maxnanos,$maxtime);
+        my $sth = $dbh->prepare($query);
+		$sth->execute() or die "Query failed '$query'\n";
+        print "Query\n$query\ndone\n";
+	    my $tmx = fillmetric($sth,$mintime,\%MET1,\%NODES1,$q);
+		$tmax = $tmx > $tmax ? $tmx : $tmax;
+	}
+
+	if ($met2match) {
+        my $query = metquery($exp,$met2match,$maxnanos,$maxtime);
+        my $sth = $dbh->prepare($query);
+		$sth->execute() or die "Query failed '$query'\n";
+        print "Query\n$query\ndone\n";
+	    my $tmx = fillmetric($sth,$mintime,\%MET2,\%NODES2,$q2);
+		$tmax = $tmx > $tmax ? $tmx : $tmax;
+	}
+
+    if ($tmax > $maxnanos) {
+        $maxnanos = $tmax;
+		printmetric("exp-$exp.dat",\%MET1,\%NODES1,$scale);
+		printmetric("exp2-$exp.dat",\%MET2,\%NODES2,$scale2) if ($met2match);
+
+		## print gnuplot file
+        open FH, ">exp-$exp.gp";
+        if ($png) {
+            print FH "set terminal png giant notransparent size $pngsz\n";
+            print FH "set output '$png'\n";
+        }
+		else {
+            print FH "set terminal x11 \n";
+            # print FH "set terminal wxt \n";
+		}
+		my $opts = $accum ? "(cumulative)" : "";
+		$opts .= $diff ? "(differential)" : "";
+        print FH "set title \"$expdesc - $met1match - $met2match - $opts\"\n";
+        print FH "set grid\n";
+        printf FH "set xrange [%f:*]\n", $mintime*1e-6;
+        print FH "set yrange [0:*]\n";
+        print FH "set y2tics\n" if $met2match;
+        print FH "set ytics\n";
+        print FH "fx_x1y1(x)=x\n";
+        print FH "fy_x1y1(y)=y\n";
+        print FH "fx_x1y2(x)=x\n" if $met2match;
+        print FH "fy_x1y2(y)=y\n" if $met2match;
+        print FH "plot \\\n";
+		plotmetric(*FH,"exp-$exp.dat", \%NODES1,"x1y1",$nplot1,$nnodes);
+		plotmetric(*FH,"exp2-$exp.dat",\%NODES2,"x1y2",$nplot2,$nnodes) if $met2match;
+        print FH "     0 notitle\n";
+        print FH "pause ",$refresh+1,"\n" if (!$png and $refresh > 0);
+        # print FH "pause -1\n" if (!$png and !$refresh);
+        close FH;
+    }
+	if ($tmax) {
+        my $rr = (!$png && $refresh > 0);
+        print "start gnuplot\n";
+        system("gnuplot "
+		       . ($rr?"":"-persist ") 
+			   . "-geometry $geometry "
+		       . "exp-$exp.gp".($rr?"&":""));
+	}
+	else {
+	    print "no available experiment data\n";
+	}
+    sleep($refresh);
+}
+while($refresh > 0);
+
+$dbh->disconnect();
+exit(0);
+
+#######################################################################################
+sub usage 
+{
+    die "
+Usage: $0 host experiment_id  [options]
+    Options:
+          [-a]                    cumulative metric (not instantaneous per heartbeat)
+          [-d]                    differential metric per heartbeat
+          [-f freq]               clock frequencey in GHz, normally not needed
+          [-g granularity]        granularity (in ms)
+          [-m metricmatch]        sql expression to match metric name (e.g. \"~'cpu[0-7]\.instcount'\")
+          [-mm builtin-metric]    builtin metric one of {$builtins}
+          [-nn]                   plot a line at the number of nodes
+          [-np n]                 plot a line every np
+          [-p png]                produce a png
+          [-ps pngsize(x,y)]      pagesize for png
+          [-r refresh_rate]       refresh (in s)
+          [-s scale]              scale factor for y values
+          [-sz geometry]          window geometry for X11 terminal
+          [-t mintime]            start time (in ms)
+          [-v]                    verbose
+    \n";
+}
+
+## Exp description
+sub get_description 
+{
+    my $dbh = shift;
+    my $query = "SELECT description from experiments where experiment_id='$exp';";
+    my $h = $dbh->prepare($query);
+    my $v = $h->execute();
+    my $desc = ($h->fetchrow_array())[0] if ($v==0);
+    print "EXPERIMENT[$v] = $desc\n";
+    $h->finish();
+    return $desc;
+}
+
+## Frequency
+sub get_frequency 
+{
+    my $dbh = shift;
+    my $f = shift;
+    my $query = "SELECT value FROM metrics
+             WHERE metric_id IN (SELECT metric_id FROM metric_names WHERE name='cycles_per_usec')
+             AND heartbeat_id IN (SELECT heartbeat_id FROM heartbeats WHERE experiment_id=$exp LIMIT 1);";
+    my $h = $dbh->prepare($query);
+    my $v = $h->execute();
+    $f = (($h->fetchrow_array())[0])/1000.0 if ($v==0);
+    print "FREQUENCY = $f GHz\n";
+    $h->finish();
+    return $f;
+}
+
+sub metquery 
+{
+    my $exp = shift;
+    my $mm = shift;
+    my $t0 = shift;
+    my $t1 = shift;
+    $mm =~ s/>/\$/;
+    return "SELECT machine_id,nanos,name,value
+        FROM heartbeats NATURAL JOIN metrics NATURAL JOIN metric_names
+        WHERE experiment_id=$exp" .
+		($t0 ? " AND $t0 <= nanos ": "") .
+		($t1 ? " AND nanos < $t1 " : "") .
+        " AND metric_id IN (
+		      SELECT metric_id FROM metric_names natural join metrics
+              WHERE name $mm AND heartbeat_id IN (
+			      SELECT heartbeat_id FROM heartbeats WHERE experiment_id=$exp) )
+        ORDER BY nanos;";
+}
+
+
+sub interval 
+{
+    my $t = shift;
+	my ($t0,$t1) = split(':',$t);
+	return ($t0 * 1e6, $t1 * 1e6);
+}
+
+sub fillmetric
+{
+	my $sth = shift;
+    my $mintime = shift;
+    my $met = shift;
+    my $nodes = shift;
+    my $qq = shift;
+
+	my $tmax = $mintime;
+	my $nr = 0;
+    while (my @row = $sth->fetchrow_array()) {
+		$nr++;
+        my $n  = $row[0]; # nodeid
+        my $t1 = $row[1]; # nanos
+        my $m  = $row[2]; # metric name
+        my $x1 = $row[3]; # metric
+        $m =~ /cpu([0-9]+)\..*/; my $cpuid = $1;
+        my $ncpu = sprintf("%03d:%02d",$n,$cpuid);
+        my ($t0,$x0) = $nodes->{$ncpu} ? @{$nodes->{$ncpu}} : ($mintime,$x1);
+        my $dt = $t1 - $t0;
+        my $dx = $x1 - $x0;
+        my $ipc = $dt > 0 ? $dx/($dt*$freq) : 0;
+
+	    if ($diff) { $dx = $ipc = $x1; }
+	    if ($accum) { $dx = $ipc = $x1/$t1; }
+
+        my $tx0 = int($t0/$qq);
+        my $tx1 = int($t1/$qq);
+        if ($tx1 > $tx0) {
+            print "[$ncpu] ($t1 $x1) ($dt, $dx) [$tx0 $tx1) $ipc\n" if $verbose;
+            for (my $tx=$tx0; $tx<$tx1; ++$tx) {
+                $met->{$tx}{$ncpu} = $ipc;
+                $TIMES{$tx} = 1;
+            }
+            $nodes->{$ncpu}=[$t1,$x1,$ipc];
+        }
+        $tmax = $t1 if ($t1 > $tmax);
+    }
+	print "$nr rows\n";
+    # fill tail
+    foreach my $ncpu (keys %{$nodes}) {
+        my ($t0,$x0,$ipc) = @{$nodes->{$ncpu}};
+        my $tx0 = int($t0/$qq);
+        my $tx1 = int($tmax/$qq);
+        for (my $tx=$tx0; $tx<$tx1; ++$tx) {
+            $met->{$tx}{$ncpu} = $ipc;
+            $TIMES{$tx} = 1;
+        }
+    }
+	return $tmax;
+}
+
+sub printmetric
+{
+	my $outfile = shift;
+	my $met = shift;
+	my $nodes = shift;
+	my $sc = shift;
+
+    open FH, ">$outfile";
+    my $lastrow = "";
+    my $tlast = 0;
+    foreach my $tx (sort {$a<=>$b} keys %TIMES) {
+        my $cx = 0;
+        my $row = "";
+        foreach my $ncpu (sort keys %{$nodes}) {
+		    my $y = $met->{$tx}{$ncpu};
+            $cx += $y if $y;
+            $row .= sprintf "%g ", $cx * $sc;
+        }
+        my $t = $tx * $q * 1e-6; ## in ms
+        if ($row ne $lastrow) { print FH "$t $row\n"; $tlast = 0; }
+        else { $tlast = $t; }
+        $lastrow = $row;
+    }
+    print FH "$tlast $lastrow\n" if $tlast;
+    close FH;
+}
+
+sub plotmetric
+{
+	my $fh = shift;
+    my $data = shift;
+    my $nodes = shift;
+	my $axes = shift;
+	my $np = shift;
+	my $nnodes = shift;
+
+    my $nn = 0;
+    my $col = 2;
+    foreach my $ncpu (sort keys %{$nodes}) {
+        $nn++;
+        if (($nn % $np) == 0) {
+            print $fh "    '$data' using (fx_$axes(\$1)):(fy_$axes(\$$col)) with fsteps lw 2 notitle axes $axes,\\\n";
+        }
+        $col++;
+    }
+    print $fh "     $nn axes $axes notitle,\\\n" if ($nnodes);
+}

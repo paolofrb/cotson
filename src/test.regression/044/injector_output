@@ -1,0 +1,11 @@
+Hybrid flash map with PrefRead 0.85 strategy.
+Item size: 64
+Memory accesses in file: 26055
+END OF FILE: Reads: 17904 writes: 4921
+             Nanos from 12500 to 10000000
+             Cycles from 0 to 109369
+ending process
+Reads: 17904 writes: 4921
+END OF TRACE: Reads: 17904 writes: 4921
+              Nanos from 12500 to 10000000
+              Cycles from 0 to 109369
