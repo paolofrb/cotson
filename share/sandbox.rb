@@ -62,11 +62,14 @@ class Sandbox < Location
     debug2 "installing cluster.sh"
     
     File.open(data('cluster.sh'),"w") do |f|
-      f.puts "sudo /sbin/cotson_node_config #{@opts[:NODE]} #{@opts[:TOTAL]} | tee node_config.log 2>&1"
+      f.puts "xget ../data/node_config node_config"
+      f.puts "xget ../data/user_script user_script"
+      f.puts "chmod +x node_config user_script"
+
+      f.puts "sudo ./node_config #{@opts[:NODE]} #{@opts[:TOTAL]} | tee node_config.log 2>&1"
       f.puts "xput node_config.log #{@root}/data/node_config.log"
-      f.puts "xget ../data/user_script c"
-      f.puts "chmod 0755 ./c"
-      f.puts "./c #{@opts[:NODE]} #{@opts[:TOTAL]} | tee stdout.log 2>&1"
+
+      f.puts "./user_script #{@opts[:NODE]} #{@opts[:TOTAL]} | tee stdout.log 2>&1"
       f.puts "xput stdout.log #{@root}/data/stdout.log"
       s_id=0
       @opts[:subscribe_result].each do |s|
