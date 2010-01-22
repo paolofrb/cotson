@@ -35,10 +35,22 @@ run_twonodes:
 	@echo "Running a cluster of 2 nodes pinging each other"; \
 	echo "Simulation runs in background -- be patient (a few minutes)"; \
 	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
-	( ../../bin/cotson twonodes.in & ) ; \
+	/bin/rm -f run_twonodes.log; \
+	( ../../bin/cotson twonodes.in > run_twonodes.log 2>&1 & ) ; \
 	sleep 10; \
 	echo "We now fire a viewer of the two consoles"; \
 	./twonodes-ctrl view
+
+run_netperf:
+	@echo "Running the netperf benchmark (two nodes)"; \
+	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
+	tar xfj np.tbz -C /tmp; \
+	rm -rf run_netperf.log /tmp/netperf.db; \
+	( ../../bin/cotson netperf.in > run_netperf.log 2>& 1 & ); \
+	sleep 10; ./np-ctrl view; \
+	./tools/ipcplot file:/tmp/netperf.db 1 -g 0.1 -mm ipc -r 0; \
+	./tools/ipcplot file:/tmp/netperf.db 1 -g 0.1 -mm bytes -r 0
+
 
 run_sqlite:
 	@echo "Running 3 times an experiment (different samplers) writing to sqlite DB"; \

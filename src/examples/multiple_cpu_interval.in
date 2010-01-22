@@ -1,5 +1,5 @@
 options = {
-    fastforward="500M", -- skip initial 200ms (200M nanos) for programs to start
+    fastforward="500M", -- skip initial 500ms (500M nanos) for programs to start
 	max_samples=5, -- after some simulation samples, the simulation ends
 	sampler={ type="interval", functional="1M", warming="100k", simulation="100k", },
 		-- the sampler will execute warming, simulation and then functional for 

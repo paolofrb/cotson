@@ -1,5 +1,4 @@
-
-runid="twonodes"
+runid="np"
 tmpdir=os.getenv("PWD")
 -- data_dir="/home2/data/4.5.2pub"
 -- simnow_dir="/home/opt/cotson/tools/simnow/simnow-linux64-4.5.2pub"
@@ -7,21 +6,25 @@ tmpdir=os.getenv("PWD")
 -- mediator_file="/home/frb/cotson/trunk/abaeterno/mediator"
 -- Xvncwm="twm -display "
 
---copy_files_prefix="log."..os.time().."."
+-- copy_files_prefix="log."..os.time().."."
 copy_files_prefix=runid.."."
 debug=true
 
-control_script_file='twonodes-ctrl'
+control_script_file='np-ctrl'
 -- clean_sandbox=false
 
 cluster_nodes=2
 options = {
-	sampler={ type="no_timing", quantum="100k" },
-	heartbeat={ type="file_last" },
+	sampler={ type="interval", functional="20M",warming="100k",simulation="100k" },
+	-- sampler={ type="no_timing", quantum="10M" },
+	heartbeat={type="sqlite", dbfile="/tmp/netperf.db",experiment_id=1,experiment_description="netperf"},
 }
 
 mediator = {
 	heartbeat={ type="file_last" },
+	quantum_min=20,
+	quantum_max=2000,
+	slirp=false,
 }
 
 simnow.commands=function()
@@ -29,8 +32,8 @@ simnow.commands=function()
 	use_hdd('karmic64.img')
 	set_journal()
 	set_network()
-	execute('ping.sh')
-	subscribe_result('/tmp/ping.log')
+	execute('netperf.sh')
+	subscribe_result('/tmp/np.log')
 end
 
 function build()
@@ -55,7 +58,6 @@ function build()
 
 	cpu=get_cpu(0)
 	cpu:timer{ name='cpu0', type="timer0" }
-
 	mem=Memory{ name="main", latency=1 } 
 
 	cpu:instruction_cache(mem)
@@ -63,14 +65,6 @@ function build()
 	cpu:instruction_tlb(mem)
 	cpu:data_tlb(mem)
 end
-
---- This is for remote execution (with daemons). Edit as appropriate
--- tmpdir="/tmp"
--- scheduler = {
-	-- policy='load-balance', 
-	-- policy='round-robin', 
-	-- hosts = { 'hpl-bro10.esp.hp.com:4040', 'hpl-bro05.esp.hp.com:4040' }
--- } 
 
 -- vim:ft=lua
 
