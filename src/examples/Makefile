@@ -48,8 +48,8 @@ run_netperf:
 	rm -rf run_netperf.log /tmp/netperf.db; \
 	( ../../bin/cotson netperf.in > run_netperf.log 2>& 1 & ); \
 	sleep 10; ./np-ctrl view; \
-	./tools/ipcplot file:/tmp/netperf.db 1 -g 0.1 -mm ipc -r 0; \
-	./tools/ipcplot file:/tmp/netperf.db 1 -g 0.1 -mm bytes -r 0
+	../tools/ipcplot file:/tmp/netperf.db 1 -g 0.1 -mm ipc -r 0; \
+	../tools/ipcplot file:/tmp/netperf.db 1 -g 0.1 -mm packets -r 0
 
 
 run_sqlite:
