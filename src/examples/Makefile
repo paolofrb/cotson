@@ -5,7 +5,7 @@ all: build
 .PHONY: run run_%
 EXAMPLES= \
 	functional \
-	mem_tracer trace_stats  \
+	mem_tracer mem_tracer2 trace_stats  \
 	one_cpu_simple smarts dynamic multiple_cpu_interval \
 	twonodes \
 	tracer
@@ -23,6 +23,12 @@ run_mem_tracer:
 	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
 	../../bin/cotson mem_tracer.in; \
 	zless /tmp/mem_tracer.txt.gz
+
+run_mem_tracer2:
+	@echo "The mem_tracer2 outputs a memory trace to /tmp/mem_tracer2.txt.gz"; \
+	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
+	../../bin/cotson mem_tracer2.in; \
+	zless /tmp/mem_tracer2.txt.gz
 
 run_trace_stats:
 	@echo "The trace_stats example outputs a disassembled trace to "; \
@@ -48,8 +54,8 @@ run_netperf:
 	rm -rf run_netperf.log /tmp/netperf.db; \
 	( ../../bin/cotson netperf.in > run_netperf.log 2>& 1 & ); \
 	sleep 10; ./np-ctrl view; \
-	../tools/ipcplot file:/tmp/netperf.db 1 -g 0.1 -mm ipc -r 0; \
-	../tools/ipcplot file:/tmp/netperf.db 1 -g 0.1 -mm packets -r 0
+	sleep 30; ../tools/ipcplot file:/tmp/netperf.db 1 -g 0.1 -mm ipc -r 2; \
+	../tools/ipcplot file:/tmp/netperf.db 1 -g 0.1 -mm packets -r 2
 
 
 run_sqlite:
