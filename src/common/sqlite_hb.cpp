@@ -107,7 +107,7 @@ CREATE TABLE heartbeats (\
 	machine_id    integer NOT NULL,\
 	experiment_id integer REFERENCES experiments,\
 	nanos         int8,\
-	date          int8,\
+	date          DATETIME DEFAULT CURRENT_TIMESTAMP, \
 	CONSTRAINT non_repeated_heart_per_machine UNIQUE(heartbeat_seq,machine_id,experiment_id)\
 ); \
 CREATE INDEX heartbeats_nanos_idx ON heartbeats(nanos);\
