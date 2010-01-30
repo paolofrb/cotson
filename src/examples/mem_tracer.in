@@ -1,27 +1,26 @@
 TRACE_OUT='/tmp/mem_tracer.txt.gz'
 
+-- Uncomment to see the simnow window on current display
+-- one_node_script="run_interactive"
+-- display=os.getenv("DISPLAY")
+
 options = {
-	max_samples="5", -- after 5 simulation samples, the simulation ends
-	sampler={ type="simple", quantum="100k", },
-		-- simple means timing simulation is always on
+	-- Uncomment to run longer and skip 200ms
+	-- fastforward="200M",
+	-- max_samples="50",
+	max_samples="5",
+	sampler={ type="interval", functional="9700k", warming="100k", simulation="200k" },
 	heartbeat={ type="file_last", logfile="mem_tracer.log" }, 
-		-- one result file in mem_tracer.log
 }
 
-
--- change this to point to your bsd and hdd
--- you can use absolute paths here or else
--- placed the bsd and hdd in the data directory
--- of this distribution
 simnow.commands=function()
+	-- Uncomment to use a 4-core BSD
+	-- use_bsd('4p.bsd')
 	use_bsd('1p.bsd')
 	use_hdd('karmic64.img')
 	set_journal()
-	-- this next string is input by simulating
-	-- keystrokes. Our machine is in text mode
-	-- expecting a command and this next command
-	-- will execute a simple command
-	-- You do not need to issue the \n
+	-- Uncomment to run the 4xgcc script (4 parallel runs)
+	-- send_keyboard('cd /home/user; sh -x 4xgcc.sh')
 	send_keyboard('gcc -O3 -c -w /home/user/test.i')
 end
 
@@ -46,10 +45,8 @@ function build()
 	-- a trace of all memory accesses into the file 
 	-- mem_tracer.txt
 	trace=Tracer{ name="trace", trace_file=TRACE_OUT, next=mem } 
-	bus=Bus{ name="bus", protocol='MOESI', 
-		latency=25, bandwidth=4, next=trace } 
-	busT=Bus{ name="tlb_bus", protocol='MOESI', 
-		latency=25, bandwidth=4, next=mem }
+	bus=Bus{ name="bus", protocol='MOESI', latency=25, bandwidth=4, next=trace } 
+	busT=Bus{ name="tlb_bus", protocol='MOESI', latency=25, bandwidth=4, next=mem }
 
 	i=0
 	while i < cpus() do
