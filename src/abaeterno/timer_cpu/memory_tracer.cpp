@@ -30,7 +30,7 @@ public:
 	void simulation(const Instruction*);
 	void simple_warming(const Instruction*);
 	void full_warming(const Instruction*);
-	void addMemory(std::string,Memory::Interface::Shared); 
+	void addMemory(string,Memory::Interface::Shared); 
 
 protected:
 	void endSimulation();
@@ -42,8 +42,8 @@ private:
 	inline void dump(uint64_t, uint64_t, uint64_t, uint64_t, bool);
 
 	typedef Memory::Storage::Many Cache;
-	boost::shared_ptr<Cache> cache;
-	const std::string tracefile;
+	shared_ptr<Cache> cache;
+	const string tracefile;
 	uint64_t cycles;
 	uint64_t instructions;
 	uint64_t lru;
@@ -51,15 +51,16 @@ private:
 	static uint64_t timestamp;
 
 	bool shared;
-	static boost::shared_ptr<Cache> shared_cache;
-	static boost::scoped_ptr<DumpGzip> trace;
+	bool binary;
+	static shared_ptr<Cache> shared_cache;
+	static scoped_ptr<DumpGzip> trace;
 };
 
 registerClass<CpuTimer,MemoryTracer> memtracer_c("memtracer");
 
 // static members
-boost::shared_ptr<MemoryTracer::Cache> MemoryTracer::shared_cache;
-boost::scoped_ptr<DumpGzip> MemoryTracer::trace;
+shared_ptr<MemoryTracer::Cache> MemoryTracer::shared_cache;
+scoped_ptr<DumpGzip> MemoryTracer::trace;
 uint64_t MemoryTracer::timestamp = 0;
 
 MemoryTracer::MemoryTracer(Parameters& p) : CpuTimer(&cycles,&instructions),
@@ -70,14 +71,15 @@ MemoryTracer::MemoryTracer(Parameters& p) : CpuTimer(&cycles,&instructions),
 	mem_rd(0),
 	mem_wr(0),
 	access(0),
-	shared(p.get<bool>("shared"))
+	shared(p.get<bool>("shared")),
+	binary(p.has("binary")?p.get<bool>("binary"):false)
 {
 	add("instructions",instructions);
 	add("cycles",cycles);
 	add("mem_rd",mem_rd);
 	add("mem_wr",mem_wr);
 	add("access",access);
-	add_ratio("ipc","instructions","cycles");	
+	add_ratio("ipc","instructions","cycles");
 	add_ratio("miss_rate","mem_rd","access");
 
 	trace_needs.types=false;
@@ -122,10 +124,18 @@ void MemoryTracer::endSimulation()
 
 inline void MemoryTracer::dump(uint64_t ts, uint64_t a, uint64_t id, uint64_t cr3, bool w)
 {
-	 // do some packing (works up to 128 cores)
-	 uint8_t tmp = (static_cast<uint8_t>(id)&0x7f) | (static_cast<uint8_t>(w)<<7);
-	 (*trace) << ts << a << cr3 << tmp;
-	 // cout << ts << hex << " a " << a << " cr3 " <<  cr3 << " id " << id <<  " rw " << w << endl;
+	 if (binary)
+	 {
+	     // do some packing (works up to 128 cores)
+	     uint8_t tmp = (static_cast<uint8_t>(id)&0x7f) | (static_cast<uint8_t>(w)<<7);
+	     *(trace) << ts << a << cr3 << tmp;
+	 }
+	 else 
+	 {
+	     stringstream s;
+	     s << format("%10llu %s 0x%016X 0x%016X [%d]\n") % ts % (w?"w":"r") % a % cr3 % id;
+	     trace->as_text(s.str());
+	 }
 }
 
 inline void MemoryTracer::read(uint64_t ts, uint64_t a, uint64_t cr3)

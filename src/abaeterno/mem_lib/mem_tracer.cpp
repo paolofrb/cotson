@@ -12,8 +12,10 @@
 // $Id$
 #include "abaeterno_config.h"
 #include "memory_interface.h"
+#include "memory_trace.h"
 #include "liboptions.h"
 #include "lua_helpers.h"
+#include "cpu_timer.h"
 
 using namespace std;
 using namespace boost;
@@ -47,11 +49,12 @@ Tracer::Tracer(const Parameters& p) :
 	name=p.get<string>("name");
 }
 
+
 MemState Tracer::read(const Access& m, uint64_t tstamp, Trace& mt, MOESI_state ms) 
 {
 	stringstream s;
-	s << format("r 0x%016X 0x%016X %10llu\n") 
-		% m.phys % m.virt % tstamp;
+	s << format("%10llu r 0x%016X 0x%016X") % tstamp % m.phys % m.virt;
+	s << " [" << mt << "]\n";
 	gz.as_text(s.str());
 	return next->read(m,tstamp,mt,ms);;
 }
@@ -59,8 +62,8 @@ MemState Tracer::read(const Access& m, uint64_t tstamp, Trace& mt, MOESI_state m
 MemState Tracer::readx(const Access& m, uint64_t tstamp, Trace& mt, MOESI_state ms) 
 {
 	stringstream s;
-	s << format("x 0x%016X 0x%016X %10llu\n") 
-		% m.phys % m.virt % tstamp;
+	s << format("%10llu x 0x%016X 0x%016X") % tstamp % m.phys % m.virt;
+	s << " [" << mt << "]\n";
 	gz.as_text(s.str());
 	return next->readx(m,tstamp,mt,ms);;
 }
@@ -68,8 +71,8 @@ MemState Tracer::readx(const Access& m, uint64_t tstamp, Trace& mt, MOESI_state 
 MemState Tracer::write(const Access& m, uint64_t tstamp, Trace& mt, MOESI_state ms) 
 {
 	stringstream s;
-	s << format("w 0x%016X 0x%016X %10llu\n") 
-		% m.phys % m.virt % tstamp;
+	s << format("%10llu w 0x%016X 0x%016X") % tstamp % m.phys % m.virt;
+	s << " [" << mt << "]\n";
 	gz.as_text(s.str());
 	return next->write(m,tstamp,mt,ms);
 }
