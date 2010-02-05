@@ -17,6 +17,7 @@
 #include "switch.h"
 #include "stats.h"
 #include "timing_message.h"
+#include "log.h"
 
 #include <stdlib.h>
 #include <sys/types.h>
@@ -46,16 +47,14 @@ int ControlPacketProcessor::process(EventHandler *handler)
     uint16_t type = TimingMessage::type(packet_.buf());
     switch (type) {
         case TimingMessage::PortRequestMsg:
-// 			if (verbose_ > 1)
-//                 LOG("(CTRL) Port request from", Sockaddr::str(handler->from()));
+            LOG2("(CTRL) Port request from", Sockaddr::str(handler->from()));
 			if (!port_reply(handler))
 			    return -1;
             break;
 
         case TimingMessage::TimeStampMsg:
 			if (packet_.len() == TimeStamp::len()) {
-// 			    if (verbose_ > 1)
-//                     LOG("(CTRL) Timestamp from", Sockaddr::str(handler->from()));
+                LOG2("(CTRL) Timestamp from", Sockaddr::str(handler->from()));
 			    timestamp();
 			}
 			else 
@@ -65,8 +64,7 @@ int ControlPacketProcessor::process(EventHandler *handler)
 
         case TimingMessage::NodeStartMsg:
 			if (packet_.len() == TimeStamp::len()) {
-// 			    if (verbose_ > 1)
-//                     LOG("(CTRL) Node start from", Sockaddr::str(handler->from()));
+                LOG2("(CTRL) Node start from", Sockaddr::str(handler->from()));
 			    start_node();
 			}
 			else 
@@ -76,8 +74,7 @@ int ControlPacketProcessor::process(EventHandler *handler)
 
         case TimingMessage::NodeStopMsg:
 			if (packet_.len() == TimeStamp::len()) {
-// 			    if (verbose_ > 1)
-//                     LOG("(CTRL) Node stop from", Sockaddr::str(handler->from()));
+                LOG2("(CTRL) Node stop from", Sockaddr::str(handler->from()));
 			    stop_node();
 			}
 			else 
@@ -87,8 +84,7 @@ int ControlPacketProcessor::process(EventHandler *handler)
 
         case TimingMessage::TimeQueryMsg:
 			if (packet_.len() == TimeStamp::len()) {
-// 			    if (verbose_ > 1)
-//                     LOG("(CTRL) Time query from", Sockaddr::str(handler->from()));
+                LOG2("(CTRL) Time query from", Sockaddr::str(handler->from()));
 			    time_query();
 			}
 			else
@@ -178,9 +174,7 @@ Node::Ptr ControlPacketProcessor::process_timing_message()
 	// Register the new node in the switch
 	Node::Ptr node = switch_->register_node(nodeid);
     node->setSimtime(tstamp,seqno); // Set the node sim time
-//     if (verbose_ > 1)
-//         LOG("(CTRL) Timing Message: Nodeid", nodeid, "Time", tstamp, 
-// 		    "MAC", node->mac().str());
+    LOG2("(CTRL) Timing Message: Nodeid", nodeid, "Time", tstamp, "MAC", node->mac().str());
     return node;
 }
 

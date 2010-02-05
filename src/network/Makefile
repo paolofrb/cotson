@@ -25,19 +25,40 @@ distclean: clean
 
 # DO NOT DELETE
 
-decoder.o: decoder.h distorm_config.h wstring.h prefix.h textdefs.h x86defs.h
-decoder.o: insts.h dis_instructions.h operands.h
-dis_instructions.o: dis_instructions.h distorm_config.h decoder.h wstring.h
-dis_instructions.o: prefix.h insts.h textdefs.h x86defs.h
-distorm.o: distorm_config.h decoder.h wstring.h x86defs.h textdefs.h insts.h
-distorm.o: dis_instructions.h prefix.h
-insts.o: distorm_config.h insts.h dis_instructions.h decoder.h wstring.h
-insts.o: prefix.h
-operands.o: distorm_config.h operands.h decoder.h wstring.h prefix.h
-operands.o: dis_instructions.h x86defs.h textdefs.h insts.h
-prefix.o: prefix.h distorm_config.h decoder.h wstring.h textdefs.h x86defs.h
-prefix.o: insts.h dis_instructions.h
-textdefs.o: textdefs.h distorm_config.h wstring.h
-wstring.o: wstring.h distorm_config.h
-x86defs.o: x86defs.h distorm_config.h textdefs.h wstring.h insts.h
-x86defs.o: dis_instructions.h decoder.h prefix.h
+control_packet_processor.o: control_packet_processor.h packet_processor.h
+control_packet_processor.o: event_handler.h mpacket.h switch.h net_typedefs.h
+control_packet_processor.o: node.h stats.h log.h
+data_packet_processor.o: data_packet_processor.h packet_processor.h
+data_packet_processor.o: event_handler.h mpacket.h switch.h net_typedefs.h
+data_packet_processor.o: node.h stats.h log.h
+mediator.o: mediator_server.h reactor.h event_handler.h switch.h net_typedefs.h
+mediator.o: node.h mpacket.h stats.h packet_acceptor.h
+mediator.o: control_packet_processor.h packet_processor.h
+mediator.o: data_packet_processor.h slirp_acceptor.h vde_acceptor.h scheduler.h
+mediator.o: net_timing_model.h
+mediator_server.o: mediator_server.h reactor.h event_handler.h switch.h
+mediator_server.o: net_typedefs.h node.h mpacket.h stats.h packet_acceptor.h
+mediator_server.o: control_packet_processor.h packet_processor.h
+mediator_server.o: data_packet_processor.h slirp_acceptor.h vde_acceptor.h
+mediator_server.o: scheduler.h
+net_constant.o: net_timing_model.h net_typedefs.h
+net_dest_based.o: net_timing_model.h net_typedefs.h
+net_new_dest_based.o: net_timing_model.h net_typedefs.h
+net_simple_switch.o: net_timing_model.h net_typedefs.h
+net_timing_model.o: net_timing_model.h net_typedefs.h
+node.o: node.h net_typedefs.h stats.h
+packet_acceptor.o: reactor.h event_handler.h packet_processor.h mpacket.h
+packet_acceptor.o: switch.h net_typedefs.h node.h packet_acceptor.h
+packet_processor.o: packet_processor.h event_handler.h mpacket.h switch.h
+packet_processor.o: net_typedefs.h node.h
+reactor.o: reactor.h event_handler.h stats.h
+scheduler.o: scheduler.h net_typedefs.h mpacket.h node.h switch.h stats.h log.h
+slirp_acceptor.o: reactor.h event_handler.h packet_processor.h mpacket.h
+slirp_acceptor.o: switch.h net_typedefs.h node.h slirp_acceptor.h
+slirp_acceptor.o: ../slirp/libslirp.h
+stats.o: stats.h
+switch.o: switch.h net_typedefs.h node.h mpacket.h data_packet_processor.h
+switch.o: packet_processor.h event_handler.h scheduler.h stats.h
+switch.o: net_timing_model.h log.h
+vde_acceptor.o: reactor.h event_handler.h packet_processor.h mpacket.h switch.h
+vde_acceptor.o: net_typedefs.h node.h vde_acceptor.h

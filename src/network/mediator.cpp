@@ -35,7 +35,7 @@ using namespace std;
 namespace 
 {
 	option  o01("help",                    		 "This help");
-	option  o02("verbose",              "false", "Increase verbosity");
+	option  o02("verbose",                  "0", "Increase verbosity");
 	option  o03("quantum_min",            "1.0", "Minimum value for the quantum in us");
 	option  o04("quantum_max",         "1000.0", "Maximum value for the quantum in us");
 	option  o05("quantum_up",        "1.031250", "Quantum increase factor"); //==33/32
@@ -106,7 +106,7 @@ int main(int argc,char*argv[])
 		}
 		
 		//first we read all variables (most have defaults in options)
-		bool verbose= Option::get<bool>("verbose"); 
+		int verbose= Option::get<int>("verbose"); 
 		double quantum_min = Option::get<double>("quantum_min");
 		double quantum_max = Option::get<double>("quantum_max");
 		double quantum_up = Option::get<double>("quantum_up");

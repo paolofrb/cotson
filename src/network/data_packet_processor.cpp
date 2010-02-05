@@ -15,6 +15,7 @@
 #include "data_packet_processor.h"
 #include "switch.h"
 #include "stats.h"
+#include "log.h"
 
 #include <iostream>
 #include <string.h>
@@ -41,9 +42,7 @@ int DataPacketProcessor::process(EventHandler *handler)
 
     // Discard IPv6
     if (ntohs(eh->ether_type) == ETH_P_IPV6) { // 0x86dd
-		if (verbose_ > 0)
-            cout << "Ignore IPv6 packet from " << src.str() 
-		         << " to " << dst.str() << endl << flush;
+		LOG1("Ignore IPv6 packet from ",src.str(),"to", dst.str());
         return 0;
     }
 
@@ -51,12 +50,12 @@ int DataPacketProcessor::process(EventHandler *handler)
     bool from_slirp = (handler->type() == EventHandler::SLIRP);
     bool from_vde = (handler->type() == EventHandler::VDE);
     const sockaddr_in& from = *reinterpret_cast<const sockaddr_in*>(handler->from());
-//     if (!from_vde && !from_slirp && verbose_ > 1)
-//         LOG("(DATA) Peer", Sockaddr::str(from), 
-// 		    "src", src.str(),
-// 			"dst", dst.str(),
-// 			"type", eh->ether_type,
-// 			"size", packet_.len());
+     if (!from_vde && !from_slirp)
+         LOG2("(DATA) Peer", Sockaddr::str(from), 
+		    "src", src.str(),
+		    "dst", dst.str(),
+			"type", eh->ether_type,
+ 			"size", packet_.len());
 
     if (switch_->process_packet(packet_,from,src,dst,from_slirp,from_vde) == -1)
         return -1;
@@ -69,8 +68,7 @@ int DataPacketProcessor::send_data_packet(
     const Packet& packet,
     const char* description)
 {
-// 	if (verbose_ > 1)
-//         LOG("(DATA) Send ",description," len [",packet.len() ,"] to ",Sockaddr::str(to));
+   LOG2("(DATA) Send ",description," len [",packet.len() ,"] to ",Sockaddr::str(to));
 
     int num_bytes = 
 	    send_packet(data_handler_,
@@ -85,8 +83,7 @@ int DataPacketProcessor::send_vde_packet(
     const Packet& packet,
     const char* description)
 {
-// 	if (verbose_ > 1)
-//         LOG("(DATA) Send ",description," len [",packet.len() ,"]");
+    LOG2("(DATA) Send ",description," len [",packet.len() ,"]");
 
     int num_bytes = 
 	    send_packet(vde_handler_,
@@ -101,8 +98,7 @@ int DataPacketProcessor::send_slirp_packet(
     const Packet& packet,
     const char* description)
 {
-// 	if (verbose_ > 1)
-//         LOG("(DATA) Send ",description," len [",packet.len() ,"]");
+    LOG2("(DATA) Send ",description," len [",packet.len() ,"]");
 
     int num_bytes = 
 	    send_packet(slirp_handler_,

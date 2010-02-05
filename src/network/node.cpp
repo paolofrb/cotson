@@ -51,7 +51,6 @@ void Node::setSimtime(uint64_t st, uint16_t sn)
 	}
 	if (simtime_ == 0) {
 	    std::cout << "Node " << nodeid_ << " simtime " << st << std::endl;
-	    Stats::get().reset();
 	}
     realtime_ = Stats::get().elapsed();
 	if (st > simtime_) { // UDP packets may be OoO

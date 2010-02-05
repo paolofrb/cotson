@@ -15,6 +15,7 @@
 #include "scheduler.h"
 #include "switch.h"
 #include "stats.h"
+#include "log.h"
 
 using namespace std;
 
@@ -35,8 +36,7 @@ void Scheduler::schedule(const Packet& packet, const Node::Ptr node, uint64_t st
 {
 	uint64_t rt = Stats::get().elapsed();
     Stats::get().n_queued_packs_++;
-// 	if (verbose_ > 1)
-//         LOG("(SWITCH) Scheduling a packet on the queue at simtime",st,"realtime",rt);
+    LOG2("(SWITCH) Scheduling a packet on the queue at simtime",st,"realtime",rt);
 	boost::mutex::scoped_lock lk(qmutex_); // lock the queue
     messages_.insert(Message(packet,node,st,rt)); // push the message on the queue
 }
@@ -44,9 +44,9 @@ void Scheduler::schedule(const Packet& packet, const Node::Ptr node, uint64_t st
 pair<uint64_t,uint64_t> Scheduler::send_packets(uint64_t stime)
 {
 	boost::mutex::scoped_lock lk(qmutex_); // lock the queue
-//     uint32_t m0 = messages_.size();
-//     if (verbose_ > 1 && m0)
-//         LOG("(SWITCH) Releasing scheduled messages at",stime);
+    uint32_t m0 = messages_.size();
+    if (m0)
+        LOG2("(SWITCH) Releasing scheduled messages at",stime);
 
 	uint64_t np = 0;
 	for (MsgQueue::iterator i = messages_.begin(); i != messages_.end();) {
@@ -60,11 +60,9 @@ pair<uint64_t,uint64_t> Scheduler::send_packets(uint64_t stime)
 			np++;
 		}
 	}
-//     if (verbose_ > 1) {
-//         uint32_t m1 = messages_.size();
-//         if (m0 > 0 && m0 > m1) 
-//             LOG("(SWITCH) Time=",stime,"Msgs before=",m0,"Msgs after=",m1);
-//     }
+    uint32_t m1 = messages_.size();
+    if (m0 > 0 && m0 > m1) 
+        LOG2("(SWITCH) Time=",stime,"Msgs before=",m0,"Msgs after=",m1);
 	MsgQueue::iterator top = messages_.begin();
 	uint64_t tt = (top == messages_.end()) ? 0 : top->simtime();
 	return pair<uint64_t,uint64_t>(np,tt);

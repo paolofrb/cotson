@@ -18,6 +18,7 @@
 #include "scheduler.h"
 #include "stats.h"
 #include "net_timing_model.h"
+#include "log.h"
 
 #include "dump_gzip.h"
 #include "liboptions.h"
@@ -148,8 +149,7 @@ void Switch::erase_dup_nodes(const sockaddr_in &address)
 Node::Ptr Switch::register_node(const MacAddress& mac, const sockaddr_in &address)
 {
 	boost::mutex::scoped_lock lk(nmutex_); // lock the nodes
-// 	if (verbose_ > 1)
-//         LOG("(SWITCH) register mac",mac.str(),"to",Sockaddr::str(address));
+    LOG2("(SWITCH) register mac",mac.str(),"to",Sockaddr::str(address));
 
 	if (!mac) {
 	    // register a node with a new port and no mac
@@ -193,10 +193,9 @@ Node::Ptr Switch::register_node(const MacAddress& mac, const sockaddr_in &addres
     const sockaddr_in& oldaddr = node->data_addr();
     if (Sockaddr::equal(oldaddr,address)) {
         // node with same mac and same address
-//         if (verbose_ > 1)
-//             LOG("(SWITCH) Found mac",mac.str(),
-//                  "port",Sockaddr::str(address),
-//                  "nodeid",node->id());
+        LOG2("(SWITCH) Found mac",mac.str(),
+              "port",Sockaddr::str(address),
+              "nodeid",node->id());
 	    return node;
     }
 
@@ -254,9 +253,8 @@ void Switch::really_send(const Node::Ptr to_node, const Packet& packet)
 	    return;
     const sockaddr_in& to_addr = to_node->data_addr();
 	size_t l = packet.len();
-//     if (verbose_ > 1)
-//         LOG("(SWITCH) Send msg: len [", l ,"] to node ", 
-//             to_node->id(), "addr ", Sockaddr::str(to_addr));
+    LOG2("(SWITCH) Send msg: len [", l ,"] to node ", 
+          to_node->id(), "addr ", Sockaddr::str(to_addr));
 	throttle(l);
 	sent_packs_++;
     processor_->send_data_packet(to_addr,packet,"DATA fwd");
@@ -276,9 +274,8 @@ void Switch::send(const Node::Ptr to_node, const Packet& packet, uint64_t now)
         really_send(to_node, packet);
 	}
 	else {
-// 	    if (verbose_ > 1)
-//             LOG("(SWITCH) Schedule msg: len [", packet.len(),"] to node", to_node->id(),
-//                 "time", now , "+", delay);
+        LOG2("(SWITCH) Schedule msg: len [", packet.len(),"] to node", to_node->id(),
+            "time", now , "+", delay);
 
         uint64_t dest_simtime = now + delay;
         scheduler_->schedule(packet, to_node, dest_simtime);
@@ -297,8 +294,7 @@ bool Switch::send(const MacAddress& dst, const Packet& packet, uint64_t now)
 
 int Switch::broadcast(const MacAddress& src, const Packet& packet,uint64_t now)
 {
-//     if (verbose_ > 1)
-//         LOG("(SWITCH) broadcast", src.str());
+    LOG2("(SWITCH) broadcast", src.str());
 
 	broadcast_++;
     // send packets to all nodes
@@ -323,8 +319,7 @@ bool Switch::stop_node(Node& n)
         send_sync(true); // Force sync to avoid initial deadlock
     }
     // Mark the node as stopped
-//     if (verbose_ > 1)
-//         LOG("(SYNC) Stop node [", n.mac().str(), "]");
+    LOG2("(SYNC) Stop node [", n.mac().str(), "]");
     n.stop();
     sync_cluster(n.getSimtime());
     return rv;
@@ -338,8 +333,7 @@ bool Switch::heartbeat_node(Node& n)
         n.warning();
         rv = false;
     }
-//     if (verbose_ > 1)
-//         LOG("(SYNC) Hartbeat node [", n.mac().str(), "]");
+    LOG2("(SYNC) Hartbeat node [", n.mac().str(), "]");
 	n.start();
     sync_cluster(n.getSimtime());
 	return rv;
@@ -388,8 +382,7 @@ int Switch::process_packet(
     Stats::get().n_bytes_ += len;
     bool bcast = dst.is_broadcast();
 
-//     if (verbose_ > 1)
-//         LOG("(SWITCH) process_packet: src",src.str(), "dst",dst.str(), "len",len);
+    LOG2("(SWITCH) process_packet: src",src.str(), "dst",dst.str(), "len",len);
 
     // FIXME: Do not register MAC of empty packets to filter out simnow keepalives
     bool registered = from_vde || from_slirp || ((bcast||len>14) && register_node(src,address));
@@ -457,8 +450,7 @@ bool Switch::simtime_advance(uint64_t ntime)
 	    return false;
 	if (gt_ == 0)
 	    cout << "(SWITCH) Start synchronization [" << t0 << "," << t1 << "]" << endl;
-// 	if (verbose_ > 2)
-// 	    LOG("GT=",GT(),"next=",nextGT(),"nt=",ntime,"t0=",t0,"t1=",t1);
+ 	LOG3("GT=",GT(),"next=",nextGT(),"nt=",ntime,"t0=",t0,"t1=",t1);
 
 	// Time advances when the slowest node has reached the barrier 
 	bool advance = t0 >= nextGT();
@@ -526,13 +518,9 @@ uint64_t Switch::compute_quantum(uint64_t nsent, uint64_t pqmax)
 	else if (nq > qmax)
 	    nq = qmax;
 
-    if (verbose_ > 1 && (packs || lround(nq) != lround(quantum_)))
-        cout << "Time=" << qtime
-             << " Packs=" << lround(packs)
-             // << " [" << qmin_ << " " << qmax << " " << qup_ << " " << qdown_ << "]"
-             << " Duration=" << duration << " (q=" << q << ")"
-             << " (nq=" << nq << ") Quantum=" << lround(nq)
-             << endl;
+    if ((packs || lround(nq) != lround(quantum_)))
+		LOG2("Time=",qtime,"Packs=",lround(packs), 
+		     "Duration=",duration,"Quantum=",lround(nq));
 
     quantum_ = nq;
 	last_qtime_ = qtime;
@@ -569,10 +557,11 @@ inline void Switch::send_sync(bool force)
 	    return;
     GlobalTime tmsg(nextGT(),0,++seqno_);
     if (tmsg.sendto(sync_socket_,&sync_addr_) == tmsg.len()) {
+	    boost::mutex::scoped_lock lk(nmutex_); // lock the nodes
 		Stats::get().n_mcsync_++;
         last_sync_ = gt;
-//         if (verbose_ > 1 && gt > 0)
-//             LOG("(SYNC) GLOBAL TIME", gt, nextgt_, tmin_, tmax_, quantum_);
+        if (gt > 0)
+            LOG2("(SYNC) GLOBAL TIME", gt, nextgt_, tmin_, tmax_, quantum_);
     }
 	else
         cerr << "(SYNC) WARNING: Cannot send sync message: " << strerror(errno) << endl;

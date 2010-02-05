@@ -118,6 +118,7 @@ int MediatorServer::init()
 int MediatorServer::run()
 {
     // Enter in the reactors never ending loop
+	Stats::get().reset();
 	boost::thread ct(boost::bind(&Reactor::handle_events,ctrl_reactor_));
 	boost::thread dt(boost::bind(&Reactor::handle_events,data_reactor_));
 	ct.join();
