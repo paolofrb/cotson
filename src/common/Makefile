@@ -72,7 +72,7 @@ port.o: port.h
 sqlite_hb.o: error.h liboptions.h kill.h static_set.h lua_register.h ./lua.hpp
 sqlite_hb.o: units.h cast.h uint64_t_hash.h parameters.h param_factory.h
 sqlite_hb.o: options.h libmetric.h metric.h tagged_metric.h heartbeat.h
-sqlite_hb.o: aggregator.h
+sqlite_hb.o: aggregator.h fileutil.h
 sum_aggregator.o: aggregator.h metric.h liboptions.h kill.h static_set.h
 sum_aggregator.o: lua_register.h ./lua.hpp units.h cast.h uint64_t_hash.h
 sum_aggregator.o: parameters.h param_factory.h options.h

@@ -581,7 +581,8 @@ mem_lib/mem_tracer.o: ../common/lua.hpp ../common/units.h ../common/cast.h
 mem_lib/mem_tracer.o: ../common/uint64_t_hash.h ../common/parameters.h
 mem_lib/mem_tracer.o: ../common/param_factory.h ../common/options.h
 mem_lib/mem_tracer.o: lib/logger.h lib/selector.h main/cotson.h
-mem_lib/mem_tracer.o: lib/lua_helpers.h
+mem_lib/mem_tracer.o: lib/lua_helpers.h timer_cpu/cpu_timer.h lib/instruction.h
+mem_lib/mem_tracer.o: lib/simplevec.h hw_model/trace_needs.h lib/delegate.h
 mem_lib/mesi.o: lib/abaeterno_config.h mem_lib/mesi.h lib/memory_interface.h
 mem_lib/mesi.o: lib/memory_access.h ../common/dump_gzip.h ../common/read_gzip.h
 mem_lib/mesi.o: lib/inline.h lib/memory_trace.h ../common/libmetric.h
