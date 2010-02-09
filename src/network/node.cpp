@@ -50,7 +50,7 @@ void Node::setSimtime(uint64_t st, uint16_t sn)
 				  << std::endl;
 	}
 	if (simtime_ == 0) {
-	    std::cout << "Node " << nodeid_ << " simtime " << st << std::endl;
+	    std::cout << "Node " << nodeid_ << " initial simtime " << st << std::endl;
 	}
     realtime_ = Stats::get().elapsed();
 	if (st > simtime_) { // UDP packets may be OoO
@@ -83,6 +83,7 @@ std::ostream& operator<<(std::ostream& s,const Node& n)
 	         << " addr " << Sockaddr::str(n.data_addr())
 			 << " st " << n.getSimtime()
 			 << " rt " << n.getRealtime()
-			 << (n.running() ? " run " : " stop ");
+			 << (n.valid() ? " valid " : "")
+			 << (n.running() ? " run " : "");
 }
 

@@ -1,6 +1,7 @@
 SRCS = $(wildcard *.cpp)
 OBJS = $(SRCS:.cpp=.o)
-INCLUDE = -I. -I../common -I../libluabind -I/usr/include/lua5.1
+DEPINC = -I. -I../common 
+INCLUDE = $(DEPINC) -I../libluabind -I/usr/include/lua5.1
 DEFS = 
 
 all: mediator

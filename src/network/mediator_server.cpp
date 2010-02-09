@@ -69,6 +69,8 @@ void MediatorServer::register_timing_model(TimingModel* timing)
 
 int MediatorServer::init()
 {
+	Stats::get().reset(); // Reset stats
+
     // Register the data socket acceptor, control socket acceptor and the VDE socket acceptor
 	int pid = ::getpid();
 
@@ -118,7 +120,6 @@ int MediatorServer::init()
 int MediatorServer::run()
 {
     // Enter in the reactors never ending loop
-	Stats::get().reset();
 	boost::thread ct(boost::bind(&Reactor::handle_events,ctrl_reactor_));
 	boost::thread dt(boost::bind(&Reactor::handle_events,data_reactor_));
 	ct.join();

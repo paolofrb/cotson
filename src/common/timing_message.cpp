@@ -106,3 +106,8 @@ DataPort::DataPort(uint16_t p)
     data_.data_port = p;
     ::memset(bytes(),0,12);
 }
+
+ssize_t DataPort::sendto(int fd, const sockaddr_in* to) const
+{
+    return xsendto(fd,bytes(),len(),to);
+}

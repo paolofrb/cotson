@@ -106,6 +106,7 @@ public:
 	inline uint8_t* bytes() { return reinterpret_cast<uint8_t*>(&data_); }
 	inline const uint8_t* bytes() const { return reinterpret_cast<const uint8_t*>(&data_); }
     ssize_t sendto(int, const sockaddr_in*) const;
+	uint16_t port() const { return data_.data_port; }
 private:
     struct Data {
 	    uint8_t  srcdst[12];  // unused    -- 12B align 1

@@ -33,7 +33,7 @@ void Stats::reset()
 	n_queued_packs_ = last_queued_packs_ = n_q_ = 0;
 	n_mcsync_ = last_mcsync_ = 0;
 	simtime_ = simtime0_ = 0;
-    realtime_ = realtime0_ = 0;
+    realtime_ = realtime0_ = now();
 	last_rtime_ = 0;
 	last_stime_ = 0;
 }

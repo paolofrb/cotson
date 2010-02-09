@@ -27,6 +27,7 @@ public:
 	MacAddress(const uint8_t x[6]) { u64=0; ::memcpy(b,x,6); }
 	MacAddress(uint32_t b, uint32_t id) { u32[0]=htonl(b|(id>>16)); u32[1]=htonl(id<<16); }
 
+	inline uint8_t operator [](uint i) const { return b[i]; }
 	inline bool operator <(const MacAddress& t) const { return u64 < t.u64; }
 	inline bool operator ==(const MacAddress& t) const { return u64 == t.u64; }
 	inline bool operator !=(const MacAddress& t) const { return u64 != t.u64; }

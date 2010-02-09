@@ -1,0 +1,13 @@
+wd=os.getenv("PWD")
+mediator = {
+	verbose=3,
+	heartbeat={ type="file_last", logfile=wd.."/med-sim.log" },
+	slirp=false,
+	quantum_min=40,
+	quantum_max=40,
+	control_port=CPORT,
+	data_port=DPORT,
+	multicast_ip=MCIP,
+	multicast_port=MPORT,
+}
+
