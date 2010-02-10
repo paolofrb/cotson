@@ -53,6 +53,13 @@ class Sandbox < Location
     end
   end
 
+  def install_node_config
+    if @opts[:node_config]!=""
+        debug2 "installing user node configuration"
+        FileUtils.cp_r(@opts[:node_config],data('node_config'))
+    end
+  end
+
   def install_user_script
     debug2 "installing user script"
     FileUtils.cp_r(@opts[:user_script], data('user_script'))

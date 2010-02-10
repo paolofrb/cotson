@@ -100,12 +100,12 @@ begin
           :vncviewer, :xterm, :screen, :Xvnc, :Xvnc_args, :Xvncwm, 
           :simnow_dir, :simnow_dir_link,
           :abaeterno_so, :abaeterno_so_link,
-          :user_script, :clean_sandbox,
+          :user_script, :node_config, :clean_sandbox,
           :subscribe_result
 
         nsb=Sandbox.new(lua_defs,nopts,sbname(opts,"-node-#{node}"))
         nsb.install :abaeterno_in, :simnow_pre_cluster, :simnow_dir,
-          :abaeterno_so, :bsd, :hdd, :user_script, :cluster_sh
+          :abaeterno_so, :bsd, :hdd, :user_script, :node_config, :cluster_sh
 
         node_sandbox.push nsb
       end
