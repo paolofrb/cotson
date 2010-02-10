@@ -54,7 +54,7 @@ public:
     Node::Ptr register_node(const MacAddress&,const sockaddr_in &);
 
     // Registers a new node with the nodeid
-    Node::Ptr register_node(uint32_t);
+    Node::Ptr register_node(uint32_t,const sockaddr_in &);
 
     // Registers a new node with address:port
     Node::Ptr register_node(const sockaddr_in &);
@@ -178,6 +178,7 @@ private:
 	DumpGzip* const dump_; 
 	boost::mutex nmutex_;
 	uint16_t seqno_;
+	bool sync_started_;
     int verbose_;
     
     //Stats

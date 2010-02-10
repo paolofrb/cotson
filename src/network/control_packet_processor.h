@@ -34,12 +34,12 @@ public:
 
 private:
 	// timestamps, start/stop nodes
-	void timestamp();
-	void start_node();
-	void stop_node();
-    void time_query();
+	void timestamp(EventHandler *);
+	void start_node(EventHandler *);
+	void stop_node(EventHandler *);
+    void time_query(EventHandler *);
 	bool port_reply(EventHandler*);
-    Node::Ptr process_timing_message();
+    Node::Ptr process_timing_message(EventHandler *);
 
     const uint16_t control_port_;
     const uint16_t data_port_;

@@ -105,8 +105,9 @@ void Stats::update_time(uint64_t st)
 	uint64_t rt = now();
     if (simtime0_==0) {
 	   simtime0_ = last_stime_ = st;
-       realtime0_ = last_rtime_ = rt;
-	   cout << "Stats reset: simtime " << simtime0_ << " realtime " << realtime0_ << endl;
+       last_rtime_ = rt;
+	   cout << "Stats sim reset: simtime " << simtime0_ 
+	        << " realtime " << rt - realtime0_ << endl;
 	}
     simtime_ = st;
     realtime_ = rt;

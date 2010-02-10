@@ -65,7 +65,7 @@ Switch::Switch(
 		force_queue_(force_queue),
 	    gt_(0),nextgt_(0),tmin_(ULONG_MAX),tmax_(0),
 	    dump_(tracefile ? new DumpGzip(tracefile) : 0),
-		nmutex_(), seqno_(0), verbose_(v)
+		nmutex_(), seqno_(0), sync_started_(false), verbose_(v)
 {
     if (sync_socket_ < 0) 
 	    die("Cannot create sync socket");
@@ -149,31 +149,24 @@ void Switch::erase_dup_nodes(const sockaddr_in &address)
 Node::Ptr Switch::register_node(const MacAddress& mac, const sockaddr_in &address)
 {
 	boost::mutex::scoped_lock lk(nmutex_); // lock the nodes
-    LOG2("(SWITCH) register mac",mac.str(),"to",Sockaddr::str(address));
-
 	if (!mac) {
 	    // register a node with a new port and no mac
 		const Node::Ptr newnode(new Node(address,mac,0));
 		nodes_.insert(newnode);
-        cerr << "(SWITCH) New port :" << (*newnode) << endl;
+        LOG2("(SWITCH) register new port",Sockaddr::str(address));
 		dump_nodes();
 		return newnode;
-	}
-
+	} 
     if (mac.is_broadcast()) {
-        cerr << "(SWITCH) Warning: cannot register broadcast MAC" << endl;
+        LOG2("(SWITCH) Warning: cannot register broadcast MAC");
         return Node::Ptr();
     }
-
 	Node::Ptr node = find_node(mac);
 	if (!node) {
 	    // mac not found
-        cerr << "(SWITCH) New mac " << mac.str() << " : "
-		     << " port " << Sockaddr::str(address)
-			 << " nodeid 0"
-			 << endl;
 		Node::Ptr oldnode = find_node(address);
 		if (oldnode) {
+            LOG2("(SWITCH) New mac",mac.str(), "for old port",Sockaddr::str(address));
 		    // Update the old node (port only) with the new mac
 		    oldnode->mac(mac);
 		    mac_map_[mac] = oldnode;
@@ -182,6 +175,7 @@ Node::Ptr Switch::register_node(const MacAddress& mac, const sockaddr_in &addres
 		}
 		else {
 		    // Register a new node
+            LOG2("(SWITCH) New mac",mac.str(), "for new port",Sockaddr::str(address));
 		    const Node::Ptr newnode(new Node(address,mac,0));
 		    nodes_.insert(newnode);
 		    mac_map_[mac] = newnode;
@@ -203,16 +197,16 @@ Node::Ptr Switch::register_node(const MacAddress& mac, const sockaddr_in &addres
         // node with mac and no port set by a timestamp message
         node->data_addr(address);
 		erase_dup_nodes(address);
-        cerr << "(SWITCH) Set port : " << (*node) << endl;
+        LOG2("(SWITCH) Set port : ",*node);
 		dump_nodes();
 		return node;
     }
 
     // someone else already registered with the same MAC
-    cerr << "(SWITCH) WARNING: replacing port from " << (*node);
+    cout << "(SWITCH) WARNING: replacing port from " << (*node);
     node->id(0);
     node->data_addr(address);
-	cerr << " to " << (*node) << endl;
+	cout << " to " << (*node) << endl;
 	dump_nodes();
     return node;
 }
@@ -222,27 +216,36 @@ Node::Ptr Switch::register_node(const sockaddr_in &address)
     return register_node(MacAddress(),address);
 }
 
-Node::Ptr Switch::register_node(uint32_t id)
+Node::Ptr Switch::register_node(uint32_t id,const sockaddr_in &address)
 {
 	boost::mutex::scoped_lock lk(nmutex_); // lock the nodes
+    MacAddress mac(mac_base_,id);
 
     // called when we see a timestamp message
     Node::Ptr node = find_node(id);
+	if (!node)
+	    node = find_node(address);
 	if (node) {
-	    // node already registered, just add id if needed
+	    // node already registered, just add id/mac if needed
 	    if (!node->id()) {
 	        node->id(id);
-            cerr << "(SWITCH) New nodeid : " << (*node) << endl;
-		    dump_nodes();
+            LOG2("(SWITCH) Update nodeid :",*node);
 		}
+		if (!node->mac()) {
+			node->mac(mac);
+            mac_map_[mac] = node;
+            LOG2("(SWITCH) Update mac :",*node);
+		}
+		dump_nodes();
 	    return node;
 	}
 	// node not yet registered, add it with constructed mac
-    MacAddress mac(mac_base_,id);
-    const Node::Ptr newnode(new Node(mac,id));
+	// NOTE: we can't use the address, it's possible that
+	// a node could use two separate ports for data and ctrl
+    const Node::Ptr newnode(new Node(mac,id)); 
     nodes_.insert(newnode);
     mac_map_[mac] = newnode;
-    cerr << "(SWITCH) New mac : " << (*newnode) << endl;
+    LOG2("(SWITCH) New node:",*newnode);
 	dump_nodes();
     return newnode;
 }
@@ -355,7 +358,7 @@ void Switch::start_nodes(const uint64_t quantum)
 		Node::Ptr node = *cur;
 	    if (node && node->obsolete(300)) { // 5'
 			deleted = true;
-		    cerr << "(SWITCH) Delete obsolete " << (*node) << endl;
+		    LOG2("(SWITCH) Delete obsolete",*node);
 			node.reset();
 		    nodes_.erase(cur);
 		}
@@ -448,8 +451,10 @@ bool Switch::simtime_advance(uint64_t ntime)
     tmax_ = t1;
 	if (tmax_ == 0)
 	    return false;
-	if (gt_ == 0)
-	    cout << "(SWITCH) Start synchronization [" << t0 << "," << t1 << "]" << endl;
+	if (gt_ == 0 && !sync_started_) {
+	    LOG1("(SWITCH) Start synchronization [",t0,t1,"]");
+		sync_started_ = true;
+	}
  	LOG3("GT=",GT(),"next=",nextGT(),"nt=",ntime,"t0=",t0,"t1=",t1);
 
 	// Time advances when the slowest node has reached the barrier 
@@ -564,7 +569,7 @@ inline void Switch::send_sync(bool force)
             LOG2("(SYNC) GLOBAL TIME", gt, nextgt_, tmin_, tmax_, quantum_);
     }
 	else
-        cerr << "(SYNC) WARNING: Cannot send sync message: " << strerror(errno) << endl;
+        cout << "(SYNC) WARNING: Cannot send sync message: " << strerror(errno) << endl;
 }
 
 void Switch::timeout()
@@ -582,7 +587,7 @@ void Switch::send_terminate()
     GlobalTime tmsg;
     tmsg.mkterminate();
     if (tmsg.sendto(sync_socket_,&sync_addr_) != tmsg.len())
-        cerr << "(SYNC) WARNING: Cannot send terminate message: " << strerror(errno) << endl;
+        cout << "(SYNC) WARNING: Cannot send terminate message: " << strerror(errno) << endl;
 }
 
 void Switch::dump_nodes()

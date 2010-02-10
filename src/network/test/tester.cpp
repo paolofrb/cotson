@@ -18,22 +18,13 @@ class FakeNode
 public:
     FakeNode(const string&, int, const string&, int, int);
     void send_timestamp(TimingMessage::Type, uint64_t);
-    void send_packet(const void *, size_t);
-    void send_message(FakeNode&, const string&);
+    void send_message(MacAddress, const string&);
 	bool ok() const { return !error; }
 	uint8_t mac(uint i) const { return xmac[i]; }
+	// uint64_t gt() { return GlobalTime(sync_sock).gt(); }
 private:
-    int get_data_port()
-    {
-		// send port request
-	    DataPort msg(med_sock);
-		msg.sendto(med_sock,&med_ctl_addr); 
-		// wait for port reply
-        ssize_t nb = ::read(med_sock,msg.bytes(),msg.len());
-        if (nb!=msg.len()) { error=true; return 0; }
-		cout << "Node " << id << ": got data port " << msg.port() << endl;
-        return msg.port();
-    }
+    void send_packet(const void *, size_t);
+    int get_data_port();
 
 	int id; // node id
     int seqno; // sequence number
@@ -121,6 +112,18 @@ FakeNode::FakeNode(
 	xmac=MacAddress(m);
 }
 
+int FakeNode::get_data_port()
+{
+     // send port request
+     DataPort msg(med_sock);
+     msg.sendto(med_sock,&med_ctl_addr); 
+     // wait for port reply
+     ssize_t nb = ::read(med_sock,msg.bytes(),msg.len());
+     if (nb!=msg.len()) { error=true; return 0; }
+     cout << "Node " << id << ": got data port " << msg.port() << endl;
+     return msg.port();
+}
+
 void FakeNode::send_timestamp(TimingMessage::Type t, uint64_t ts)
 {
     TimeStamp(t,ts,id,++seqno).sendto(med_sock,&med_ctl_addr);
@@ -135,13 +138,13 @@ void FakeNode::send_packet(const void *data, size_t n)
 	    cerr << "Error sending packet: sent " << n << " returned " << l << endl;
 }
 
-void FakeNode::send_message(FakeNode& dst, const string& data)
+void FakeNode::send_message(MacAddress m, const string& data)
 {
 	ether_header eh;
     eh.ether_type = ETHERTYPE_IP;
 	for(uint i=0;i<6;++i) {
 	    eh.ether_shost[i]=mac(i);
-	    eh.ether_dhost[i]=dst.mac(i);
+	    eh.ether_dhost[i]=m[i];
 	}
 	size_t sn = data.size();
 	size_t en = sizeof(ether_header);
@@ -154,8 +157,11 @@ void FakeNode::send_message(FakeNode& dst, const string& data)
 int main(int argc, char **argv)
 {
     // Request data port
-	if (argc < 7) {
-	    cerr <<  "Usage: " << argv[0] << " med_host med_port sync_mcast_ip sync_port n_nodes n_timestamps" << endl;
+	if (argc < 8) {
+	    cerr <<  "Usage: " 
+		    << argv[0] 
+			<< " med_host med_port sync_mcast_ip sync_port n_nodes n_timestamps mode" 
+			<< endl;
 		return 1;
 	}
 	string med_host(argv[1]);
@@ -164,28 +170,67 @@ int main(int argc, char **argv)
 	int sync_port = atoi(argv[4]);
 	uint NN = atoi(argv[5]);
 	uint NTS = atoi(argv[6]);
+	int mode = atoi(argv[7]);
 
 	vector<FakeNode> nodes;
-	// create 10 nodes
-	for (uint i=0; i < NN; ++i) {
-		FakeNode n(med_host,med_port, sync_mcast_ip,sync_port, i+1);
-		if (!n.ok())
-		    return 1;
-	    nodes.push_back(n);
-    }
-	// send some data messages
-	for (uint i=0; i < NN-1; ++i)
-	    nodes[i].send_message(nodes[i+1],"hello");
-	nodes[NN-1].send_message(nodes[0],"hello");
+	const uint8_t dest[6] = {1,2,3,4,5,6};
+	MacAddress destmac(dest);
 
-	// send 5 timestamps
-	int t = 100;
+	if (mode==0) { // timestamp before data
+	    // create 10 nodes
+	    for (uint i=0; i < NN; ++i) {
+		    FakeNode n(med_host,med_port, sync_mcast_ip,sync_port, i+1);
+		    if (!n.ok()) return 1;
+	        nodes.push_back(n);
+        }
+	    // send initial timestamp
+	    for (uint i=0; i < NN; ++i)
+	        nodes[i].send_timestamp(TimingMessage::TimeStampMsg,10);
+
+	    // send data messages
+	    for (uint i=0; i < NN; ++i)
+	        nodes[i].send_message(destmac,"hello1");
+	}
+	if (mode==1) { // timestamp+data mixed
+	    for (uint i=0; i < NN; ++i) {
+		    FakeNode n(med_host,med_port, sync_mcast_ip,sync_port, i+1);
+		    if (!n.ok()) return 1;
+	        n.send_timestamp(TimingMessage::TimeStampMsg,10);
+	        n.send_message(destmac,"hello2");
+	        nodes.push_back(n);
+	    }
+	}
+	if (mode==2) { // data before timestamps
+	    // create 10 nodes
+	    for (uint i=0; i < NN; ++i) {
+		    FakeNode n(med_host,med_port, sync_mcast_ip,sync_port, i+1);
+		    if (!n.ok()) return 1;
+	        nodes.push_back(n);
+        }
+	    // send data messages
+	    for (uint i=0; i < NN; ++i)
+	        nodes[i].send_message(destmac,"hello0");
+	    // send initial timestamp
+	    for (uint i=0; i < NN; ++i)
+	        nodes[i].send_timestamp(TimingMessage::TimeStampMsg,10);
+	}
+	if (mode==3) { // data+timestamp mixed (BAD)
+	    for (uint i=0; i < NN; ++i) {
+		    FakeNode n(med_host,med_port, sync_mcast_ip,sync_port, i+1);
+		    if (!n.ok()) return 1;
+	        n.send_message(destmac,"hello3");
+	        n.send_timestamp(TimingMessage::TimeStampMsg,10);
+	        nodes.push_back(n);
+	    }
+	}
+	// send other timestamps
+    uint64_t t = 100;
 	for (uint i = 0; i < NTS; ++i) {
 	    cout << "Send timestamp "<< t << endl;
-		for (uint i=0; i < nodes.size(); ++i)
+	    for (uint i=0; i < nodes.size(); ++i)
 	        nodes[i].send_timestamp(TimingMessage::TimeStampMsg,t+10*i);
-	    sleep(1);
-		t += 100;
+	    t += 100;
+	    sleep(0.2);
 	}
 	// send terminate to quit
 	nodes[0].send_timestamp(TimingMessage::TerminateMsg,t);

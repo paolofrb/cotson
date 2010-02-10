@@ -55,7 +55,7 @@ int ControlPacketProcessor::process(EventHandler *handler)
         case TimingMessage::TimeStampMsg:
 			if (packet_.len() == TimeStamp::len()) {
                 LOG2("(CTRL) Timestamp from", Sockaddr::str(handler->from()));
-			    timestamp();
+			    timestamp(handler);
 			}
 			else 
 			    cerr << "Warning: discarded timestamp, len " << packet_.len()
@@ -65,7 +65,7 @@ int ControlPacketProcessor::process(EventHandler *handler)
         case TimingMessage::NodeStartMsg:
 			if (packet_.len() == TimeStamp::len()) {
                 LOG2("(CTRL) Node start from", Sockaddr::str(handler->from()));
-			    start_node();
+			    start_node(handler);
 			}
 			else 
 			    cerr << "Warning: discarded nodestart, len " << packet_.len()
@@ -75,7 +75,7 @@ int ControlPacketProcessor::process(EventHandler *handler)
         case TimingMessage::NodeStopMsg:
 			if (packet_.len() == TimeStamp::len()) {
                 LOG2("(CTRL) Node stop from", Sockaddr::str(handler->from()));
-			    stop_node();
+			    stop_node(handler);
 			}
 			else 
 			    cerr << "Warning: discarded nodestop, len " << packet_.len()
@@ -85,7 +85,7 @@ int ControlPacketProcessor::process(EventHandler *handler)
         case TimingMessage::TimeQueryMsg:
 			if (packet_.len() == TimeStamp::len()) {
                 LOG2("(CTRL) Time query from", Sockaddr::str(handler->from()));
-			    time_query();
+			    time_query(handler);
 			}
 			else
 			    cerr << "Warning: discarded time query, len " << packet_.len()
@@ -98,7 +98,7 @@ int ControlPacketProcessor::process(EventHandler *handler)
 		case TimingMessage::TerminateMsg:
 			if (packet_.len() == TimeStamp::len()) {
 			    cout << "(CTRL) Got a termination message from node "
-			         << process_timing_message()->id()
+			         << process_timing_message(handler)->id()
 				     << ": goodbye!" << endl;
 				switch_->send_terminate();
 			    Stats::get().print_stats(1);
@@ -135,36 +135,36 @@ bool ControlPacketProcessor::port_reply(EventHandler *h)
 	return true;
 }
 
-void ControlPacketProcessor::timestamp()
+void ControlPacketProcessor::timestamp(EventHandler *h)
 {
 	Stats::get().n_msg_++;
-	switch_->heartbeat_node(*process_timing_message());
+	switch_->heartbeat_node(*process_timing_message(h));
 }
 
-void ControlPacketProcessor::start_node()
+void ControlPacketProcessor::start_node(EventHandler *h)
 {
 	// Message from abaeterno signaling a node has started
 	Stats::get().n_msg_++;
-	switch_->heartbeat_node(*process_timing_message());
+	switch_->heartbeat_node(*process_timing_message(h));
 }
 
-void ControlPacketProcessor::stop_node()
+void ControlPacketProcessor::stop_node(EventHandler *h)
 {
 	// Message from abaeterno signaling a node has stopped
 	Stats::get().n_msg_++;
-	switch_->stop_node(*process_timing_message());
+	switch_->stop_node(*process_timing_message(h));
 }
 
-void ControlPacketProcessor::time_query()
+void ControlPacketProcessor::time_query(EventHandler *h)
 {
 	// Message from abaeterno asking a resend of the last time
 	Stats::get().n_msg_++;
-	Node::Ptr node = process_timing_message();
+	Node::Ptr node = process_timing_message(h);
 	if (node->valid())
 	    switch_->timeout(); // force a sync
 }
 
-Node::Ptr ControlPacketProcessor::process_timing_message()
+Node::Ptr ControlPacketProcessor::process_timing_message(EventHandler *h)
 {
 	TimeStamp tdata(packet_.buf());
 	uint32_t nodeid = tdata.nodeid();
@@ -172,7 +172,8 @@ Node::Ptr ControlPacketProcessor::process_timing_message()
 	uint16_t seqno = tdata.seqno();
 
 	// Register the new node in the switch
-	Node::Ptr node = switch_->register_node(nodeid);
+	const sockaddr_in *from = reinterpret_cast<const sockaddr_in*>(h->from());
+	Node::Ptr node = switch_->register_node(nodeid,*from);
     node->setSimtime(tstamp,seqno); // Set the node sim time
     LOG2("(CTRL) Timing Message: Nodeid", nodeid, "Time", tstamp, "MAC", node->mac().str());
     return node;
