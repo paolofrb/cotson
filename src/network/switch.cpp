@@ -227,16 +227,20 @@ Node::Ptr Switch::register_node(uint32_t id,const sockaddr_in &address)
 	    node = find_node(address);
 	if (node) {
 	    // node already registered, just add id/mac if needed
+		bool change=false;
 	    if (!node->id()) {
 	        node->id(id);
+			change=true;
             LOG2("(SWITCH) Update nodeid :",*node);
 		}
 		if (!node->mac()) {
 			node->mac(mac);
             mac_map_[mac] = node;
+			change=true;
             LOG2("(SWITCH) Update mac :",*node);
 		}
-		dump_nodes();
+		if(change)
+		    dump_nodes();
 	    return node;
 	}
 	// node not yet registered, add it with constructed mac
