@@ -83,7 +83,8 @@ std::ostream& operator<<(std::ostream& s,const Node& n)
 	         << " addr " << Sockaddr::str(n.data_addr())
 			 << " st " << n.getSimtime()
 			 << " rt " << n.getRealtime()
-			 << (n.valid() ? " valid " : "")
-			 << (n.running() ? " run " : "");
+			 << (n.sync_valid() ? " sync" : "")
+			 << (n.data_valid() ? " data" : "")
+			 << (n.running() ? " run" : "");
 }
 

@@ -38,7 +38,6 @@ public:
     // Get/set the socket addresses of this node.
     const sockaddr_in& data_addr() const { return data_addr_; }
     void data_addr(const sockaddr_in& a) { data_addr_ = a; }
-	bool has_port() const { return Sockaddr::valid(data_addr_); }
 
     // Get the Mac and Id of this node
     const MacAddress& mac() const { return mac_; }
@@ -48,10 +47,12 @@ public:
     enum State {STOP = 0, RUNNING = 1};
     void stop() { state_ = STOP; }
     void start() { state_ = RUNNING; } 
-    bool running() const { return valid() && state_ == RUNNING; }
+    bool running() const { return sync_valid() && state_ == RUNNING; }
 	void mac(const MacAddress &mac) { mac_ = mac; }
 	void id(uint32_t id) { nodeid_ = id; }
-	bool valid() const { return nodeid_ && mac_ && has_port(); }
+	bool sync_valid() const { return nodeid_ && mac_; }
+	bool data_valid() const { return Sockaddr::valid(data_addr_); }
+	bool valid() const { return data_valid() && sync_valid(); }
     void warning();
 	bool obsolete(uint32_t);
 

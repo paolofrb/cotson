@@ -53,7 +53,7 @@ pair<uint64_t,uint64_t> Scheduler::send_packets(uint64_t stime)
 		MsgQueue::iterator cur = i++; // safe increment for erase
 	    const Message& m = (*cur);
 		Node::Ptr node = m.node();
-		// uint64_t ntime = node->valid() ? node->getSimtime() : stime;
+		// uint64_t ntime = node->sync_valid() ? node->getSimtime() : stime;
 		if (stime >= m.simtime()) {
 		    switch_->really_send(node,m.packet());
 			messages_.erase(cur);

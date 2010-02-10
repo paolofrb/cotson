@@ -256,7 +256,7 @@ Node::Ptr Switch::register_node(uint32_t id,const sockaddr_in &address)
 
 void Switch::really_send(const Node::Ptr to_node, const Packet& packet)
 {
-	if (!to_node || !to_node->has_port())
+	if (!to_node || !to_node->data_valid())
 	    return;
     const sockaddr_in& to_addr = to_node->data_addr();
 	size_t l = packet.len();
@@ -275,9 +275,7 @@ void Switch::send(const Node::Ptr to_node, const Packet& packet, uint64_t now)
 	    return;
 
     int64_t delay = timing_ ? timing_->get_delay() : 0;
-    if (    (to_node->valid() && !force_queue_ && delay <= lround(quantum_))
-	     || (!to_node->valid() && to_node->has_port())
-	) {
+    if (!force_queue_ && delay <= lround(quantum_) && to_node->data_valid()) {
         really_send(to_node, packet);
 	}
 	else {
@@ -319,9 +317,8 @@ int Switch::broadcast(const MacAddress& src, const Packet& packet,uint64_t now)
 bool Switch::stop_node(Node& n)
 {
     bool rv = true;
-    if (!n.has_port()) {
-        // Node with this mac address was not found
-        n.warning();
+    if (!n.data_valid()) {
+        n.warning(); // Node with this mac address was not found
         rv = false;
         send_sync(true); // Force sync to avoid initial deadlock
     }
@@ -335,9 +332,8 @@ bool Switch::stop_node(Node& n)
 bool Switch::heartbeat_node(Node& n) 
 {
     bool rv = true;
-    if (!n.has_port()) {
-        // Node with this mac address was not found
-        n.warning();
+    if (!n.data_valid()) {
+        n.warning(); // Node with this mac address was not found
         rv = false;
     }
     LOG2("(SYNC) Hartbeat node [", n.mac().str(), "]");
@@ -366,7 +362,7 @@ void Switch::start_nodes(const uint64_t quantum)
 			node.reset();
 		    nodes_.erase(cur);
 		}
-		else if (node && node->valid()) {
+		else if (node && node->sync_valid()) {
             node->start();
 			numnodes_++;
 	    }
@@ -441,7 +437,7 @@ bool Switch::simtime_advance(uint64_t ntime)
 	int nx = 0;
 	for (NodeSet::iterator i = nodes_.begin(); i != nodes_.end(); ++i) {
 	    const Node::Ptr node = *i;
-	    if (node && node->valid()) {
+	    if (node && node->sync_valid()) {
 	        uint64_t t = node->getSimtime();
 	        t0 = t < t0 ? t : t0;
 	        t1 = t > t1 ? t : t1;
