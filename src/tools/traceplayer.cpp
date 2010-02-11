@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
         MacAddress dst;
         uint32_t len;
         uint32_t lat;
-        uint32_t q;
+        double q;
 
         trace >> tstamp;
         trace >> src;

@@ -24,4 +24,4 @@ distclean: clean
 
 # DO NOT DELETE
 
-traceplayer.o: ../common/read_gzip.h ../network/net_typedefs.h
+traceplayer.o: ../common/read_gzip.h ../network/net_typedefs.h ../common/mac.h
