@@ -54,7 +54,8 @@ private:
 		inline void terminate();
         bool process(const GlobalTime&);
 	private:
-	    GlobalTime ctime;  // cluster stats
+	    uint64_t clust_gt;
+	    uint64_t clust_lat;
 	    boost::mutex gtmutex;
 		bool end;
 	    boost::condition new_gt;

@@ -391,28 +391,28 @@ void NetworkTiming::warn(const string& s)
 
 //=======  Global Time synchronization ========
 
-NetworkTiming::GT::GT():ctime(),gtmutex(),end(false) { }
+NetworkTiming::GT::GT():clust_gt(0),clust_lat(0),gtmutex(),end(false) { }
 
 inline uint64_t NetworkTiming::GT::gt()
 {
     boost::mutex::scoped_lock lk(gtmutex);
-	return ctime.gt();
+	return clust_gt;
 }
 
 inline uint64_t NetworkTiming::GT::lat()
 {
     boost::mutex::scoped_lock lk(gtmutex);
-	return ctime.lat();
+	return clust_lat;
 }
 
 inline uint64_t NetworkTiming::GT::wait_until(uint64_t now)
 {
     boost::mutex::scoped_lock lk(gtmutex);
-	while (ctime.gt() <= now && !end) {
-		// cout << "wait until now=" << now << " gt=" << ctime.gt() << endl;
+	while (clust_gt <= now && !end) {
+		// cout << "wait until now=" << now << " gt=" << clust_gt << endl;
 	    new_gt.wait(lk);
 	}
-    return ctime.gt();
+    return clust_gt;
 }
 
 inline void NetworkTiming::GT::terminate()
@@ -429,8 +429,9 @@ bool NetworkTiming::GT::process(const GlobalTime& gt)
 		terminate();
 		return true;
 	}
-    else if (gt.gt() > ctime.gt()) { // filter out OoO messages
-        ctime = gt;
+    else if (gt.gt() > clust_gt) { // filter out OoO messages
+        clust_gt = gt.gt();
+        clust_lat = gt.lat();
         new_gt.notify_one();
 		return true;
     }
