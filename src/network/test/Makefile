@@ -24,7 +24,7 @@ medtester: $(OBJS)
 	$(ROOT)/common/libaacommon.a
 
 clean:
-	$(RM) $(OBJS) medtester med*.log test*.log
+	$(RM) $(OBJS) medtester med*.log test*.log gdb.in
 
 distclean: clean
 
