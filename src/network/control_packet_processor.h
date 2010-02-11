@@ -43,7 +43,6 @@ private:
 
     const uint16_t control_port_;
     const uint16_t data_port_;
-    const DataPort data_port_msg_;
 };
 
 #endif /*CONTROLPACKETPROCESSOR_H_*/

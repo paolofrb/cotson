@@ -47,7 +47,7 @@ public:
 	void timeout();
 
 	// Send packets
-	int sendto(const uint8_t*,size_t,const sockaddr*,size_t);
+	int sendto(const void*,size_t,const sockaddr*,size_t);
 	const sockaddr* from() { return reinterpret_cast<const sockaddr*>(&from_); }
 
 private:

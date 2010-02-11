@@ -43,23 +43,37 @@ namespace TimingMessage
 	{
         return ntohs(reinterpret_cast<const ether_header*>(p)->ether_type);
 	}
+
+	class Base 
+	{
+	public:
+		Base(void* p, ssize_t l):ptr_(p),sz_(l){}
+	    const void* data() const { return ptr_; }
+	    ssize_t len() const { return sz_; }
+		void copy(const void* p,ssize_t f=0, ssize_t l=0) 
+		{
+		    ::memcpy(reinterpret_cast<uint8_t*>(ptr_)+f,p,(l==0?sz_:l)); 
+		}
+        ssize_t sendto(int, const sockaddr_in*) const;
+        ssize_t recv(int fd);
+	protected:
+		void * const ptr_;
+		const ssize_t sz_;
+	};
 };
 
 // timestamp from nodes to mediator
-class TimeStamp
+class TimeStamp : public TimingMessage::Base
 {
 public:
-	inline TimeStamp(const uint8_t *p){ ::memcpy(bytes(),p,len()); }
+	TimeStamp(const void *);
 	TimeStamp(uint16_t, uint64_t, uint32_t, uint16_t);
 	TimeStamp(uint16_t);
-	static inline const ssize_t len() { return sizeof(Data); }
-	inline uint8_t* bytes() { return reinterpret_cast<uint8_t*>(&data_); }
-	inline const uint8_t* bytes() const { return reinterpret_cast<const uint8_t*>(&data_); }
-	inline uint16_t seqno() const { return data_.seqno; }
-	inline uint64_t tstamp() const { return data_.tstamp; }
-	inline uint32_t nodeid() const { return data_.nodeid; }
-    ssize_t sendto(int, const sockaddr_in*) const;
-	inline bool valid() { return data_.type != TimingMessage::UnknownMsg; }
+	uint16_t seqno() const { return data_.seqno; }
+	uint64_t tstamp() const { return data_.tstamp; }
+	uint32_t nodeid() const { return data_.nodeid; }
+	bool valid() { return data_.type != TimingMessage::UnknownMsg; }
+	static bool check(ssize_t l) { return l == sizeof(Data); }
 private:
 	struct Data { // Must overlap with Ethernet header (src[6],dst[6],type[2])
         uint64_t tstamp; // simulated time (us) -- 8B align 8
@@ -71,22 +85,18 @@ private:
 };
 
 // global time from mediator to nodes
-class GlobalTime
+class GlobalTime : public TimingMessage::Base
 {
 public:
 	GlobalTime();
 	GlobalTime(uint16_t);
 	GlobalTime(uint64_t, uint32_t, uint16_t);
-	static inline const ssize_t len() { return sizeof(Data); }
-	inline uint8_t* bytes() { return reinterpret_cast<uint8_t*>(&data_); }
-	inline const uint8_t* bytes() const { return reinterpret_cast<const uint8_t*>(&data_); }
-	inline uint32_t lat() const { return data_.lat; }
-	inline uint64_t gt() const { return data_.gt; }
-	inline uint16_t seqno() const { return data_.seqno; }
-	inline bool is_terminate() const { return data_.gt == static_cast<uint64_t>(-1); }
-	inline void mkterminate() { data_.gt = static_cast<uint64_t>(-1); }
-    ssize_t sendto(int, const sockaddr_in*) const;
-	inline bool valid() { return data_.type != TimingMessage::UnknownMsg; }
+	uint32_t lat() const { return data_.lat; }
+	uint64_t gt() const { return data_.gt; }
+	uint16_t seqno() const { return data_.seqno; }
+	bool is_terminate() const { return data_.gt == static_cast<uint64_t>(-1); }
+	void mkterminate() { data_.gt = static_cast<uint64_t>(-1); }
+	bool valid() { return data_.type != TimingMessage::UnknownMsg; }
 private:
 	struct Data { // Must overlap with Ethernet header (src[6],dst[6],type[2])
         uint64_t gt;      // next sync time (us)     -- 8B align 8
@@ -98,14 +108,10 @@ private:
 };
 
 // dataport message
-class DataPort
+class DataPort : public TimingMessage::Base
 {
 public:
 	DataPort(uint16_t);
-	static inline const ssize_t len() { return sizeof(Data); }
-	inline uint8_t* bytes() { return reinterpret_cast<uint8_t*>(&data_); }
-	inline const uint8_t* bytes() const { return reinterpret_cast<const uint8_t*>(&data_); }
-    ssize_t sendto(int, const sockaddr_in*) const;
 	uint16_t port() const { return data_.data_port; }
 private:
     struct Data {
@@ -114,6 +120,20 @@ private:
 	    uint16_t data_port;   // data_port --  2B align 2
 	} __PACKED__; // It should already be packed (see alignments above)
 	Data data_;
+};
+
+// generic ethernet packet
+class EtherPacket : public TimingMessage::Base
+{
+public:
+    EtherPacket(const ether_header* eh, const void* p, size_t n)
+	    : Base(new uint8_t(sizeof(ether_header)+n), sizeof(ether_header)+n)
+	{
+		copy(eh,0,sizeof(ether_header));
+		copy(p,sizeof(ether_header),n);
+	}
+	~EtherPacket() { delete[] reinterpret_cast<uint8_t*>(Base::ptr_); }
+private:
 };
 
 #undef __PACKED__

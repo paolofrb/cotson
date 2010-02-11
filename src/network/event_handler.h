@@ -42,7 +42,7 @@ public:
 	virtual void timeout() {}
 
 	// Send hooks
-	virtual int sendto(const uint8_t*,size_t,const sockaddr*,size_t) = 0;
+	virtual int sendto(const void*,size_t,const sockaddr*,size_t) = 0;
 	virtual const sockaddr* from() = 0;
 
 protected:

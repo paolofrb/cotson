@@ -28,8 +28,12 @@
 using namespace std;
 
 // Local utility
-static inline ssize_t xsendto(int fd, const uint8_t* b, ssize_t l, const sockaddr_in* to)
+namespace TimingMessage {
+
+ssize_t Base::sendto(int fd, const sockaddr_in* to) const
 {
+	const void* b = data();
+	const ssize_t l = len();
 	ssize_t n = 0;
 	for (int t=0; t<NUM_RETRIES; ++t) {
         n = ::sendto(fd,b,l,0,reinterpret_cast<const sockaddr*>(to),sizeof(sockaddr_in));
@@ -39,9 +43,23 @@ static inline ssize_t xsendto(int fd, const uint8_t* b, ssize_t l, const sockadd
 	cout << "Cannot send message (size=" << l << " sent=" << n << ")" << endl;
     return -1;
 }
+ssize_t Base::recv(int fd)
+{
+    return ::read(fd,ptr_,sz_);
+}
+
+
+}
 
 // TimeStamp messages
+TimeStamp::TimeStamp(const void* p)
+    : Base(&data_,sizeof(Data)) 
+{ 
+    Base::copy(p); 
+}
+
 TimeStamp::TimeStamp(uint16_t t, uint64_t ts, uint32_t id, uint16_t sn)
+    : Base(&data_,sizeof(Data)) 
 {
     data_.type = htons(t); // TimeStampMsg, NodeStartMsg, NodeStopMsg, TerminateMsg
     data_.tstamp = ts;
@@ -49,14 +67,10 @@ TimeStamp::TimeStamp(uint16_t t, uint64_t ts, uint32_t id, uint16_t sn)
     data_.seqno = sn;
 }
 
-ssize_t TimeStamp::sendto(int fd, const sockaddr_in* to) const
-{
-    return xsendto(fd,bytes(),len(),to);
-}
-
 TimeStamp::TimeStamp(uint16_t fd)
+    : Base(&data_,sizeof(Data)) 
 {
-    ssize_t nb = ::read(fd,bytes(),len());
+    ssize_t nb = ::read(fd,&data_,len());
     if (nb==len()) {
         switch(ntohs(data_.type)) {
             case TimingMessage::TimeStampMsg:
@@ -73,20 +87,23 @@ TimeStamp::TimeStamp(uint16_t fd)
 
 // GlobalTime messages
 GlobalTime::GlobalTime()
+    : Base(&data_,sizeof(Data)) 
 {
-    ::memset(bytes(),0,len()); 
+    ::memset(&data_,0,len()); 
     data_.type = htons(TimingMessage::GTimeMsg);
 }
 
 GlobalTime::GlobalTime(uint16_t fd)
+    : Base(&data_,sizeof(Data)) 
 {
-    ssize_t nb = ::read(fd,bytes(),len());
+    ssize_t nb = ::read(fd,&data_,len());
     if (nb == len() && ntohs(data_.type) == TimingMessage::GTimeMsg)
         return;
     data_.type = TimingMessage::UnknownMsg;
 }
 
 GlobalTime::GlobalTime(uint64_t t0, uint32_t l, uint16_t sn)
+    : Base(&data_,sizeof(Data)) 
 {
     data_.type = htons(TimingMessage::GTimeMsg);
     data_.gt = t0;
@@ -94,20 +111,12 @@ GlobalTime::GlobalTime(uint64_t t0, uint32_t l, uint16_t sn)
     data_.seqno = sn;
 }
 
-ssize_t GlobalTime::sendto(int fd, const sockaddr_in* to) const
-{
-    return xsendto(fd,bytes(),len(),to);
-}
-
 // DataPort messages
 DataPort::DataPort(uint16_t p) 
+    : Base(&data_,sizeof(Data)) 
 {
     data_.type = htons(TimingMessage::PortRequestMsg);
     data_.data_port = p;
-    ::memset(bytes(),0,12);
+    ::memset(&data_,0,12);
 }
 
-ssize_t DataPort::sendto(int fd, const sockaddr_in* to) const
-{
-    return xsendto(fd,bytes(),len(),to);
-}

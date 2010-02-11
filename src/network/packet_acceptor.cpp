@@ -112,7 +112,7 @@ void PacketAcceptor::flush()
 	}
 }
 
-int PacketAcceptor::sendto(const uint8_t* buf, size_t n, const sockaddr* to, size_t tolen)
+int PacketAcceptor::sendto(const void* buf, size_t n, const sockaddr* to, size_t tolen)
 {
     // return ::sendto(outsock_,buf,n,MSG_DONTWAIT,to,tolen);
     return ::sendto(handle_,buf,n,0,to,tolen);

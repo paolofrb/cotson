@@ -13,6 +13,9 @@
 
 using namespace std;
 
+int N_ctrl=0;
+int N_data=0;
+
 class FakeNode
 {
 public:
@@ -21,14 +24,11 @@ public:
     void send_message(MacAddress, const string&);
 	bool ok() const { return !error; }
 	uint8_t mac(uint i) const { return xmac[i]; }
-	// uint64_t gt() { return GlobalTime(sync_sock).gt(); }
 private:
-    void send_packet(const void *, size_t);
     int get_data_port();
 
 	int id; // node id
     int seqno; // sequence number
-
     int med_sock; // socket for mediator communication
     int sync_sock; // synchronization socket
     sockaddr_in med_ctl_addr; // mediator ctrl address
@@ -107,35 +107,27 @@ FakeNode::FakeNode(
 	memcpy((char*)&med_data_addr,&med_ctl_addr,sizeof(sockaddr_in));
 	med_data_addr.sin_port = htons(get_data_port());
 
-	// assign MAC address and send initial message
-	const uint8_t m[6]={0xfa,0xcd,1,0,0,nodeid};
-	xmac=MacAddress(m);
+	// assign a MAC address
+	xmac=MacAddress(0xfacd0100,nodeid);
 }
 
 int FakeNode::get_data_port()
 {
-     // send port request
-     DataPort msg(med_sock);
-     msg.sendto(med_sock,&med_ctl_addr); 
-     // wait for port reply
-     ssize_t nb = ::read(med_sock,msg.bytes(),msg.len());
-     if (nb!=msg.len()) { error=true; return 0; }
-     cout << "Node " << id << ": got data port " << msg.port() << endl;
-     return msg.port();
+    // send port request
+    DataPort msg(med_sock);
+    msg.sendto(med_sock,&med_ctl_addr); 
+	N_ctrl++;
+    // wait for port reply
+    ssize_t nb = msg.recv(med_sock);
+    if (nb!=msg.len()) { error=true; return 0; }
+    cout << "Node " << id << ": got data port " << msg.port() << endl;
+    return msg.port();
 }
 
 void FakeNode::send_timestamp(TimingMessage::Type t, uint64_t ts)
 {
+	N_ctrl += 2;
     TimeStamp(t,ts,id,++seqno).sendto(med_sock,&med_ctl_addr);
-}
-
-void FakeNode::send_packet(const void *data, size_t n)
-{
-    size_t l = ::sendto(med_sock,data,n,0,
-		                (const sockaddr*)&med_data_addr,
-						sizeof(sockaddr_in));
-	if (l != n) 
-	    cerr << "Error sending packet: sent " << n << " returned " << l << endl;
 }
 
 void FakeNode::send_message(MacAddress m, const string& data)
@@ -146,17 +138,16 @@ void FakeNode::send_message(MacAddress m, const string& data)
 	    eh.ether_shost[i]=mac(i);
 	    eh.ether_dhost[i]=m[i];
 	}
-	size_t sn = data.size();
-	size_t en = sizeof(ether_header);
-    uint8_t *buf = new uint8_t[sn+en];
-	::memcpy(buf,&eh,en);
-	::memcpy(buf+en,data.c_str(),sn);
-    send_packet(buf,en+sn);
+	EtherPacket msg(&eh,data.c_str(),data.size()+1);
+    ssize_t l = msg.sendto(med_sock,&med_data_addr); 
+	if (l != msg.len()) 
+	    cerr << "Error sending packet: sent " << msg.len() << " returned " << l << endl;
+	else
+        N_data++;
 }
 
 int main(int argc, char **argv)
 {
-    // Request data port
 	if (argc < 8) {
 	    cerr <<  "Usage: " 
 		    << argv[0] 
@@ -173,8 +164,7 @@ int main(int argc, char **argv)
 	int mode = atoi(argv[7]);
 
 	vector<FakeNode> nodes;
-	const uint8_t dest[6] = {1,2,3,4,5,6};
-	MacAddress destmac(dest);
+	MacAddress destmac(0x01020304,0); // random address
 
 	if (mode==0) { // timestamp before data
 	    // create 10 nodes
@@ -234,6 +224,8 @@ int main(int argc, char **argv)
 	}
 	// send terminate to quit
 	nodes[0].send_timestamp(TimingMessage::TerminateMsg,t);
+	cout << "CTRL " << N_ctrl << endl;
+	cout << "DATA " << N_data << endl;
     return 0;
 }
 

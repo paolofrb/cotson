@@ -34,8 +34,7 @@ ControlPacketProcessor::ControlPacketProcessor(
 	int v
 ) : PacketProcessor(sw,v),
     control_port_(control_port),
-    data_port_(data_port),
-    data_port_msg_(data_port)
+    data_port_(data_port)
 {}
 
 ControlPacketProcessor::~ControlPacketProcessor()
@@ -44,7 +43,8 @@ ControlPacketProcessor::~ControlPacketProcessor()
 int ControlPacketProcessor::process(EventHandler *handler)
 {
     // Process the control packet
-    uint16_t type = TimingMessage::type(packet_.buf());
+    const uint16_t type = TimingMessage::type(packet_.buf());
+	const size_t len = packet_.len();
     switch (type) {
         case TimingMessage::PortRequestMsg:
             LOG2("(CTRL) Port request from", Sockaddr::str(handler->from()));
@@ -53,60 +53,51 @@ int ControlPacketProcessor::process(EventHandler *handler)
             break;
 
         case TimingMessage::TimeStampMsg:
-			if (packet_.len() == TimeStamp::len()) {
+			if (TimeStamp::check(len)) {
                 LOG2("(CTRL) Timestamp from", Sockaddr::str(handler->from()));
 			    timestamp(handler);
 			}
-			else 
-			    cerr << "Warning: discarded timestamp, len " << packet_.len()
-				     << ", expected " << TimeStamp::len() << endl;
+			else cerr << "Warning: ignore timestamp, len " << len << endl;
 		    break;
 
         case TimingMessage::NodeStartMsg:
-			if (packet_.len() == TimeStamp::len()) {
+			if (TimeStamp::check(len)) {
                 LOG2("(CTRL) Node start from", Sockaddr::str(handler->from()));
 			    start_node(handler);
 			}
-			else 
-			    cerr << "Warning: discarded nodestart, len " << packet_.len()
-				     << ", expected " << TimeStamp::len() << endl;
+			else cerr << "Warning: ignore nodestart, len " << len << endl;
 		    break;
 
         case TimingMessage::NodeStopMsg:
-			if (packet_.len() == TimeStamp::len()) {
+			if (TimeStamp::check(len)) {
                 LOG2("(CTRL) Node stop from", Sockaddr::str(handler->from()));
 			    stop_node(handler);
 			}
-			else 
-			    cerr << "Warning: discarded nodestop, len " << packet_.len()
-				     << ", expected " << TimeStamp::len() << endl;
+			else cerr << "Warning: ignore nodestop, len " << len << endl;
 		    break;
 
         case TimingMessage::TimeQueryMsg:
-			if (packet_.len() == TimeStamp::len()) {
+			if (TimeStamp::check(len)) {
                 LOG2("(CTRL) Time query from", Sockaddr::str(handler->from()));
 			    time_query(handler);
 			}
-			else
-			    cerr << "Warning: discarded time query, len " << packet_.len()
-				     << ", expected " << TimeStamp::len() << endl;
+			else cerr << "Warning: ignore time query, len " << len << endl;
 		    break;
 
 		case TimingMessage::GTimeMsg:
 		    break; // We shouldn't be getting it, ignore
 
 		case TimingMessage::TerminateMsg:
-			if (packet_.len() == TimeStamp::len()) {
-			    cout << "(CTRL) Got a termination message from node "
-			         << process_timing_message(handler)->id()
-				     << ": goodbye!" << endl;
+			if (TimeStamp::check(len)) {
+				int n = process_timing_message(handler)->id();
+			    cout << "(CTRL) termination message from node " 
+				     << n << ": goodbye!" << endl;
 				switch_->send_terminate();
 			    Stats::get().print_stats(1);
 		        exit(0); // Goodbye!
 			}
 			else 
-			    cerr << "Warning: discarded terminate, len " << packet_.len()
-				     << ", expected " << TimeStamp::len() << endl;
+			    cerr << "Warning: ignore terminate, len " << len << endl;
 		    break; 
 
         default:
@@ -119,19 +110,16 @@ int ControlPacketProcessor::process(EventHandler *handler)
 
 bool ControlPacketProcessor::port_reply(EventHandler *h)
 {
-    // send data port message back
-    const uint8_t* msg = data_port_msg_.bytes();
-    const size_t len = data_port_msg_.len();
-    size_t nb = h->sendto(msg,len,h->from(),sizeof(sockaddr_in));
-    if (nb != len) {
+	DataPort dp(data_port_);
+    ssize_t nb = h->sendto(dp.data(),dp.len(),h->from(),sizeof(sockaddr_in));
+    if (nb != dp.len()) {
         cerr << "Error in port request reply "
-             << "(len=" << len << ", sent=" << nb << ")" 
+             << "(len=" << dp.len() << ", sent=" << nb << ")" 
              << endl;
         return false;
     }
 	// Register the new node in the switch
-	const sockaddr_in *from = reinterpret_cast<const sockaddr_in*>(h->from());
-	switch_->register_node(*from);
+	switch_->register_node(*reinterpret_cast<const sockaddr_in*>(h->from()));
 	return true;
 }
 

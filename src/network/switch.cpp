@@ -594,6 +594,8 @@ void Switch::dump_nodes()
 {
 	if (verbose_ < 1)
 	    return;
+	extern boost::mutex io_mutex;
+	boost::mutex::scoped_lock lk(io_mutex);
 	int n = 1;
 	cout << "################### NODES ######################" << endl;
     for (NodeSet::const_iterator i = nodes_.begin(); i != nodes_.end(); ++i) {

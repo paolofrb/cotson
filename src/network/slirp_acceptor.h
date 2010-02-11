@@ -48,7 +48,7 @@ public:
     int handle_input(const uint8_t*, int) ;
 
 	// Send and receive packets
-	int sendto(const uint8_t*,size_t,const sockaddr*,size_t);
+	int sendto(const void*,size_t,const sockaddr*,size_t);
 	int receive(uint8_t*,size_t);
 	const sockaddr* from() { return &null_addr_; }
 

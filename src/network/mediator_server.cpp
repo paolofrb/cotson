@@ -19,6 +19,7 @@
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
 
+boost::mutex io_mutex;
 
 MediatorServer::MediatorServer(uint16_t ctrl_port,
                                uint16_t data_port,

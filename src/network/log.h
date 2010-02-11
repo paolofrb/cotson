@@ -13,11 +13,13 @@
 // Assumes compiler support for variadic macros
 #ifndef LOG_H
 #define LOG_H
+
 #define __str(x) #x
 #define ___str(x) __str(x)
-#define LOG1(...) if (verbose_>0) { _LOG(__VA_ARGS__); }
-#define LOG2(...) if (verbose_>1) { _LOG(__VA_ARGS__); }
-#define LOG3(...) if (verbose_>2) { _LOG(__VA_ARGS__); }
+extern boost::mutex io_mutex;
+#define LOG1(...) if (verbose_>0) { boost::mutex::scoped_lock lk(io_mutex); _LOG(__VA_ARGS__); }
+#define LOG2(...) if (verbose_>1) { boost::mutex::scoped_lock lk(io_mutex); _LOG(__VA_ARGS__); }
+#define LOG3(...) if (verbose_>2) { boost::mutex::scoped_lock lk(io_mutex); _LOG(__VA_ARGS__); }
 template<typename A> 
 static inline void _LOG(const A&a)
 {std::cout<<a<<std::endl;}

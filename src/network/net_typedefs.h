@@ -15,6 +15,8 @@
 #ifndef NET_TYPEDEFS_H_
 #define NET_TYPEDEFS_H_
 
+#include "mac.h"
+
 #include <set>
 #include <iostream>
 #include <string>
@@ -25,28 +27,6 @@
 #include <netinet/ether.h>
 #include <arpa/inet.h>
 #include <boost/lexical_cast.hpp>
-
-// MAC address
-union MacAddress
-{
-public:
-	MacAddress() { u64=0; }
-	MacAddress(const uint8_t x[6]) { u64=0; ::memcpy(b,x,6); }
-	MacAddress(const std::string& s) { u64=0; ::ether_aton_r(s.c_str(),(ether_addr*)b); }
-	MacAddress(uint32_t b, uint32_t id) { u32[0]=htonl(b|(id>>16)); u32[1]=htonl(id<<16); }
-
- 	inline bool operator ==(uint64_t l) const { return u64==l; }
-	inline bool operator <(const MacAddress& t) const { return u64 < t.u64; }
-	inline operator bool() const { return u64 != 0; }
-	inline bool is_broadcast() const { return u64 == 0x0000FFFFFFFFFFFFULL; }
-	std::string str() const { return std::string(::ether_ntoa((ether_addr*)b)); }
-	inline uint8_t byte(int n) const { return b[n]; }
-
-private:
-    uint64_t u64;
-    uint32_t u32[2];
-    uint8_t b[8];
-};
 
 namespace Sockaddr {
     static inline bool equal(const sockaddr_in &a, const sockaddr_in &b)

@@ -120,7 +120,7 @@ int VDEAcceptor::close_acceptor(void)
     return 0;
 }
 
-int VDEAcceptor::sendto(const uint8_t* buf, size_t n, const sockaddr* to, size_t tolen)
+int VDEAcceptor::sendto(const void* buf, size_t n, const sockaddr* to, size_t tolen)
 {
     return ::sendto(handle_,buf,n,0,to,tolen);
 }

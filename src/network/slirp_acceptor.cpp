@@ -83,10 +83,10 @@ int SlirpAcceptor::poll(fd_set* r,fd_set* w,fd_set* e)
 	return 0;
 }
 
-int SlirpAcceptor::sendto(const uint8_t* buf, size_t len,const sockaddr* to, size_t tolen)
+int SlirpAcceptor::sendto(const void* buf, size_t len,const sockaddr* to, size_t tolen)
 {
 	// cout << "### SLIRP SEND [" << len << "]\n";
-	slirp_input(buf,len);
+	slirp_input(reinterpret_cast<const uint8_t*>(buf),len);
 	return len;
 }
 
