@@ -42,21 +42,20 @@ run_twonodes:
 	echo "Simulation runs in background -- be patient (a few minutes)"; \
 	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
 	/bin/rm -f run_twonodes.log; \
-	( ../../bin/cotson twonodes.in > run_twonodes.log 2>&1 & ) ; \
-	sleep 10; \
-	echo "We now fire a viewer of the two consoles"; \
-	./twonodes-ctrl view
+	( (sleep 10; echo "Firing console view"; ./twonodes-ctrl view) &); \
+	../../bin/cotson twonodes.in > run_twonodes.log 2>&1 ; \
+	echo "Dumping the network trace"; \
+	../tools/traceplayer /tmp/net-trace.gz 0 1
+
 
 run_netperf:
 	@echo "Running the netperf benchmark (two nodes)"; \
 	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
 	tar xfj np.tbz -C /tmp; \
 	rm -rf run_netperf.log /tmp/netperf.db; \
-	( ../../bin/cotson netperf.in > run_netperf.log 2>& 1 & ); \
-	sleep 10; ./np-ctrl view; \
-	sleep 30; ../tools/ipcplot file:/tmp/netperf.db 1 -g 0.1 -mm ipc -r 2; \
-	../tools/ipcplot file:/tmp/netperf.db 1 -g 0.1 -mm packets -r 2
-
+	../../bin/cotson netperf.in > run_netperf.log 2>&1; \
+	../tools/ipcplot file:/tmp/netperf.db 1 -g 0.1 -mm ipc -r 0; \
+	../tools/ipcplot file:/tmp/netperf.db 1 -g 0.1 -mm packets -r 0
 
 run_sqlite:
 	@echo "Running 3 times an experiment (different samplers) writing to sqlite DB"; \
