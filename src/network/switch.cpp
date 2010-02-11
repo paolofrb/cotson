@@ -588,6 +588,8 @@ void Switch::send_terminate()
     tmsg.mkterminate();
     if (tmsg.sendto(sync_socket_,&sync_addr_) != tmsg.len())
         cout << "(SYNC) WARNING: Cannot send terminate message: " << strerror(errno) << endl;
+    if (dump_) 
+	   dump_->flush();
 }
 
 void Switch::dump_nodes()
