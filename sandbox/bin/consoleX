@@ -51,7 +51,8 @@ begin
 		debug " executing terminal in background"
 		debug "   #{CF[:xterm]} -e screen -DDR sessionname"
 		ENV['SCREENDIR']=$here.share('screen_dir')
-		a=Execute.run_background("#{CF[:xterm]} -e screen -DDR sessionname")
+        title="\'#{CF[:runid]} - node #{CF[:NODE]}\'"
+		a=Execute.run_background("#{CF[:xterm]} -T #{title} -e screen -DDR sessionname")
 		if force_display then
 			DB['rxvt_vnc_pid']=vnc_pid if vnc_pid
 			DB['rxvt_display']=display
