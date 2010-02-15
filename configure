@@ -109,7 +109,7 @@ echo "$dist $ver supported"
 pkgs="g++ bison flex ruby rubygems libopenssl-ruby libsqlite3-ruby vnc4server vnc-java 
 rxvt xfwm4 xfonts-100dpi xfonts-75dpi zsh sharutils build-essential xvnc4viewer screen \
 liblua5.1-0 liblua5.1-0-dev libpqxx-dev zlib1g-dev indent xutils-dev libsqlite3-dev \
-sqlite3 libdbd-sqlite3-perl libdbd-pg-perl gnuplot"
+sqlite3 libdbd-sqlite3-perl libdbd-pg-perl gnuplot libboost-dev"
 
 echo ""
 echo "Checking and installing packages ($pkgs)"
@@ -125,7 +125,7 @@ fi
 
 # Fix missing rgb.txt if needed
 if [[ ! -f /etc/X11/rgb.txt ]]; then
-    sudo cp data/rgb.txt /etc/X11/rgb.txt
+    sudo cp etc/rgb.txt /etc/X11/rgb.txt
 fi
 
 thread_lib="-lboost_thread -lpthread"

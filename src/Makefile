@@ -75,3 +75,5 @@ debug:
 release:
 	@echo "Making optimized version"; \
 	$(MAKE) OPT=release
+
+# DO NOT DELETE

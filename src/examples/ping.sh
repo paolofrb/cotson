@@ -7,7 +7,6 @@ TOTAL_NODES=$2
 if [ $NODE -eq 1 ] ; then
    echo "Node #1"
    ping -i 0.2 -c 5 n2 | tee /tmp/ping.log
-
 else
 ################# NODE 2..N ##################
    echo "Node #2"

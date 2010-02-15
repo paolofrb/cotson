@@ -83,6 +83,8 @@ build: ../abaeterno/abaeterno.so
 
 install: 
 
+dep:
+
 clean:
 	/bin/rm -f *log* abaeterno.so exp-*.gp exp-*.dat
 	make -C tracer clean

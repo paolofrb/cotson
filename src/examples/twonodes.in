@@ -13,7 +13,8 @@ copy_files_prefix=runid.."."
 debug=true
 
 control_script_file='twonodes-ctrl'
--- clean_sandbox=false
+clean_sandbox=false
+-- node_config="config.sh"
 
 cluster_nodes=2
 options = {
