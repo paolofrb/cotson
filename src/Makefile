@@ -24,7 +24,7 @@ regression-update: test_@all.log
 include Make.conf
 
 .PHONY: build_% install_% dep_% clean_% distclean_% test_% all test libs
-.PHONY: debug release regression regression-update
+.PHONY: regression regression-update
 
 build_%:
 	@echo "########## Build $* #############"; \
@@ -67,13 +67,5 @@ build_network: $(libs)
 build_common: build_libluabind
 
 build_examples: build_abaeterno
-
-debug:
-	@echo "Making debug version"; \
-	$(MAKE) OPT=debug
-
-release:
-	@echo "Making optimized version"; \
-	$(MAKE) OPT=release
 
 # DO NOT DELETE
