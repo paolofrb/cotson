@@ -44,12 +44,17 @@ private:
 	Instructions insns;
 	Opcodes opcodes;
 	uint64_t cur_cr3;
+	bool init_cr3;
 
 	// map to store tag->info correspondence
 	typedef std::map<uint32_t,Cotson::Inject::info_tag> tag_map;
 	tag_map tagged_insts;
 
     inline void add_tokens(size_t, const uint64_t*);
+
+    void process_pending(Instruction *);
+    std::vector<Memory::Access> prefetch_address;
+	std::vector<Memory::Access> clflush_address;
 };
 
 #endif

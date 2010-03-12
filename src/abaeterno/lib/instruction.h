@@ -32,6 +32,8 @@ public:
 	   // any other type above MAXCTRL
 	   CPUID=_MAXCTRL+1,
 	   PREFETCH=_MAXCTRL+2,
+	   CLFLUSH=_MAXCTRL+3,
+	   MEMFAKE=_MAXCTRL+4,
 	};
 
 	InstType(const uint8_t*);
@@ -42,6 +44,7 @@ public:
 	INLINE bool is_branch()   const { return type==CTRL_BRANCH; }
 	INLINE bool is_cpuid()    const { return type==CPUID; }
 	INLINE bool is_prefetch() const { return type==PREFETCH; }
+	INLINE bool is_clflush() const { return type==CLFLUSH; }
 	INLINE bool is_ret() const { return type==CTRL_RET || type==CTRL_IRET; }
 	INLINE bool is_call() const { return type==CTRL_CALL; }
 	INLINE bool valid() const { return type!=UNDEF; }

@@ -105,7 +105,7 @@ namespace Inject {
         info_opcode(int n,const uint8_t* op):opcode(op),length(n){}
     };
 
-    enum tag_type { PREFETCH=1 };
+    enum tag_type { PREFETCH=1, CLFLUSH=2 };
 
     struct info_tag {
         tag_type type;
@@ -210,6 +210,12 @@ namespace X86 {
     uint64_t RCX();
     uint64_t RAX();
 
+	// Save and restore regs
+	size_t RegSize();
+	void SaveRegs(void*);
+	void RestoreRegs(const void*);
+
+	// Other utilities
     inline bool is_cpuid(const uint8_t* b)
     {
         return b[0]==0x0F && b[1]==0xA2;
@@ -221,6 +227,10 @@ namespace X86 {
     inline bool is_cr3mov(const uint8_t* b, const uint8_t *m)
     {
         return b[0]==0x0F && b[1]==0x22 && (m[0]&0x38)==0x18;
+    }
+    inline bool is_clflush(const uint8_t* b, const uint8_t *m)
+    {
+        return b[0]==0x0F && b[1]==0xAE && (m[0]&0x38)==0x38;
     }
 }
 

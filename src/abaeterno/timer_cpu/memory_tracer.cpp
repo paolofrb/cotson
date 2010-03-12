@@ -39,6 +39,7 @@ protected:
 private: 
 	inline void read(uint64_t, uint64_t, uint64_t);
 	inline void write(uint64_t, uint64_t, uint64_t);
+	inline void invalidate(uint64_t, uint64_t, uint64_t);
 	inline void dump(uint64_t, uint64_t, uint64_t, uint64_t, bool);
 
 	typedef Memory::Storage::Many Cache;
@@ -47,11 +48,13 @@ private:
 	uint64_t cycles;
 	uint64_t instructions;
 	uint64_t lru;
+	uint64_t cache_ld, cache_st, flush;
 	uint64_t mem_rd, mem_wr, access;
 	static uint64_t timestamp;
 
 	bool shared;
 	bool binary;
+	bool code;
 	static shared_ptr<Cache> shared_cache;
 	static scoped_ptr<DumpGzip> trace;
 };
@@ -68,14 +71,17 @@ MemoryTracer::MemoryTracer(Parameters& p) : CpuTimer(&cycles,&instructions),
 	cycles(0),
 	instructions(0),
 	lru(0),
-	mem_rd(0),
-	mem_wr(0),
-	access(0),
+	cache_ld(0),cache_st(0),flush(0),
+	mem_rd(0),mem_wr(0),access(0),
 	shared(p.get<bool>("shared")),
-	binary(p.has("binary")?p.get<bool>("binary"):false)
+	binary(p.has("binary")?p.get<bool>("binary"):false),
+	code(p.has("code")?p.get<bool>("code"):false)
 {
 	add("instructions",instructions);
 	add("cycles",cycles);
+	add("cache_ld",cache_ld);
+	add("cache_st",cache_st);
+	add("flush",flush);
 	add("mem_rd",mem_rd);
 	add("mem_wr",mem_wr);
 	add("access",access);
@@ -91,6 +97,8 @@ MemoryTracer::MemoryTracer(Parameters& p) : CpuTimer(&cycles,&instructions),
 	trace_needs.st[SIMULATION].needs_exception=false;
 	trace_needs.st[SIMULATION].needs_heartbeat=false;
 	trace_needs.st[SIMULATION].needs_register=false;
+	trace_needs.st[SIMULATION].needs_memory=true;
+	trace_needs.st[SIMULATION].needs_code=code;
 	if (shared) 
 	{
 		 // shared cache across all CPUs (static member)
@@ -119,6 +127,11 @@ void MemoryTracer::endSimulation()
 	    cout << "<<< cpu " << id() << " now=" << Cotson::nanos() 
 		     << " instrs=" << instructions
 		     << " cycles=" << cycles 
+		     << " ld=" << cache_ld
+		     << " mr=" << mem_rd 
+		     << " st=" << cache_st
+		     << " mw=" << mem_wr 
+		     << " fl=" << flush 
 			 << endl;
 }
 
@@ -141,6 +154,7 @@ inline void MemoryTracer::dump(uint64_t ts, uint64_t a, uint64_t id, uint64_t cr
 inline void MemoryTracer::read(uint64_t ts, uint64_t a, uint64_t cr3)
 {
 	access++;
+	cache_ld++;
 	Memory::Line* cl = cache->find(a);
 	if (cl)
 	   cl->lru=++lru;
@@ -160,9 +174,27 @@ inline void MemoryTracer::read(uint64_t ts, uint64_t a, uint64_t cr3)
 	}
 }
 
+inline void MemoryTracer::invalidate(uint64_t ts, uint64_t a, uint64_t cr3)
+{
+	flush++;
+	Memory::Line* cl = cache->find(a);
+	if (cl) 
+	{
+		if (cl->moesi==Memory::MODIFIED)
+		{
+			// writeback
+		    uint64_t wb = cache->cache.addr_from_group_id(cl->tag); 
+		    dump(ts,wb,id(),cr3,true); // writeback
+			mem_wr++;
+		}
+		cl->moesi==Memory::INVALID;
+	}
+}
+
 inline void MemoryTracer::write(uint64_t ts, uint64_t a, uint64_t cr3)
 {
 	access++;
+	cache_st++;
 	Memory::Line* cl = cache->find(a);
 	if (cl)
 	{
@@ -189,15 +221,22 @@ void MemoryTracer::simulation(const Instruction* inst)
 	// Check if time has advanced past us
 	uint64_t t = Cotson::nanos();
 	uint64_t ts = t > timestamp ? t : timestamp; // local timestamp
-
 	uint64_t cr3 = inst->getCR3();
-	const uint64_t pctag = cache->cache.group_id(inst->PC().phys);
-	read(ts++,cache->cache.addr_from_group_id(pctag),cr3);
+	bool is_clflush=inst->Type().is_clflush();
+
+	if (code)
+	{
+	    const uint64_t pctag = cache->cache.group_id(inst->PC().phys);
+	    read(ts++,cache->cache.addr_from_group_id(pctag),cr3);
+	}
 
 	for(Instruction::MemIterator i=inst->LoadsBegin(); i!=inst->LoadsEnd();++i)
 	{
 		uint64_t tag = cache->cache.group_id(i->phys);
-		read(ts++,cache->cache.addr_from_group_id(tag),cr3);
+		if (is_clflush) 
+		    invalidate(ts++,cache->cache.addr_from_group_id(tag),cr3);
+		else
+		    read(ts++,cache->cache.addr_from_group_id(tag),cr3);
 	}
 
 	for(Instruction::MemIterator i=inst->StoresBegin(); i!=inst->StoresEnd();++i)

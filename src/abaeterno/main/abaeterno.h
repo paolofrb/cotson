@@ -64,6 +64,7 @@ private:
 	void printStats();
 	uint64_t next_sample;
 	void callme(uint64_t);
+    bool needs_sim_tag(const uint8_t*, uint32_t) const;
 	
 	uint64_t nanos;
 	uint64_t cycles;

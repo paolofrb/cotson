@@ -24,10 +24,10 @@ struct Access
 	uint64_t phys;
 	uint32_t length;
 	
+	INLINE Access():virt(0),phys(0),length(0) {}
 	INLINE Access(uint64_t v):virt(v),phys(v),length(8) {}
 	INLINE Access(uint64_t v,uint64_t p):virt(v),phys(p),length(8) {}
-	INLINE Access(uint64_t v,uint64_t p,uint32_t l):
-		virt(v),phys(p),length(l) {}
+	INLINE Access(uint64_t v,uint64_t p,uint32_t l):virt(v),phys(p),length(l) {}
 };
 }
 

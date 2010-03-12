@@ -150,6 +150,15 @@ struct Proxy : public CMonitorConsumer
 		}
 		return regs;
     }
+
+    const void set_regs(X8664REG& regs)
+    {
+	    ERROR_IF(!code_injector,"no code injector present right now");
+	    if (!regs_valid) 
+		{
+	        code_injector->SetX8664Reg(regs);
+		}
+    }
 #ifdef NEED_GET_PROC_FREQ
     double GetProcessorFreq(UINT64, UINT64);
 #endif
@@ -925,6 +934,9 @@ void Cotson::Inject::save_tag_info(uint64_t d,uint32_t tag,Cotson::Inject::tag_t
 	ti.index_reg = ii.bHasIndex ? 15-ii.nSIBIndexReg : -1;
 	ti.disp = ii.bHasDisplacement ? ii.nDisplacement : 0;
 	ti.scale = (ii.bHasIndex && ii.bHasScale) ? (1 << ii.nSibScale) : 1;
+
+	// FIXME: we don't deal with 16b immediates yet..
+
     ti.segment = ii.nSegment;
 	ti.size_mask =   ii.eAddressSize == Size16Bit ? 0x000000000000FFFF 
 	               : ii.eAddressSize == Size32Bit ? 0x00000000FFFFFFFF
@@ -1075,6 +1087,21 @@ uint64_t Cotson::X86::RBX() { return proxy->get_regs().IntegerRegs[12]; }
 uint64_t Cotson::X86::RDX() { return proxy->get_regs().IntegerRegs[13]; }
 uint64_t Cotson::X86::RCX() { return proxy->get_regs().IntegerRegs[14]; }
 uint64_t Cotson::X86::RAX() { return proxy->get_regs().IntegerRegs[15]; }
+
+size_t Cotson::X86::RegSize() { return sizeof(X8664REG); }
+
+void Cotson::X86::SaveRegs(void *p) 
+{
+    const X8664REG& r=proxy->get_regs();
+    (void)memcpy(p,reinterpret_cast<const void*>(&r),RegSize());
+}
+
+void Cotson::X86::RestoreRegs(const void *p) 
+{
+    X8664REG r;
+    (void)memcpy(reinterpret_cast<void*>(&r),p,RegSize());
+	proxy->set_regs(r);
+}
 
 //##################################################################################
 // FIXME: Hack to guess frequency from old SimNow registry if the 

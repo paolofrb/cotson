@@ -181,7 +181,7 @@ ostream& operator<<(ostream& o,const Instruction& insn)
 		% insn.pc.virt
 		% insn.pc.phys
 		% insn.pc.length
-		% insn.type
+		% (int)insn.type
 		% ss.str();
 	for(Instruction::MemIterator i=insn.loads.begin(); i!=insn.loads.end();i++)
 		o << format("%|12t|load%|20t|0x%016X 0x%016X (%d)\n") 
