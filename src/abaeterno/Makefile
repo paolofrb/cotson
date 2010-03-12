@@ -452,6 +452,19 @@ mem_lib/futurebus.o: ../common/lua.hpp ../common/units.h ../common/cast.h
 mem_lib/futurebus.o: ../common/uint64_t_hash.h ../common/parameters.h
 mem_lib/futurebus.o: ../common/param_factory.h ../common/options.h lib/logger.h
 mem_lib/futurebus.o: lib/selector.h main/cotson.h mem_lib/protocol.h
+mem_lib/hybrid_memory.o: lib/abaeterno_config.h mem_lib/hybrid_memory.h
+mem_lib/hybrid_memory.o: lib/memory_interface.h lib/memory_access.h
+mem_lib/hybrid_memory.o: ../common/dump_gzip.h ../common/read_gzip.h
+mem_lib/hybrid_memory.o: lib/inline.h lib/memory_trace.h ../common/libmetric.h
+mem_lib/hybrid_memory.o: ../common/metric.h ../common/tagged_metric.h
+mem_lib/hybrid_memory.o: ../common/heartbeat.h ../common/aggregator.h
+mem_lib/hybrid_memory.o: hw_model/state_observer.h hw_model/states.h
+mem_lib/hybrid_memory.o: ../common/liboptions.h ../common/kill.h
+mem_lib/hybrid_memory.o: ../common/static_set.h ../common/lua_register.h
+mem_lib/hybrid_memory.o: ../common/lua.hpp ../common/units.h ../common/cast.h
+mem_lib/hybrid_memory.o: ../common/uint64_t_hash.h ../common/parameters.h
+mem_lib/hybrid_memory.o: ../common/param_factory.h ../common/options.h
+mem_lib/hybrid_memory.o: lib/logger.h lib/selector.h main/cotson.h
 mem_lib/hybrid_memory_cache.o: lib/abaeterno_config.h
 mem_lib/hybrid_memory_cache.o: mem_lib/hybrid_memory_cache.h
 mem_lib/hybrid_memory_cache.o: lib/memory_interface.h lib/memory_access.h
@@ -469,19 +482,6 @@ mem_lib/hybrid_memory_cache.o: ../common/param_factory.h ../common/options.h
 mem_lib/hybrid_memory_cache.o: lib/logger.h lib/selector.h main/cotson.h
 mem_lib/hybrid_memory_cache.o: lib/cache.h lib/debug_mem.h lib/hashmap.h
 mem_lib/hybrid_memory_cache.o: mem_lib/hybrid_memory.h
-mem_lib/hybrid_memory.o: lib/abaeterno_config.h mem_lib/hybrid_memory.h
-mem_lib/hybrid_memory.o: lib/memory_interface.h lib/memory_access.h
-mem_lib/hybrid_memory.o: ../common/dump_gzip.h ../common/read_gzip.h
-mem_lib/hybrid_memory.o: lib/inline.h lib/memory_trace.h ../common/libmetric.h
-mem_lib/hybrid_memory.o: ../common/metric.h ../common/tagged_metric.h
-mem_lib/hybrid_memory.o: ../common/heartbeat.h ../common/aggregator.h
-mem_lib/hybrid_memory.o: hw_model/state_observer.h hw_model/states.h
-mem_lib/hybrid_memory.o: ../common/liboptions.h ../common/kill.h
-mem_lib/hybrid_memory.o: ../common/static_set.h ../common/lua_register.h
-mem_lib/hybrid_memory.o: ../common/lua.hpp ../common/units.h ../common/cast.h
-mem_lib/hybrid_memory.o: ../common/uint64_t_hash.h ../common/parameters.h
-mem_lib/hybrid_memory.o: ../common/param_factory.h ../common/options.h
-mem_lib/hybrid_memory.o: lib/logger.h lib/selector.h main/cotson.h
 mem_lib/hybrid_memory_lua.o: lib/abaeterno_config.h lib/lua_helpers.h
 mem_lib/hybrid_memory_lua.o: ../common/lua.hpp lib/memory_interface.h
 mem_lib/hybrid_memory_lua.o: lib/memory_access.h ../common/dump_gzip.h
@@ -828,6 +828,16 @@ sampler/smarts.o: ../common/static_set.h ../common/lua_register.h
 sampler/smarts.o: ../common/lua.hpp ../common/units.h ../common/cast.h
 sampler/smarts.o: ../common/uint64_t_hash.h ../common/parameters.h
 sampler/smarts.o: ../common/param_factory.h ../common/options.h
+timer_dev/disk_tracer.o: lib/abaeterno_config.h lib/logger.h lib/selector.h
+timer_dev/disk_tracer.o: main/cotson.h ../common/metric.h
+timer_dev/disk_tracer.o: timer_dev/disk_timer.h ../common/libmetric.h
+timer_dev/disk_tracer.o: ../common/tagged_metric.h ../common/heartbeat.h
+timer_dev/disk_tracer.o: ../common/aggregator.h ../common/liboptions.h
+timer_dev/disk_tracer.o: ../common/kill.h ../common/static_set.h
+timer_dev/disk_tracer.o: ../common/lua_register.h ../common/lua.hpp
+timer_dev/disk_tracer.o: ../common/units.h ../common/cast.h
+timer_dev/disk_tracer.o: ../common/uint64_t_hash.h ../common/parameters.h
+timer_dev/disk_tracer.o: ../common/param_factory.h ../common/options.h
 timer_dev/disksim.o: lib/abaeterno_config.h lib/logger.h lib/selector.h
 timer_dev/disksim.o: main/cotson.h ../common/metric.h timer_dev/disk_timer.h
 timer_dev/disksim.o: ../common/libmetric.h ../common/tagged_metric.h
@@ -839,16 +849,6 @@ timer_dev/disksim.o: ../common/uint64_t_hash.h ../common/parameters.h
 timer_dev/disksim.o: ../common/param_factory.h ../common/options.h
 timer_dev/disksim.o: timer_dev/disksim_interface.h
 timer_dev/disksim.o: ../disksim/src/disksim_reqflags.h
-timer_dev/disk_tracer.o: lib/abaeterno_config.h lib/logger.h lib/selector.h
-timer_dev/disk_tracer.o: main/cotson.h ../common/metric.h
-timer_dev/disk_tracer.o: timer_dev/disk_timer.h ../common/libmetric.h
-timer_dev/disk_tracer.o: ../common/tagged_metric.h ../common/heartbeat.h
-timer_dev/disk_tracer.o: ../common/aggregator.h ../common/liboptions.h
-timer_dev/disk_tracer.o: ../common/kill.h ../common/static_set.h
-timer_dev/disk_tracer.o: ../common/lua_register.h ../common/lua.hpp
-timer_dev/disk_tracer.o: ../common/units.h ../common/cast.h
-timer_dev/disk_tracer.o: ../common/uint64_t_hash.h ../common/parameters.h
-timer_dev/disk_tracer.o: ../common/param_factory.h ../common/options.h
 timer_dev/simple_disk.o: lib/abaeterno_config.h lib/logger.h lib/selector.h
 timer_dev/simple_disk.o: ../common/error.h ../common/liboptions.h
 timer_dev/simple_disk.o: ../common/kill.h ../common/static_set.h
