@@ -14,6 +14,8 @@
 # that install the required libraries
 #
 
+SIMNOW_SUPPORTED_VER="4.6.2"
+
 status_args="$*"
 simnow_dir=""
 root=`pwd`
@@ -22,6 +24,7 @@ src_dir="$root/src"
 cc="gcc"
 cxx="g++"
 vnctest=1
+force=0
 if [[ "$SIMNOW_DIR" != "" ]]; then
     simnow_dir=$SIMNOW_DIR
 fi
@@ -42,12 +45,14 @@ do
         --cc) cc=$2; shift; shift;;
         --cxx) cxx=$2; shift; shift;;
         --vnctest) vnctest=$2; shift; shift;;
+		--force) force=1; shift;;
         *) echo "Usage: $0"
            echo "--simnow_dir simnow_location           set simnow dir"
            echo "--data_dir data_location               set data dir"
            echo "--cc c-compiler                        set C compiler"
            echo "--cxx c++-compiler                     set C++ compiler"
            echo "--vnctest N                            test N vnc ports"
+		   echo "--force                                ignore simnow version"
            exit 1
     esac
 done
@@ -77,6 +82,16 @@ if [[ -f $lib1 || -f $lib2 ]]; then
     echo "       make sure $simnow_dir is writeable or remove $lib1 and $lib2 manually"
     exit 1
 fi
+
+if [[ $force != 1 ]]; then
+    simnow_ver=`cd $simnow_dir; ./simnow --version | awk '/SimNow version/{print $6;}'|sed 's/,//'`
+    if [[ $simnow_ver != $SIMNOW_SUPPORTED_VER ]]; then
+        echo "ERROR: simnow version is '$simnow_ver'"
+	    echo "       The supported version is $SIMNOW_SUPPORTED_VER"
+	    exit 1
+    fi
+fi
+echo "SimNow version is $simnow_ver"
 
 ########################################################################
 dist=`lsb_release -i -s`
