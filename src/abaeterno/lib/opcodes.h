@@ -13,6 +13,7 @@
 #ifndef OPCODES_H
 #define OPCODES_H
 
+#include <boost/pool/pool_alloc.hpp>
 #include <hashmap.h>
 #include <vector>
 
