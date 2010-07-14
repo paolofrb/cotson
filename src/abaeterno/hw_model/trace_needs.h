@@ -19,34 +19,50 @@
 class Instruction; 
 typedef delegate<const Instruction *> EmitFunction;
 
+#define NEED_CODE (1)
+#define NEED_MEM  (1<<1)
+#define NEED_REG  (1<<2)
+#define NEED_EXC  (1<<3)
+#define NEED_HB   (1<<4)
+
 class StateNeeds
 {
-	public:
+public:
 	EmitFunction emit;
 	bool has_emit;	
 	bool needs_code;
 	bool needs_memory;
+	bool needs_register;
 	bool needs_exception;
 	bool needs_heartbeat;
-	bool needs_register;
 
 	StateNeeds() : has_emit(false), needs_code(false), 
-		needs_memory(false), needs_exception(false), 
-		needs_heartbeat(false), needs_register(false) {}
+		needs_memory(false), needs_register(false),
+		needs_exception(false), needs_heartbeat(false)
+		{}
 	
-	void set(const EmitFunction& e) 
-	{ 
+	void setflags(uint32_t f)
+	{
+		needs_code=(f&NEED_CODE);
+		needs_memory=(f&NEED_MEM);
+		needs_register=(f&NEED_REG);
+		needs_exception=(f&NEED_EXC);
+		needs_heartbeat=(f&NEED_HB);
+	}
+
+	void set(const EmitFunction& e)
+	{
 		emit=e; 
 		has_emit=true; 
 		needs_code=true;
 		needs_memory=true;
+		needs_register=true;
 		needs_exception=true;
 		needs_heartbeat=true;
-		needs_register=true;
 	}
 
 	void clear() 
-	{ 
+	{
 		has_emit=false; 
 		needs_code=false;
 		needs_memory=false;
@@ -58,9 +74,7 @@ class StateNeeds
 
 class TraceNeeds
 {
-	public:
-	bool opcodes;
-	bool types;
+public:
 	int  history; // max number of instructions that a timer may remember
 
 	StateNeeds st[SIM_STATES];
@@ -69,7 +83,8 @@ class TraceNeeds
 	uint64_t* instructions;
 
 	TraceNeeds(uint64_t*c,uint64_t*i) : 
-		opcodes(false), types(false), history(0),
+		// opcodes(false), types(false), 
+		history(0),
 		cycles(c), instructions(i) {}
 };
 

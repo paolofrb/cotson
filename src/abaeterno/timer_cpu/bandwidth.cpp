@@ -186,12 +186,16 @@ Bandwidth::Bandwidth(Parameters& p) : CpuTimer(&cycles,&instructions),
 	}
 	clear_metrics();
 
-	trace_needs.opcodes=false;
-	trace_needs.types=false;
 	trace_needs.history=rbs*2; // account for waiting !!
 	trace_needs.st[SIMPLE_WARMING].set(EmitFunction::bind<Bandwidth,&Bandwidth::simple_warming>(this));
 	trace_needs.st[FULL_WARMING].set(EmitFunction::bind<Bandwidth,&Bandwidth::full_warming>(this));
 	trace_needs.st[SIMULATION].set(EmitFunction::bind<Bandwidth,&Bandwidth::simulation>(this));
+
+	uint32_t flags=(NEED_CODE|NEED_MEM|NEED_EXC|NEED_HB);
+	trace_needs.st[SIMPLE_WARMING].setflags(flags);
+	trace_needs.st[FULL_WARMING].setflags(flags);
+	trace_needs.st[SIMULATION].setflags(flags);
+
 }
 
 void Bandwidth::beginSimulation()

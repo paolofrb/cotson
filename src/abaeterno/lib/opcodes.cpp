@@ -15,7 +15,6 @@
 #include "opcodes.h"
 #include "logger.h"
 
-
 Opcodes::Opcodes() : 
 	data(hash_size),
 	pul(new boost::pool<>(Opcodes::pool_size)) 

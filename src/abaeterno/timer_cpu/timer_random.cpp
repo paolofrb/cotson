@@ -50,7 +50,6 @@ TimerRandom::TimerRandom(Parameters& p) : CpuTimer(&cycles,&instructions),
 {
 	add("instructions",instructions);
 	add("cycles",cycles);
-	trace_needs.types=false;
 	trace_needs.history=0;
 	clear_metrics();
 }

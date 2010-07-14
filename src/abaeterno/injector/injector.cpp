@@ -60,14 +60,10 @@ ReadGzip& operator>>(ReadGzip& gz,Instruction& inst)
 		return gz;
 	ERROR_IF(!pc.length,"instructions must have length to be read");
 
-	Instruction::init(&inst,pc.virt,pc.phys,pc.length,0);
-
 	char type;
 	gz >> type;
 	if(!gz)
 		return gz;
-
-	inst.Type(type);
 
 	uint8_t *opc = opcodes.malloc(pc.length);
 	for(uint i=0;i<pc.length;i++)
@@ -75,7 +71,14 @@ ReadGzip& operator>>(ReadGzip& gz,Instruction& inst)
 	if(!gz)
 		return gz;
 
-	inst.CopyOpcode(opc,pc.length);
+	const Opcode* newop = 
+	    opcodes.insert(
+	        pc.phys, 
+			Opcode(opc,pc.length,type,
+			       Opcode::regs(),
+				   Opcode::regs(),
+				   Opcode::regs()));
+	Instruction::init(&inst,pc.virt,pc.phys,pc.length,0,newop,type);
 
 	Memory::Access e(0,0,0);
 	uint32_t size;

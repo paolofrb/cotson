@@ -14,25 +14,37 @@
 #define OPCODES_H
 
 #include <hashmap.h>
+#include <vector>
+
+class Opcode
+{
+public:
+    typedef std::vector<uint8_t> regs;
+
+	Opcode(const uint8_t* o,uint32_t l,int t,
+	       const regs& src,
+		   const regs& dst,
+		   const regs& mem):
+        opcode(o),length(l),type(t),
+		src_regs(src),dst_regs(dst),mem_regs(mem){}
+
+	inline const uint8_t* getOpcode() const { return opcode; }
+	inline uint32_t getLength() const { return length; }
+	inline int getType() const { return type; }
+	inline const regs& getSrcRegs() const { return src_regs; }
+	inline const regs& getDstRegs() const { return dst_regs; }
+	inline const regs& getMemRegs() const { return mem_regs; }
+private:
+    const uint8_t* opcode;
+	uint32_t length;
+	int type;
+	const regs src_regs, dst_regs, mem_regs;
+};
 
 class Opcodes
 {
 private:
-	class Datum
-	{
-	private:
-	    const uint8_t* opcode;
-		uint32_t length;
-		int type;
-	public:
-		Datum():opcode(0),length(0),type(0){}
-		Datum(const uint8_t* o,uint32_t l,int t):opcode(o),length(l),type(t){}
-	    inline const uint8_t* getOpcode() const { return opcode; }
-	    inline uint32_t getLength() const { return length; }
-	    inline int getType() const { return type; }
-	};
-
-	typedef HashMap<int64_t,Datum> Map;
+	typedef HashMap<int64_t,Opcode> Map;
 	Map data;
 	boost::pool<>* pul;
 
@@ -52,17 +64,15 @@ public:
 	    return static_cast<uint8_t*>(pul->malloc());
 	}
 
-	// accessing data
-	typedef const Datum datum;
-	inline const datum* find(uint64_t index) const 
+	inline const Opcode* find(uint64_t index) const 
 	{
 		Map::const_iterator i = data.find(index); 
 	    return i == data.end() ? 0 : &(i->second);
 	}
 
-	inline void insert(uint64_t index,const uint8_t*opc,uint32_t length,int type)
+	inline const Opcode* insert(uint64_t index, const Opcode& op)
 	{
-		data[index]=Datum(opc,length,type);
+		return &(data.insert(std::make_pair(index,op)).first->second);
 	}
 };
 

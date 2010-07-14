@@ -158,10 +158,10 @@ cpu0.hb_ev_HW_interrupt                                     65
 cpu0.hb_ev_SW_interrupt                                     0
 cpu0.idlecount                                              513240
 cpu0.instcount                                              1241096
-cpu0.invalid_translation_bytes                              57797
+cpu0.invalid_translation_bytes                              58862
 cpu0.iocount                                                481240
-cpu0.metadata_bytes                                         311024
-cpu0.other_exceptions                                       4506
+cpu0.metadata_bytes                                         310904
+cpu0.other_exceptions                                       4502
 cpu0.plain_invalidations                                    41
 cpu0.range_invalidations                                    0
 cpu0.read_mmios                                             71
@@ -390,7 +390,7 @@ cpu0.timer.twolev.misses                                    1470
 cpu0.timer.twolev.reset                                     0
 cpu0.timer.twolev.update                                    45989
 cpu0.trace_cache_size                                       0
-cpu0.valid_translation_bytes                                2674708
+cpu0.valid_translation_bytes                                2742086
 cpu0.write_mmios                                            47
 cpu0.write_pios                                             670
 cycles                                                      3200102
@@ -437,19 +437,19 @@ cpu0.timer.dcache.read_miss_rate                            0.0118178
 cpu0.timer.dcache.write_miss_rate                           0.0241516
 cpu0.timer.dtlb.l2tlb.main.dram_miss_ratio                  0.267823
 cpu0.timer.dtlb.l2tlb.read_miss_rate                        0.100602
-cpu0.timer.dtlb.l2tlb.write_miss_rate                       nan
+cpu0.timer.dtlb.l2tlb.write_miss_rate                       -nan
 cpu0.timer.dtlb.read_miss_rate                              0.00774917
-cpu0.timer.dtlb.write_miss_rate                             nan
+cpu0.timer.dtlb.write_miss_rate                             -nan
 cpu0.timer.icache.l2cache.main.dram_miss_ratio              0.267823
 cpu0.timer.icache.l2cache.read_miss_rate                    0.167745
 cpu0.timer.icache.l2cache.write_miss_rate                   0.00288212
 cpu0.timer.icache.read_miss_rate                            0.0255814
-cpu0.timer.icache.write_miss_rate                           nan
+cpu0.timer.icache.write_miss_rate                           -nan
 cpu0.timer.ipc                                              0.30973
 cpu0.timer.itlb.l2tlb.main.dram_miss_ratio                  0.267823
 cpu0.timer.itlb.l2tlb.read_miss_rate                        0.100602
-cpu0.timer.itlb.l2tlb.write_miss_rate                       nan
+cpu0.timer.itlb.l2tlb.write_miss_rate                       -nan
 cpu0.timer.itlb.read_miss_rate                              0.00229533
-cpu0.timer.itlb.write_miss_rate                             nan
+cpu0.timer.itlb.write_miss_rate                             -nan
 cpu0.timer.twolev.miss_rate                                 0.0319642
 END__DATA

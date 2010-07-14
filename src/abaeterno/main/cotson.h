@@ -15,9 +15,11 @@
 
 #include "metric.h"
 
+#include <vector>
+
 class TokenQueue;
 
-namespace Cotson { 
+namespace Cotson {
 
 const std::set<std::string>& statistics_names();
 
@@ -97,6 +99,7 @@ namespace Inject {
         uint64_t pc;
         bool is_cpuid;
         bool is_cr3_change; 
+		std::vector<uint8_t> src_regs, dst_regs, mem_regs;
     };
 
     struct info_opcode {
@@ -117,7 +120,7 @@ namespace Inject {
         int64_t size_mask;
     };
 
-    const info_instruction& current_opcode(boost::function<uint8_t*(int)> use_this_malloc);
+    const info_instruction& current_opcode(boost::function<uint8_t*(int)>);
     void tag(uint32_t tag);
     void save_tag_info(uint64_t,uint32_t,tag_type);
     uint64_t PC(bool);
@@ -128,10 +131,13 @@ namespace Memory {
     uint64_t physical_address(uint64_t);
     void read_physical_memory(uint64_t address,uint32_t length,uint8_t*buf);
     void write_physical_memory(uint64_t address,uint32_t length,uint8_t*buf);
+    void read_virtual_memory(uint64_t address,uint32_t length,uint8_t*buf);
+    void write_virtual_memory(uint64_t address,uint32_t length,uint8_t*buf);
 	uint64_t address_from_tag(const Inject::info_tag&);
 }
 
 namespace X86 {
+    // GR regs
     uint64_t IntegerReg(int);
     uint16_t SelectorES();
     uint16_t FlagsES();
@@ -210,10 +216,40 @@ namespace X86 {
     uint64_t RCX();
     uint64_t RAX();
 
+    // FP regs
+    struct uint128_t { uint64_t hi,lo; uint128_t(uint64_t,uint64_t); };
+    uint128_t XmmReg(int); // xmm registers
+    uint16_t  fcw();            // fpu control word
+    uint16_t  fsw();            // fpu status word
+    uint16_t  ftw();            // fpu tag word (8bits)
+    uint16_t  fop();            // fpu opcode
+    uint32_t  ip();             // fpu instruction pointer offset
+    uint16_t  cs();             // fpu instruction pointer selector
+    uint32_t  dp();             // fpu data pointer offset
+    uint16_t  ds();             // fpu data pointer selector
+    uint32_t  mxcsr();          // MXCSR register state
+    uint32_t  mxcsrMask();      // changed jray (mask for MXCSR)
+    uint64_t  mmx0Mant();
+    uint16_t  mmx0Exp();
+    uint64_t  mmx1Mant();
+    uint16_t  mmx1Exp();
+    uint64_t  mmx2Mant();
+    uint16_t  mmx2Exp();
+    uint64_t  mmx3Mant();
+    uint16_t  mmx3Exp();
+    uint64_t  mmx4Mant();
+    uint16_t  mmx4Exp();
+    uint64_t  mmx5Mant();
+    uint16_t  mmx5Exp();
+    uint64_t  mmx6Mant();
+    uint16_t  mmx6Exp();
+    uint64_t  mmx7Mant();
+    uint16_t  mmx7Exp();
+
 	// Save and restore regs
-	size_t RegSize();
-	void SaveRegs(void*);
-	void RestoreRegs(const void*);
+	size_t RegSize(); // total regsize
+	void SaveRegs(uint8_t*);
+	void RestoreRegs(const uint8_t*);
 
 	// Other utilities
     inline bool is_cpuid(const uint8_t* b)

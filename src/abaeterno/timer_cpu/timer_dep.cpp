@@ -1,4 +1,4 @@
-// (C) Copyright 2006-2009 Hewlett-Packard Development Company, L.P.
+// (C) Copyright 2010 Hewlett-Packard Development Company, L.P.
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -10,6 +10,9 @@
 //
 
 // $Id$
+
+// #define _DEBUG_THIS_
+
 #include "abaeterno_config.h"
 #include "logger.h"
 #include "cpu_timer.h"
@@ -19,10 +22,10 @@
 using namespace std;
 using namespace boost;
 
-class Timer0 : public CpuTimer
+class TimerDep : public CpuTimer
 {
 public: 
-	Timer0(Parameters&);
+	TimerDep(Parameters&);
 
 	void simple_warming(const Instruction*);
 	void full_warming(const Instruction*);
@@ -35,6 +38,9 @@ protected:
 	void beginSimulation();
 
 private: 
+    uint64_t reg_read(const Opcode*, uint64_t);
+    void reg_write(const Opcode*, uint64_t);
+
 	const Instruction* prev_inst;
 	Memory::Interface::Shared icache;
 	Memory::Interface::Shared dcache;
@@ -43,27 +49,25 @@ private:
 	boost::shared_ptr<twolevT>	twolev;
 
 	uint64_t instructions;
-	uint64_t cycles; // rounded up version of dcycles
-	double dcycles; // keep cycles accounting at sub-cycle precision
+	uint64_t fetch_cycle;
+	uint64_t cycles;
 	
 	const uint32_t branch_mispred_penalty;
 	const bool bpred_perfect;
 	const double commit_cpi;
-	const double dcache_fudge;
-	const double icache_fudge;
 
+	uint8_t lastreg;
+	uint8_t rename[256]; // register renaming
 	uint64_t regcycle[256]; // register ready time
 };
 
-registerClass<CpuTimer,Timer0> timer0_c("timer0");
+registerClass<CpuTimer,TimerDep> timer_dep_c("timer_dep");
 
-Timer0::Timer0(Parameters& p) : CpuTimer(&cycles,&instructions),
+TimerDep::TimerDep(Parameters& p) : CpuTimer(&cycles,&instructions),
 	prev_inst(0),
 	branch_mispred_penalty(p.get<uint32_t>("branch_mispred_penalty","8")),
 	bpred_perfect(p.get<bool>("bpred_perfect","false")),
-	commit_cpi(p.get<double>("commit_cpi","1.0")),
-	dcache_fudge(p.get<double>("dcache.fudge","1.0")),
-	icache_fudge(p.get<double>("icache.fudge","1.0"))
+	commit_cpi(p.get<double>("commit_cpi","1.0"))
 {
 	twolev.reset(new twolevT(
 		p.get<uint32_t>("twolev.l1_size","1"),
@@ -77,52 +81,113 @@ Timer0::Timer0(Parameters& p) : CpuTimer(&cycles,&instructions),
 
 	add("twolev.", *twolev);
 	clear_metrics();
-	dcycles = 0.0;
+	fetch_cycle=0;
 
 	trace_needs.history=2;
-	trace_needs.st[SIMPLE_WARMING].set(EmitFunction::bind<Timer0,&Timer0::simple_warming>(this));
-	trace_needs.st[FULL_WARMING].set(EmitFunction::bind<Timer0,&Timer0::full_warming>(this));
-	trace_needs.st[SIMULATION].set(EmitFunction::bind<Timer0,&Timer0::simulation>(this));
+	trace_needs.st[SIMPLE_WARMING].set(EmitFunction::bind<TimerDep,&TimerDep::simple_warming>(this));
+	trace_needs.st[FULL_WARMING].set(EmitFunction::bind<TimerDep,&TimerDep::full_warming>(this));
+	trace_needs.st[SIMULATION].set(EmitFunction::bind<TimerDep,&TimerDep::simulation>(this));
 
-	uint32_t flags = (NEED_CODE | NEED_MEM | NEED_EXC | NEED_HB);
-	trace_needs.st[SIMPLE_WARMING].setflags(flags);
-	trace_needs.st[FULL_WARMING].setflags(flags);
-	trace_needs.st[SIMULATION].setflags(flags);
+	uint32_t wflags = (NEED_CODE | NEED_MEM | NEED_EXC | NEED_HB);
+	trace_needs.st[SIMPLE_WARMING].setflags(wflags);
+	trace_needs.st[FULL_WARMING].setflags(wflags);
+
+	uint32_t sflags = (NEED_CODE | NEED_MEM | NEED_REG | NEED_EXC | NEED_HB);
+	trace_needs.st[SIMULATION].setflags(sflags);
 }
 
-void Timer0::simulation(const Instruction* inst)
+uint64_t TimerDep::reg_read(const Opcode* opc, uint64_t fc)
+{
+	uint64_t rc = fc;
+	if (opc)
+	{
+		const Opcode::regs& src_regs = opc->getSrcRegs();
+	    for(Opcode::regs::const_iterator i=src_regs.begin(); i!=src_regs.end(); ++i)
+		{
+			uint8_t r = *i;
+			if (!rename[r]) {
+			    rename[r]= ++lastreg;
+			    if (lastreg == 256) lastreg = 0;
+			}
+		    uint64_t t = regcycle[rename[r]];
+			if (t > rc) rc = t;
+			LOG(" -- reg read",(int)r,":",(int)rename[r],"cycle",t);
+		}
+		const Opcode::regs& mem_regs = opc->getMemRegs();
+	    for(Opcode::regs::const_iterator i=mem_regs.begin(); i!=mem_regs.end(); ++i)
+		{
+			uint8_t r = *i;
+			if (!rename[r]) {
+			    rename[r]= ++lastreg;
+			    if (lastreg == 256) lastreg = 0;
+			}
+		    uint64_t t = regcycle[rename[r]];
+			if (t > rc) rc = t;
+			LOG(" -- mreg read",(int)r,":",(int)rename[r],"cycle",t);
+		}
+	}
+	return rc;
+}
+
+void TimerDep::reg_write(const Opcode* opc, uint64_t t)
+{
+	if (opc) // set ready time for dest registers
+	{
+		const Opcode::regs& dst_regs = opc->getSrcRegs();
+	    for(Opcode::regs::const_iterator i=dst_regs.begin(); i!=dst_regs.end(); ++i)
+		{
+			uint8_t r = *i;
+			rename[r]= ++lastreg;
+			if (lastreg == 256) lastreg = 0;
+		    regcycle[rename[r]] = t;
+			LOG(" -- reg write",(int)r,":",(int)rename[r],"cycle",t);
+	    }
+	}
+}
+
+void TimerDep::simulation(const Instruction* inst)
 {
 	instructions++;
-	dcycles+=commit_cpi;
-
 	const Memory::Access& pc = inst->PC();
 	
 	/* Branch predictor */
-	if (!bpred_perfect && prev_inst && prev_inst->is_branch())
+	bool taken=false;
+	if (prev_inst && prev_inst->is_branch())
 	{
 		const Memory::Access& lastPC = prev_inst->PC();
 		uint64_t lpc = lastPC.phys;
-		bool real_taken = ((lpc+lastPC.length) != pc.phys);
-
-		TwolevUpdate twolev_record;
-		if (twolev->Lookup(lpc, twolev_record,real_taken))
-			dcycles += (double)branch_mispred_penalty;
+		taken = ((lpc+lastPC.length) != pc.phys);
+	    if (!bpred_perfect)
+		{
+		    TwolevUpdate twolev_record;
+		    if (twolev->Lookup(lpc, twolev_record,taken)) 
+			{
+			    fetch_cycle += branch_mispred_penalty;
+				LOG("mispredict: fetch",fetch_cycle);
+		    }
 		
-		// Update branch predictor
-		twolev->SpecUpdate(lpc, real_taken);
-		twolev->Update(lpc, real_taken, twolev_record.count);
+		    // Update branch predictor
+		    twolev->SpecUpdate(lpc, taken);
+		    twolev->Update(lpc, taken, twolev_record.count);
+	    }
 	}
 
+	/* Instruction Cache */
 	if(icache)
 	{
-		LOG(" -- INSTRUCTION:", hex, pc);
-		uint64_t latency = icache->read(pc,(uint64_t)dcycles,this)+
-			itlb->read(pc,(uint64_t)dcycles,this);
-		LOG(" icache latency =",latency);
-		if (latency)
-			dcycles += icache_fudge * latency;
+		LOG("++ INSTRUCTION:", hex, pc);
+		inst->disasm(cout); cout << dec;
+		uint64_t latency =   icache->read(pc,fetch_cycle,this)
+			               + itlb->read(pc,(uint64_t)fetch_cycle,this);
+		fetch_cycle += latency;
+		LOG(" icache latency =",latency, "fetch",fetch_cycle);
 	}
 
+	/* Register read */
+	const Opcode* opc = inst->getOpcode();
+	uint64_t rcycle = reg_read(opc,fetch_cycle);
+
+	/* Data Cache */
 	if(dcache)
 	{
 		Instruction::MemIterator il = inst->LoadsBegin();
@@ -132,15 +197,15 @@ void Timer0::simulation(const Instruction* inst)
 		for(; il != el; ++il)
 		{
 			LOG(" -- LOAD:", *il);
-			uint64_t cache_lat = dcache->read(*il,(uint64_t)dcycles,this);
-			uint64_t tlb_lat = dtlb->read(*il,(uint64_t)dcycles,this);
+			uint64_t cache_lat = dcache->read(*il,rcycle,this);
+			uint64_t tlb_lat = dtlb->read(*il,rcycle,this);
 			uint64_t latency = tlb_lat + (is_prefetch ? 0 : cache_lat);
-			LOG(" load latency =",latency);
+			LOG("     load latency =",latency);
 			if (latency > max_load_latency)
 				max_load_latency=latency;
 		}
 		if(max_load_latency)
-			dcycles += dcache_fudge * max_load_latency;
+			rcycle += max_load_latency;
 
 		uint64_t max_store_latency=0;
 		Instruction::MemIterator is = inst->StoresBegin();
@@ -148,21 +213,23 @@ void Timer0::simulation(const Instruction* inst)
 		for(; is != es; ++is)
 		{
 			LOG(" -- STORE:", *is);
-			dcache->write(*is,(uint64_t)dcycles,this);
-			uint64_t latency = dtlb->read(*is,(uint64_t)dcycles,this);
-			LOG(" store latency =",latency);
+			dcache->write(*is,rcycle,this);
+			uint64_t latency = dtlb->read(*is,rcycle,this);
+			LOG("     store latency =",latency);
 			if (latency > max_store_latency)
 				max_store_latency=latency;
 		}
 		if(max_store_latency)
-			dcycles += dcache_fudge * max_store_latency;
+			rcycle += max_store_latency;
 	}
-	
+	// rcycle += commit_cpi;
+	reg_write(opc,rcycle);
+	if (rcycle > cycles) cycles = rcycle;
+	LOG(" -- rcycle =",rcycle, "cycles=", cycles);
 	prev_inst = inst;
-	cycles = (uint64_t)dcycles;
 }
 
-void Timer0::full_warming(const Instruction* inst)
+void TimerDep::full_warming(const Instruction* inst)
 {
 	if(!prev_inst)
 	{
@@ -212,27 +279,29 @@ void Timer0::full_warming(const Instruction* inst)
 	prev_inst = inst;
 }
 
-void Timer0::beginSimulation()
+void TimerDep::beginSimulation()
 {
 	LOG("clear metrics");
 	clear_metrics();
-	dcycles = 0.0;
+	fetch_cycle=0;
+	lastreg=0;
+	(void)memset(rename,0,256*sizeof(uint8_t));
 	(void)memset(regcycle,0,256*sizeof(uint64_t));
 }
 
-void Timer0::endSimulation()
+void TimerDep::endSimulation()
 {
 	LOG("clearing timer");
-	prev_inst = 0;
-	dcycles = 0.0;
+	prev_inst=0;
+	fetch_cycle=0;
 }
 
-void Timer0::simple_warming(const Instruction* inst)
+void TimerDep::simple_warming(const Instruction* inst)
 {
 	full_warming(inst);
 }
 
-void Timer0::addMemory(string name,Memory::Interface::Shared c) 
+void TimerDep::addMemory(string name,Memory::Interface::Shared c) 
 {
 	if(name=="icache")
 	{

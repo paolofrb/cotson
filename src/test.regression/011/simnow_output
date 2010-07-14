@@ -1,5 +1,5 @@
 Loading module abaeterno.so.
-Using image path: "/home/hp/COTSON-OPENSOURCE/cotson/data"
+Using image path: "/home/hp/SOURCEFORGE/cotson/trunk/data"
 Known Device: Deerhound RevB QuadCore Socket L1
 Known Device: Intel(R) Pro/1000 MT/PT Desktop Network Adapter
 Known Device: USB JumpDrive
@@ -30,6 +30,7 @@ Known Device: SMB Hub Device
 Known Device: Winbond W83627HF SIO
 Known Device: Machine
 Known Device: Matrox(R) MGA-G4x0 Graphics Adapter
+Known Device: Unnamed Group
 Using library path: "./libs"
 
 1 exec> open ../data/node.bsd
@@ -50,7 +51,7 @@ info: creating device #0 "AMD 8th Generation Integrated Northbridge"
 info: creating device #1 "Dimm Bank"
 Dimmdevice: Bank 0, Simulated Size 10000000
 info: creating device #2 "AMD-8111 I/O Hub"
-ATA: Image [/home/hp/COTSON-OPENSOURCE/cotson/data/karmic64.img] does not have an ID field.
+ATA: Image [/home/hp/SOURCEFORGE/cotson/trunk/data/karmic64.img] does not have an ID field.
 info: creating device #3 "Memory Device"
 info: creating device #4 "Winbond W83627HF SIO"
 info: creating device #5 "SMB Hub Device"
@@ -66,6 +67,12 @@ info: creating device #14 "USB JumpDrive"
 info: creating device #15 "Emerald Graphics"
 Could allocate map memory
 info: creating device #16 "Intel(R) Pro/1000 MT/PT Desktop Network Adapter"
+MSG: The following devices have been updated, please check their configuration and re-save.
+AMD 8th Generation Integrated Northbridge #-1
+Dimm Bank #0
+AMD-8111 I/O Hub #1
+Memory Device #2
+
 BSD Load completed!
 
 1 exec> ide:0.image master ../data/node.hdd
@@ -73,7 +80,7 @@ ATA: Image [../data/node.hdd] does not have an ID field.
 MASTER drive Image file is now ../data/node.hdd
 
 1 exec> ide:0.journal master on
-Journaling enabled
+Journaling was already enabled
 
 1 exec> keyboard.key 2E AE
 
@@ -143,9 +150,9 @@ Journaling enabled
 TIME=0.000664 ms IPC ( 1 )
 TIME=0.220764 ms IPC ( 0.574317 )
 TIME=0.406021 ms IPC ( 0.743377 )
-TIME=0.868936 ms IPC ( 1.04252 )
-TIME=0.967442 ms IPC ( 0.714195 )
-TIME=1.04991 ms IPC ( 1.42852 )
+TIME=0.868936 ms IPC ( 1.0414 )
+TIME=0.967442 ms IPC ( 1.49052 )
+TIME=1.04991 ms IPC ( 0.379814 )
 TIME=2.01946 ms IPC ( 1 )
 TIME=2.05969 ms IPC ( 1 )
 TIME=2.27817 ms IPC ( 1 )
@@ -169,7 +176,7 @@ TIME=6.27946 ms IPC ( 1 )
 TIME=6.47038 ms IPC ( 1 )
 TIME=6.50202 ms IPC ( 1 )
 TIME=6.57122 ms IPC ( 1 )
-TIME=7.39019 ms IPC ( 2.21124 )
+TIME=7.39019 ms IPC ( 1 )
 TIME=7.68941 ms IPC ( 1 )
 TIME=7.84397 ms IPC ( 1 )
 TIME=8.09858 ms IPC ( 1 )

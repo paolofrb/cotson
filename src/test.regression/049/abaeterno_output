@@ -136,20 +136,20 @@ time_feedback                                               true
 Output values: 
 
 cpu0.cycles                                                 90000000
-cpu0.haltcount                                              98058216
+cpu0.haltcount                                              98047421
 cpu0.hb_ATC_flush                                           0
 cpu0.hb_CR3_different                                       0
 cpu0.hb_CR3_equal                                           0
 cpu0.hb_ev_Exception                                        0
 cpu0.hb_ev_HW_interrupt                                     0
 cpu0.hb_ev_SW_interrupt                                     0
-cpu0.idlecount                                              100583585
-cpu0.instcount                                              5871986
+cpu0.idlecount                                              101476259
+cpu0.instcount                                              4979312
 cpu0.invalid_translation_bytes                              0
-cpu0.iocount                                                2525369
-cpu0.metadata_bytes                                         321920
-cpu0.other_exceptions                                       57031
-cpu0.plain_invalidations                                    245
+cpu0.iocount                                                2531100
+cpu0.metadata_bytes                                         321600
+cpu0.other_exceptions                                       54578
+cpu0.plain_invalidations                                    243
 cpu0.range_invalidations                                    0
 cpu0.read_mmios                                             96
 cpu0.read_pios                                              358
@@ -157,7 +157,7 @@ cpu0.segv_exceptions                                        1207
 cpu0.timer.cycles                                           9929
 cpu0.timer.instructions                                     10000
 cpu0.trace_cache_size                                       0
-cpu0.valid_translation_bytes                                481424
+cpu0.valid_translation_bytes                                499771
 cpu0.write_mmios                                            31
 cpu0.write_pios                                             1284
 cycles                                                      90000000

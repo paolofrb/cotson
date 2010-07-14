@@ -59,8 +59,6 @@ SimPointProfile::SimPointProfile(Parameters&p) : CpuTimer(&instructions,&instruc
 	add("basic_blocks",basic_blocks);
 	add_ratio("insts_x_bb","instructions","basic_blocks");
 	clear_metrics();
-
-	trace_needs.types=true;
 }
 
 SimPointProfile::~SimPointProfile() { } 
@@ -71,7 +69,7 @@ void SimPointProfile::simulation(const Instruction* inst)
 	interval_instructions++;
 	
 	// End of BB?
-	if (inst->Type().is_control())
+	if (inst->is_control())
 	{
 		newBB(inst->PC().phys, interval_instructions);
 		basic_blocks++;

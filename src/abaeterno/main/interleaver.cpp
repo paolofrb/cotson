@@ -76,7 +76,7 @@ void Interleaver::notify()
 		while(ins->elems())
 		{
 		    const Instruction* nn=ins->next();
-            if(! (nn->Type().is_cpuid() && exec_cpuid(nn)) )
+            if(! (nn->is_cpuid() && exec_cpuid(nn)) )
 		        emit(nn);
 		}
 	    return;
@@ -93,7 +93,7 @@ void Interleaver::notify()
 			break;
 		
 		const Instruction* nn=t.ins->next();
-        if(nn->Type().is_cpuid() && exec_cpuid(nn))
+        if(nn->is_cpuid() && exec_cpuid(nn))
 		{
 		    pq.push(t);
 		    continue;
@@ -116,7 +116,7 @@ void Interleaver::notify()
 			continue;
 		
 		const Instruction* nn=t.ins->next();
-        if(nn->Type().is_cpuid() && exec_cpuid(nn))
+        if(nn->is_cpuid() && exec_cpuid(nn))
 		{
 		    pq.push(t);
 		    continue;

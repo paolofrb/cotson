@@ -35,9 +35,9 @@ public:
 	virtual ~CpuTimer() {}
 	
 	typedef void (CpuTimer::*process) (const Instruction*);
-	virtual void simulation(const Instruction*) = 0;
-	virtual void simple_warming(const Instruction*) =0;
-	virtual void full_warming(const Instruction*) =0;
+	virtual void simulation(const Instruction*)=0;
+	virtual void simple_warming(const Instruction*)=0;
+	virtual void full_warming(const Instruction*)=0;
 
 	virtual void addMemory(std::string,Memory::Interface::Shared) {}
 

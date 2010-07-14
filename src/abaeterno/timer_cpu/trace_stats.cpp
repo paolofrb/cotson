@@ -58,11 +58,8 @@ TraceStats::TraceStats(Parameters& p) : CpuTimer(&instructions,&instructions),
 	if (!disasm_file.empty())
 	{
 		advanced_stats = true;
-		trace_needs.opcodes=true; 
 		disfile.open(disasm_file.c_str());
 	}
-	
-	trace_needs.types=true; 
 }
 
 TraceStats::~TraceStats()	

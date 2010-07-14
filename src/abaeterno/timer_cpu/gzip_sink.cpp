@@ -47,8 +47,6 @@ GzipSink::GzipSink(Parameters&p) : CpuTimer(&instructions,&instructions),
 	add_ratio("ipc","instructions","cycles");   
 	clear_metrics();
 
-	trace_needs.opcodes=true;
-	trace_needs.types=true;
 	trace_needs.history=1;
 }
 

@@ -50,11 +50,11 @@ struct Proxy : public CMonitorConsumer
 	void InitializeMachine(int);
 	void TerminateMachine(int,EVENTQUEUEINFO*);
 
-	void CodeInjection(int m,UINT64 d,CCodeInjector *i);
-	void MemoryInjection(int m,UINT64 d,CCodeInjector *i);
-	void BranchInjection(int m,UINT64 d,CCodeInjector *i);
-	void ExcInjection(int m,UINT64 d,CCodeInjector *i);
-	void HeartBeatInjection(int m,UINT64 d,CCodeInjector *i);
+	void CodeInjection(int,UINT64,CCodeInjector*);
+	void MemoryInjection(int,UINT64,CCodeInjector*);
+	void BranchInjection(int,UINT64,CCodeInjector*);
+	void ExcInjection(int,UINT64,CCodeInjector*);
+	void HeartBeatInjection(int,UINT64,CCodeInjector*);
 
 	void CodeTranslation(int, UINT64, CCodeInjector *, CODETRANSLATESTRUCT *);
 	void TaggedExecution(int, UINT64, CCodeInjector *, void *);
@@ -65,8 +65,8 @@ struct Proxy : public CMonitorConsumer
 	map<uint64_t,bool> inject_code;
 	map<uint64_t,Cotson::Cpu::Stats> cpu_stats;
 
-	void RegisterEventQueue(int m,EVENTQUEUEINFO *q);
-	void UnregisterEventQueue(int m,EVENTQUEUEINFO *q);
+	void RegisterEventQueue(int,EVENTQUEUEINFO *);
+	void UnregisterEventQueue(int,EVENTQUEUEINFO *);
 
 	void DeliverEventQueue(UINT64,int,EVENTQUEUEINFO*);
 	void TimeCallback(int); 
@@ -75,7 +75,7 @@ struct Proxy : public CMonitorConsumer
 
 	void QuantumEnd(int);
 
-	void ExternalEventTiming(EVENTTIMINGINFO* info);
+	void ExternalEventTiming(EVENTTIMINGINFO*);
 	bool ReturnNextCommand(int,const char*, char*, int);
 
 	int machineID;
@@ -107,25 +107,26 @@ struct Proxy : public CMonitorConsumer
 	CCodeInjector *code_injector;
 	CODETRANSLATESTRUCT *translate_struct;
 	X8664REG regs;
-	INSTRUCTIONINFO info;
+	FX86REG fregs;
+	INSTRUCTIONINFO cur_info;
 	bool info_valid;
 	bool regs_valid;
+	bool fregs_valid;
 	bool time_feedback;
+	bool regvalue;
 
-    inline void set_injector(CCodeInjector* i,CODETRANSLATESTRUCT* t=0)
+    inline void set_injector(CCodeInjector* inj,CODETRANSLATESTRUCT* t=0)
     {
-	    code_injector=i;
+	    code_injector=inj;
 	    translate_struct=t;
-	    info_valid=false;
-	    regs_valid=false;
+	    info_valid=regs_valid=fregs_valid=false;
     }
 
     inline void clear_injector()
     {
 	    code_injector=0;
 	    translate_struct=0;
-	    info_valid=false;
-		regs_valid=false;
+	    info_valid=regs_valid=fregs_valid=false;
     }
 
     const INSTRUCTIONINFO& build_info()
@@ -133,14 +134,14 @@ struct Proxy : public CMonitorConsumer
 	    ERROR_IF(!code_injector,"no code injector present right now");
 	    if (!info_valid) 
 		{
-	        if (!code_injector->BuildInstructionInfo(&info, sizeof(info)))
+	        if (!code_injector->BuildInstructionInfo(&cur_info, sizeof(cur_info)))
 		        ERROR("error building instruction info");
             info_valid=true;
 		}
-		return info;
+		return cur_info;
     }
 
-    const X8664REG& get_regs()
+    const X8664REG& gr()
     {
 	    ERROR_IF(!code_injector,"no code injector present right now");
 	    if (!regs_valid) 
@@ -151,17 +152,32 @@ struct Proxy : public CMonitorConsumer
 		return regs;
     }
 
-    const void set_regs(X8664REG& regs)
+    const FX86REG& fr()
     {
 	    ERROR_IF(!code_injector,"no code injector present right now");
-	    if (!regs_valid) 
+	    if (!fregs_valid) 
 		{
-	        code_injector->SetX8664Reg(regs);
+	        code_injector->GetFX86Reg(fregs);
+            fregs_valid=true;
 		}
+		return fregs;
     }
-#ifdef NEED_GET_PROC_FREQ
-    double GetProcessorFreq(UINT64, UINT64);
-#endif
+
+    const void gr(X8664REG& r)
+    {
+	    ERROR_IF(!code_injector,"no code injector present right now");
+		regs=r;
+	    code_injector->SetX8664Reg(regs);
+		regs_valid=true;
+    }
+
+    const void fr(FX86REG& r)
+    {
+	    ERROR_IF(!code_injector,"no code injector present right now");
+		fregs=r;
+	    code_injector->SetFX86Reg(fregs);
+		fregs_valid=true;
+    }
 };
 
 namespace {
@@ -228,8 +244,10 @@ Proxy::Proxy() :
 	code_injector(0),
 	translate_struct(0),
 	info_valid(0),
-	regs_valid(0),
-	time_feedback(Option::get<bool>("time_feedback"))
+	regs_valid(false),
+	fregs_valid(false),
+	time_feedback(Option::get<bool>("time_feedback")),
+	regvalue(false)
 {
 }
 
@@ -252,18 +270,18 @@ void Proxy::TerminateMachine(int m,EVENTQUEUEINFO *)
 }
 
 //INTF
-void Proxy::CodeInjection(int m,UINT64 d,CCodeInjector *i) 
+void Proxy::CodeInjection(int m,UINT64 d,CCodeInjector *inj) 
 {
 	ERROR_IF(m!=machineID,"different machines: '", m, "' vs '", machineID,"'");
-	set_injector(i);
+	set_injector(inj);
 	if (AbAeterno::get().has_pending_tags())
 	{
 		build_info();
 	    UINT8 opcode[64];
-	    int n = i->OpcodeBytes(opcode, 64);
-		const uint8_t* op = opcode+info.nOpcodeOffset;
+	    int n = inj->OpcodeBytes(opcode, 64);
+		const uint8_t* op = opcode+cur_info.nOpcodeOffset;
 		if (AbAeterno::get().inject_tag(d,n,op)) {
-	        LOG("(inject tag)",i->Disassemble(opcode,n));
+	        LOG("(inject tag)",inj->Disassemble(opcode,n));
 	    }
 	}
 	if (inject_code[d])
@@ -272,56 +290,56 @@ void Proxy::CodeInjection(int m,UINT64 d,CCodeInjector *i)
 }
 
 //INTF
-void Proxy::MemoryInjection(int m,UINT64 d,CCodeInjector *i)
+void Proxy::MemoryInjection(int m,UINT64 d,CCodeInjector *inj)
 {
 	ERROR_IF(m!=machineID,"different machines: '", m, "' vs '", machineID,"'");
-	set_injector(i);
+	set_injector(inj);
 	Machine::get().inject(d,MEMORY);
 	clear_injector();
 }
 
 //INTF
-void Proxy::BranchInjection(int m,UINT64 d,CCodeInjector *i) 
+void Proxy::BranchInjection(int m,UINT64 d,CCodeInjector *inj) 
 {
 	ERROR_IF(m!=machineID,"different machines: '", m, "' vs '", machineID,"'");
 }
 
 //INTF
-void Proxy::ExcInjection(int m,UINT64 d,CCodeInjector *i)
+void Proxy::ExcInjection(int m,UINT64 d,CCodeInjector *inj)
 {
 	ERROR_IF(m!=machineID,"different machines: '", m, "' vs '", machineID,"'");
-	set_injector(i);
+	set_injector(inj);
 	Machine::get().inject(d,EXCEPT);
 	clear_injector();
 }
 
 //INTF
-void Proxy::HeartBeatInjection(int m,UINT64 d,CCodeInjector *i)
+void Proxy::HeartBeatInjection(int m,UINT64 d,CCodeInjector *inj)
 {
 	ERROR_IF(m!=machineID,"different machines: '", m, "' vs '", machineID,"'");
-	set_injector(i);
+	set_injector(inj);
 	Machine::get().inject(d,HEARTBEAT);
 	clear_injector();
 }
 
 //INTF
 void Proxy::CodeTranslation(int m, UINT64 devid, 
-	CCodeInjector *i, CODETRANSLATESTRUCT *t)
+	CCodeInjector *inj, CODETRANSLATESTRUCT *t)
 {
 	ERROR_IF(m!=machineID,"different machines: '", m, "' vs '", machineID,"'");
-	set_injector(i,t);
+	set_injector(inj,t);
 	AbAeterno::get().translate(devid);
 	clear_injector();
 }
 
 //INTF
-void Proxy::TaggedExecution(int m, UINT64 devid, CCodeInjector *i, void *pParam)
+void Proxy::TaggedExecution(int m, UINT64 devid, CCodeInjector *inj, void *pParam)
 {
 	ERROR_IF(m!=machineID,"different machines: '", m, "' vs '", machineID,"'");
 	uint32_t tag = static_cast<uint32_t>(reinterpret_cast<uint64_t>(pParam));
 	if (!tag) return;
 
-	set_injector(i);
+	set_injector(inj);
 	synch_time();
 	LOG("TaggedExecution - tag:",dec,tag,"time",nanos);
 	// First, we check whether this is a tagged operation handled in parsing
@@ -801,12 +819,14 @@ void Cotson::Cpu::Tokens::register_on(uint64_t devid)
 {
 	if(!proxy->UpdateCpu(devid, EVENT_REGISTER, REGISTER_ON))
 		ERROR("UpdateEventOptions failed (cpu register on)");
+    proxy->regvalue=true;
 }
 
 void Cotson::Cpu::Tokens::register_off(uint64_t devid)
 {
 	if(!proxy->UpdateCpu(devid, EVENT_REGISTER, REGISTER_OFF))
 		ERROR("UpdateEventOptions failed (cpu register off)");
+    proxy->regvalue=false;
 }
 
 void Cotson::Disk::Tokens::on(uint64_t devid) 
@@ -883,16 +903,13 @@ void Cotson::Inject::register_token(const char* reg)
 }
 
 const Cotson::Inject::info_instruction&
-Cotson::Inject::current_opcode(function<uint8_t*(int)> use_this_malloc) 
+Cotson::Inject::current_opcode(function<uint8_t*(int)> malloc_func) 
 {
 	const INSTRUCTIONINFO& info = proxy->build_info();
-	// info has fields for source and destination register operands
-	// have a look at MonRegMask ... inside INSTRUCTIONINFO at
-	// CodeInjector.h
-
 	static info_instruction ii; // we only need one at a time
+
 	ii.length=info.nLength;
-	ii.opcode = use_this_malloc(ii.length);
+	ii.opcode = malloc_func(ii.length);
 	ii.length = proxy->code_injector->OpcodeBytes(ii.opcode,ii.length);
 	ERROR_IF(ii.length!=info.nLength,"incorrect instruction length");
 
@@ -907,6 +924,17 @@ Cotson::Inject::current_opcode(function<uint8_t*(int)> use_this_malloc)
 		info.bHasModrm && 
 		Cotson::X86::is_cr3mov(opcode,modrm);
 
+	if (proxy->regvalue) {
+	    ii.src_regs.clear();
+	    ii.dst_regs.clear();
+	    ii.mem_regs.clear();
+	    for (size_t i=0;i<info.SourceRegs.numRegs;++i)
+	        ii.src_regs.push_back(info.SourceRegs.registers[i]);
+	    for (size_t i=0;i<info.DestRegs.numRegs;++i)
+	        ii.dst_regs.push_back(info.DestRegs.registers[i]);
+	    for (size_t i=0;i<info.MemRegs.numRegs;++i)
+	        ii.mem_regs.push_back(info.MemRegs.registers[i]);
+	}
 	return ii; // only one at a time, return by ref to save a copy
 }
 
@@ -973,6 +1001,22 @@ void Cotson::Memory::write_physical_memory(uint64_t address,uint32_t length,uint
 	ERROR_IF(length!=r,"WritePhysicalMemoryError");
 }
 
+void Cotson::Memory::read_virtual_memory(uint64_t address,uint32_t length,uint8_t*buf) 
+{
+	ERROR_IF(!proxy->code_injector,"no code injector present right now");
+	uint32_t r;
+	proxy->code_injector->ReadLinearMemory(address,buf,length,&r);
+	ERROR_IF(length!=r,"ReadLinearMemoryError");
+}
+
+void Cotson::Memory::write_virtual_memory(uint64_t address,uint32_t length,uint8_t*buf) 
+{
+	ERROR_IF(!proxy->code_injector,"no code injector present right now");
+	uint32_t r;
+	proxy->code_injector->WriteLinearMemory(address,buf,length,&r);
+	ERROR_IF(length!=r,"WritePhysicalMemoryError");
+}
+
 uint64_t Cotson::Memory::address_from_tag(const Cotson::Inject::info_tag& ti)
 {
 	ERROR_IF(!proxy->code_injector,"no code injector present right now");
@@ -1009,127 +1053,139 @@ uint64_t Cotson::t2c(uint64_t t)
 
 const set<TokenQueue*>& Cotson::queues() { return proxy->queues; }
 
-// Register access
-uint64_t Cotson::X86::IntegerReg(int reg) { return proxy->get_regs().IntegerRegs[reg]; }
-uint16_t Cotson::X86::SelectorES() { return proxy->get_regs().SelectorES; }
-uint16_t Cotson::X86::FlagsES() { return proxy->get_regs().FlagsES; }
-uint32_t Cotson::X86::LimitES() { return proxy->get_regs().LimitES; }
-uint64_t Cotson::X86::BaseES() { return proxy->get_regs().BaseES; }
-uint16_t Cotson::X86::SelectorCS() { return proxy->get_regs().SelectorCS; }
-uint16_t Cotson::X86::FlagsCS() { return proxy->get_regs().FlagsCS; }
-uint32_t Cotson::X86::LimitCS() { return proxy->get_regs().LimitCS; }
-uint64_t Cotson::X86::BaseCS() { return proxy->get_regs().BaseCS; }
-uint16_t Cotson::X86::SelectorSS() { return proxy->get_regs().SelectorSS; }
-uint16_t Cotson::X86::FlagsSS() { return proxy->get_regs().FlagsSS; }
-uint32_t Cotson::X86::LimitSS() { return proxy->get_regs().LimitSS; }
-uint64_t Cotson::X86::BaseSS() { return proxy->get_regs().BaseSS; }
-uint16_t Cotson::X86::SelectorDS() { return proxy->get_regs().SelectorDS; }
-uint16_t Cotson::X86::FlagsDS() { return proxy->get_regs().FlagsDS; }
-uint32_t Cotson::X86::LimitDS() { return proxy->get_regs().LimitDS; }
-uint64_t Cotson::X86::BaseDS() { return proxy->get_regs().BaseDS; }
-uint16_t Cotson::X86::SelectorFS() { return proxy->get_regs().SelectorFS; }
-uint16_t Cotson::X86::FlagsFS() { return proxy->get_regs().FlagsFS; }
-uint32_t Cotson::X86::LimitFS() { return proxy->get_regs().LimitFS; }
-uint64_t Cotson::X86::BaseFS() { return proxy->get_regs().BaseFS; }
-uint16_t Cotson::X86::SelectorGS() { return proxy->get_regs().SelectorGS; }
-uint16_t Cotson::X86::FlagsGS() { return proxy->get_regs().FlagsGS; }
-uint32_t Cotson::X86::LimitGS() { return proxy->get_regs().LimitGS; }
-uint64_t Cotson::X86::BaseGS() { return proxy->get_regs().BaseGS; }
-uint16_t Cotson::X86::SelectorGDT() { return proxy->get_regs().SelectorGDT; }
-uint16_t Cotson::X86::FlagsGDT() { return proxy->get_regs().FlagsGDT; }
-uint32_t Cotson::X86::LimitGDT() { return proxy->get_regs().LimitGDT; }
-uint64_t Cotson::X86::BaseGDT() { return proxy->get_regs().BaseGDT; }
-uint16_t Cotson::X86::SelectorLDT() { return proxy->get_regs().SelectorLDT; }
-uint16_t Cotson::X86::FlagsLDT() { return proxy->get_regs().FlagsLDT; }
-uint32_t Cotson::X86::LimitLDT() { return proxy->get_regs().LimitLDT; }
-uint64_t Cotson::X86::BaseLDT() { return proxy->get_regs().BaseLDT; }
-uint16_t Cotson::X86::SelectorIDT()	 { return proxy->get_regs().SelectorIDT;	 }
-uint16_t Cotson::X86::FlagsIDT() { return proxy->get_regs().FlagsIDT; }
-uint32_t Cotson::X86::LimitIDT() { return proxy->get_regs().LimitIDT; }
-uint64_t Cotson::X86::BaseIDT() { return proxy->get_regs().BaseIDT; }
-uint16_t Cotson::X86::SelectorTR() { return proxy->get_regs().SelectorTR; }
-uint16_t Cotson::X86::FlagsTR() { return proxy->get_regs().FlagsTR; }
-uint32_t Cotson::X86::LimitTR() { return proxy->get_regs().LimitTR; }
-uint64_t Cotson::X86::BaseTR() { return proxy->get_regs().BaseTR; }
-uint64_t Cotson::X86::IORestartRIP() { return proxy->get_regs().IORestartRIP; }
-uint64_t Cotson::X86::IORestartRCX() { return proxy->get_regs().IORestartRCX; }
-uint64_t Cotson::X86::IORestartRSI() { return proxy->get_regs().IORestartRSI; }
-uint64_t Cotson::X86::IORestartRDI() { return proxy->get_regs().IORestartRDI; }
-uint64_t Cotson::X86::IORestartDword() { return proxy->get_regs().IORestartDword; }
-uint8_t Cotson::X86::IORestartFlag() { return proxy->get_regs().IORestartFlag; }
-uint8_t Cotson::X86::HLTRestartFlag() { return proxy->get_regs().HLTRestartFlag; }
-uint8_t Cotson::X86::NMIBlocked() { return proxy->get_regs().NMIBlocked; }
-uint8_t Cotson::X86::CurrentPL() { return proxy->get_regs().CurrentPL; }
-uint64_t Cotson::X86::EFERRegister() { return proxy->get_regs().EFERRegister; }
-uint32_t Cotson::X86::MachineState() { return proxy->get_regs().MachineState; }
-uint32_t Cotson::X86::Revision() { return proxy->get_regs().Revision; }
-uint64_t Cotson::X86::SMMBase() { return proxy->get_regs().SMMBase; }
-uint64_t Cotson::X86::RegisterCR4() { return proxy->get_regs().RegisterCR4; }
-uint64_t Cotson::X86::RegisterCR3() { return proxy->get_regs().RegisterCR3; }
-uint64_t Cotson::X86::RegisterCR0() { return proxy->get_regs().RegisterCR0; }
-uint64_t Cotson::X86::RegisterDR7() { return proxy->get_regs().RegisterDR7; }
-uint64_t Cotson::X86::RegisterDR6() { return proxy->get_regs().RegisterDR6; }
-uint64_t Cotson::X86::RegisterEFlags() { return proxy->get_regs().RegisterEFlags; }
-uint64_t Cotson::X86::RegisterRIP() { return proxy->get_regs().RegisterRIP; }
-uint64_t Cotson::X86::R15() { return proxy->get_regs().IntegerRegs[0]; }
-uint64_t Cotson::X86::R14() { return proxy->get_regs().IntegerRegs[1]; }
-uint64_t Cotson::X86::R13() { return proxy->get_regs().IntegerRegs[2]; }
-uint64_t Cotson::X86::R12() { return proxy->get_regs().IntegerRegs[3]; }
-uint64_t Cotson::X86::R11() { return proxy->get_regs().IntegerRegs[4]; }
-uint64_t Cotson::X86::R10() { return proxy->get_regs().IntegerRegs[5]; }
-uint64_t Cotson::X86::R9()  { return proxy->get_regs().IntegerRegs[6]; }
-uint64_t Cotson::X86::R8()  { return proxy->get_regs().IntegerRegs[7]; }
-uint64_t Cotson::X86::RDI() { return proxy->get_regs().IntegerRegs[8]; }
-uint64_t Cotson::X86::RSI() { return proxy->get_regs().IntegerRegs[9]; }
-uint64_t Cotson::X86::RBP() { return proxy->get_regs().IntegerRegs[10]; }
-uint64_t Cotson::X86::RSP() { return proxy->get_regs().IntegerRegs[11]; }
-uint64_t Cotson::X86::RBX() { return proxy->get_regs().IntegerRegs[12]; }
-uint64_t Cotson::X86::RDX() { return proxy->get_regs().IntegerRegs[13]; }
-uint64_t Cotson::X86::RCX() { return proxy->get_regs().IntegerRegs[14]; }
-uint64_t Cotson::X86::RAX() { return proxy->get_regs().IntegerRegs[15]; }
+// General Register access
+uint64_t Cotson::X86::IntegerReg(int reg) { return proxy->gr().IntegerRegs[reg]; }
+uint16_t Cotson::X86::SelectorES() { return proxy->gr().SelectorES; }
+uint16_t Cotson::X86::FlagsES() { return proxy->gr().FlagsES; }
+uint32_t Cotson::X86::LimitES() { return proxy->gr().LimitES; }
+uint64_t Cotson::X86::BaseES() { return proxy->gr().BaseES; }
+uint16_t Cotson::X86::SelectorCS() { return proxy->gr().SelectorCS; }
+uint16_t Cotson::X86::FlagsCS() { return proxy->gr().FlagsCS; }
+uint32_t Cotson::X86::LimitCS() { return proxy->gr().LimitCS; }
+uint64_t Cotson::X86::BaseCS() { return proxy->gr().BaseCS; }
+uint16_t Cotson::X86::SelectorSS() { return proxy->gr().SelectorSS; }
+uint16_t Cotson::X86::FlagsSS() { return proxy->gr().FlagsSS; }
+uint32_t Cotson::X86::LimitSS() { return proxy->gr().LimitSS; }
+uint64_t Cotson::X86::BaseSS() { return proxy->gr().BaseSS; }
+uint16_t Cotson::X86::SelectorDS() { return proxy->gr().SelectorDS; }
+uint16_t Cotson::X86::FlagsDS() { return proxy->gr().FlagsDS; }
+uint32_t Cotson::X86::LimitDS() { return proxy->gr().LimitDS; }
+uint64_t Cotson::X86::BaseDS() { return proxy->gr().BaseDS; }
+uint16_t Cotson::X86::SelectorFS() { return proxy->gr().SelectorFS; }
+uint16_t Cotson::X86::FlagsFS() { return proxy->gr().FlagsFS; }
+uint32_t Cotson::X86::LimitFS() { return proxy->gr().LimitFS; }
+uint64_t Cotson::X86::BaseFS() { return proxy->gr().BaseFS; }
+uint16_t Cotson::X86::SelectorGS() { return proxy->gr().SelectorGS; }
+uint16_t Cotson::X86::FlagsGS() { return proxy->gr().FlagsGS; }
+uint32_t Cotson::X86::LimitGS() { return proxy->gr().LimitGS; }
+uint64_t Cotson::X86::BaseGS() { return proxy->gr().BaseGS; }
+uint16_t Cotson::X86::SelectorGDT() { return proxy->gr().SelectorGDT; }
+uint16_t Cotson::X86::FlagsGDT() { return proxy->gr().FlagsGDT; }
+uint32_t Cotson::X86::LimitGDT() { return proxy->gr().LimitGDT; }
+uint64_t Cotson::X86::BaseGDT() { return proxy->gr().BaseGDT; }
+uint16_t Cotson::X86::SelectorLDT() { return proxy->gr().SelectorLDT; }
+uint16_t Cotson::X86::FlagsLDT() { return proxy->gr().FlagsLDT; }
+uint32_t Cotson::X86::LimitLDT() { return proxy->gr().LimitLDT; }
+uint64_t Cotson::X86::BaseLDT() { return proxy->gr().BaseLDT; }
+uint16_t Cotson::X86::SelectorIDT()	 { return proxy->gr().SelectorIDT;	 }
+uint16_t Cotson::X86::FlagsIDT() { return proxy->gr().FlagsIDT; }
+uint32_t Cotson::X86::LimitIDT() { return proxy->gr().LimitIDT; }
+uint64_t Cotson::X86::BaseIDT() { return proxy->gr().BaseIDT; }
+uint16_t Cotson::X86::SelectorTR() { return proxy->gr().SelectorTR; }
+uint16_t Cotson::X86::FlagsTR() { return proxy->gr().FlagsTR; }
+uint32_t Cotson::X86::LimitTR() { return proxy->gr().LimitTR; }
+uint64_t Cotson::X86::BaseTR() { return proxy->gr().BaseTR; }
+uint64_t Cotson::X86::IORestartRIP() { return proxy->gr().IORestartRIP; }
+uint64_t Cotson::X86::IORestartRCX() { return proxy->gr().IORestartRCX; }
+uint64_t Cotson::X86::IORestartRSI() { return proxy->gr().IORestartRSI; }
+uint64_t Cotson::X86::IORestartRDI() { return proxy->gr().IORestartRDI; }
+uint64_t Cotson::X86::IORestartDword() { return proxy->gr().IORestartDword; }
+uint8_t Cotson::X86::IORestartFlag() { return proxy->gr().IORestartFlag; }
+uint8_t Cotson::X86::HLTRestartFlag() { return proxy->gr().HLTRestartFlag; }
+uint8_t Cotson::X86::NMIBlocked() { return proxy->gr().NMIBlocked; }
+uint8_t Cotson::X86::CurrentPL() { return proxy->gr().CurrentPL; }
+uint64_t Cotson::X86::EFERRegister() { return proxy->gr().EFERRegister; }
+uint32_t Cotson::X86::MachineState() { return proxy->gr().MachineState; }
+uint32_t Cotson::X86::Revision() { return proxy->gr().Revision; }
+uint64_t Cotson::X86::SMMBase() { return proxy->gr().SMMBase; }
+uint64_t Cotson::X86::RegisterCR4() { return proxy->gr().RegisterCR4; }
+uint64_t Cotson::X86::RegisterCR3() { return proxy->gr().RegisterCR3; }
+uint64_t Cotson::X86::RegisterCR0() { return proxy->gr().RegisterCR0; }
+uint64_t Cotson::X86::RegisterDR7() { return proxy->gr().RegisterDR7; }
+uint64_t Cotson::X86::RegisterDR6() { return proxy->gr().RegisterDR6; }
+uint64_t Cotson::X86::RegisterEFlags() { return proxy->gr().RegisterEFlags; }
+uint64_t Cotson::X86::RegisterRIP() { return proxy->gr().RegisterRIP; }
+uint64_t Cotson::X86::R15() { return proxy->gr().IntegerRegs[0]; }
+uint64_t Cotson::X86::R14() { return proxy->gr().IntegerRegs[1]; }
+uint64_t Cotson::X86::R13() { return proxy->gr().IntegerRegs[2]; }
+uint64_t Cotson::X86::R12() { return proxy->gr().IntegerRegs[3]; }
+uint64_t Cotson::X86::R11() { return proxy->gr().IntegerRegs[4]; }
+uint64_t Cotson::X86::R10() { return proxy->gr().IntegerRegs[5]; }
+uint64_t Cotson::X86::R9()  { return proxy->gr().IntegerRegs[6]; }
+uint64_t Cotson::X86::R8()  { return proxy->gr().IntegerRegs[7]; }
+uint64_t Cotson::X86::RDI() { return proxy->gr().IntegerRegs[8]; }
+uint64_t Cotson::X86::RSI() { return proxy->gr().IntegerRegs[9]; }
+uint64_t Cotson::X86::RBP() { return proxy->gr().IntegerRegs[10]; }
+uint64_t Cotson::X86::RSP() { return proxy->gr().IntegerRegs[11]; }
+uint64_t Cotson::X86::RBX() { return proxy->gr().IntegerRegs[12]; }
+uint64_t Cotson::X86::RDX() { return proxy->gr().IntegerRegs[13]; }
+uint64_t Cotson::X86::RCX() { return proxy->gr().IntegerRegs[14]; }
+uint64_t Cotson::X86::RAX() { return proxy->gr().IntegerRegs[15]; }
 
-size_t Cotson::X86::RegSize() { return sizeof(X8664REG); }
-
-void Cotson::X86::SaveRegs(void *p) 
+// FP Register access
+Cotson::X86::uint128_t::uint128_t(uint64_t h, uint64_t l) {hi=h; lo=l;}
+Cotson::X86::uint128_t Cotson::X86::XmmReg(int reg)
 {
-    const X8664REG& r=proxy->get_regs();
-    (void)memcpy(p,reinterpret_cast<const void*>(&r),RegSize());
+    const UINT128& x128 = proxy->fr().xmm[reg]; 
+	return uint128_t(x128.msw,x128.lsw);
+}
+uint16_t Cotson::X86::fcw() { return proxy->fr().fcw; }
+uint16_t Cotson::X86::fsw() { return proxy->fr().fsw; }
+uint16_t Cotson::X86::ftw() { return proxy->fr().ftw; }
+uint16_t Cotson::X86::fop() { return proxy->fr().fop; }
+uint32_t Cotson::X86::ip() { return proxy->fr().ip; }
+uint16_t Cotson::X86::cs() { return proxy->fr().cs; }
+uint32_t Cotson::X86::dp() { return proxy->fr().dp; }
+uint16_t Cotson::X86::ds() { return proxy->fr().ds; }
+uint32_t Cotson::X86::mxcsr() { return proxy->fr().mxcsr; }
+uint32_t Cotson::X86::mxcsrMask() { return proxy->fr().mxcsrMask; }
+uint64_t Cotson::X86::mmx0Mant() { return proxy->fr().mmx0Mant; }
+uint16_t Cotson::X86::mmx0Exp() { return proxy->fr().mmx0Exp; }
+uint64_t Cotson::X86::mmx1Mant() { return proxy->fr().mmx1Mant; }
+uint16_t Cotson::X86::mmx1Exp() { return proxy->fr().mmx1Exp; }
+uint64_t Cotson::X86::mmx2Mant() { return proxy->fr().mmx2Mant; }
+uint16_t Cotson::X86::mmx2Exp() { return proxy->fr().mmx2Exp; }
+uint64_t Cotson::X86::mmx3Mant() { return proxy->fr().mmx3Mant; }
+uint16_t Cotson::X86::mmx3Exp() { return proxy->fr().mmx3Exp; }
+uint64_t Cotson::X86::mmx4Mant() { return proxy->fr().mmx4Mant; }
+uint16_t Cotson::X86::mmx4Exp() { return proxy->fr().mmx4Exp; }
+uint64_t Cotson::X86::mmx5Mant() { return proxy->fr().mmx5Mant; }
+uint16_t Cotson::X86::mmx5Exp() { return proxy->fr().mmx5Exp; }
+uint64_t Cotson::X86::mmx6Mant() { return proxy->fr().mmx6Mant; }
+uint16_t Cotson::X86::mmx6Exp() { return proxy->fr().mmx6Exp; }
+uint64_t Cotson::X86::mmx7Mant() { return proxy->fr().mmx7Mant; }
+uint16_t Cotson::X86::mmx7Exp() { return proxy->fr().mmx7Exp; }
+
+inline static size_t GRSize() { return sizeof(X8664REG); }
+inline static size_t FRSize() { return sizeof(FX86REG); }
+size_t Cotson::X86::RegSize() { return GRSize()+FRSize(); }
+
+void Cotson::X86::SaveRegs(uint8_t *p)
+{
+    const X8664REG& gr=proxy->gr();
+    memcpy(p,reinterpret_cast<const void*>(&gr),GRSize());
+
+    const FX86REG& fr=proxy->fr();
+    memcpy(p+GRSize(),reinterpret_cast<const void*>(&fr),FRSize());
 }
 
-void Cotson::X86::RestoreRegs(const void *p) 
+void Cotson::X86::RestoreRegs(const uint8_t *p) 
 {
-    X8664REG r;
-    (void)memcpy(reinterpret_cast<void*>(&r),p,RegSize());
-	proxy->set_regs(r);
-}
+    X8664REG gr;
+    (void)memcpy(reinterpret_cast<void*>(&gr),p,GRSize());
+	proxy->gr(gr);
 
-//##################################################################################
-// FIXME: Hack to guess frequency from old SimNow registry if the 
-// monitor interface does not provide the GetProcessorFreq API.
-// To be removed when simnow 4.5.3 comes out
-//##################################################################################
-#ifdef NEED_GET_PROC_FREQ
-typedef enum{SRV_IRegistry = 8} eServiceID;
-class MIDTYPE{private: int t;int m;UINT64 v;public:MIDTYPE(int);};
-class IService{public:IService();virtual ~IService();static IService* GetServiceByID(eServiceID,MIDTYPE);static void DeleteService(IService*);};
-class IRegistry:public IService{public: IRegistry();virtual ~IRegistry();virtual bool FindKey(const char *,char *,int)=0;};
-
-double Proxy::GetProcessorFreq(UINT64 m, UINT64 devid) 
-{
-	static double f = 1000.0;
-	static bool found=false;
-	if (!found)
-	{
-        char buf[256];
-        IRegistry *s = dynamic_cast<IRegistry*>(IService::GetServiceByID(SRV_IRegistry,m));
-        if(s && s->FindKey("Instructions per Microsecond",buf,256))
-		{
-            f = static_cast<double>(strtoull(buf,0,10));
-		    found=true;
-		}
-        IService::DeleteService(s);
-	}
-    return f;
+    FX86REG fr;
+    (void)memcpy(reinterpret_cast<void*>(&fr),p+GRSize(),FRSize());
+	proxy->fr(fr);
 }
-#endif
-//##################################################################################

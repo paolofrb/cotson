@@ -88,17 +88,16 @@ MemoryTracer::MemoryTracer(Parameters& p) : CpuTimer(&cycles,&instructions),
 	add_ratio("ipc","instructions","cycles");
 	add_ratio("miss_rate","mem_rd","access");
 
-	trace_needs.types=false;
-	trace_needs.opcodes=false;
 	trace_needs.history=1;
+	// uint32_t flags = code ? (NEED_CODE | NEED_MEM) : NEED_MEM;
+
 	trace_needs.st[SIMPLE_WARMING].set(EmitFunction::bind<MemoryTracer,&MemoryTracer::simple_warming>(this));
+	// trace_needs.st[SIMPLE_WARMING].setflags(flags);
 	trace_needs.st[FULL_WARMING].set(EmitFunction::bind<MemoryTracer,&MemoryTracer::full_warming>(this));
+	// trace_needs.st[FULL_WARMING].setflags(flags);
 	trace_needs.st[SIMULATION].set(EmitFunction::bind<MemoryTracer,&MemoryTracer::simulation>(this));
-	trace_needs.st[SIMULATION].needs_exception=false;
-	trace_needs.st[SIMULATION].needs_heartbeat=false;
-	trace_needs.st[SIMULATION].needs_register=false;
-	trace_needs.st[SIMULATION].needs_memory=true;
-	trace_needs.st[SIMULATION].needs_code=code;
+	// trace_needs.st[SIMULATION].setflags(flags);
+
 	if (shared) 
 	{
 		 // shared cache across all CPUs (static member)
@@ -222,7 +221,7 @@ void MemoryTracer::simulation(const Instruction* inst)
 	uint64_t t = Cotson::nanos();
 	uint64_t ts = t > timestamp ? t : timestamp; // local timestamp
 	uint64_t cr3 = inst->getCR3();
-	bool is_clflush=inst->Type().is_clflush();
+	bool is_clflush=inst->is_clflush();
 
 	if (code)
 	{

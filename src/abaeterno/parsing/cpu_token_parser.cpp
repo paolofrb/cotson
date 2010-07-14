@@ -50,9 +50,10 @@ void CpuTokenParser::process_pending(Instruction *inst)
 		if (!inst)  
 		{
             inst=insns.alloc();
-            Instruction::init(inst,0,0,8,cur_cr3); 
+            Instruction::init(inst,0,0,8,cur_cr3,0,InstType::PREFETCH); 
 		}
-        inst->Type(InstType::PREFETCH);
+		else
+            inst->Type(InstType::PREFETCH);
 		for (size_t i=0;i<np;++i)
             inst->LoadsPush(prefetch_address[i]);
 		prefetch_address.clear();
@@ -64,9 +65,10 @@ void CpuTokenParser::process_pending(Instruction *inst)
 		if (!inst)  
 		{
             inst=insns.alloc();
-            Instruction::init(inst,0,0,8,cur_cr3); 
+            Instruction::init(inst,0,0,8,cur_cr3,0,InstType::CLFLUSH);
 		}
-        inst->Type(InstType::CLFLUSH);
+		else 
+            inst->Type(InstType::CLFLUSH);
 		for (size_t i=0;i<nf;++i)
             inst->LoadsPush(clflush_address[i]);
 		clflush_address.clear();
@@ -95,23 +97,24 @@ void CpuTokenParser::run()
             {
                 if (count!=4 && count!=5) ERROR("incorrect instruction event token count");
                 ERROR_IF(TOKEN_OPTIONS(p0)!=INSTRUCTIONS_ON, "type: INSTRUCTIONS_ON");
-                    
                 uint64_t p2 = p[2];
-                current_inst=insns.alloc();
-                Instruction::init(current_inst,p1,p2,p[count-1],cur_cr3); 
-                LOG(hex,static_cast<void*>(this),"inst",hex,p1);
-
-                const Opcodes::datum *op = opcodes.find(p2);
-                if (!op)
+                const Opcode *op = opcodes.find(p2);
+                if (op)
                 {
-                    WARNING("no opcode at PC ", p2, "(",  static_cast<void*>(this), ")");
-                    current_inst = 0;
+                    ERROR_IF(p[count-1]!=op->getLength(), "opcode length mismatch");
+                    current_inst=insns.alloc();
+                    Instruction::init(
+					    current_inst,
+						p1,p2,op->getLength(),
+						cur_cr3,
+						op,op->getType()); 
+                    LOG(hex,static_cast<void*>(this),"inst",hex,p1);
+					process_pending(current_inst);
                 }
                 else
                 {
-                    current_inst->CopyOpcode(op->getOpcode(),op->getLength());
-                    current_inst->Type(op->getType());
-					process_pending(current_inst);
+                    WARNING("no opcode at PC ", p2, "(",  static_cast<void*>(this), ")");
+                    current_inst = 0;
                 }
             }
             break;
@@ -127,8 +130,7 @@ void CpuTokenParser::run()
 						// Process pending stuff and make a fake inst
 					    process_pending(0);
                         current_inst=insns.alloc();
-                        Instruction::init(current_inst,0,0,8,cur_cr3); 
-                        current_inst->Type(InstType::MEMFAKE);
+                        Instruction::init(current_inst,0,0,8,cur_cr3,0,InstType::MEMFAKE); 
                     }
 					if (current_inst) 
 					{
@@ -181,8 +183,7 @@ void CpuTokenParser::run()
                     LOG("\tRBX:   ",hex,RBX);
                     // Fake instruction for the interleaver
                     Instruction* fake_insn = insns.alloc();
-                    Instruction::init(fake_insn,UINT64_MAX,UINT64_MAX,1,cur_cr3); 
-                    fake_insn->Type(InstType::CPUID);
+                    Instruction::init(fake_insn,0,0,8,cur_cr3,0,InstType::CPUID); 
                     fake_insn->cpuid_registers(RDI,RSI,RBX);
                 }
             }
@@ -235,8 +236,12 @@ void CpuTokenParser::inject(InjectState state)
         case CODE:
         {
             const Cotson::Inject::info_instruction& ii=
-                Cotson::Inject::current_opcode(bind(&Opcodes::malloc,&opcodes,_1));
-            opcodes.insert(ii.pc,ii.opcode,ii.length,InstType(ii.opcode));
+                Cotson::Inject::current_opcode(
+				    bind(&Opcodes::malloc,&opcodes,_1));
+            opcodes.insert(ii.pc, 
+			    Opcode(ii.opcode,ii.length,
+				    InstType(ii.opcode),
+				    ii.src_regs,ii.dst_regs,ii.mem_regs));
             LOG(hex,static_cast<void*>(this),"new pc",hex,ii.pc);
 
             if(ii.is_cr3_change)
@@ -378,10 +383,10 @@ void CpuTokenParser::doSetState(SimState new_state)
 
     if(flush_now)
     {
-        opcodes.clear();
         insns.clear();
         tagged_insts.clear();
 		prefetch_address.clear();
 		clflush_address.clear();
+        opcodes.clear();
     }
 }

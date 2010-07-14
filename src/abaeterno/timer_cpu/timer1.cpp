@@ -50,7 +50,7 @@ private:
 	
 	/* PREDECODING_LOOKAHEAD defines the number of future BB's that will be
 	   predecoded when a new BB is going to be fetched. A value of '1' will
-	   cause that many fech blocks got from the BTB are not decoded, and so
+	   cause that many fetch blocks got from the BTB are not decoded, and so
 	   there will be a lot of mispredictions. *Empirically*, I have found
 	   that 4 is a good number to achieve good predecoding accuracy (2 is
 	   not enough, and 8 doesn't provide further benefits). 
@@ -220,11 +220,15 @@ Timer1::Timer1(Parameters& p) : CpuTimer(&cycles,&commit_insn),
 
 	clear_metrics();
 
-	trace_needs.types=true;
 	trace_needs.history=history;
 	trace_needs.st[SIMPLE_WARMING].set(EmitFunction::bind<Timer1,&Timer1::simple_warming>(this));
 	trace_needs.st[FULL_WARMING].set(EmitFunction::bind<Timer1,&Timer1::full_warming>(this));
 	trace_needs.st[SIMULATION].set(EmitFunction::bind<Timer1,&Timer1::simulation>(this));
+
+	uint32_t flags = (NEED_CODE | NEED_MEM | NEED_EXC | NEED_HB);
+	trace_needs.st[SIMPLE_WARMING].setflags(flags);
+	trace_needs.st[FULL_WARMING].setflags(flags);
+	trace_needs.st[SIMULATION].setflags(flags);
 }
 
 inline void Timer1::Inst::set(const Instruction* inst) 
@@ -270,7 +274,7 @@ void Timer1::simple_warming(const Instruction* inst)
 	}
 
 	// Branch predictor
-	if (prev.inst()->Type().is_branch())
+	if (prev.inst()->is_branch())
 	{
 		bool taken = (inst->PC().phys != (prev_pc.phys + prev_pc.length));
 		char *counter = twolev->Get2bitCounter (prev_pc.phys);
@@ -356,10 +360,10 @@ void Timer1::simulateInstruction(const Instruction* inst)
 		predecode.end(0,InstType::DEFAULT);
 		beginsNewBB = false;
 	}
-	predecode.push_back(static_cast<uint8_t>(inst->Length()));
+	predecode.push_back(static_cast<uint8_t>(inst->PC().length));
 	
 	// Branch detected -> end of BB in *current* address
-	if (inst->Type().is_control())
+	if (inst->is_control())
 	{
 		const Memory::Access& pc=inst->PC();
 		predecode.end(pc.phys+pc.length,inst->Type());

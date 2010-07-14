@@ -174,9 +174,13 @@ uint64_t Instruction::unique_id = 0; // static member
 ostream& operator<<(ostream& o,const Instruction& insn)
 {
 	stringstream ss;
-	if(insn.opcode)
-		for(uint i=0;i<insn.pc.length;i++)
-			ss << format("%02X ") % static_cast<uint>(insn.opcode[i]);
+	const Opcode* const opc = insn.opcode;
+	if(opc) 
+	{
+		const uint8_t* opbytes = opc->getOpcode();
+		for(uint i=0;i<opc->getLength();i++)
+			ss << format("%02X ") % static_cast<uint>(opbytes[i]);
+	}
 	o << format("insn 0x%016X 0x%016X%|50t| (%2d) [%d] %s\n") 
 		% insn.pc.virt
 		% insn.pc.phys
@@ -218,7 +222,6 @@ DumpGzip& operator<<(DumpGzip& gz,const Instruction& inst)
 
 void Instruction::disasm(std::ostream& outfile) const	
 {
-
 	if (pc.length == 0 || opcode == NULL)
 		return;
 	
@@ -233,8 +236,7 @@ void Instruction::disasm(std::ostream& outfile) const
 	_DecodedInst decodedInstructions[MAX_INSTRUCTIONS];
 	// decodedInstructionsCount holds the count of filled instructions' array by the decoder.
 	uint32_t decodedInstructionsCount = 0;
-	
-	res = distorm_decode(pc.virt, (const unsigned char*)opcode, pc.length, Decode64Bits, 
+	res = distorm_decode(pc.virt, opcode->getOpcode(), pc.length, Decode64Bits, 
 				decodedInstructions, MAX_INSTRUCTIONS, &decodedInstructionsCount);
 	if (res == DECRES_INPUTERR) 
 	{

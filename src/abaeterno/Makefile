@@ -5,8 +5,7 @@ INCLUDE = $(SUBINC) -I../common -I../libluabind -I.. -I/usr/include/lua5.1
 DEPINC = $(SUBINC) -I../common
 XOPTS = -Werror
 
-## Public simnow version up to 4.5.2 missing a interface hook
-SIMNOW_FLAGS = -DNEED_GET_PROC_FREQ -Isimnow -I$(SIMNOW_DIR)/devel/monitor
+SIMNOW_FLAGS = -Isimnow -I$(SIMNOW_DIR)/devel/monitor
 
 all: abaeterno.so abaeterno.a aaInjector test
 
@@ -140,7 +139,7 @@ main/abaeterno.o: lib/circbuf.h lib/hashmap.h lib/callme.h lib/logger.h
 main/abaeterno.o: lib/selector.h main/interleaver.h lib/instructions.h
 main/abaeterno.o: lib/instruction.h ../common/dump_gzip.h ../common/read_gzip.h
 main/abaeterno.o: lib/memory_access.h lib/inline.h lib/simplevec.h
-main/abaeterno.o: hw_model/trace_needs.h lib/delegate.h
+main/abaeterno.o: lib/opcodes.h hw_model/trace_needs.h lib/delegate.h
 main/abaeterno.o: hw_model/state_observer.h ../common/liboptions.h
 main/abaeterno.o: ../common/kill.h ../common/static_set.h
 main/abaeterno.o: ../common/lua_register.h ../common/lua.hpp ../common/units.h
@@ -169,11 +168,12 @@ main/command_socket.o: ../common/heartbeat.h ../common/aggregator.h
 main/interleaver.o: lib/abaeterno_config.h main/interleaver.h
 main/interleaver.o: lib/instructions.h lib/instruction.h ../common/dump_gzip.h
 main/interleaver.o: ../common/read_gzip.h lib/memory_access.h lib/inline.h
-main/interleaver.o: lib/simplevec.h hw_model/trace_needs.h lib/delegate.h
-main/interleaver.o: hw_model/states.h hw_model/state_observer.h
-main/interleaver.o: ../common/liboptions.h ../common/kill.h
-main/interleaver.o: ../common/static_set.h ../common/lua_register.h
-main/interleaver.o: ../common/lua.hpp ../common/units.h ../common/cast.h
+main/interleaver.o: lib/simplevec.h lib/opcodes.h lib/hashmap.h
+main/interleaver.o: hw_model/trace_needs.h lib/delegate.h hw_model/states.h
+main/interleaver.o: hw_model/state_observer.h ../common/liboptions.h
+main/interleaver.o: ../common/kill.h ../common/static_set.h
+main/interleaver.o: ../common/lua_register.h ../common/lua.hpp
+main/interleaver.o: ../common/units.h ../common/cast.h
 main/interleaver.o: ../common/uint64_t_hash.h ../common/parameters.h
 main/interleaver.o: ../common/param_factory.h ../common/options.h lib/logger.h
 main/interleaver.o: lib/selector.h main/cotson.h ../common/metric.h
@@ -189,12 +189,12 @@ main/lua_export.o: ../common/tagged_metric.h ../common/heartbeat.h
 main/lua_export.o: ../common/aggregator.h lib/instruction.h
 main/lua_export.o: ../common/dump_gzip.h ../common/read_gzip.h
 main/lua_export.o: lib/memory_access.h lib/inline.h lib/simplevec.h
-main/lua_export.o: hw_model/states.h hw_model/trace_needs.h lib/delegate.h
-main/lua_export.o: lib/memory_interface.h lib/memory_trace.h
-main/lua_export.o: hw_model/state_observer.h lib/logger.h lib/selector.h
-main/lua_export.o: main/cotson.h lib/lua_helpers.h hw_model/machine.h
-main/lua_export.o: hw_model/nic.h timer_dev/nic_timer.h hw_model/disk.h
-main/lua_export.o: timer_dev/disk_timer.h
+main/lua_export.o: lib/opcodes.h lib/hashmap.h hw_model/states.h
+main/lua_export.o: hw_model/trace_needs.h lib/delegate.h lib/memory_interface.h
+main/lua_export.o: lib/memory_trace.h hw_model/state_observer.h lib/logger.h
+main/lua_export.o: lib/selector.h main/cotson.h lib/lua_helpers.h
+main/lua_export.o: hw_model/machine.h hw_model/nic.h timer_dev/nic_timer.h
+main/lua_export.o: hw_model/disk.h timer_dev/disk_timer.h
 main/network_timing.o: main/network_timing.h lib/abaeterno_config.h
 main/network_timing.o: ../common/timing_message.h ../common/libmetric.h
 main/network_timing.o: ../common/metric.h ../common/tagged_metric.h
@@ -213,10 +213,10 @@ main/profiler.o: timer_cpu/cpu_timer.h ../common/libmetric.h
 main/profiler.o: ../common/tagged_metric.h ../common/heartbeat.h
 main/profiler.o: ../common/aggregator.h lib/instruction.h ../common/dump_gzip.h
 main/profiler.o: ../common/read_gzip.h lib/memory_access.h lib/inline.h
-main/profiler.o: lib/simplevec.h hw_model/states.h hw_model/trace_needs.h
-main/profiler.o: lib/delegate.h lib/memory_interface.h lib/memory_trace.h
-main/profiler.o: hw_model/state_observer.h ../common/liboptions.h
-main/profiler.o: ../common/kill.h ../common/static_set.h
+main/profiler.o: lib/simplevec.h lib/opcodes.h hw_model/states.h
+main/profiler.o: hw_model/trace_needs.h lib/delegate.h lib/memory_interface.h
+main/profiler.o: lib/memory_trace.h hw_model/state_observer.h
+main/profiler.o: ../common/liboptions.h ../common/kill.h ../common/static_set.h
 main/profiler.o: ../common/lua_register.h ../common/lua.hpp ../common/units.h
 main/profiler.o: ../common/cast.h ../common/uint64_t_hash.h
 main/profiler.o: ../common/parameters.h ../common/param_factory.h
@@ -243,8 +243,8 @@ timer_cpu/bandwidth.o: ../common/libmetric.h ../common/metric.h
 timer_cpu/bandwidth.o: ../common/tagged_metric.h ../common/heartbeat.h
 timer_cpu/bandwidth.o: ../common/aggregator.h lib/instruction.h
 timer_cpu/bandwidth.o: ../common/dump_gzip.h ../common/read_gzip.h
-timer_cpu/bandwidth.o: lib/memory_access.h lib/simplevec.h hw_model/states.h
-timer_cpu/bandwidth.o: hw_model/trace_needs.h lib/delegate.h
+timer_cpu/bandwidth.o: lib/memory_access.h lib/simplevec.h lib/opcodes.h
+timer_cpu/bandwidth.o: hw_model/states.h hw_model/trace_needs.h lib/delegate.h
 timer_cpu/bandwidth.o: lib/memory_interface.h lib/memory_trace.h
 timer_cpu/bandwidth.o: hw_model/state_observer.h main/cotson.h
 timer_cpu/gzip_sink.o: lib/abaeterno_config.h timer_cpu/cpu_timer.h
@@ -253,7 +253,8 @@ timer_cpu/gzip_sink.o: ../common/tagged_metric.h ../common/heartbeat.h
 timer_cpu/gzip_sink.o: ../common/aggregator.h lib/instruction.h
 timer_cpu/gzip_sink.o: ../common/dump_gzip.h ../common/read_gzip.h
 timer_cpu/gzip_sink.o: lib/memory_access.h lib/inline.h lib/simplevec.h
-timer_cpu/gzip_sink.o: hw_model/states.h hw_model/trace_needs.h lib/delegate.h
+timer_cpu/gzip_sink.o: lib/opcodes.h lib/hashmap.h hw_model/states.h
+timer_cpu/gzip_sink.o: hw_model/trace_needs.h lib/delegate.h
 timer_cpu/gzip_sink.o: lib/memory_interface.h lib/memory_trace.h
 timer_cpu/gzip_sink.o: hw_model/state_observer.h ../common/liboptions.h
 timer_cpu/gzip_sink.o: ../common/kill.h ../common/static_set.h
@@ -269,16 +270,17 @@ timer_cpu/memory_tracer.o: ../common/tagged_metric.h ../common/heartbeat.h
 timer_cpu/memory_tracer.o: ../common/aggregator.h lib/instruction.h
 timer_cpu/memory_tracer.o: ../common/dump_gzip.h ../common/read_gzip.h
 timer_cpu/memory_tracer.o: lib/memory_access.h lib/inline.h lib/simplevec.h
-timer_cpu/memory_tracer.o: hw_model/states.h hw_model/trace_needs.h
-timer_cpu/memory_tracer.o: lib/delegate.h lib/memory_interface.h
-timer_cpu/memory_tracer.o: lib/memory_trace.h hw_model/state_observer.h
-timer_cpu/memory_tracer.o: ../common/liboptions.h ../common/kill.h
-timer_cpu/memory_tracer.o: ../common/static_set.h ../common/lua_register.h
-timer_cpu/memory_tracer.o: ../common/lua.hpp ../common/units.h ../common/cast.h
+timer_cpu/memory_tracer.o: lib/opcodes.h lib/hashmap.h hw_model/states.h
+timer_cpu/memory_tracer.o: hw_model/trace_needs.h lib/delegate.h
+timer_cpu/memory_tracer.o: lib/memory_interface.h lib/memory_trace.h
+timer_cpu/memory_tracer.o: hw_model/state_observer.h ../common/liboptions.h
+timer_cpu/memory_tracer.o: ../common/kill.h ../common/static_set.h
+timer_cpu/memory_tracer.o: ../common/lua_register.h ../common/lua.hpp
+timer_cpu/memory_tracer.o: ../common/units.h ../common/cast.h
 timer_cpu/memory_tracer.o: ../common/uint64_t_hash.h ../common/parameters.h
 timer_cpu/memory_tracer.o: ../common/param_factory.h ../common/options.h
 timer_cpu/memory_tracer.o: mem_lib/storage_many.h mem_lib/storage.h lib/cache.h
-timer_cpu/memory_tracer.o: lib/debug_mem.h lib/hashmap.h mem_lib/cache_line.h
+timer_cpu/memory_tracer.o: lib/debug_mem.h mem_lib/cache_line.h
 timer_cpu/perfect_disk.o: lib/abaeterno_config.h lib/logger.h lib/selector.h
 timer_cpu/perfect_disk.o: ../common/error.h ../common/liboptions.h
 timer_cpu/perfect_disk.o: ../common/kill.h ../common/static_set.h
@@ -295,32 +297,32 @@ timer_cpu/simpoint_profile.o: ../common/tagged_metric.h ../common/heartbeat.h
 timer_cpu/simpoint_profile.o: ../common/aggregator.h lib/instruction.h
 timer_cpu/simpoint_profile.o: ../common/dump_gzip.h ../common/read_gzip.h
 timer_cpu/simpoint_profile.o: lib/memory_access.h lib/inline.h lib/simplevec.h
-timer_cpu/simpoint_profile.o: hw_model/states.h hw_model/trace_needs.h
-timer_cpu/simpoint_profile.o: lib/delegate.h lib/memory_interface.h
-timer_cpu/simpoint_profile.o: lib/memory_trace.h hw_model/state_observer.h
-timer_cpu/simpoint_profile.o: ../common/liboptions.h ../common/kill.h
-timer_cpu/simpoint_profile.o: ../common/static_set.h ../common/lua_register.h
-timer_cpu/simpoint_profile.o: ../common/lua.hpp ../common/units.h
-timer_cpu/simpoint_profile.o: ../common/cast.h ../common/uint64_t_hash.h
-timer_cpu/simpoint_profile.o: ../common/parameters.h ../common/param_factory.h
-timer_cpu/simpoint_profile.o: ../common/options.h lib/logger.h lib/selector.h
-timer_cpu/simpoint_profile.o: main/cotson.h
+timer_cpu/simpoint_profile.o: lib/opcodes.h lib/hashmap.h hw_model/states.h
+timer_cpu/simpoint_profile.o: hw_model/trace_needs.h lib/delegate.h
+timer_cpu/simpoint_profile.o: lib/memory_interface.h lib/memory_trace.h
+timer_cpu/simpoint_profile.o: hw_model/state_observer.h ../common/liboptions.h
+timer_cpu/simpoint_profile.o: ../common/kill.h ../common/static_set.h
+timer_cpu/simpoint_profile.o: ../common/lua_register.h ../common/lua.hpp
+timer_cpu/simpoint_profile.o: ../common/units.h ../common/cast.h
+timer_cpu/simpoint_profile.o: ../common/uint64_t_hash.h ../common/parameters.h
+timer_cpu/simpoint_profile.o: ../common/param_factory.h ../common/options.h
+timer_cpu/simpoint_profile.o: lib/logger.h lib/selector.h main/cotson.h
 timer_cpu/timer0.o: lib/abaeterno_config.h lib/logger.h lib/selector.h
 timer_cpu/timer0.o: timer_cpu/cpu_timer.h ../common/libmetric.h
 timer_cpu/timer0.o: ../common/metric.h ../common/tagged_metric.h
 timer_cpu/timer0.o: ../common/heartbeat.h ../common/aggregator.h
 timer_cpu/timer0.o: lib/instruction.h ../common/dump_gzip.h
 timer_cpu/timer0.o: ../common/read_gzip.h lib/memory_access.h lib/inline.h
-timer_cpu/timer0.o: lib/simplevec.h hw_model/states.h hw_model/trace_needs.h
-timer_cpu/timer0.o: lib/delegate.h lib/memory_interface.h lib/memory_trace.h
+timer_cpu/timer0.o: lib/simplevec.h lib/opcodes.h lib/hashmap.h
+timer_cpu/timer0.o: hw_model/states.h hw_model/trace_needs.h lib/delegate.h
+timer_cpu/timer0.o: lib/memory_interface.h lib/memory_trace.h
 timer_cpu/timer0.o: hw_model/state_observer.h ../common/liboptions.h
 timer_cpu/timer0.o: ../common/kill.h ../common/static_set.h
 timer_cpu/timer0.o: ../common/lua_register.h ../common/lua.hpp
 timer_cpu/timer0.o: ../common/units.h ../common/cast.h
 timer_cpu/timer0.o: ../common/uint64_t_hash.h ../common/parameters.h
 timer_cpu/timer0.o: ../common/param_factory.h ../common/options.h main/cotson.h
-timer_cpu/timer0.o: lib/twolev.h lib/cache.h lib/debug_mem.h lib/hashmap.h
-timer_cpu/timer0.o: ../common/error.h
+timer_cpu/timer0.o: lib/twolev.h lib/cache.h lib/debug_mem.h ../common/error.h
 timer_cpu/timer1.o: lib/abaeterno_config.h ../common/error.h
 timer_cpu/timer1.o: ../common/liboptions.h ../common/kill.h
 timer_cpu/timer1.o: ../common/static_set.h ../common/lua_register.h
@@ -332,18 +334,36 @@ timer_cpu/timer1.o: ../common/metric.h ../common/tagged_metric.h
 timer_cpu/timer1.o: ../common/heartbeat.h ../common/aggregator.h
 timer_cpu/timer1.o: lib/instruction.h ../common/dump_gzip.h
 timer_cpu/timer1.o: ../common/read_gzip.h lib/memory_access.h lib/inline.h
-timer_cpu/timer1.o: lib/simplevec.h hw_model/states.h hw_model/trace_needs.h
-timer_cpu/timer1.o: lib/delegate.h lib/memory_interface.h lib/memory_trace.h
+timer_cpu/timer1.o: lib/simplevec.h lib/opcodes.h lib/hashmap.h
+timer_cpu/timer1.o: hw_model/states.h hw_model/trace_needs.h lib/delegate.h
+timer_cpu/timer1.o: lib/memory_interface.h lib/memory_trace.h
 timer_cpu/timer1.o: hw_model/state_observer.h main/cotson.h lib/twolev.h
-timer_cpu/timer1.o: lib/cache.h lib/debug_mem.h lib/hashmap.h lib/btb.h
-timer_cpu/timer1.o: lib/bb.h lib/ras.h
+timer_cpu/timer1.o: lib/cache.h lib/debug_mem.h lib/btb.h lib/bb.h lib/ras.h
+timer_cpu/timer_dep.o: lib/abaeterno_config.h lib/logger.h lib/selector.h
+timer_cpu/timer_dep.o: timer_cpu/cpu_timer.h ../common/libmetric.h
+timer_cpu/timer_dep.o: ../common/metric.h ../common/tagged_metric.h
+timer_cpu/timer_dep.o: ../common/heartbeat.h ../common/aggregator.h
+timer_cpu/timer_dep.o: lib/instruction.h ../common/dump_gzip.h
+timer_cpu/timer_dep.o: ../common/read_gzip.h lib/memory_access.h lib/inline.h
+timer_cpu/timer_dep.o: lib/simplevec.h lib/opcodes.h lib/hashmap.h
+timer_cpu/timer_dep.o: hw_model/states.h hw_model/trace_needs.h lib/delegate.h
+timer_cpu/timer_dep.o: lib/memory_interface.h lib/memory_trace.h
+timer_cpu/timer_dep.o: hw_model/state_observer.h ../common/liboptions.h
+timer_cpu/timer_dep.o: ../common/kill.h ../common/static_set.h
+timer_cpu/timer_dep.o: ../common/lua_register.h ../common/lua.hpp
+timer_cpu/timer_dep.o: ../common/units.h ../common/cast.h
+timer_cpu/timer_dep.o: ../common/uint64_t_hash.h ../common/parameters.h
+timer_cpu/timer_dep.o: ../common/param_factory.h ../common/options.h
+timer_cpu/timer_dep.o: main/cotson.h lib/twolev.h lib/cache.h lib/debug_mem.h
+timer_cpu/timer_dep.o: ../common/error.h
 timer_cpu/timer_random.o: lib/abaeterno_config.h lib/logger.h lib/selector.h
 timer_cpu/timer_random.o: timer_cpu/cpu_timer.h ../common/libmetric.h
 timer_cpu/timer_random.o: ../common/metric.h ../common/tagged_metric.h
 timer_cpu/timer_random.o: ../common/heartbeat.h ../common/aggregator.h
 timer_cpu/timer_random.o: lib/instruction.h ../common/dump_gzip.h
 timer_cpu/timer_random.o: ../common/read_gzip.h lib/memory_access.h
-timer_cpu/timer_random.o: lib/inline.h lib/simplevec.h hw_model/states.h
+timer_cpu/timer_random.o: lib/inline.h lib/simplevec.h lib/opcodes.h
+timer_cpu/timer_random.o: lib/hashmap.h hw_model/states.h
 timer_cpu/timer_random.o: hw_model/trace_needs.h lib/delegate.h
 timer_cpu/timer_random.o: lib/memory_interface.h lib/memory_trace.h
 timer_cpu/timer_random.o: hw_model/state_observer.h ../common/liboptions.h
@@ -353,7 +373,7 @@ timer_cpu/timer_random.o: ../common/units.h ../common/cast.h
 timer_cpu/timer_random.o: ../common/uint64_t_hash.h ../common/parameters.h
 timer_cpu/timer_random.o: ../common/param_factory.h ../common/options.h
 timer_cpu/timer_random.o: main/cotson.h lib/twolev.h lib/cache.h
-timer_cpu/timer_random.o: lib/debug_mem.h lib/hashmap.h ../common/error.h
+timer_cpu/timer_random.o: lib/debug_mem.h ../common/error.h
 timer_cpu/trace_stats.o: lib/abaeterno_config.h ../common/liboptions.h
 timer_cpu/trace_stats.o: ../common/kill.h ../common/static_set.h
 timer_cpu/trace_stats.o: ../common/lua_register.h ../common/lua.hpp
@@ -365,11 +385,11 @@ timer_cpu/trace_stats.o: ../common/metric.h ../common/tagged_metric.h
 timer_cpu/trace_stats.o: ../common/heartbeat.h ../common/aggregator.h
 timer_cpu/trace_stats.o: lib/instruction.h ../common/dump_gzip.h
 timer_cpu/trace_stats.o: ../common/read_gzip.h lib/memory_access.h lib/inline.h
-timer_cpu/trace_stats.o: lib/simplevec.h hw_model/states.h
-timer_cpu/trace_stats.o: hw_model/trace_needs.h lib/delegate.h
-timer_cpu/trace_stats.o: lib/memory_interface.h lib/memory_trace.h
-timer_cpu/trace_stats.o: hw_model/state_observer.h lib/logger.h lib/selector.h
-timer_cpu/trace_stats.o: main/cotson.h
+timer_cpu/trace_stats.o: lib/simplevec.h lib/opcodes.h lib/hashmap.h
+timer_cpu/trace_stats.o: hw_model/states.h hw_model/trace_needs.h
+timer_cpu/trace_stats.o: lib/delegate.h lib/memory_interface.h
+timer_cpu/trace_stats.o: lib/memory_trace.h hw_model/state_observer.h
+timer_cpu/trace_stats.o: lib/logger.h lib/selector.h main/cotson.h
 mem_lib/bus_lua.o: lib/abaeterno_config.h lib/lua_helpers.h ../common/lua.hpp
 mem_lib/bus_lua.o: lib/memory_interface.h lib/memory_access.h
 mem_lib/bus_lua.o: ../common/dump_gzip.h ../common/read_gzip.h lib/inline.h
@@ -404,9 +424,10 @@ mem_lib/cache_lua.o: mem_lib/storage_two_way.h mem_lib/storage_four_way.h
 mem_lib/cache_lua.o: mem_lib/storage_many.h mem_lib/storage_basic.h
 mem_lib/cache_lua.o: mem_lib/cache_timing_basic.h mem_lib/cache_timing_l2.h
 mem_lib/cache_lua.o: timer_cpu/cpu_timer.h lib/instruction.h lib/simplevec.h
-mem_lib/cache_lua.o: hw_model/trace_needs.h lib/delegate.h mem_lib/cache_impl.h
-mem_lib/cache_lua.o: mem_lib/timewheel.h hw_model/machine.h hw_model/cpu.h
-mem_lib/cache_lua.o: hw_model/nic.h timer_dev/nic_timer.h hw_model/disk.h
+mem_lib/cache_lua.o: lib/opcodes.h hw_model/trace_needs.h lib/delegate.h
+mem_lib/cache_lua.o: mem_lib/cache_impl.h mem_lib/timewheel.h
+mem_lib/cache_lua.o: hw_model/machine.h hw_model/cpu.h hw_model/nic.h
+mem_lib/cache_lua.o: timer_dev/nic_timer.h hw_model/disk.h
 mem_lib/cache_lua.o: timer_dev/disk_timer.h ../common/error.h
 mem_lib/cache_timing_l2.o: mem_lib/cache_timing_l2.h lib/abaeterno_config.h
 mem_lib/cache_timing_l2.o: ../common/libmetric.h ../common/metric.h
@@ -423,8 +444,9 @@ mem_lib/cache_timing_l2.o: lib/inline.h lib/memory_trace.h
 mem_lib/cache_timing_l2.o: hw_model/state_observer.h hw_model/states.h
 mem_lib/cache_timing_l2.o: lib/logger.h lib/selector.h main/cotson.h
 mem_lib/cache_timing_l2.o: timer_cpu/cpu_timer.h lib/instruction.h
-mem_lib/cache_timing_l2.o: lib/simplevec.h hw_model/trace_needs.h
-mem_lib/cache_timing_l2.o: lib/delegate.h ../common/error.h
+mem_lib/cache_timing_l2.o: lib/simplevec.h lib/opcodes.h lib/hashmap.h
+mem_lib/cache_timing_l2.o: hw_model/trace_needs.h lib/delegate.h
+mem_lib/cache_timing_l2.o: ../common/error.h
 mem_lib/debug_mem.o: lib/abaeterno_config.h lib/debug_mem.h lib/inline.h
 mem_lib/debug_mem.o: lib/hashmap.h mem_lib/cache_line.h lib/memory_interface.h
 mem_lib/debug_mem.o: lib/memory_access.h ../common/dump_gzip.h
@@ -526,8 +548,8 @@ mem_lib/main_memory.o: ../common/uint64_t_hash.h ../common/parameters.h
 mem_lib/main_memory.o: ../common/param_factory.h ../common/options.h
 mem_lib/main_memory.o: lib/logger.h lib/selector.h main/cotson.h
 mem_lib/main_memory.o: mem_lib/cache_timing_l2.h timer_cpu/cpu_timer.h
-mem_lib/main_memory.o: lib/instruction.h lib/simplevec.h hw_model/trace_needs.h
-mem_lib/main_memory.o: lib/delegate.h
+mem_lib/main_memory.o: lib/instruction.h lib/simplevec.h lib/opcodes.h
+mem_lib/main_memory.o: lib/hashmap.h hw_model/trace_needs.h lib/delegate.h
 mem_lib/main_memory_lua.o: lib/abaeterno_config.h lib/lua_helpers.h
 mem_lib/main_memory_lua.o: ../common/lua.hpp lib/memory_interface.h
 mem_lib/main_memory_lua.o: lib/memory_access.h ../common/dump_gzip.h
@@ -582,7 +604,8 @@ mem_lib/mem_tracer.o: ../common/uint64_t_hash.h ../common/parameters.h
 mem_lib/mem_tracer.o: ../common/param_factory.h ../common/options.h
 mem_lib/mem_tracer.o: lib/logger.h lib/selector.h main/cotson.h
 mem_lib/mem_tracer.o: lib/lua_helpers.h timer_cpu/cpu_timer.h lib/instruction.h
-mem_lib/mem_tracer.o: lib/simplevec.h hw_model/trace_needs.h lib/delegate.h
+mem_lib/mem_tracer.o: lib/simplevec.h lib/opcodes.h lib/hashmap.h
+mem_lib/mem_tracer.o: hw_model/trace_needs.h lib/delegate.h
 mem_lib/mesi.o: lib/abaeterno_config.h mem_lib/mesi.h lib/memory_interface.h
 mem_lib/mesi.o: lib/memory_access.h ../common/dump_gzip.h ../common/read_gzip.h
 mem_lib/mesi.o: lib/inline.h lib/memory_trace.h ../common/libmetric.h
@@ -639,18 +662,17 @@ hw_model/cpu.o: ../common/libmetric.h ../common/metric.h
 hw_model/cpu.o: ../common/tagged_metric.h ../common/heartbeat.h
 hw_model/cpu.o: ../common/aggregator.h lib/instruction.h ../common/dump_gzip.h
 hw_model/cpu.o: ../common/read_gzip.h lib/memory_access.h lib/inline.h
-hw_model/cpu.o: lib/simplevec.h hw_model/states.h hw_model/trace_needs.h
-hw_model/cpu.o: lib/delegate.h lib/memory_interface.h lib/memory_trace.h
-hw_model/cpu.o: hw_model/state_observer.h ../common/liboptions.h
-hw_model/cpu.o: ../common/kill.h ../common/static_set.h
+hw_model/cpu.o: lib/simplevec.h lib/opcodes.h lib/hashmap.h hw_model/states.h
+hw_model/cpu.o: hw_model/trace_needs.h lib/delegate.h lib/memory_interface.h
+hw_model/cpu.o: lib/memory_trace.h hw_model/state_observer.h
+hw_model/cpu.o: ../common/liboptions.h ../common/kill.h ../common/static_set.h
 hw_model/cpu.o: ../common/lua_register.h ../common/lua.hpp ../common/units.h
 hw_model/cpu.o: ../common/cast.h ../common/uint64_t_hash.h
 hw_model/cpu.o: ../common/parameters.h ../common/param_factory.h
 hw_model/cpu.o: ../common/options.h lib/logger.h lib/selector.h main/cotson.h
 hw_model/cpu.o: lib/lua_helpers.h ../common/error.h parsing/cpu_token_parser.h
-hw_model/cpu.o: parsing/token_parser.h lib/opcodes.h lib/hashmap.h
-hw_model/cpu.o: lib/instructions.h parsing/token_queue.h lib/predictor.h
-hw_model/cpu.o: lib/circbuf.h lib/series.h
+hw_model/cpu.o: parsing/token_parser.h lib/instructions.h parsing/token_queue.h
+hw_model/cpu.o: lib/predictor.h lib/circbuf.h lib/series.h
 hw_model/disk.o: lib/abaeterno_config.h hw_model/disk.h timer_dev/disk_timer.h
 hw_model/disk.o: ../common/libmetric.h ../common/metric.h
 hw_model/disk.o: ../common/tagged_metric.h ../common/heartbeat.h
@@ -668,8 +690,9 @@ hw_model/machine.o: ../common/metric.h ../common/tagged_metric.h
 hw_model/machine.o: ../common/heartbeat.h ../common/aggregator.h
 hw_model/machine.o: lib/instruction.h ../common/dump_gzip.h
 hw_model/machine.o: ../common/read_gzip.h lib/memory_access.h lib/inline.h
-hw_model/machine.o: lib/simplevec.h hw_model/states.h hw_model/trace_needs.h
-hw_model/machine.o: lib/delegate.h lib/memory_interface.h lib/memory_trace.h
+hw_model/machine.o: lib/simplevec.h lib/opcodes.h lib/hashmap.h
+hw_model/machine.o: hw_model/states.h hw_model/trace_needs.h lib/delegate.h
+hw_model/machine.o: lib/memory_interface.h lib/memory_trace.h
 hw_model/machine.o: hw_model/state_observer.h ../common/liboptions.h
 hw_model/machine.o: ../common/kill.h ../common/static_set.h
 hw_model/machine.o: ../common/lua_register.h ../common/lua.hpp
@@ -757,12 +780,13 @@ sampler/dynamic.o: ../common/tagged_metric.h ../common/heartbeat.h
 sampler/dynamic.o: ../common/aggregator.h lib/instruction.h
 sampler/dynamic.o: ../common/dump_gzip.h ../common/read_gzip.h
 sampler/dynamic.o: lib/memory_access.h lib/inline.h lib/simplevec.h
-sampler/dynamic.o: hw_model/states.h hw_model/trace_needs.h lib/delegate.h
-sampler/dynamic.o: lib/memory_interface.h lib/memory_trace.h
-sampler/dynamic.o: hw_model/state_observer.h lib/logger.h lib/selector.h
-sampler/dynamic.o: main/cotson.h lib/lua_helpers.h hw_model/nic.h
-sampler/dynamic.o: timer_dev/nic_timer.h hw_model/disk.h timer_dev/disk_timer.h
-sampler/dynamic.o: sampler/sampler.h lib/series.h lib/circbuf.h
+sampler/dynamic.o: lib/opcodes.h lib/hashmap.h hw_model/states.h
+sampler/dynamic.o: hw_model/trace_needs.h lib/delegate.h lib/memory_interface.h
+sampler/dynamic.o: lib/memory_trace.h hw_model/state_observer.h lib/logger.h
+sampler/dynamic.o: lib/selector.h main/cotson.h lib/lua_helpers.h
+sampler/dynamic.o: hw_model/nic.h timer_dev/nic_timer.h hw_model/disk.h
+sampler/dynamic.o: timer_dev/disk_timer.h sampler/sampler.h lib/series.h
+sampler/dynamic.o: lib/circbuf.h
 sampler/exp_random.o: lib/abaeterno_config.h ../common/error.h
 sampler/exp_random.o: ../common/liboptions.h ../common/kill.h
 sampler/exp_random.o: ../common/static_set.h ../common/lua_register.h
@@ -808,7 +832,7 @@ sampler/selective.o: ../common/uint64_t_hash.h ../common/parameters.h
 sampler/selective.o: ../common/param_factory.h ../common/options.h
 sampler/selective.o: lib/cpuid_call.h lib/instruction.h ../common/dump_gzip.h
 sampler/selective.o: ../common/read_gzip.h lib/memory_access.h lib/inline.h
-sampler/selective.o: lib/simplevec.h main/cotson.h
+sampler/selective.o: lib/simplevec.h lib/opcodes.h main/cotson.h
 sampler/simple.o: lib/abaeterno_config.h sampler/sampler.h hw_model/states.h
 sampler/simple.o: ../common/liboptions.h ../common/kill.h
 sampler/simple.o: ../common/static_set.h ../common/lua_register.h
@@ -879,7 +903,8 @@ lib/btb.o: ../common/aggregator.h lib/logger.h lib/selector.h ../common/error.h
 lib/instruction.o: lib/abaeterno_config.h lib/instruction.h
 lib/instruction.o: ../common/dump_gzip.h ../common/read_gzip.h
 lib/instruction.o: lib/memory_access.h lib/inline.h lib/simplevec.h
-lib/instruction.o: ../common/error.h ../common/liboptions.h ../common/kill.h
+lib/instruction.o: lib/opcodes.h lib/hashmap.h ../common/error.h
+lib/instruction.o: ../common/liboptions.h ../common/kill.h
 lib/instruction.o: ../common/static_set.h ../common/lua_register.h
 lib/instruction.o: ../common/lua.hpp ../common/units.h ../common/cast.h
 lib/instruction.o: ../common/uint64_t_hash.h ../common/parameters.h
@@ -888,7 +913,7 @@ lib/instruction.o: ../distorm/distorm.h
 lib/instructions.o: lib/abaeterno_config.h lib/instructions.h lib/instruction.h
 lib/instructions.o: ../common/dump_gzip.h ../common/read_gzip.h
 lib/instructions.o: lib/memory_access.h lib/inline.h lib/simplevec.h
-lib/instructions.o: lib/logger.h lib/selector.h
+lib/instructions.o: lib/opcodes.h lib/hashmap.h lib/logger.h lib/selector.h
 lib/lua_helpers.o: lib/abaeterno_config.h lib/lua_helpers.h ../common/lua.hpp
 lib/lua_helpers.o: lib/memory_interface.h lib/memory_access.h
 lib/lua_helpers.o: ../common/dump_gzip.h ../common/read_gzip.h lib/inline.h
@@ -917,8 +942,8 @@ lib/memory_interface.o: ../common/uint64_t_hash.h ../common/parameters.h
 lib/memory_interface.o: ../common/param_factory.h ../common/options.h
 lib/memory_interface.o: lib/logger.h lib/selector.h main/cotson.h
 lib/memory_interface.o: ../common/error.h timer_cpu/cpu_timer.h
-lib/memory_interface.o: lib/instruction.h lib/simplevec.h
-lib/memory_interface.o: hw_model/trace_needs.h lib/delegate.h
+lib/memory_interface.o: lib/instruction.h lib/simplevec.h lib/opcodes.h
+lib/memory_interface.o: lib/hashmap.h hw_model/trace_needs.h lib/delegate.h
 lib/opcodes.o: lib/abaeterno_config.h lib/opcodes.h lib/hashmap.h lib/logger.h
 lib/opcodes.o: lib/selector.h
 lib/twolev.o: lib/abaeterno_config.h lib/twolev.h lib/cache.h
@@ -944,7 +969,7 @@ simnow/proxy.o: ../common/options.h lib/version.h lib/selector.h
 simnow/proxy.o: ../common/error.h main/command_socket.h lib/callme.h
 simnow/proxy.o: hw_model/machine.h hw_model/cpu.h timer_cpu/cpu_timer.h
 simnow/proxy.o: lib/instruction.h ../common/dump_gzip.h ../common/read_gzip.h
-simnow/proxy.o: lib/memory_access.h lib/inline.h lib/simplevec.h
+simnow/proxy.o: lib/memory_access.h lib/inline.h lib/simplevec.h lib/opcodes.h
 simnow/proxy.o: hw_model/trace_needs.h lib/delegate.h lib/memory_interface.h
 simnow/proxy.o: lib/memory_trace.h hw_model/state_observer.h lib/logger.h
 simnow/proxy.o: lib/lua_helpers.h hw_model/nic.h timer_dev/nic_timer.h
@@ -963,10 +988,10 @@ injector/injector.o: ../common/libmetric.h ../common/metric.h
 injector/injector.o: ../common/tagged_metric.h ../common/heartbeat.h
 injector/injector.o: ../common/aggregator.h hw_model/state_observer.h
 injector/injector.o: hw_model/states.h main/cotson.h timer_cpu/cpu_timer.h
-injector/injector.o: lib/instruction.h lib/simplevec.h hw_model/trace_needs.h
-injector/injector.o: lib/delegate.h lib/instructions.h lib/opcodes.h
-injector/injector.o: lib/hashmap.h ../common/fileutil.h mem_lib/mem_bintracer.h
-injector/injector.o: ../common/memgate.h
+injector/injector.o: lib/instruction.h lib/simplevec.h lib/opcodes.h
+injector/injector.o: lib/hashmap.h hw_model/trace_needs.h lib/delegate.h
+injector/injector.o: lib/instructions.h ../common/fileutil.h
+injector/injector.o: mem_lib/mem_bintracer.h ../common/memgate.h
 test.unit/test_cache.o: lib/cache.h ../common/liboptions.h ../common/kill.h
 test.unit/test_cache.o: ../common/static_set.h ../common/lua_register.h
 test.unit/test_cache.o: ../common/lua.hpp ../common/units.h ../common/cast.h
@@ -990,10 +1015,11 @@ test.unit/test_cache_hierarchy.o: ../common/param_factory.h ../common/options.h
 test.unit/test_cache_hierarchy.o: lib/logger.h lib/selector.h main/cotson.h
 test.unit/test_cache_hierarchy.o: mem_lib/cache_timing_l2.h
 test.unit/test_cache_hierarchy.o: timer_cpu/cpu_timer.h lib/instruction.h
-test.unit/test_cache_hierarchy.o: lib/simplevec.h hw_model/trace_needs.h
-test.unit/test_cache_hierarchy.o: lib/delegate.h mem_lib/storage_basic.h
-test.unit/test_cache_hierarchy.o: mem_lib/storage.h lib/cache.h lib/debug_mem.h
-test.unit/test_cache_hierarchy.o: lib/hashmap.h mem_lib/cache_line.h
+test.unit/test_cache_hierarchy.o: lib/simplevec.h lib/opcodes.h lib/hashmap.h
+test.unit/test_cache_hierarchy.o: hw_model/trace_needs.h lib/delegate.h
+test.unit/test_cache_hierarchy.o: mem_lib/storage_basic.h mem_lib/storage.h
+test.unit/test_cache_hierarchy.o: lib/cache.h lib/debug_mem.h
+test.unit/test_cache_hierarchy.o: mem_lib/cache_line.h
 test.unit/test_cache_hierarchy.o: mem_lib/cache_timing_basic.h
 test.unit/test_cache_hierarchy.o: mem_lib/cache_impl.h mem_lib/timewheel.h
 test.unit/test_cache_hierarchy.o: hw_model/machine.h hw_model/cpu.h
@@ -1017,10 +1043,10 @@ test.unit/test_cache_impl.o: ../common/uint64_t_hash.h ../common/parameters.h
 test.unit/test_cache_impl.o: ../common/param_factory.h ../common/options.h
 test.unit/test_cache_impl.o: lib/logger.h lib/selector.h main/cotson.h
 test.unit/test_cache_impl.o: mem_lib/cache_timing_l2.h timer_cpu/cpu_timer.h
-test.unit/test_cache_impl.o: lib/instruction.h lib/simplevec.h
-test.unit/test_cache_impl.o: hw_model/trace_needs.h lib/delegate.h
-test.unit/test_cache_impl.o: mem_lib/storage_one_way.h mem_lib/storage.h
-test.unit/test_cache_impl.o: lib/cache.h lib/debug_mem.h lib/hashmap.h
+test.unit/test_cache_impl.o: lib/instruction.h lib/simplevec.h lib/opcodes.h
+test.unit/test_cache_impl.o: lib/hashmap.h hw_model/trace_needs.h
+test.unit/test_cache_impl.o: lib/delegate.h mem_lib/storage_one_way.h
+test.unit/test_cache_impl.o: mem_lib/storage.h lib/cache.h lib/debug_mem.h
 test.unit/test_cache_impl.o: mem_lib/cache_line.h mem_lib/storage_two_way.h
 test.unit/test_cache_impl.o: mem_lib/storage_four_way.h mem_lib/storage_many.h
 test.unit/test_cache_impl.o: mem_lib/storage_basic.h
@@ -1047,10 +1073,10 @@ test.unit/test_cache_impl_wb.o: ../common/parameters.h
 test.unit/test_cache_impl_wb.o: ../common/param_factory.h ../common/options.h
 test.unit/test_cache_impl_wb.o: lib/logger.h lib/selector.h main/cotson.h
 test.unit/test_cache_impl_wb.o: mem_lib/cache_timing_l2.h timer_cpu/cpu_timer.h
-test.unit/test_cache_impl_wb.o: lib/instruction.h lib/simplevec.h
-test.unit/test_cache_impl_wb.o: hw_model/trace_needs.h lib/delegate.h
-test.unit/test_cache_impl_wb.o: mem_lib/storage_one_way.h mem_lib/storage.h
-test.unit/test_cache_impl_wb.o: lib/cache.h lib/debug_mem.h lib/hashmap.h
+test.unit/test_cache_impl_wb.o: lib/instruction.h lib/simplevec.h lib/opcodes.h
+test.unit/test_cache_impl_wb.o: lib/hashmap.h hw_model/trace_needs.h
+test.unit/test_cache_impl_wb.o: lib/delegate.h mem_lib/storage_one_way.h
+test.unit/test_cache_impl_wb.o: mem_lib/storage.h lib/cache.h lib/debug_mem.h
 test.unit/test_cache_impl_wb.o: mem_lib/cache_line.h mem_lib/storage_two_way.h
 test.unit/test_cache_impl_wb.o: mem_lib/storage_four_way.h
 test.unit/test_cache_impl_wb.o: mem_lib/storage_many.h mem_lib/storage_basic.h
@@ -1076,10 +1102,10 @@ test.unit/test_mesi_2levels.o: ../common/uint64_t_hash.h ../common/parameters.h
 test.unit/test_mesi_2levels.o: ../common/param_factory.h ../common/options.h
 test.unit/test_mesi_2levels.o: lib/logger.h lib/selector.h main/cotson.h
 test.unit/test_mesi_2levels.o: mem_lib/cache_timing_l2.h timer_cpu/cpu_timer.h
-test.unit/test_mesi_2levels.o: lib/instruction.h lib/simplevec.h
-test.unit/test_mesi_2levels.o: hw_model/trace_needs.h lib/delegate.h
-test.unit/test_mesi_2levels.o: mem_lib/storage_basic.h mem_lib/storage.h
-test.unit/test_mesi_2levels.o: lib/cache.h lib/debug_mem.h lib/hashmap.h
+test.unit/test_mesi_2levels.o: lib/instruction.h lib/simplevec.h lib/opcodes.h
+test.unit/test_mesi_2levels.o: lib/hashmap.h hw_model/trace_needs.h
+test.unit/test_mesi_2levels.o: lib/delegate.h mem_lib/storage_basic.h
+test.unit/test_mesi_2levels.o: mem_lib/storage.h lib/cache.h lib/debug_mem.h
 test.unit/test_mesi_2levels.o: mem_lib/cache_line.h
 test.unit/test_mesi_2levels.o: mem_lib/cache_timing_basic.h
 test.unit/test_mesi_2levels.o: mem_lib/cache_impl.h mem_lib/timewheel.h
@@ -1104,10 +1130,10 @@ test.unit/test_moesi_2levels.o: ../common/parameters.h
 test.unit/test_moesi_2levels.o: ../common/param_factory.h ../common/options.h
 test.unit/test_moesi_2levels.o: lib/logger.h lib/selector.h main/cotson.h
 test.unit/test_moesi_2levels.o: mem_lib/cache_timing_l2.h timer_cpu/cpu_timer.h
-test.unit/test_moesi_2levels.o: lib/instruction.h lib/simplevec.h
-test.unit/test_moesi_2levels.o: hw_model/trace_needs.h lib/delegate.h
-test.unit/test_moesi_2levels.o: mem_lib/storage_basic.h mem_lib/storage.h
-test.unit/test_moesi_2levels.o: lib/cache.h lib/debug_mem.h lib/hashmap.h
+test.unit/test_moesi_2levels.o: lib/instruction.h lib/simplevec.h lib/opcodes.h
+test.unit/test_moesi_2levels.o: lib/hashmap.h hw_model/trace_needs.h
+test.unit/test_moesi_2levels.o: lib/delegate.h mem_lib/storage_basic.h
+test.unit/test_moesi_2levels.o: mem_lib/storage.h lib/cache.h lib/debug_mem.h
 test.unit/test_moesi_2levels.o: mem_lib/cache_line.h
 test.unit/test_moesi_2levels.o: mem_lib/cache_timing_basic.h
 test.unit/test_moesi_2levels.o: mem_lib/cache_impl.h mem_lib/timewheel.h
