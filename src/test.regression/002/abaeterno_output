@@ -274,17 +274,17 @@ cpu0.dcache.l2cache.write_miss_rate                         0.156549
 cpu0.dcache.read_miss_rate                                  0.112662
 cpu0.dcache.write_miss_rate                                 0.405255
 cpu0.dtlb.l2tlb.read_miss_rate                              0.145261
-cpu0.dtlb.l2tlb.write_miss_rate                             -nan
+cpu0.dtlb.l2tlb.write_miss_rate                             nan
 cpu0.dtlb.read_miss_rate                                    0.0190548
-cpu0.dtlb.write_miss_rate                                   -nan
+cpu0.dtlb.write_miss_rate                                   nan
 cpu0.icache.l2cache.read_miss_rate                          0.378652
 cpu0.icache.l2cache.write_miss_rate                         0.156549
 cpu0.icache.read_miss_rate                                  0.0585657
-cpu0.icache.write_miss_rate                                 -nan
+cpu0.icache.write_miss_rate                                 nan
 cpu0.ipc                                                    0.132301
 cpu0.itlb.l2tlb.read_miss_rate                              0.145261
-cpu0.itlb.l2tlb.write_miss_rate                             -nan
+cpu0.itlb.l2tlb.write_miss_rate                             nan
 cpu0.itlb.read_miss_rate                                    0.00336269
-cpu0.itlb.write_miss_rate                                   -nan
+cpu0.itlb.write_miss_rate                                   nan
 cpu0.twolev.miss_rate                                       0.134134
 END__DATA

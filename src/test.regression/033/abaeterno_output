@@ -142,12 +142,12 @@ cpu0.hb_ev_HW_interrupt                                     63
 cpu0.hb_ev_SW_interrupt                                     0
 cpu0.idlecount                                              13828722
 cpu0.instcount                                              2171278
-cpu0.invalid_translation_bytes                              167488
+cpu0.invalid_translation_bytes                              168243
 cpu0.iocount                                                1193109
-cpu0.metadata_bytes                                         726616
-cpu0.other_exceptions                                       11022
-cpu0.plain_invalidations                                    206
-cpu0.range_invalidations                                    0
+cpu0.metadata_bytes                                         726976
+cpu0.other_exceptions                                       10989
+cpu0.plain_invalidations                                    207
+cpu0.range_invalidations                                    2
 cpu0.read_mmios                                             87
 cpu0.read_pios                                              267
 cpu0.segv_exceptions                                        0
@@ -155,7 +155,7 @@ cpu0.timer.basic_blocks                                     402828422
 cpu0.timer.cycles                                           3092077339
 cpu0.timer.instructions                                     3092077339
 cpu0.trace_cache_size                                       0
-cpu0.valid_translation_bytes                                6264216
+cpu0.valid_translation_bytes                                6279733
 cpu0.write_mmios                                            31
 cpu0.write_pios                                             1175
 cycles                                                      16000000

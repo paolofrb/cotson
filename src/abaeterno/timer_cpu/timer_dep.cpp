@@ -22,6 +22,36 @@
 using namespace std;
 using namespace boost;
 
+#define MAXREG 256
+
+class Resource 
+{
+public:
+    Resource(uint32_t w):width(w){}
+    ~Resource() {}
+	inline void reset() { tab.clear(); }
+	inline uint32_t use(uint64_t c) { return tab[c]; }
+	inline uint64_t allocate(uint64_t c)
+	{
+	    while(true) {
+		    Cdata::iterator it = tab.find(c);
+		    if (it == tab.end()) {
+		        tab[c]=1;
+			    return c;
+		    }
+		    if (it->second < width) {
+			    it->second++;
+		        return c;
+	        }
+		    c++;
+        }
+	}
+private:
+	typedef map<uint64_t,uint32_t> Cdata;
+	Cdata tab;
+	uint32_t width;
+};
+
 class TimerDep : public CpuTimer
 {
 public: 
@@ -39,7 +69,10 @@ protected:
 
 private: 
     uint64_t reg_read(const Opcode*, uint64_t);
+    uint64_t reg_read(uint8_t);
+	uint8_t rename(uint8_t,bool);
     void reg_write(const Opcode*, uint64_t);
+    uint64_t free_cycle(uint64_t);
 
 	const Instruction* prev_inst;
 	Memory::Interface::Shared icache;
@@ -54,11 +87,14 @@ private:
 	
 	const uint32_t branch_mispred_penalty;
 	const bool bpred_perfect;
-	const double commit_cpi;
 
 	uint8_t lastreg;
-	uint8_t rename[256]; // register renaming
-	uint64_t regcycle[256]; // register ready time
+	uint8_t renamereg[MAXREG]; // register renaming
+	uint64_t regcycle[MAXREG]; // register ready time
+	uint64_t memcycle; // memory ready time
+
+	Resource res_exe;
+	Resource res_mem;
 };
 
 registerClass<CpuTimer,TimerDep> timer_dep_c("timer_dep");
@@ -67,7 +103,8 @@ TimerDep::TimerDep(Parameters& p) : CpuTimer(&cycles,&instructions),
 	prev_inst(0),
 	branch_mispred_penalty(p.get<uint32_t>("branch_mispred_penalty","8")),
 	bpred_perfect(p.get<bool>("bpred_perfect","false")),
-	commit_cpi(p.get<double>("commit_cpi","1.0"))
+	res_exe(p.get<uint32_t>("execution_width","1")),
+	res_mem(p.get<uint32_t>("memory_width","1"))
 {
 	twolev.reset(new twolevT(
 		p.get<uint32_t>("twolev.l1_size","1"),
@@ -96,34 +133,44 @@ TimerDep::TimerDep(Parameters& p) : CpuTimer(&cycles,&instructions),
 	trace_needs.st[SIMULATION].setflags(sflags);
 }
 
+inline uint8_t TimerDep::rename(uint8_t r, bool w)
+{
+	uint8_t rr = renamereg[r];
+	if (w) // new renaming
+	{
+        rr = renamereg[r] = ++lastreg;
+	    if (lastreg == MAXREG)
+	        lastreg = 0;
+	}
+    return rr;
+}
+
+inline uint64_t TimerDep::reg_read(uint8_t r)
+{
+	uint8_t rr = rename(r,false);
+	uint64_t t = regcycle[rr];
+    LOG(" -- reg read",(int)r,":",(int)rr,"cycle",t);
+    return t;
+}
+
 uint64_t TimerDep::reg_read(const Opcode* opc, uint64_t fc)
 {
 	uint64_t rc = fc;
 	if (opc)
 	{
 		const Opcode::regs& src_regs = opc->getSrcRegs();
-	    for(Opcode::regs::const_iterator i=src_regs.begin(); i!=src_regs.end(); ++i)
+	    for(Opcode::regs::const_iterator i=src_regs.begin(); i!=src_regs.end(); ++i) 
 		{
-			uint8_t r = *i;
-			if (!rename[r]) {
-			    rename[r]= ++lastreg;
-			    if (lastreg == 256) lastreg = 0;
-			}
-		    uint64_t t = regcycle[rename[r]];
-			if (t > rc) rc = t;
-			LOG(" -- reg read",(int)r,":",(int)rename[r],"cycle",t);
+			uint64_t t = reg_read(*i);
+			if (t > rc) 
+			    rc = t;
 		}
 		const Opcode::regs& mem_regs = opc->getMemRegs();
 	    for(Opcode::regs::const_iterator i=mem_regs.begin(); i!=mem_regs.end(); ++i)
 		{
-			uint8_t r = *i;
-			if (!rename[r]) {
-			    rename[r]= ++lastreg;
-			    if (lastreg == 256) lastreg = 0;
-			}
-		    uint64_t t = regcycle[rename[r]];
-			if (t > rc) rc = t;
-			LOG(" -- mreg read",(int)r,":",(int)rename[r],"cycle",t);
+			uint64_t t = reg_read(*i);
+			if (t > rc) 
+			    rc = t;
 		}
 	}
 	return rc;
@@ -137,10 +184,9 @@ void TimerDep::reg_write(const Opcode* opc, uint64_t t)
 	    for(Opcode::regs::const_iterator i=dst_regs.begin(); i!=dst_regs.end(); ++i)
 		{
 			uint8_t r = *i;
-			rename[r]= ++lastreg;
-			if (lastreg == 256) lastreg = 0;
-		    regcycle[rename[r]] = t;
-			LOG(" -- reg write",(int)r,":",(int)rename[r],"cycle",t);
+			uint8_t rr = rename(r,true); // new renaming
+		    regcycle[rr] = t;
+			LOG(" -- reg write",(int)r,":",(int)rr,"cycle",t);
 	    }
 	}
 }
@@ -176,7 +222,7 @@ void TimerDep::simulation(const Instruction* inst)
 	if(icache)
 	{
 		LOG("++ INSTRUCTION:", hex, pc);
-		inst->disasm(cout); cout << dec;
+		// inst->disasm(cout); cout << dec;
 		uint64_t latency =   icache->read(pc,fetch_cycle,this)
 			               + itlb->read(pc,(uint64_t)fetch_cycle,this);
 		fetch_cycle += latency;
@@ -185,47 +231,55 @@ void TimerDep::simulation(const Instruction* inst)
 
 	/* Register read */
 	const Opcode* opc = inst->getOpcode();
-	uint64_t rcycle = reg_read(opc,fetch_cycle);
+	uint64_t xcycle = reg_read(opc,fetch_cycle);
 
 	/* Data Cache */
 	if(dcache)
 	{
+		if (memcycle > xcycle)
+		    xcycle = memcycle;
 		Instruction::MemIterator il = inst->LoadsBegin();
 		const Instruction::MemIterator el = inst->LoadsEnd();
 		uint64_t max_load_latency=0;
 		bool is_prefetch=inst->is_prefetch();
 		for(; il != el; ++il)
 		{
-			LOG(" -- LOAD:", *il);
-			uint64_t cache_lat = dcache->read(*il,rcycle,this);
-			uint64_t tlb_lat = dtlb->read(*il,rcycle,this);
+	        xcycle = res_mem.allocate(xcycle);
+			LOG(" -- LOAD:", xcycle, *il);
+			uint64_t cache_lat = dcache->read(*il,xcycle,this);
+			uint64_t tlb_lat = dtlb->read(*il,xcycle,this);
 			uint64_t latency = tlb_lat + (is_prefetch ? 0 : cache_lat);
 			LOG("     load latency =",latency);
 			if (latency > max_load_latency)
 				max_load_latency=latency;
 		}
-		if(max_load_latency)
-			rcycle += max_load_latency;
+		xcycle += max_load_latency;
 
 		uint64_t max_store_latency=0;
 		Instruction::MemIterator is = inst->StoresBegin();
 		const Instruction::MemIterator es = inst->StoresEnd();
+		bool has_stores = (is != es);
 		for(; is != es; ++is)
 		{
-			LOG(" -- STORE:", *is);
-			dcache->write(*is,rcycle,this);
-			uint64_t latency = dtlb->read(*is,rcycle,this);
+	        xcycle = res_mem.allocate(xcycle);
+			LOG(" -- STORE:", xcycle, *is);
+			dcache->write(*is,xcycle,this);
+			uint64_t latency = dtlb->read(*is,xcycle,this);
 			LOG("     store latency =",latency);
-			if (latency > max_store_latency)
-				max_store_latency=latency;
+		    if (latency > max_store_latency)
+		        max_store_latency = latency;
 		}
-		if(max_store_latency)
-			rcycle += max_store_latency;
+		xcycle += max_store_latency;
+		if (has_stores)
+		    memcycle = xcycle+1;
 	}
-	// rcycle += commit_cpi;
-	reg_write(opc,rcycle);
-	if (rcycle > cycles) cycles = rcycle;
-	LOG(" -- rcycle =",rcycle, "cycles=", cycles);
+	reg_write(opc,xcycle);
+
+	/* Execute */
+	xcycle = res_exe.allocate(xcycle);
+	if (xcycle > cycles)
+	    cycles = xcycle;
+	LOG(" -- xcycle",xcycle,"memcycle",memcycle,"cycles",cycles);
 	prev_inst = inst;
 }
 
@@ -285,8 +339,11 @@ void TimerDep::beginSimulation()
 	clear_metrics();
 	fetch_cycle=0;
 	lastreg=0;
-	(void)memset(rename,0,256*sizeof(uint8_t));
-	(void)memset(regcycle,0,256*sizeof(uint64_t));
+	(void)memset(renamereg,0,MAXREG*sizeof(uint8_t));
+	(void)memset(regcycle,0,MAXREG*sizeof(uint64_t));
+	memcycle=0;
+	res_mem.reset();
+	res_exe.reset();
 }
 
 void TimerDep::endSimulation()
@@ -326,3 +383,4 @@ void TimerDep::addMemory(string name,Memory::Interface::Shared c)
 	else 
 		throw runtime_error("unknown memory interface "+name);
 }
+

@@ -1,5 +1,5 @@
 Loading module abaeterno.so.
-Using image path: "/home/hp/SOURCEFORGE/cotson/trunk/data"
+Using image path: "/home/frb/h2/OPENSOURCE/cotson/data"
 Known Device: Deerhound RevB QuadCore Socket L1
 Known Device: Intel(R) Pro/1000 MT/PT Desktop Network Adapter
 Known Device: USB JumpDrive
@@ -51,7 +51,7 @@ info: creating device #0 "AMD 8th Generation Integrated Northbridge"
 info: creating device #1 "Dimm Bank"
 Dimmdevice: Bank 0, Simulated Size 10000000
 info: creating device #2 "AMD-8111 I/O Hub"
-ATA: Image [/home/hp/SOURCEFORGE/cotson/trunk/data/karmic64.img] does not have an ID field.
+ATA: Image [/home2/frb/OPENSOURCE/cotson/data/karmic64.img] does not have an ID field.
 info: creating device #3 "Memory Device"
 info: creating device #4 "Winbond W83627HF SIO"
 info: creating device #5 "SMB Hub Device"
@@ -67,12 +67,6 @@ info: creating device #14 "USB JumpDrive"
 info: creating device #15 "Emerald Graphics"
 Could allocate map memory
 info: creating device #16 "Intel(R) Pro/1000 MT/PT Desktop Network Adapter"
-MSG: The following devices have been updated, please check their configuration and re-save.
-AMD 8th Generation Integrated Northbridge #-1
-Dimm Bank #0
-AMD-8111 I/O Hub #1
-Memory Device #2
-
 BSD Load completed!
 
 1 exec> ide:0.image master ../data/node.hdd
@@ -148,7 +142,7 @@ Journaling was already enabled
 
 1 exec> go
 TIME=0.003125 ms IPC ( 1 )
-TIME=0.128656 ms IPC ( 0.495196 )
-TIME=0.439862 ms IPC ( 0.406937 )
-TIME=0.826544 ms IPC ( 1.19651 )
-MAX NANOS: 1322560
+TIME=0.013961 ms IPC ( 0.0389869 )
+TIME=0.562097 ms IPC ( 0.259506 )
+TIME=0.961383 ms IPC ( 0.399261 )
+MAX NANOS: 1146938

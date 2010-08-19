@@ -76,6 +76,10 @@ MASTER drive Image file is now ../data/node.hdd
 1 exec> ide:0.journal master on
 Journaling was already enabled
 
+1 exec> setmpquantum 1000
+
+1 exec> setsyncquantum 1001
+
 1 exec> keyboard.key 2E AE
 
 1 exec> keyboard.key 20 A0
@@ -103,6 +107,8 @@ Journaling was already enabled
 1 exec> keyboard.key 13 93
 
 1 exec> keyboard.key 27 A7
+
+1 exec> keyboard.key 39 B9
 
 1 exec> keyboard.key 34 B4
 
@@ -141,14 +147,8 @@ Journaling was already enabled
 1 exec> keyboard.key 1C 9C
 
 1 exec> go
-TIME=0 ms IPC ( 1.89753 )
-TIME=3.125 ms IPC ( 1.83824 )
-TIME=6.25 ms IPC ( 0.974659 )
-TIME=9.375 ms IPC ( 0.696379 )
-TIME=12.5 ms IPC ( 0.776398 )
-TIME=15.625 ms IPC ( 0.55991 )
-TIME=18.75 ms IPC ( 0.807103 )
-TIME=21.875 ms IPC ( 1.74216 )
-TIME=25 ms IPC ( 1.35318 )
-TIME=28.125 ms IPC ( 1.2987 )
-MAX SAMPLES: 10
+TIME=0.03125 ms IPC ( 0.141525 )
+TIME=0.0625 ms IPC ( 0.727108 )
+TIME=0.09375 ms IPC ( 0.546734 )
+TIME=0.125 ms IPC ( 0.821798 )
+MAX SAMPLES: 4

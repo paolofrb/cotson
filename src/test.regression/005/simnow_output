@@ -1,5 +1,5 @@
 Loading module abaeterno.so.
-Using image path: "/home/hp/SOURCEFORGE/cotson/trunk/data"
+Using image path: "/home/frb/h2/OPENSOURCE/cotson/data"
 Known Device: Deerhound RevB QuadCore Socket L1
 Known Device: Intel(R) Pro/1000 MT/PT Desktop Network Adapter
 Known Device: USB JumpDrive
@@ -51,7 +51,7 @@ info: creating device #0 "AMD 8th Generation Integrated Northbridge"
 info: creating device #1 "Dimm Bank"
 Dimmdevice: Bank 0, Simulated Size 10000000
 info: creating device #2 "AMD-8111 I/O Hub"
-ATA: Image [/home/hp/SOURCEFORGE/cotson/trunk/data/karmic64.img] does not have an ID field.
+ATA: Image [/home2/frb/OPENSOURCE/cotson/data/karmic64.img] does not have an ID field.
 info: creating device #3 "Memory Device"
 info: creating device #4 "Winbond W83627HF SIO"
 info: creating device #5 "SMB Hub Device"
@@ -67,12 +67,6 @@ info: creating device #14 "USB JumpDrive"
 info: creating device #15 "Emerald Graphics"
 Could allocate map memory
 info: creating device #16 "Intel(R) Pro/1000 MT/PT Desktop Network Adapter"
-MSG: The following devices have been updated, please check their configuration and re-save.
-AMD 8th Generation Integrated Northbridge #-1
-Dimm Bank #0
-AMD-8111 I/O Hub #1
-Memory Device #2
-
 BSD Load completed!
 
 1 exec> ide:0.image master ../data/node.hdd
@@ -147,36 +141,36 @@ Journaling was already enabled
 1 exec> keyboard.key 1C 9C
 
 1 exec> go
-TIME=0.03125 ms IPC ( 0.154742 )
-TIME=0.0625 ms IPC ( 0.456548 )
-TIME=0.09375 ms IPC ( 0.334708 )
-TIME=0.125 ms IPC ( 0.666431 )
-TIME=0.15625 ms IPC ( 0.519049 )
-TIME=0.1875 ms IPC ( 0.671139 )
-TIME=0.21875 ms IPC ( 0.535651 )
-TIME=0.25 ms IPC ( 0.508308 )
-TIME=0.28125 ms IPC ( 0.660626 )
-TIME=0.3125 ms IPC ( 0.553282 )
-TIME=0.34375 ms IPC ( 0.519708 )
-TIME=0.375 ms IPC ( 0.67048 )
-TIME=0.40625 ms IPC ( 0.538138 )
-TIME=0.4375 ms IPC ( 0.523662 )
-TIME=0.46875 ms IPC ( 0.699386 )
-TIME=0.5 ms IPC ( 0.563021 )
-TIME=0.53125 ms IPC ( 0.616274 )
-TIME=0.5625 ms IPC ( 0.586591 )
-TIME=0.59375 ms IPC ( 0.526303 )
-TIME=0.625 ms IPC ( 0.702096 )
-TIME=0.65625 ms IPC ( 0.558147 )
-TIME=0.6875 ms IPC ( 0.780793 )
-TIME=0.71875 ms IPC ( 0.703226 )
-TIME=0.75 ms IPC ( 0.743892 )
-TIME=0.78125 ms IPC ( 0.756641 )
-TIME=0.8125 ms IPC ( 0.777467 )
-TIME=0.84375 ms IPC ( 0.764983 )
-TIME=0.875 ms IPC ( 0.765146 )
-TIME=0.90625 ms IPC ( 0.792173 )
-TIME=0.9375 ms IPC ( 0.76773 )
-TIME=0.96875 ms IPC ( 0.761505 )
-TIME=1 ms IPC ( 0.76563 )
+TIME=0.03125 ms IPC ( 0.154808 )
+TIME=0.0625 ms IPC ( 0.45587 )
+TIME=0.09375 ms IPC ( 0.336385 )
+TIME=0.125 ms IPC ( 0.664687 )
+TIME=0.15625 ms IPC ( 0.519023 )
+TIME=0.1875 ms IPC ( 0.66512 )
+TIME=0.21875 ms IPC ( 0.536798 )
+TIME=0.25 ms IPC ( 0.503617 )
+TIME=0.28125 ms IPC ( 0.66133 )
+TIME=0.3125 ms IPC ( 0.546276 )
+TIME=0.34375 ms IPC ( 0.527128 )
+TIME=0.375 ms IPC ( 0.677953 )
+TIME=0.40625 ms IPC ( 0.539516 )
+TIME=0.4375 ms IPC ( 0.520654 )
+TIME=0.46875 ms IPC ( 0.692302 )
+TIME=0.5 ms IPC ( 0.565641 )
+TIME=0.53125 ms IPC ( 0.619527 )
+TIME=0.5625 ms IPC ( 0.574591 )
+TIME=0.59375 ms IPC ( 0.520196 )
+TIME=0.625 ms IPC ( 0.698499 )
+TIME=0.65625 ms IPC ( 0.55582 )
+TIME=0.6875 ms IPC ( 0.775156 )
+TIME=0.71875 ms IPC ( 0.697862 )
+TIME=0.75 ms IPC ( 0.741213 )
+TIME=0.78125 ms IPC ( 0.755882 )
+TIME=0.8125 ms IPC ( 0.774857 )
+TIME=0.84375 ms IPC ( 0.763375 )
+TIME=0.875 ms IPC ( 0.797273 )
+TIME=0.90625 ms IPC ( 0.779707 )
+TIME=0.9375 ms IPC ( 0.756597 )
+TIME=0.96875 ms IPC ( 0.756808 )
+TIME=1 ms IPC ( 0.764146 )
 MAX NANOS: 1000000
