@@ -268,6 +268,17 @@ namespace X86 {
     {
         return b[0]==0x0F && b[1]==0xAE && (m[0]&0x38)==0x38;
     }
+    inline bool is_fp(const uint8_t* b)
+	{
+		switch(b[0]) 
+		{
+		    case 0xd8: case 0xd9: case 0xda: case 0xdb:
+		    case 0xdc: case 0xdd: case 0xde: case 0xdf: // X87
+		        return true;
+		    default:
+                return false;
+		}
+	}
 }
 
 const std::set<TokenQueue*>& queues();

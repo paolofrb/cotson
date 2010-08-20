@@ -279,6 +279,7 @@ cpu0.timer.dtlb.write                                       0
 cpu0.timer.dtlb.write_half_miss                             0
 cpu0.timer.dtlb.write_miss                                  0
 cpu0.timer.dtlb.writeback                                   0
+cpu0.timer.fp_instructions                                  0
 cpu0.timer.icache.data_invalidation                         0
 cpu0.timer.icache.inclusion_invalidation                    0
 cpu0.timer.icache.l2cache.bus.bw                            9402
@@ -392,6 +393,8 @@ cpu0.timer.itlb.write                                       0
 cpu0.timer.itlb.write_half_miss                             0
 cpu0.timer.itlb.write_miss                                  0
 cpu0.timer.itlb.writeback                                   0
+cpu0.timer.reg_reads                                        202080
+cpu0.timer.reg_writes                                       151088
 cpu0.timer.twolev.lookup                                    8020
 cpu0.timer.twolev.misses                                    1517
 cpu0.timer.twolev.reset                                     0

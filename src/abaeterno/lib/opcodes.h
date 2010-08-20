@@ -22,23 +22,25 @@ class Opcode
 public:
     typedef std::vector<uint8_t> regs;
 
-	Opcode(const uint8_t* o,uint32_t l,int t,
+	Opcode(const uint8_t* o,uint32_t l,int t,bool f,
 	       const regs& src,
 		   const regs& dst,
 		   const regs& mem):
-        opcode(o),length(l),type(t),
+        opcode(o),length(l),type(t),fp(f),
 		src_regs(src),dst_regs(dst),mem_regs(mem){}
 
 	inline const uint8_t* getOpcode() const { return opcode; }
 	inline uint32_t getLength() const { return length; }
 	inline int getType() const { return type; }
+	inline bool is_fp() const { return fp; }
 	inline const regs& getSrcRegs() const { return src_regs; }
 	inline const regs& getDstRegs() const { return dst_regs; }
 	inline const regs& getMemRegs() const { return mem_regs; }
 private:
     const uint8_t* opcode;
 	uint32_t length;
-	int type;
+	int type; 
+	bool fp;
 	const regs src_regs, dst_regs, mem_regs;
 };
 

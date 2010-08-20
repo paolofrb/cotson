@@ -74,7 +74,7 @@ ReadGzip& operator>>(ReadGzip& gz,Instruction& inst)
     const Opcode* newop = 
         opcodes.insert(
             pc.phys, 
-            Opcode(opc,pc.length,type,
+            Opcode(opc,pc.length,type,false,
                    Opcode::regs(),
                    Opcode::regs(),
                    Opcode::regs()));

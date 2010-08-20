@@ -82,6 +82,8 @@ private:
 	boost::shared_ptr<twolevT>	twolev;
 
 	uint64_t instructions;
+	uint64_t fpinstructions;
+	uint64_t n_reg_reads, n_reg_writes;
 	uint64_t fetch_cycle;
 	uint64_t cycles;
 	
@@ -113,6 +115,9 @@ TimerDep::TimerDep(Parameters& p) : CpuTimer(&cycles,&instructions),
 		p.get<uint32_t>("twolev.use_xor","1")));
 
 	add("instructions",instructions);
+	add("fp_instructions",fpinstructions);
+	add("reg_reads",n_reg_reads);
+	add("reg_writes",n_reg_writes);
 	add("cycles",cycles);
 	add_ratio("ipc","instructions","cycles");	
 
@@ -147,6 +152,7 @@ inline uint8_t TimerDep::rename(uint8_t r, bool w)
 
 inline uint64_t TimerDep::reg_read(uint8_t r)
 {
+	n_reg_reads++;
 	uint8_t rr = rename(r,false);
 	uint64_t t = regcycle[rr];
     LOG(" -- reg read",(int)r,":",(int)rr,"cycle",t);
@@ -183,6 +189,7 @@ void TimerDep::reg_write(const Opcode* opc, uint64_t t)
 		const Opcode::regs& dst_regs = opc->getSrcRegs();
 	    for(Opcode::regs::const_iterator i=dst_regs.begin(); i!=dst_regs.end(); ++i)
 		{
+	        n_reg_writes++;
 			uint8_t r = *i;
 			uint8_t rr = rename(r,true); // new renaming
 		    regcycle[rr] = t;
@@ -231,6 +238,8 @@ void TimerDep::simulation(const Instruction* inst)
 
 	/* Register read */
 	const Opcode* opc = inst->getOpcode();
+	if (opc->is_fp())
+	    fpinstructions++;
 	uint64_t xcycle = reg_read(opc,fetch_cycle);
 
 	/* Data Cache */
