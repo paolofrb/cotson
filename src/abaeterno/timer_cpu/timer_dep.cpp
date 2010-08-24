@@ -18,6 +18,7 @@
 #include "cpu_timer.h"
 #include "twolev.h"
 #include "liboptions.h"
+#include "hashmap.h"
 
 using namespace std;
 using namespace boost;
@@ -47,7 +48,7 @@ public:
         }
 	}
 private:
-	typedef map<uint64_t,uint32_t> Cdata;
+	typedef HashMap<uint64_t,uint32_t> Cdata;
 	Cdata tab;
 	uint32_t width;
 };
