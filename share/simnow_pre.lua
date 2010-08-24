@@ -23,8 +23,8 @@ send_keyboard=send_keyboard_helper
 if type(simnow)~='table' or type(simnow.commands)~='function' then
 	error("missing simnow.commands function")
 end
-
 simnow.commands()
+
 if type(simnow)=='table' and type(simnow.xcommands)=='function' then
     simnow.xcommands()
 end
