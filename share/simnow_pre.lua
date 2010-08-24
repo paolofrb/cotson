@@ -25,3 +25,6 @@ if type(simnow)~='table' or type(simnow.commands)~='function' then
 end
 
 simnow.commands()
+if type(simnow)=='table' and type(simnow.xcommands)=='function' then
+    simnow.xcommands()
+end
