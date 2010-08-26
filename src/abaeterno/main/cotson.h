@@ -98,6 +98,7 @@ namespace Inject {
         int length;
         uint64_t pc;
         bool is_cpuid;
+        bool is_fp;
         bool is_cr3_change; 
 		std::vector<uint8_t> src_regs, dst_regs, mem_regs;
     };

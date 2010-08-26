@@ -918,6 +918,7 @@ Cotson::Inject::current_opcode(function<uint8_t*(int)> malloc_func)
 	const uint8_t* modrm = ii.opcode + info.nModrmOffset;
 
 	ii.is_cpuid=Cotson::X86::is_cpuid(opcode);
+	ii.is_fp=Cotson::X86::is_fp(opcode);
 
 	ii.is_cr3_change=info.bPagingEnabled && 
 		info.nLength > (info.nOpcodeOffset + 2) && 

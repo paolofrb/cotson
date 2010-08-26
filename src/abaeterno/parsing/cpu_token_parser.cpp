@@ -240,7 +240,7 @@ void CpuTokenParser::inject(InjectState state)
 				    bind(&Opcodes::malloc,&opcodes,_1));
             opcodes.insert(ii.pc, 
 			    Opcode(ii.opcode,ii.length,
-				    InstType(ii.opcode), Cotson::X86::is_fp(ii.opcode),
+				    InstType(ii.opcode), ii.is_fp,
 				    ii.src_regs,ii.dst_regs,ii.mem_regs));
             LOG(hex,static_cast<void*>(this),"new pc",hex,ii.pc);
 
