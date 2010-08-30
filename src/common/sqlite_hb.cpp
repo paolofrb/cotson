@@ -236,10 +236,12 @@ string SqliteHB::get_metric_id(const string& name)
 void SqliteHB::subscribe(metric* met)
 {
 	// First, insert metrics (if needed)
+	db.begin_transaction();
 	for(metric::iterator i=met->names_begin();i!=met->names_end();i++)
 	    add_metric(*i);
 	for(metric::iterator i=met->ratios_begin();i!=met->ratios_end();i++)
 	    add_metric(*i);
+	db.end_transaction();
 
 	// Then get the ids
 	db.begin_transaction();
