@@ -20,3 +20,4 @@ other_exceptions
 print_unknown
 allow_unknown
 plain_invalidations
+nan$
