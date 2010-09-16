@@ -22,7 +22,7 @@ lzma: $(HDD)
 # sudo mount -o loop,offset=32256,ro $(HDD) tmp 
 
 %.bsd: %-reset.bsd $(HDD)
-	if [[ ! -f $(SIMNOW_DIR)/Images/tf.rom ]]; then \
+	if [[ -f tf.rom && ! -f $(SIMNOW_DIR)/Images/tf.rom ]]; then \
 	    cp tf.rom $(SIMNOW_DIR)/Images; \
 	fi; \
 	./initbsd $(SIMNOW_DIR) $*; \
