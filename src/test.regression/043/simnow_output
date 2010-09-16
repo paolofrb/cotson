@@ -30,6 +30,7 @@ Known Device: SMB Hub Device
 Known Device: Winbond W83627HF SIO
 Known Device: Machine
 Known Device: Matrox(R) MGA-G4x0 Graphics Adapter
+Known Device: quadcore
 Known Device: Unnamed Group
 Using library path: "./libs"
 
@@ -51,7 +52,7 @@ info: creating device #0 "AMD 8th Generation Integrated Northbridge"
 info: creating device #1 "Dimm Bank"
 Dimmdevice: Bank 0, Simulated Size 10000000
 info: creating device #2 "AMD-8111 I/O Hub"
-ATA: Image [/home2/frb/OPENSOURCE/cotson/data/karmic64.img] does not have an ID field.
+ATA: Image [/home/frb/h2/OPENSOURCE/cotson/data/karmic64.img] does not have an ID field.
 info: creating device #3 "Memory Device"
 info: creating device #4 "Winbond W83627HF SIO"
 info: creating device #5 "SMB Hub Device"
@@ -142,36 +143,36 @@ Journaling was already enabled
 
 1 exec> go
 Hybrid flash map with PrefRead 0.85 strategy.
-TIME=0.017813 ms IPC ( 0.066294 )
-TIME=0.049064 ms IPC ( 0.16677 )
-TIME=0.080315 ms IPC ( 0.49551 )
-TIME=0.111566 ms IPC ( 0.221081 )
-TIME=0.142817 ms IPC ( 0.14386 )
-TIME=0.174068 ms IPC ( 0.625924 )
-TIME=0.205319 ms IPC ( 0.450623 )
-TIME=0.23657 ms IPC ( 0.318468 )
-TIME=0.267821 ms IPC ( 0.493152 )
-TIME=0.299072 ms IPC ( 0.313785 )
-TIME=0.330323 ms IPC ( 0.536287 )
-TIME=0.361574 ms IPC ( 0.506927 )
-TIME=0.392825 ms IPC ( 0.537359 )
-TIME=0.424076 ms IPC ( 0.316366 )
-TIME=0.455327 ms IPC ( 0.565973 )
-TIME=0.486578 ms IPC ( 0.428654 )
-TIME=0.517829 ms IPC ( 0.57676 )
-TIME=0.54908 ms IPC ( 0.443776 )
-TIME=0.580331 ms IPC ( 0.643485 )
-TIME=0.611582 ms IPC ( 0.417232 )
-TIME=0.642833 ms IPC ( 0.587763 )
-TIME=0.674084 ms IPC ( 0.451646 )
-TIME=0.705335 ms IPC ( 0.748474 )
-TIME=0.736586 ms IPC ( 0.527167 )
-TIME=0.767837 ms IPC ( 0.581499 )
-TIME=0.799088 ms IPC ( 0.584765 )
-TIME=0.830339 ms IPC ( 0.536442 )
-TIME=0.86159 ms IPC ( 0.710766 )
-TIME=0.892841 ms IPC ( 0.77533 )
-TIME=0.924092 ms IPC ( 0.789538 )
-TIME=0.955343 ms IPC ( 0.784503 )
-TIME=0.986594 ms IPC ( 0.820984 )
+TIME=0.017813 ms IPC ( 0.0662744 )
+TIME=0.049064 ms IPC ( 0.201795 )
+TIME=0.080315 ms IPC ( 0.261777 )
+TIME=0.111566 ms IPC ( 0.150547 )
+TIME=0.142817 ms IPC ( 0.58877 )
+TIME=0.174068 ms IPC ( 0.335414 )
+TIME=0.205319 ms IPC ( 0.293633 )
+TIME=0.23657 ms IPC ( 0.545243 )
+TIME=0.267821 ms IPC ( 0.34681 )
+TIME=0.299072 ms IPC ( 0.294411 )
+TIME=0.330323 ms IPC ( 0.345693 )
+TIME=0.361574 ms IPC ( 0.333501 )
+TIME=0.392825 ms IPC ( 0.274849 )
+TIME=0.424076 ms IPC ( 0.449881 )
+TIME=0.455327 ms IPC ( 0.364753 )
+TIME=0.486578 ms IPC ( 0.402562 )
+TIME=0.517829 ms IPC ( 0.292243 )
+TIME=0.54908 ms IPC ( 0.322628 )
+TIME=0.580331 ms IPC ( 0.435443 )
+TIME=0.611582 ms IPC ( 0.305154 )
+TIME=0.642833 ms IPC ( 0.251272 )
+TIME=0.674084 ms IPC ( 0.489426 )
+TIME=0.705335 ms IPC ( 0.265941 )
+TIME=0.736586 ms IPC ( 0.251066 )
+TIME=0.767837 ms IPC ( 0.422234 )
+TIME=0.799088 ms IPC ( 0.42513 )
+TIME=0.830339 ms IPC ( 0.462863 )
+TIME=0.86159 ms IPC ( 0.4871 )
+TIME=0.892841 ms IPC ( 0.499225 )
+TIME=0.924092 ms IPC ( 0.505996 )
+TIME=0.955343 ms IPC ( 0.509402 )
+TIME=0.986594 ms IPC ( 0.218897 )
 MAX NANOS: 1000032

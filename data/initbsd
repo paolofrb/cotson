@@ -21,6 +21,15 @@ if [[ -f $bsd ]]; then
     exit 0
 fi
 
+## Don't ask :-(
+drive="master"
+case $machine_id in
+"8p"|"16p"|"32p")
+    drive="slave"
+	;;
+esac
+
+
 ## Do we have a display?
 df="-c"
 if [[ "$DISPLAY" != "" ]]; then
@@ -49,8 +58,8 @@ echo "################ CREATING $bsd ############"
 cat > $bootscript << EOF
 open $bsd0
 SetLogConsoleEnabled 1
-ide:0.image master $datadir/karmic64.img
-ide:0.journal master on
+ide:0.image $drive $datadir/karmic64.img
+ide:0.journal $drive on
 e1000.linkconnect down
 e1000.setmediatorhost off
 e1000.setmacaddress fa:cd:00:00:00:00

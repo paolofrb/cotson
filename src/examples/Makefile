@@ -58,16 +58,17 @@ run_netperf:
 	../tools/ipcplot file:/tmp/netperf.db 1 -g 0.1 -mm packets -r 0
 
 run_sqlite:
-	@echo "Running 3 times an experiment (different samplers) writing to sqlite DB"; \
+	echo "Running 3 times an experiment (different samplers) writing to sqlite DB"; \
 	echo "At the end, the IPC is plotted"; \
 	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
 	/bin/rm -f /tmp/test.db; \
-	../../bin/cotson EXP=1 sqlite.in; \
-	../tools/ipcplot file:/tmp/test.db 1 -g 0.01 -r 0; \
-	../../bin/cotson EXP=2 sqlite.in; \
-	../tools/ipcplot file:/tmp/test.db 2 -g 0.01 -r 0; \
-	../../bin/cotson EXP=3 sqlite.in; \
-	../tools/ipcplot file:/tmp/test.db 3 -g 0.01 -r 0; \
+	(( ../../bin/cotson EXP=1 sqlite.in; \
+	  ../tools/ipcplot file:/tmp/test.db 1 -g 0.01 -r 0 ) & );  \
+	(( ../../bin/cotson EXP=2 sqlite.in; \
+	  ../tools/ipcplot file:/tmp/test.db 2 -g 0.01 -r 0 ) & ); \
+	(( ../../bin/cotson EXP=3 sqlite.in; \
+	  ../tools/ipcplot file:/tmp/test.db 3 -g 0.01 -r 0 ) & ); \
+	  wait
 
 run_%:
 	@echo "Running the $* example"; \

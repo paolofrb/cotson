@@ -30,6 +30,7 @@ Known Device: SMB Hub Device
 Known Device: Winbond W83627HF SIO
 Known Device: Machine
 Known Device: Matrox(R) MGA-G4x0 Graphics Adapter
+Known Device: quadcore
 Known Device: Unnamed Group
 Using library path: "./libs"
 
@@ -51,7 +52,7 @@ info: creating device #0 "AMD 8th Generation Integrated Northbridge"
 info: creating device #1 "Dimm Bank"
 Dimmdevice: Bank 0, Simulated Size 10000000
 info: creating device #2 "AMD-8111 I/O Hub"
-ATA: Image [/home2/frb/OPENSOURCE/cotson/data/karmic64.img] does not have an ID field.
+ATA: Image [/home/frb/h2/OPENSOURCE/cotson/data/karmic64.img] does not have an ID field.
 info: creating device #3 "Memory Device"
 info: creating device #4 "Winbond W83627HF SIO"
 info: creating device #5 "SMB Hub Device"
@@ -142,7 +143,7 @@ Journaling was already enabled
 
 1 exec> go
 TIME=0.003125 ms IPC ( 1 )
-TIME=0.013961 ms IPC ( 0.0389869 )
-TIME=0.562097 ms IPC ( 0.259506 )
-TIME=0.961383 ms IPC ( 0.399261 )
+TIME=0.013961 ms IPC ( 0.038844 )
+TIME=0.562097 ms IPC ( 0.244294 )
+TIME=0.961383 ms IPC ( 0.120021 )
 MAX NANOS: 1146938
