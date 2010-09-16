@@ -148,8 +148,8 @@ Journaling was already enabled
 1 exec> keyboard.key 1C 9C
 
 1 exec> go
-TIME=0.03125 ms IPC ( 0.132805 )
-TIME=0.0625 ms IPC ( 0.312444 )
-TIME=0.09375 ms IPC ( 0.558073 )
-TIME=0.125 ms IPC ( 0.507703 )
+TIME=0.03125 ms IPC ( 0.148539 )
+TIME=0.0625 ms IPC ( 0.611522 )
+TIME=0.09375 ms IPC ( 0.475111 )
+TIME=0.125 ms IPC ( 0.626705 )
 MAX SAMPLES: 4

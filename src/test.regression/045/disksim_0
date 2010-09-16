@@ -414,9 +414,9 @@ OVERALL I/O SYSTEM STATISTICS
 
 Overall I/O System Total Requests handled:	15
 Overall I/O System Requests per second:   	150.000000
-Overall I/O System Completely idle time:  	4.174939   	0.041749
-Overall I/O System Response time average: 	6.388337
-Overall I/O System Response time std.dev.:	5.414621
+Overall I/O System Completely idle time:  	4.266640   	0.042666
+Overall I/O System Response time average: 	6.382224
+Overall I/O System Response time std.dev.:	5.421914
 Overall I/O System Response time maximum:	19.192000
 Overall I/O System Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
@@ -424,8 +424,8 @@ Overall I/O System Response time distribution
 Overall I/O System Overlaps combined:     	0	0.000000
 Overall I/O System Read overlaps combined:	0	0.000000	0.000000
 Overall I/O System Critical Reads:      	    15  	1.000000
-Overall I/O System Critical Read Response time average: 	6.388337
-Overall I/O System Critical Read Response time std.dev.:	5.414621
+Overall I/O System Critical Read Response time average: 	6.382224
+Overall I/O System Critical Read Response time std.dev.:	5.421914
 Overall I/O System Critical Read Response time maximum:	19.192000
 Overall I/O System Critical Read Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
@@ -458,24 +458,24 @@ Overall I/O System Sequential writes:       0  	0.000000  	0.000000
 Overall I/O System Base SPTF/SDF Different:      0 /      0 	0.000000
 Overall I/O System Timeout SPTF/SDF Different:      0 /      0 	0.000000
 Overall I/O System Priority SPTF/SDF Different:      0 /      0 	0.000000
-Overall I/O System runlistlen:              95.825061
+Overall I/O System runlistlen:              95.733360
 Overall I/O System runoutstanding:          0.000000
 Overall I/O System simtime:                 100.000000
 Overall I/O System warmuptime:              0.000000
 Overall I/O System setsize:                 1
-Overall I/O System Average # requests:      0.958251
+Overall I/O System Average # requests:      0.957334
 Overall I/O System Maximum # requests:      1
 Overall I/O System End # requests:          0
-Overall I/O System Average queue length:    0.958251
+Overall I/O System Average queue length:    0.957334
 Overall I/O System Maximum queue length:    1
 Overall I/O System End queued requests:     0
-Overall I/O System Queue time average: 	6.388337
-Overall I/O System Queue time std.dev.:	5.414621
+Overall I/O System Queue time average: 	6.382224
+Overall I/O System Queue time std.dev.:	5.421914
 Overall I/O System Queue time maximum:	19.192000
 Overall I/O System Queue time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
       8       4       3       0       0       0       0       0       0       0 
-Overall I/O System Avg # read requests:     0.958251
+Overall I/O System Avg # read requests:     0.957334
 Overall I/O System Max # read requests:     1
 Overall I/O System Avg # write requests:    0.000000
 Overall I/O System Max # write requests:    0
@@ -2240,9 +2240,9 @@ Overall I/O System Batch size maximum:	0
 Overall I/O System Batch size distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
       0       0       0       0       0       0       0       0       0       0 
-Overall I/O System Inter-arrival time average: 	6.468717
-Overall I/O System Inter-arrival time std.dev.:	5.599290
-Overall I/O System Inter-arrival time maximum:	19.392679
+Overall I/O System Inter-arrival time average: 	6.470358
+Overall I/O System Inter-arrival time std.dev.:	5.603326
+Overall I/O System Inter-arrival time maximum:	19.374454
 Overall I/O System Inter-arrival time distribution
    0  	      0  	0.000000  	0.000000
    5  	      8  	0.533333  	0.533333
@@ -2284,9 +2284,9 @@ Overall I/O System Inter-arrival time distribution
  185  	      0  	0.000000  	1.000000
  190  	      0  	0.000000  	1.000000
  195  	      0  	0.000000  	1.000000
-Overall I/O System Read inter-arrival average: 	6.468717
-Overall I/O System Read inter-arrival std.dev.:	5.599290
-Overall I/O System Read inter-arrival maximum:	19.392679
+Overall I/O System Read inter-arrival average: 	6.470358
+Overall I/O System Read inter-arrival std.dev.:	5.603326
+Overall I/O System Read inter-arrival maximum:	19.374454
 Overall I/O System Read inter-arrival distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
       8       4       1       2       0       0       0       0       0       0 
@@ -2297,9 +2297,9 @@ Overall I/O System Write inter-arrival distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
       0       0       0       0       0       0       0       0       0       0 
 Overall I/O System Number of idle periods:  16
-Overall I/O System Idle period length average: 	0.260934
-Overall I/O System Idle period length std.dev.:	0.329164
-Overall I/O System Idle period length maximum:	1.195955
+Overall I/O System Idle period length average: 	0.266665
+Overall I/O System Idle period length std.dev.:	0.339302
+Overall I/O System Idle period length maximum:	1.219628
 Overall I/O System Idle period length distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
      16       0       0       0       0       0       0       0       0       0 
@@ -2342,21 +2342,21 @@ System logorg #0 Number of requests:       15
 System logorg #0 Number of read requests:  15  	1.000000
 System logorg #0 Number of accesses:       15
 System logorg #0 Number of read accesses:  15  	1.000000
-System logorg #0 Average outstanding:      0.958251
+System logorg #0 Average outstanding:      0.957334
 System logorg #0 Maximum outstanding:      1
 System logorg #0 Avg nonzero outstanding:  1.000000
-System logorg #0 Completely idle time:     4.174939
-System logorg #0 Response time average: 	6.388337
-System logorg #0 Response time std.dev.:	5.414621
+System logorg #0 Completely idle time:     4.266640
+System logorg #0 Response time average: 	6.382224
+System logorg #0 Response time std.dev.:	5.421914
 System logorg #0 Response time maximum:	19.192000
 System logorg #0 Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
       8       4       3       0       0       0       0       0       0       0 
 System logorg #0 Time-critical reads:  15
 System logorg #0 Time-critical writes: 0
-System logorg #0 Inter-arrival time average: 	6.468717
-System logorg #0 Inter-arrival time std.dev.:	5.599290
-System logorg #0 Inter-arrival time maximum:	19.392679
+System logorg #0 Inter-arrival time average: 	6.470358
+System logorg #0 Inter-arrival time std.dev.:	5.603326
+System logorg #0 Inter-arrival time maximum:	19.374454
 System logorg #0 Inter-arrival time distribution
    0  	      0  	0.000000  	0.000000
    5  	      8  	0.533333  	0.533333
@@ -2398,9 +2398,9 @@ System logorg #0 Inter-arrival time distribution
  185  	      0  	0.000000  	1.000000
  190  	      0  	0.000000  	1.000000
  195  	      0  	0.000000  	1.000000
-System logorg #0 Read inter-arrival average: 	6.468717
-System logorg #0 Read inter-arrival std.dev.:	5.599290
-System logorg #0 Read inter-arrival maximum:	19.392679
+System logorg #0 Read inter-arrival average: 	6.470358
+System logorg #0 Read inter-arrival std.dev.:	5.603326
+System logorg #0 Read inter-arrival maximum:	19.374454
 System logorg #0 Read inter-arrival distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
       8       4       1       2       0       0       0       0       0       0 
@@ -2445,9 +2445,9 @@ System logorg #0 Write request size distribution
    =  1    =  2    =  3    =  4    <  7    <  9    < 13    < 17    < 21     21+
       0       0       0       0       0       0       0       0       0       0 
 System logorg #0 Number of idle periods:	16
-System logorg #0 Idle period length average: 	0.260934
-System logorg #0 Idle period length std.dev.:	0.329164
-System logorg #0 Idle period length maximum:	1.195955
+System logorg #0 Idle period length average: 	0.266665
+System logorg #0 Idle period length std.dev.:	0.339302
+System logorg #0 Idle period length maximum:	1.219628
 System logorg #0 Idle period length distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
      16       0       0       0       0       0       0       0       0       0 
@@ -2466,9 +2466,9 @@ System logorg #0 disk Seek time distribution
       0       4       4       3       1       0       0       0       0       0 
 System logorg #0 disk Full rotation time:      5.985037
 System logorg #0 disk Zero rotate latency:	0	0.000000
-System logorg #0 disk Rotational latency average: 	1.773294
-System logorg #0 disk Rotational latency std.dev.:	1.572036
-System logorg #0 disk Rotational latency maximum:	5.729746
+System logorg #0 disk Rotational latency average: 	1.762446
+System logorg #0 disk Rotational latency std.dev.:	1.573834
+System logorg #0 disk Rotational latency maximum:	5.709500
 System logorg #0 disk Rotational latency distribution
    <  1    <  3    <  5    <  7    <  8    <  9    < 11    < 13    < 15     15+
       4       6       1       1       0       0       0       0       0       0 
@@ -2478,15 +2478,15 @@ System logorg #0 disk Transfer time maximum:	2.580006
 System logorg #0 disk Transfer time distribution
   < 0.5   < 1.0   < 1.5   < 2.0   < 2.5   < 3.0   < 4.0   < 5.0   < 6.0     60+
       9       1       1       0       0       1       0       0       0       0 
-System logorg #0 disk Positioning time average: 	3.246416
-System logorg #0 disk Positioning time std.dev.:	1.505434
-System logorg #0 disk Positioning time maximum:	6.260906
+System logorg #0 disk Positioning time average: 	3.235568
+System logorg #0 disk Positioning time std.dev.:	1.502172
+System logorg #0 disk Positioning time maximum:	6.220809
 System logorg #0 disk Positioning time distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
      10       2       0       0       0       0       0       0       0       0 
-System logorg #0 disk Access time average: 	3.722701
-System logorg #0 disk Access time std.dev.:	1.764396
-System logorg #0 disk Access time maximum:	7.052415
+System logorg #0 disk Access time average: 	3.711854
+System logorg #0 disk Access time std.dev.:	1.767885
+System logorg #0 disk Access time maximum:	7.032170
 System logorg #0 disk Access time distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
       9       3       0       0       0       0       0       0       0       0 
@@ -2511,9 +2511,9 @@ IODRIVER STATISTICS
 
 IOdriver Total Requests handled:	15
 IOdriver Requests per second:   	150.000000
-IOdriver Completely idle time:  	4.174939   	0.041749
-IOdriver Response time average: 	6.388337
-IOdriver Response time std.dev.:	5.414621
+IOdriver Completely idle time:  	4.266640   	0.042666
+IOdriver Response time average: 	6.382224
+IOdriver Response time std.dev.:	5.421914
 IOdriver Response time maximum:	19.192000
 IOdriver Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
@@ -2521,8 +2521,8 @@ IOdriver Response time distribution
 IOdriver Overlaps combined:     	0	0.000000
 IOdriver Read overlaps combined:	0	0.000000	0.000000
 IOdriver Critical Reads:      	    15  	1.000000
-IOdriver Critical Read Response time average: 	6.388337
-IOdriver Critical Read Response time std.dev.:	5.414621
+IOdriver Critical Read Response time average: 	6.382224
+IOdriver Critical Read Response time std.dev.:	5.421914
 IOdriver Critical Read Response time maximum:	19.192000
 IOdriver Critical Read Response time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
@@ -2555,12 +2555,12 @@ IOdriver Sequential writes:       0  	0.000000  	0.000000
 IOdriver Base SPTF/SDF Different:      0 /     15 	0.000000
 IOdriver Timeout SPTF/SDF Different:      0 /      0 	0.000000
 IOdriver Priority SPTF/SDF Different:      0 /      0 	0.000000
-IOdriver runlistlen:              95.825061
-IOdriver runoutstanding:          95.825061
+IOdriver runlistlen:              95.733360
+IOdriver runoutstanding:          95.733360
 IOdriver simtime:                 100.000000
 IOdriver warmuptime:              0.000000
 IOdriver setsize:                 1
-IOdriver Average # requests:      0.958251
+IOdriver Average # requests:      0.957334
 IOdriver Maximum # requests:      1
 IOdriver End # requests:          0
 IOdriver Average queue length:    0.000000
@@ -2572,12 +2572,12 @@ IOdriver Queue time maximum:	0
 IOdriver Queue time distribution
    <  5    < 10    < 20    < 40    < 60    < 90    <120    <150    <200    200+
      15       0       0       0       0       0       0       0       0       0 
-IOdriver Avg # read requests:     0.958251
+IOdriver Avg # read requests:     0.957334
 IOdriver Max # read requests:     1
 IOdriver Avg # write requests:    0.000000
 IOdriver Max # write requests:    0
-IOdriver Physical access time average: 	6.388337
-IOdriver Physical access time std.dev.:	5.414621
+IOdriver Physical access time average: 	6.382224
+IOdriver Physical access time std.dev.:	5.421914
 IOdriver Physical access time maximum:	19.192000
 IOdriver Physical access time distribution
  0.000  	      0  	0.000000  	0.000000
@@ -2978,8 +2978,8 @@ IOdriver Physical access time distribution
  2.837  	      0  	0.000000  	0.200000
  2.866  	      0  	0.000000  	0.200000
  2.895  	      0  	0.000000  	0.200000
- 2.924  	      0  	0.000000  	0.200000
- 2.954  	      1  	0.066667  	0.266667
+ 2.924  	      1  	0.066667  	0.266667
+ 2.954  	      0  	0.000000  	0.266667
  2.984  	      0  	0.000000  	0.266667
  3.014  	      0  	0.000000  	0.266667
  3.045  	      0  	0.000000  	0.266667
@@ -4337,9 +4337,9 @@ IOdriver Batch size maximum:	0
 IOdriver Batch size distribution
    =  1    =  2    =  3    <  6    < 10    < 20    < 40    < 80    <150    150+
       0       0       0       0       0       0       0       0       0       0 
-IOdriver Inter-arrival time average: 	6.468717
-IOdriver Inter-arrival time std.dev.:	5.599290
-IOdriver Inter-arrival time maximum:	19.392679
+IOdriver Inter-arrival time average: 	6.470358
+IOdriver Inter-arrival time std.dev.:	5.603326
+IOdriver Inter-arrival time maximum:	19.374454
 IOdriver Inter-arrival time distribution
    0  	      0  	0.000000  	0.000000
    5  	      8  	0.533333  	0.533333
@@ -4381,9 +4381,9 @@ IOdriver Inter-arrival time distribution
  185  	      0  	0.000000  	1.000000
  190  	      0  	0.000000  	1.000000
  195  	      0  	0.000000  	1.000000
-IOdriver Read inter-arrival average: 	6.468717
-IOdriver Read inter-arrival std.dev.:	5.599290
-IOdriver Read inter-arrival maximum:	19.392679
+IOdriver Read inter-arrival average: 	6.470358
+IOdriver Read inter-arrival std.dev.:	5.603326
+IOdriver Read inter-arrival maximum:	19.374454
 IOdriver Read inter-arrival distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
       8       4       1       2       0       0       0       0       0       0 
@@ -4394,9 +4394,9 @@ IOdriver Write inter-arrival distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
       0       0       0       0       0       0       0       0       0       0 
 IOdriver Number of idle periods:  16
-IOdriver Idle period length average: 	0.260934
-IOdriver Idle period length std.dev.:	0.329164
-IOdriver Idle period length maximum:	1.195955
+IOdriver Idle period length average: 	0.266665
+IOdriver Idle period length std.dev.:	0.339302
+IOdriver Idle period length maximum:	1.219628
 IOdriver Idle period length distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
      16       0       0       0       0       0       0       0       0       0 
@@ -4449,9 +4449,9 @@ Disk Seek time distribution
       0       4       4       3       1       0       0       0       0       0 
 Disk Full rotation time:      5.985037
 Disk Zero rotate latency:	0	0.000000
-Disk Rotational latency average: 	1.773294
-Disk Rotational latency std.dev.:	1.572036
-Disk Rotational latency maximum:	5.729746
+Disk Rotational latency average: 	1.762446
+Disk Rotational latency std.dev.:	1.573834
+Disk Rotational latency maximum:	5.709500
 Disk Rotational latency distribution
    <  1    <  3    <  5    <  7    <  8    <  9    < 11    < 13    < 15     15+
       4       6       1       1       0       0       0       0       0       0 
@@ -4461,15 +4461,15 @@ Disk Transfer time maximum:	2.580006
 Disk Transfer time distribution
   < 0.5   < 1.0   < 1.5   < 2.0   < 2.5   < 3.0   < 4.0   < 5.0   < 6.0     60+
       9       1       1       0       0       1       0       0       0       0 
-Disk Positioning time average: 	3.246416
-Disk Positioning time std.dev.:	1.505434
-Disk Positioning time maximum:	6.260906
+Disk Positioning time average: 	3.235568
+Disk Positioning time std.dev.:	1.502172
+Disk Positioning time maximum:	6.220809
 Disk Positioning time distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
      10       2       0       0       0       0       0       0       0       0 
-Disk Access time average: 	3.722701
-Disk Access time std.dev.:	1.764396
-Disk Access time maximum:	7.052415
+Disk Access time average: 	3.711854
+Disk Access time std.dev.:	1.767885
+Disk Access time maximum:	7.032170
 Disk Access time distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
       9       3       0       0       0       0       0       0       0       0 
@@ -4514,8 +4514,8 @@ BUS STATISTICS
 Bus #1
 Bus #1 Total utilization time: 	57.76   	0.57760
 Bus #1 (bus1) Bus idle period length average: 	1.564444
-Bus #1 (bus1) Bus idle period length std.dev.:	1.831635
-Bus #1 (bus1) Bus idle period length maximum:	6.278823
+Bus #1 (bus1) Bus idle period length std.dev.:	1.824283
+Bus #1 (bus1) Bus idle period length maximum:	6.238726
 Bus #1 (bus1) Bus idle period length distribution
    <  5    < 10    < 15    < 20    < 25    < 30    < 40    < 50    < 60     60+
      25       2       0       0       0       0       0       0       0       0 

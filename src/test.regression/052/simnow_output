@@ -137,7 +137,7 @@ Journaling was already enabled
 1 exec> keyboard.key 1C 9C
 
 1 exec> go
-TIME=0.333333 ms IPC ( 0.204688 1 1 1 )
+TIME=0.333333 ms IPC ( 0.188697 1 1 1 )
 TIME=1.33333 ms IPC ( 1 1 1 1 )
 TIME=1.66666 ms IPC ( 1 1 1 1 )
 TIME=5.33333 ms IPC ( 1 1 1 1 )

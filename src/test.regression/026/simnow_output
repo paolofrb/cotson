@@ -139,5 +139,5 @@ Journaling was already enabled
 1 exec> go
 Fast forward from 20000000000 ns to 20100000000 ns
 Fast forward ended at 20100000000 ns
-TIME=0.033333 ms IPC ( 0.159319 1 0.133164 0.192494 )
+TIME=0.033333 ms IPC ( 0.0874239 0.207001 0.138112 0.0680795 )
 MAX SAMPLES: 1
