@@ -15,28 +15,30 @@
 #include "sampler.h"
 #include "liboptions.h"
 
+uint32_t Sampler::seed() const
+{
+    if (Option::get<bool>("deterministic"))
+        return 0;
+    struct timeval tv;
+    ::gettimeofday(&tv, NULL);
+    return (tv.tv_sec + tv.tv_usec + getpid()); 
+}
+
+using namespace boost;
+
 class Random : public Sampler
 {
-	public:
-
+public:
 	Random(Parameters&);
 	StateChange changeState(SimState);
 
-	private:
-
-	typedef boost::mt19937                                         generator;
-	typedef boost::scoped_ptr<generator>                       ptr_generator;
-
-	typedef boost::uniform_int<>                                distribution;
-	typedef boost::variate_generator<generator&,distribution>        variate;
-	typedef boost::scoped_ptr<variate>                           ptr_variate;
-
-	ptr_generator gen;
-	ptr_variate   uFunc;
-
+private:
 	const uint64_t functional;
 	const uint64_t warming;
 	const uint64_t simulation;
+	mt19937 rng;
+	uniform_int<> range;
+	variate_generator< mt19937&,uniform_int<> > rnd_functional;
 };
 
 using namespace std;
@@ -47,10 +49,11 @@ Random::Random(Parameters&p) :
 	Sampler(FULL_WARMING),
 	functional (p.get<uint64_t>("functional")),
 	warming    (p.get<uint64_t>("warming")),
-	simulation (p.get<uint64_t>("simulation"))
+	simulation (p.get<uint64_t>("simulation")),
+    rng(seed()),
+    range(0,functional*2),
+    rnd_functional(rng,range)
 {
-	gen.reset(new generator(seed()));
-	uFunc.reset(new variate(*gen,distribution(0,functional*2)));
 }
 
 Sampler::StateChange Random::changeState(SimState curr)
@@ -67,11 +70,8 @@ Sampler::StateChange Random::changeState(SimState curr)
 			break;
 	
 		case SIMULATION: 
-		{
-			uint64_t ts = (*uFunc)();
-			next = StateChange(FUNCTIONAL, ts);
+			next = StateChange(FUNCTIONAL, rnd_functional());
 			break;
-        }
 
 		default: ERROR(true,"SimState not handled");
 	}

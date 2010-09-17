@@ -1,5 +1,5 @@
 Loading module abaeterno.so.
-Using image path: "/home/frb/h2/OPENSOURCE/cotson/data"
+Using image path: "/mnt/cotson/cotson/trunk/data"
 Known Device: Deerhound RevB QuadCore Socket L1
 Known Device: Intel(R) Pro/1000 MT/PT Desktop Network Adapter
 Known Device: USB JumpDrive
@@ -52,7 +52,7 @@ info: creating device #0 "AMD 8th Generation Integrated Northbridge"
 info: creating device #1 "Dimm Bank"
 Dimmdevice: Bank 0, Simulated Size 10000000
 info: creating device #2 "AMD-8111 I/O Hub"
-ATA: Image [/home/frb/h2/OPENSOURCE/cotson/data/karmic64.img] does not have an ID field.
+ATA: Image [/mnt/cotson/cotson/trunk/data/karmic64.img] does not have an ID field.
 info: creating device #3 "Memory Device"
 info: creating device #4 "Winbond W83627HF SIO"
 info: creating device #5 "SMB Hub Device"
@@ -143,7 +143,6 @@ Journaling was already enabled
 
 1 exec> go
 TIME=0.003125 ms IPC ( 1 )
-TIME=0.013961 ms IPC ( 0.0631088 )
-TIME=0.562097 ms IPC ( 0.785714 )
-TIME=0.961383 ms IPC ( 0.0945139 )
-MAX NANOS: 1146938
+TIME=0.345353 ms IPC ( 0.0497176 )
+TIME=0.714286 ms IPC ( 0.144042 )
+MAX NANOS: 1148046

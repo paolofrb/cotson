@@ -34,9 +34,9 @@ private:
 	uint64_t instructions;
 	uint64_t cycles;
 
-	boost::mt19937 rng;
-	boost::uniform_real<> ipc_range;
-	boost::variate_generator< boost::mt19937&,boost::uniform_real<> > ipc_gen;
+	mt19937 rng;
+	uniform_real<> ipc_range;
+	variate_generator< mt19937&,uniform_real<> > ipc_gen;
 };
 
 registerClass<CpuTimer,TimerRandom> timer_random_c("random");

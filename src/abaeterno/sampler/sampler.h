@@ -17,7 +17,7 @@
 
 class Sampler
 {
-	public:
+public:
 	Sampler(SimState p) : pre_state(p) {};
 	virtual ~Sampler() {}
 
@@ -26,10 +26,10 @@ class Sampler
 
 	SimState preState() const { return pre_state; }
 
-	protected:
-	static uint seed();
-	
-	private:
+protected:
+    uint32_t seed() const;
+
+private:
 	SimState pre_state;
 };
 #endif
