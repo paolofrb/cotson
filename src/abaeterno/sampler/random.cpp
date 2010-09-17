@@ -18,7 +18,7 @@
 uint32_t Sampler::seed() const
 {
     if (Option::get<bool>("deterministic"))
-        return 0;
+        return 1234;
     struct timeval tv;
     ::gettimeofday(&tv, NULL);
     return (tv.tv_sec + tv.tv_usec + getpid()); 
@@ -37,8 +37,9 @@ private:
 	const uint64_t warming;
 	const uint64_t simulation;
 	mt19937 rng;
-	uniform_int<> range;
-	variate_generator< mt19937&,uniform_int<> > rnd_functional;
+	uniform_real<> range; 
+    // FIXME: should be uniform_int<>, but different boost versions produce different values...
+	variate_generator< mt19937&,uniform_real<> > rnd_functional;
 };
 
 using namespace std;
@@ -69,7 +70,7 @@ Sampler::StateChange Random::changeState(SimState curr)
 			next = StateChange(SIMULATION,simulation);
 			break;
 	
-		case SIMULATION: 
+		case SIMULATION:
 			next = StateChange(FUNCTIONAL, rnd_functional());
 			break;
 

@@ -26,7 +26,7 @@ public:
 private:
 	mt19937 rng;
     exponential_distribution<> funcDist,warmDist,simDist;
-    variate_generator< mt19937,exponential_distribution<> > eFunctional,eWarming,eSimulation;
+    variate_generator< mt19937&,exponential_distribution<> > eFunctional,eWarming,eSimulation;
 };
 
 using namespace std;
