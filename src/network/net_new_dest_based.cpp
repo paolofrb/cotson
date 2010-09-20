@@ -46,7 +46,7 @@ private:
     typedef std::map<MacAddress,DestinationInfo *> DestinationMap;
     DestinationMap destinations;
     
-    uint64_t packets;
+    uint64_t packets, bytes;
 };
 
 namespace newdbased
@@ -76,6 +76,7 @@ NewDestBased::NewDestBased(Parameters &p) : latency(0),quantum(0),mac_prefix(0xF
 		switch_bandwidth = 0;
 		
 	add("packets", packets);
+	add("bytes", bytes);
 	
 	clear_metrics();
 }
@@ -116,6 +117,7 @@ void NewDestBased::packet_event(const MacAddress& src, const MacAddress& dst, in
     }
     
     packets ++;
+    bytes ++;
     
     DestinationMap::iterator dest_iter = destinations.find(dst);
     DestinationInfo *dest_info;

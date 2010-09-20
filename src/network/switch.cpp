@@ -85,12 +85,13 @@ Switch::Switch(
         die("Error setting multicast loopback");
     quantum_ = qmax_;
     
+	beat_interval_ = Option::get<uint64_t>("heartbeat_interval");
+	beat_gt_ = 0;
     HeartBeat::add(*this);
-    add("packets", sent_packs_);
-    add("broadcasts",broadcast_);
+	add("nanos",gt_);
+	add("",Stats::get());
     
     clear_metrics();
-    
 }
 
 Switch::~Switch()
@@ -263,7 +264,6 @@ void Switch::really_send(const Node::Ptr to_node, const Packet& packet)
     LOG2("(SWITCH) Send msg: len [", l ,"] to node ", 
           to_node->id(), "addr ", Sockaddr::str(to_addr));
 	throttle(l);
-	sent_packs_++;
     processor_->send_data_packet(to_addr,packet,"DATA fwd");
 }
 
@@ -300,8 +300,6 @@ bool Switch::send(const MacAddress& dst, const Packet& packet, uint64_t now)
 int Switch::broadcast(const MacAddress& src, const Packet& packet,uint64_t now)
 {
     LOG2("(SWITCH) broadcast", src.str());
-
-	broadcast_++;
     // send packets to all nodes
     for (NodeSet::iterator i = nodes_.begin(); i != nodes_.end(); ++i) {
 		Node::Ptr to_node = *i;
@@ -346,8 +344,6 @@ void Switch::start_nodes(const uint64_t quantum)
 {
     if (timing_)
         timing_->startquantum_mt(GT(), nextGT());
-
-	HeartBeat::beat();
 
 	// Start nodes, delete obsolete ones
 	bool deleted = false;
@@ -474,6 +470,11 @@ bool Switch::simtime_advance(uint64_t ntime)
 
 inline void Switch::GT_advance()
 {
+	if (gt_ >= beat_gt_) {
+	    boost::mutex::scoped_lock lk(nmutex_); // lock the nodes
+	    HeartBeat::beat();
+		beat_gt_ = gt_ + beat_interval_;
+	}
     gt_ = nextgt_;
     nextgt_ += lround(quantum_);
     Stats::get().update_time(gt_);

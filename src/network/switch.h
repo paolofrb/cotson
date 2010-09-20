@@ -29,6 +29,7 @@
 #include <boost/ref.hpp>
 
 #include "metric.h"
+#include "net_timing_model.h"
 
 // Forward declarations
 
@@ -38,7 +39,6 @@ class Scheduler;
 class DataPacketProcessor;
 class Stats;
 class Packet;
-class TimingModel;
 class DumpGzip;
 
 class Switch : public metric
@@ -89,8 +89,8 @@ public:
     // Register a timing model in the switch
     inline void register_timing_model(TimingModel* timing) 
     { 
-    	this->timing_ = timing; 
-    	add("timer.", *((metric *) this->timing_)); 
+    	timing_ = timing; 
+    	add("timer.", *timing_);
     }
 
     // Get the timing model
@@ -174,16 +174,13 @@ private:
 	bool force_queue_;
 	// Time data
 	uint64_t gt_, nextgt_, tmin_, tmax_;
+	uint64_t beat_gt_, beat_interval_;
 	// Compressed tracefile
 	DumpGzip* const dump_; 
 	boost::mutex nmutex_;
 	uint16_t seqno_;
 	bool sync_started_;
     int verbose_;
-    
-    //Stats
-    uint64_t sent_packs_;
-    uint64_t broadcast_;
 };
 
 #endif /*SWICTH_H_*/

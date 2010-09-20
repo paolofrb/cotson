@@ -17,9 +17,10 @@
 
 #include <iostream>
 #include <stdint.h>
+#include "metric.h"
 
 // time in ms/us precision
-class Stats
+class Stats : public metric
 {
 public:
     static Stats& get() { static Stats singleton; return singleton; }
@@ -28,7 +29,7 @@ public:
     void reset(); // resets stats
 
     // Prints out the stats at a given interval (in packets)
-    void print_stats(uint32_t);
+    bool print_stats(uint32_t);
 
     uint64_t n_packs_;
     uint64_t n_bcast_;

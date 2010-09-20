@@ -48,6 +48,7 @@ protected:
     // Messages and bytes processed in the current quantum
     uint64_t messages_;
     uint64_t bytes_;
+    uint64_t cmessages_; // congested messages
 };
 
 namespace simple_switch {
@@ -75,6 +76,11 @@ SimpleSwitch::SimpleSwitch(Parameters &p) :
         cout << "max_bandwith=" << max_bandwith_ << endl;
         cout << "cfactor=" << cfactor_ << endl;
     }
+	add("packets",messages_);
+	add("congested_packets",cmessages_);
+	add("bytes",bytes_);
+
+	clear_metrics();
 }
 
 void 
@@ -83,8 +89,7 @@ SimpleSwitch::startquantum(uint64_t gt, uint64_t nextgt)
 	uint64_t q = nextgt - gt;
     if (q != 0)
 	    quantum_ = q;
-    messages_ = 0 ;
-    bytes_ = 0;
+	clear_metrics();
 }
 
 void
@@ -105,8 +110,10 @@ SimpleSwitch::get_delay()
 
     if (bytes_* 8 < quantum_* max_bandwith_ * 1000000)
 	    return latency_;
-    else 
+    else {
+		cmessages_++;
 	    return latency_ * cfactor_; // N times more latency
+    }
 }
 
 /* vi: set sw=4 ts=4: */

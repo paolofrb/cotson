@@ -223,6 +223,7 @@ int main(int argc, char **argv)
 	    sleep(0.2);
 	}
 	// send terminate to quit
+	sleep(1.0);
 	nodes[0].send_timestamp(TimingMessage::TerminateMsg,t);
 	cout << "CTRL " << N_ctrl << endl;
 	cout << "DATA " << N_data << endl;

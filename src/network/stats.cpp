@@ -23,7 +23,18 @@
 
 using namespace std;
 
-Stats::Stats() { reset(); }
+Stats::Stats() 
+{
+    reset(); 
+    add("packets", n_packs_);
+	add("bytes", n_bytes_);
+    add("broadcast",n_bcast_);
+    add("forward",n_fwd_);
+    add("vde",n_vde_);
+    add("slirp",n_slirp_);
+    add("nsync",n_mcsync_);
+    add("control",n_msg_);
+}
 
 Stats::~Stats() {}
 
@@ -45,7 +56,7 @@ uint64_t Stats::now()
     return (static_cast<uint64_t>(tv.tv_sec) * 1000000ULL) + tv.tv_usec;
 }
 
-void Stats::print_stats (uint32_t interval)
+bool Stats::print_stats (uint32_t interval)
 {
     if ((n_packs_ % interval) == 0)  {
 	    uint64_t tnow = now();
@@ -90,7 +101,9 @@ void Stats::print_stats (uint32_t interval)
 	    last_stime_ = simtime_;
 	    last_rtime_ = tnow;
 		last_q_ = n_q_;
+	    return true;
     }
+	return false;
 }
 
 uint64_t Stats::sync_packs()

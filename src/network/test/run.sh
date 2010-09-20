@@ -3,18 +3,22 @@ CPORT=50000
 DPORT=50001
 MPORT=50002
 MCIP=239.200.1.1
+NODES=100
+TIMESTAMPS=10
 mode=$1
 debug=$2
+/bin/rm -f /tmp/test.db
+
 echo "########### Running test $mode ###############"
 ../mediator CPORT=$CPORT DPORT=$DPORT MPORT=$MPORT med.in > med$mode.log 2>&1 & 
 sleep 1
 
 if [[ $debug -eq 1 ]] ; then
     echo "b main" > gdb.in
-    echo "r localhost $CPORT $MCIP $MPORT 10 10 $mode" >> gdb.in
+    echo "r localhost $CPORT $MCIP $MPORT $NODES $TIMESTAMPS $mode" >> gdb.in
 	gdb -x gdb.in medtester
 else
-    ./medtester localhost $CPORT $MCIP $MPORT 10 10 $mode > test$mode.log 2>&1
+    ./medtester localhost $CPORT $MCIP $MPORT $NODES $TIMESTAMPS $mode > test$mode.log 2>&1
 fi
 wait
 
