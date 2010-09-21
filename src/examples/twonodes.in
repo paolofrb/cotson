@@ -2,11 +2,12 @@
 runid="twonodes"
 tmpdir=os.getenv("PWD")
 
--- data_dir="/home2/data/4.5.2pub"
--- simnow_dir="/home/opt/cotson/tools/simnow/simnow-linux64-4.5.2pub"
--- abaeterno_so="/home/frb/cotson/trunk/abaeterno/abaeterno.so"
--- mediator_file="/home/frb/cotson/trunk/abaeterno/mediator"
--- Xvncwm="twm -display "
+-- Other interesting variables:
+--   data_dir="/home2/data/4.6.2pub"
+--   simnow_dir="/home/opt/cotson/tools/simnow/simnow-linux64-4.6.2pub"
+--   abaeterno_so="/home/frb/cotson/trunk/abaeterno/abaeterno.so"
+--   mediator_file="/home/frb/cotson/trunk/abaeterno/mediator"
+--   Xvncwm="twm -display "
 
 --copy_files_prefix="log."..os.time().."."
 copy_files_prefix=runid.."."
@@ -16,17 +17,26 @@ control_script_file='twonodes-ctrl'
 clean_sandbox=false
 -- node_config="config.sh"
 
+DBFILE="/tmp/twonodes.db"
+DESC="Two nodes example"
+EXP=10
+
 cluster_nodes=2
 options = {
 	sampler={ type="no_timing", quantum="100k" },
 	heartbeat={ type="file_last" },
+	heartbeat1={ type="sqlite", dbfile=DBFILE, experiment_id=EXP, experiment_description=DESC },
 }
 
 -- Poor man's multicast disambiguation (day+hour+minute+second is in [1:211])
 MCAST=os.date('%d')+os.date('%H')+os.date('%M')+os.date('%S')
 mediator = {
     multicast_ip="239.200.1."..MCAST,
+    quantum_min=10,
+    quantum_max=1000,
+	heartbeat_interval=10000, -- 10msec
 	heartbeat={ type="file_last" },
+	heartbeat1={ type="sqlite", dbfile=DBFILE, experiment_id=EXP },
 	tracefile="/tmp/net-trace.gz", -- dump a trace
 	slirp=false, -- don't NAT with the external world
 }
@@ -62,9 +72,7 @@ function build()
 
 	cpu=get_cpu(0)
 	cpu:timer{ name='cpu0', type="timer0" }
-
 	mem=Memory{ name="main", latency=1 } 
-
 	cpu:instruction_cache(mem)
 	cpu:data_cache(mem)
 	cpu:instruction_tlb(mem)

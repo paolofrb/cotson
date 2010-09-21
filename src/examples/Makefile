@@ -41,7 +41,7 @@ run_twonodes:
 	@echo "Running a cluster of 2 nodes pinging each other"; \
 	echo "Simulation runs in background -- be patient (a few minutes)"; \
 	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
-	/bin/rm -f run_twonodes.log; \
+	/bin/rm -f run_twonodes.log /tmp/twonodes.db; \
 	( (sleep 10; echo "Firing console view"; ./twonodes-ctrl view) &); \
 	../../bin/cotson twonodes.in > run_twonodes.log 2>&1 ; \
 	echo "Dumping the network trace"; \
@@ -87,7 +87,7 @@ install:
 dep:
 
 clean:
-	/bin/rm -f *log* abaeterno.so exp-*.gp exp-*.dat
+	/bin/rm -rf *log* abaeterno.so exp-*.gp exp-*.dat twonodes-*
 	make -C tracer clean
 
 distclean: clean

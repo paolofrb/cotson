@@ -63,7 +63,7 @@ Switch::Switch(
 		qup_(qup),
 		qdown_(qdown),
 		force_queue_(force_queue),
-	    gt_(0),nextgt_(0),tmin_(ULONG_MAX),tmax_(0),
+	    gt_(0),nextgt_(0),tmin_(ULONG_MAX),tmax_(0),nanos_(0),
 	    dump_(tracefile ? new DumpGzip(tracefile) : 0),
 		nmutex_(), seqno_(0), sync_started_(false), verbose_(v)
 {
@@ -88,8 +88,8 @@ Switch::Switch(
 	beat_interval_ = Option::get<uint64_t>("heartbeat_interval");
 	beat_gt_ = 0;
     HeartBeat::add(*this);
-	add("nanos",gt_);
-	add("",Stats::get());
+	add("nanos",nanos_);
+	add("mediator.",Stats::get());
     
     clear_metrics();
 }
@@ -475,7 +475,7 @@ inline void Switch::GT_advance()
 	    HeartBeat::beat();
 		beat_gt_ = gt_ + beat_interval_;
 	}
-    gt_ = nextgt_;
+    nanos_ = (gt_ = nextgt_) * 1000; // gt is in usec
     nextgt_ += lround(quantum_);
     Stats::get().update_time(gt_);
 }

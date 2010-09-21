@@ -68,4 +68,10 @@ build_common: build_libluabind
 
 build_examples: build_abaeterno
 
+release:
+	$(MAKE) OPT=release
+
+debug:
+	$(MAKE) OPT=debug
+
 # DO NOT DELETE

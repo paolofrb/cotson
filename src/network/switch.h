@@ -173,7 +173,7 @@ private:
 	const double qdown_;
 	bool force_queue_;
 	// Time data
-	uint64_t gt_, nextgt_, tmin_, tmax_;
+	uint64_t gt_, nextgt_, tmin_, tmax_, nanos_;
 	uint64_t beat_gt_, beat_interval_;
 	// Compressed tracefile
 	DumpGzip* const dump_; 

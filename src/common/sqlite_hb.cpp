@@ -1,4 +1,4 @@
-// (C) Copyright 2006-2009 Hewlett-Packard Development Company, L.P.
+// (C) Copyright 2006-2010 Hewlett-Packard Development Company, L.P.
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -113,7 +113,8 @@ CREATE TABLE heartbeats (\
 CREATE INDEX heartbeats_nanos_idx ON heartbeats(nanos);\
 CREATE TABLE metric_names (\
 	metric_id  integer PRIMARY KEY,\
-	name       varchar(256) NOT NULL\
+	name       varchar(256) NOT NULL,\
+	CONSTRAINT non_repeated_names UNIQUE(name)\
 ); \
 CREATE TABLE metrics (\
 	heartbeat_id integer REFERENCES heartbeats,\
@@ -122,6 +123,7 @@ CREATE TABLE metrics (\
 	CONSTRAINT non_repeated_metric_per_heart UNIQUE(heartbeat_id,metric_id)\
 ); \
 CREATE INDEX metrics_metid_idx ON metrics(metric_id); \
+CREATE INDEX metric_names_name_idx ON metric_names(name); \
 ";
 
 class SqliteHB : public HeartBeat
@@ -156,7 +158,8 @@ SqliteHB::SqliteHB(Parameters&p) :
 	count(0)
 {
 	const char* id_opt="network.mediator_nodeid";
-	int node_id=Option::has(id_opt) ? Option::get<int>(id_opt) : 1;
+	// int node_id=Option::has(id_opt) ? Option::get<int>(id_opt) : 1;
+	int node_id=Option::get<int>(id_opt);
 	machine_id=lexical_cast<string>(node_id);
     string desc("");
 	if(p.has("experiment_description"))
@@ -164,7 +167,7 @@ SqliteHB::SqliteHB(Parameters&p) :
 
 	// If the db already exists we add to the existing one
 	// This will only work if machine_id or experiment_id are different
-	if (node_id<=1) // only node 1 creates the DB
+	if (node_id == 0 || node_id==1) // only node 0 (mediator) or 1 can create the DB and experiment 
 	{
 		if (!db.has_table("metrics")) 
 		{
@@ -172,17 +175,25 @@ SqliteHB::SqliteHB(Parameters&p) :
             db.exec(create_db);
 			db.end_transaction();
 		}
-	    cout << "Creating experiment " << experiment_id << ": " << desc << endl;
-	    db.exec("INSERT INTO experiments(experiment_id,description) VALUES('"
-	        + experiment_id + "','" + desc +"')");
+
+	    db.begin_transaction();
+	    db.exec("SELECT description FROM experiments WHERE experiment_id='" 
+		    + experiment_id +"'");
+	    if(!db.empty())
+	        cout << "Using experiment " << experiment_id << ": " << db.data(0,0) << endl;
+		else {
+	        cout << "Creating experiment " << experiment_id << ": " << desc << endl;
+	        db.exec("INSERT INTO experiments(experiment_id,description) VALUES('"
+	            + experiment_id + "','" + desc +"')");
+		}
+		db.end_transaction();
 	}
 	else // wait for node 1 to do the job
 	{
 		while(!db.has_table("metrics"));
 		do 
-		    db.exec("SELECT description FROM experiments WHERE experiment_id='"
-			    + experiment_id +"'");
-	    while(db.empty());
+		    db.exec("SELECT description FROM experiments WHERE experiment_id='" + experiment_id +"'");
+	    while(db.empty()); 
 	    cout << "Using experiment " << experiment_id << ": " << db.data(0,0) << endl;
 	}
 }
@@ -220,12 +231,14 @@ void SqliteHB::add(const map<string,string>& opts)
 
 void SqliteHB::add_metric(const string& m)
 {
-	db.exec("INSERT INTO metric_names(name) VALUES('"+m+"');");
+	db.exec("SELECT metric_id FROM metric_names WHERE name='"+m+"';");
+	if (db.empty())
+	    db.exec("INSERT INTO metric_names(name) VALUES('"+m+"');");
 }
 
 string SqliteHB::get_metric_id(const string& name)
 {
-	db.exec("SELECT metric_id FROM metric_names WHERE name='"+name+"'");
+	db.exec("SELECT metric_id FROM metric_names WHERE name='"+name+"';");
 	if (!db.empty())
 	    return db.data(0,0);
     else

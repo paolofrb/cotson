@@ -425,7 +425,7 @@ bool NetworkTiming::GT::process(const GlobalTime& gt)
 {
     boost::mutex::scoped_lock lk(gtmutex);
     if (gt.is_terminate()) {
-	    cerr << "Received termination message at " << gt.gt() << endl;
+	    cerr << "Received termination message" << endl;
 		terminate();
 		return true;
 	}
