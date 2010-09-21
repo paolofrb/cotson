@@ -214,7 +214,7 @@ sub get_frequency
     my $f = shift;
     my $query = "SELECT value FROM metrics
              WHERE metric_id IN (SELECT metric_id FROM metric_names WHERE name='cycles_per_usec')
-             AND heartbeat_id IN (SELECT heartbeat_id FROM heartbeats WHERE experiment_id=$exp LIMIT 1);";
+             AND heartbeat_id IN (SELECT heartbeat_id FROM heartbeats WHERE machine_id > 0 AND experiment_id=$exp LIMIT 1);";
     my $h = $dbh->prepare($query);
     my $v = $h->execute();
     $f = (($h->fetchrow_array())[0])/1000.0 if ($v==0);
@@ -232,13 +232,14 @@ sub metquery
     $mm =~ s/>/\$/;
     return "SELECT machine_id,nanos,name,value
         FROM heartbeats NATURAL JOIN metrics NATURAL JOIN metric_names
-        WHERE experiment_id=$exp" .
+        WHERE machine_id>0 AND experiment_id=$exp" .
 		($t0 ? " AND $t0 <= nanos ": "") .
 		($t1 ? " AND nanos < $t1 " : "") .
         " AND metric_id IN (
 		      SELECT metric_id FROM metric_names natural join metrics
               WHERE name $mm AND heartbeat_id IN (
-			      SELECT heartbeat_id FROM heartbeats WHERE experiment_id=$exp) )
+			      SELECT heartbeat_id FROM heartbeats 
+                      WHERE machine_id>0 AND experiment_id=$exp) )
         ORDER BY nanos;";
 }
 
