@@ -36,18 +36,13 @@ using namespace boost;
 using namespace boost::assign;
 
 namespace {
-option  o01("help",                           "this help");
-
+option  o01("help",                             "this help");
 option  o02("injection_type",            "cpu", "type of trace to be injected");
-
-option  o03("debug_messages",            "0", "level of selection of messages");
-options o04("debug_this",                     "print debug messages related to the arg");
-
-option  o05("instructions",              "0", "how much to simulate");
-
-option  o07("memory_accesses",           "0", "how many memory accesses to simulate (memory injection_type only)");
-
-optionR o20("heartbeat",                      "what heartbeat driver to use");
+option  o03("debug_messages",            "0",   "level of selection of messages");
+options o04("debug_this",                       "print debug messages related to the arg");
+option  o05("instructions",              "0",   "how much to simulate");
+option  o07("memory_accesses",           "0",   "how many memory accesses to simulate (memory injection_type only)");
+optionR o20("heartbeat",                        "what heartbeat driver to use");
 }
 
 Opcodes opcodes;
@@ -165,20 +160,14 @@ class InjectMemory
         FakeTrace(cpu->get_timer())
     {
         read_=write_=0;
-//      cout << "Createing inject memory" <<endl;
-//      cout << "   " << tracefile << endl;
         if (gz == 0)
             throw runtime_error("Could not open trace file "+ tracefile); 
         
         trace = new Memory::TraceMem(true, 0, 0, 0, 0);
-//      cout << "Trace before " << *trace << endl;
-//      cout<<"Call read_next"<<endl;
         read_next();
         
         first_nanos=trace->getNanos();
         first_tmstamp = trace->getTstamp();
-        
-//      cout<<"End read_next"<<endl;
     }
         
     ~InjectMemory()
@@ -224,7 +213,6 @@ class InjectMemory
         {
             free(trace);
             trace = NULL;
-//          cout << "End of file"<<endl;
             cout << "END OF FILE: Reads: "<< read_ << " writes: "<< write_ << endl;
             cout << "             Nanos from "<< first_nanos << " to "<< last_nanos << endl;
             cout << "             Cycles from "<< first_tmstamp << " to "<< last_tmstamp << endl;
@@ -378,13 +366,11 @@ int main(int argc,char*argv[])
             for(vector<string>::iterator i=dt.begin();i!=dt.end();i++)
                 Selector::on(*i);
         }
-    
         if(Option::has("help"))
         {
             Option::print(cout);
             cout << kill;
         }
-    
         LOG("Initialize");
         HeartBeat::add(*Machine::get());
         Option::run_function("build");

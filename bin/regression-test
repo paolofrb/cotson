@@ -24,7 +24,7 @@ begin
 
 	tests.each do |test|
 
-		puts "\e[1;33mtesting\e[0m #{test}"
+		puts "testing #{test}"
 	    $stdout.flush
 
 		if test === 'injector' then
@@ -34,9 +34,9 @@ begin
 		end
 
 		if success then
-			puts "\e[1;32mpassed\e[0m  #{test}"
+			puts "passed #{test}"
 		else
-			puts "\e[1;31mfailed\e[0m  #{test} [#{dir}] ('#{reason}')"
+			puts "failed #{test} [#{dir}] ('#{reason}')"
 			errors+=1
 		end
 	    $stdout.flush

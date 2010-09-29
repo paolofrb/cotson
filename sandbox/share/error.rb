@@ -12,10 +12,16 @@
 
 # $Id: error.rb 6977 2009-12-09 16:18:35Z frb $
 
-def colored_text(bg, fg, st)
+## Fancy...
+def colored_text1(bg, fg, st)
   esc="\033["
 
   "#{esc}#{fg};#{bg}m#{st}#{esc}0m"
+end
+
+## Boring...
+def colored_text(bg, fg, st) 
+   "#{st}"
 end
 
 class ErrorMessage
@@ -116,7 +122,7 @@ class ErrorMessage
     :AbaeternoNotFound => {:message => "[[abaeterno.so]] library was not found", :solution => "Link/copy [[abaeterno.so]] to the current location or set at your lua configuration file the [[abaeterno_so]] variable to point to the [[abaeterno.so]] file. Example: [[abaeterno_so='/home/user/abaeterno.so']]" },
     :BSDNotFound => {:message => "[[use_bsd]] was not found on lua file or the referenced [[bsd]] file was not found", :solution => "Check your lua if there is the [[use_bsd]] function call inside of [[simnow.commands]]. Check if the [[bsd]] file pointed out by [[use_bsd]] exists and is well referenced.\nTo reproduce the error with lua execute '{{lua}} {{script}} {{luainput}}'." },
     :CompareWithoutProduced => {:message => "Could not compare reference result with produced result because the result file {{produced}} was not found"},
-    :ComparisonMismatch => {:message => "The reference file {{real}} does not match with the test produced file {{produced}}"},
+    :ComparisonMismatch => {:message => "The reference file {{real}} does not match with the test produced file {{produced}}, check with:\ndiff -w {{real}} {{produced}}\n"},
     :ConnectionRefused => {:message => "The connection with the host {{host}} port {{port}} was refused while attempting a HTTP {{type}}. It is very likely that the daemon service was not started for the host {{host}}:{{port}}.", :solution => "Start the daemon in the host {{host}} using the port {{port}} or point the execution to the correct host:port using your configuration file and setting the [[scheduler]] lua table."},
     :DaemonAlreadyOn => {:message => "The daemon is already running for the host {{host}}:{{port}} at the directory {{directory}}. The process pid is {{pid}}", :solution => "If you can not connect to the daemon at {{host}}:{{port}}, kill the process with pid {{pid}} if it is running, delete the file {{file}} and start the daemon again."},
     :DaemonAlreadyOff => {:message => "The daemon is not running for the host {{host}} at the directory {{directory}}."},
