@@ -18,6 +18,13 @@ run_functional:
 	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
 	../../bin/cotson functional.in
 
+run_slirp:
+	@echo "Simple example how to use COTSon with the building slirp (NAT) interface."; \
+	echo "Try accessing the network"; \
+	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
+	../../bin/cotson slirp.in
+
+
 run_mem_tracer:
 	@echo "The mem_tracer outputs a memory trace to /tmp/mem_tracer.txt.gz"; \
 	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
