@@ -20,7 +20,6 @@ run_functional:
 
 run_slirp:
 	@echo "Simple example how to use COTSon with the building slirp (NAT) interface."; \
-	echo "Try accessing the network"; \
 	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
 	../../bin/cotson slirp.in
 

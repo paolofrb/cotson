@@ -3,7 +3,7 @@
 one_node_script='run_interactive'
 display=os.getenv("DISPLAY")
 
-MPORT=10000
+MPORT=10000 -- embedded mediator port (pick a free port)
 options = {
     slirp=true,
     slirp_control_port=MPORT,
@@ -13,7 +13,11 @@ options = {
     sampler={ type="no_timing", quantum="10M" },
 	heartbeat={ type="file_last" },
 }
-options.slirp_redir_tcp[22]=2222
+-- redirects guest port 22 (ssh) to host 2222
+-- once the network is up, you can access the guest with 
+--     ssh -p 2222 user@localhost
+-- (password is 'user')
+options.slirp_redir_tcp[22]=2222 
 
 simnow.commands=function()
 	use_bsd('1p.bsd')
