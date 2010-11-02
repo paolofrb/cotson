@@ -130,7 +130,7 @@ echo ""
 echo "Checking and installing packages ($pkgs)"
 echo "*** NOTE: sudo access required ***"
 echo ""
-sudo apt-get -q -q install $pkgs
+sudo apt-get -q -y install $pkgs
 if [[ $? -ne 0 ]]; then
     echo "Could not install one or more of $pkgs"
     echo "Please check your distribution and edit 'configure' to reflect it"
