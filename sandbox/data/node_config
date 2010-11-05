@@ -55,25 +55,28 @@ iface eth0 inet static
 	gateway $GW
 EOF
 
-log "  sysctl configuration"
-sysctl -q -w net.core.rmem_default="262144"
-sysctl -q -w net.core.wmem_default="262144"
-sysctl -q -w net.core.rmem_max="8388608"
-sysctl -q -w net.core.wmem_max="8388608"
-sysctl -q -w net.core.netdev_max_backlog="20000"
-sysctl -q -w fs.file-max="3241615"
-sysctl -q -w kernel.randomize_va_space="0"
-sysctl -q -w net.ipv4.tcp_mem="262144 262144 8388608"
-sysctl -q -w net.ipv4.tcp_rmem="262144 262144 8388608"
-sysctl -q -w net.ipv4.tcp_wmem="262144 262144 8388608"
-sysctl -q -w net.ipv4.tcp_sack="0"
-sysctl -q -w net.ipv4.tcp_timestamps="0"
-sysctl -q -w net.ipv4.route.flush="1"
-# sysctl -q -w net.ipv4.no_metrics_save="1"
+log "  cleaning /etc/resolv.conf"
+echo "" > /etc/resolv.conf
+
+#log "  sysctl configuration"
+#sysctl -q -w net.core.rmem_default="262144"
+#sysctl -q -w net.core.wmem_default="262144"
+#sysctl -q -w net.core.rmem_max="8388608"
+#sysctl -q -w net.core.wmem_max="8388608"
+#sysctl -q -w net.core.netdev_max_backlog="20000"
+#sysctl -q -w fs.file-max="3241615"
+#sysctl -q -w kernel.randomize_va_space="0"
+#sysctl -q -w net.ipv4.tcp_mem="262144 262144 8388608"
+#sysctl -q -w net.ipv4.tcp_rmem="262144 262144 8388608"
+#sysctl -q -w net.ipv4.tcp_wmem="262144 262144 8388608"
+#sysctl -q -w net.ipv4.tcp_sack="0"
+#sysctl -q -w net.ipv4.tcp_timestamps="0"
+#sysctl -q -w net.ipv4.route.flush="1"
+## sysctl -q -w net.ipv4.no_metrics_save="1"
  
 log "  baptize nic"
 /sbin/ifconfig eth0 hw ether $(mac $NODE)
-/sbin/ifconfig eth0 txqueuelen 20000
+# /sbin/ifconfig eth0 txqueuelen 20000
 # /sbin/ifconfig eth0 mtu 9000
 
 log "  setting hostname"

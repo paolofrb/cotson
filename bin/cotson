@@ -40,8 +40,6 @@ begin
 
   if(opts.one_node?)
     opts.load :one_node_script, :data_dir, :display,
-      :bsd, :bsd_link,
-      :hdd, :hdd_link,
       :vncviewer, :xterm, :screen, :Xvnc, :Xvnc_args, :Xvncwm,
       :simnow_dir, :simnow_dir_link,
       :abaeterno_so, :abaeterno_so_link,
@@ -50,9 +48,8 @@ begin
 
     sb=Sandbox.new(lua_defs,opts,sbname(opts,''))
     node_sandbox.push sb
-    sb.install :abaeterno_in, :simnow_pre, :simnow_dir,
-      :abaeterno_so, :bsd, :hdd
-    sb.run(opts[:one_node_script])
+    sb.install :abaeterno_in, :simnow_pre, :simnow_dir, :abaeterno_so, 
+        sb.run(opts[:one_node_script])
 
   else
     opts.load :cluster_nodes, 
@@ -95,8 +92,6 @@ begin
         lua_defs.instance_defaults :NODE => node, :TOTAL => cluster_nodes
         nopts=Options.new(lua_defs, :NODE => node, :TOTAL => cluster_nodes)
         nopts.load :data_dir, :display,
-          :bsd, :bsd_link,
-          :hdd, :hdd_link,
           :vncviewer, :xterm, :screen, :Xvnc, :Xvnc_args, :Xvncwm, 
           :simnow_dir, :simnow_dir_link,
           :abaeterno_so, :abaeterno_so_link,
@@ -105,7 +100,7 @@ begin
 
         nsb=Sandbox.new(lua_defs,nopts,sbname(opts,"-node-#{node}"))
         nsb.install :abaeterno_in, :simnow_pre_cluster, :simnow_dir,
-          :abaeterno_so, :bsd, :hdd, :user_script, :node_config, :cluster_sh
+          :abaeterno_so, :user_script, :node_config, :cluster_sh
 
         node_sandbox.push nsb
       end

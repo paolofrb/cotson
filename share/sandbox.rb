@@ -135,23 +135,9 @@ class Sandbox < Location
   end
 
   def install_bsd
-    f=File.expand_path(@opts[:bsd])
-    bsd=data('node.bsd')
-    link=@opts[:bsd_link]
-    debug2 "installing node.bsd"
-    debug2 " from #{f}"
-    debug2 " using #{link ? 'link' : 'copy'}"
-    link ? FileUtils.ln_sf(f,bsd) : FileUtils.cp_r(f, bsd)
   end
 
   def install_hdd
-    f=File.expand_path(@opts[:hdd])
-    hdd=data('node.hdd')
-    link=@opts[:hdd_link]
-    debug2 "installing node.hdd"
-    debug2 " from #{f}"
-    debug2 " using #{link ? 'link' : 'copy'}"
-    link ? FileUtils.ln_sf(f,hdd) : FileUtils.cp_r(f, hdd)
   end
 
   def install_config

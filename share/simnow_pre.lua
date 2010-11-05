@@ -17,6 +17,7 @@ dofile(arg[0]:gsub("(.+)/.+","%1/defaults.lua"))
 use_bsd=use_bsd_helper
 use_hdd=use_hdd_helper
 set_journal=set_journal_helper
+set_diskjournal=set_diskjournal_helper
 set_quantum=set_quantum_helper
 send_keyboard=send_keyboard_helper
 

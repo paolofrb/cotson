@@ -22,15 +22,13 @@ def abaeterno_test(test,argv)
 	lua_defs=LuaDefinitions.new :command_line => my_args
 	opts=Options.new(lua_defs,:test => test,:runid => "test"+test.tid+"-")
 	opts.load :data_dir, :display,
-		:bsd, :bsd_link,
-		:hdd, :hdd_link,
 		:simnow_dir, :simnow_dir_link,
 		:abaeterno_so, :abaeterno_so_link,
 		:clean_sandbox, :screen
 
 	sb=Sandbox.new(lua_defs,opts)
 	sb.install :abaeterno_in, :simnow_pre, :simnow_dir,
-		:abaeterno_so, :bsd, :hdd, :test_data
+		:abaeterno_so, :test_data
 
 	i,o=sb.run_output('regression')
 	debug2("regression output begin\n#{o}\nregression output end")

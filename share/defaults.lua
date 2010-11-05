@@ -152,7 +152,7 @@ end
 function use_bsd_helper(x)
 	l=location(x)
 	check_exists(l,"bsd file '"..x.."' does not exist")
-	print('open ../data/node.bsd')
+	print('open '..l)
 end
 
 function use_hdd_helper(x,num,tipo)
@@ -160,7 +160,7 @@ function use_hdd_helper(x,num,tipo)
 	check_exists(l,"hdd file '"..x.."' does not exist")
 	if num==nil then num=0 end
 	if tipo==nil then tipo='master' end
-	print('ide:'..num..'.image '..tipo..' ../data/node.hdd')
+	print('ide:'..num..'.image '..tipo..' '..l)
 end
 
 function set_journal_helper(num,tipo)
@@ -169,18 +169,29 @@ function set_journal_helper(num,tipo)
 	print('ide:'..num..'.journal '..tipo..' on')
 end
 
-function set_network_helper()
+function set_diskjournal_helper(x,num,tipo)
+	if num==nil then num=0 end
+	if tipo==nil then tipo='master' end
+	print('ide:'..num..'.journal '..tipo..' off')
+	print('ide:'..num..'.journaladd '..tipo..' '..x)
+end
+
+function set_network_helper(tx,rx,thr)
 	low=NODE%256
 	high=(NODE-low)/256
+
+	if rx==nil then rx=1 end
+	if tx==nil then tx=1 end
+	if thr==nil then thr=100 end
 
 	print("e1000.linkconnect down")
 	print("cmos.setbyte 254 "..low)
 	print("cmos.setbyte 255 "..high)
 	print("e1000.setmediatorhost MEDIATOR")
-	print("e1000.tune rxdelay 1")
-	print("e1000.tune txdelay 1")
-	print("e1000.tune intthrtl 100")
 	print("e1000.forcetunevalues on")
+	print("e1000.tune rxdelay "..rx)
+	print("e1000.tune txdelay "..tx)
+	print("e1000.tune intthrtl "..thr)
 	print("e1000.linkconnect auto")
 end
 
@@ -189,8 +200,9 @@ end
 function use_bsd(x) end
 function use_hdd(x,num,tipo) end
 function set_journal(num,tipo) end
+function set_diskjournal(x,num,tipo) end
 function set_quantum(n) end
-function set_network() end
+function set_network(tx,rx,thr) end
 function send_keyboard() end
 function execute(n) end
 
