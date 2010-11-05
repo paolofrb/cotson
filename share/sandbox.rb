@@ -73,10 +73,10 @@ class Sandbox < Location
       f.puts "xget ../data/user_script user_script"
       f.puts "chmod +x node_config user_script"
 
-      f.puts "sudo ./node_config #{@opts[:NODE]} #{@opts[:TOTAL]} | tee node_config.log 2>&1"
+      f.puts "sudo ./node_config #{@opts[:NODE]} #{@opts[:TOTAL]} 2>&1 | tee node_config.log"
       f.puts "xput node_config.log #{@root}/data/node_config.log"
 
-      f.puts "./user_script #{@opts[:NODE]} #{@opts[:TOTAL]} | tee stdout.log 2>&1"
+      f.puts "./user_script #{@opts[:NODE]} #{@opts[:TOTAL]} 2>&1 | tee stdout.log"
       f.puts "xput stdout.log #{@root}/data/stdout.log"
       s_id=0
       @opts[:subscribe_result].each do |s|
