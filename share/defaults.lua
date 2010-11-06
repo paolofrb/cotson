@@ -155,25 +155,34 @@ function use_bsd_helper(x)
 	print('open '..l)
 end
 
-function use_hdd_helper(x,num,tipo)
+function use_hdd_helper(x,num,dt)
 	l=location(x)
 	check_exists(l,"hdd file '"..x.."' does not exist")
 	if num==nil then num=0 end
-	if tipo==nil then tipo='master' end
-	print('ide:'..num..'.image '..tipo..' '..l)
+	if dt==nil then dt='master' end
+	print('ide:'..num..'.image '..dt..' '..l)
 end
 
-function set_journal_helper(num,tipo)
+function set_journal_helper(num,dt)
 	if num==nil then num=0 end
-	if tipo==nil then tipo='master' end
-	print('ide:'..num..'.journal '..tipo..' on')
+	if dt==nil then dt='master' end
+	print('ide:'..num..'.journal '..dt..' on')
 end
 
-function set_diskjournal_helper(x,num,tipo)
+function set_diskjournal_helper(x,num,dt)
 	if num==nil then num=0 end
-	if tipo==nil then tipo='master' end
-	print('ide:'..num..'.journal '..tipo..' off')
-	print('ide:'..num..'.journaladd '..tipo..' '..x)
+	if dt==nil then dt='master' end
+	print('ide:'..num..'.journal '..dt..' off')
+	print('ide:'..num..'.journaladd '..dt..' '..x)
+end
+
+function set_serial_helper(x)
+    print("serial:0.setcommport "..x)
+    print("serial:1.setcommport "..x)
+end
+
+function dumpregistry_helper()
+	print('dumpregistry')
 end
 
 function set_network_helper(tx,rx,thr)
@@ -198,13 +207,15 @@ end
 -- main api (void versions)
 
 function use_bsd(x) end
-function use_hdd(x,num,tipo) end
-function set_journal(num,tipo) end
-function set_diskjournal(x,num,tipo) end
+function use_hdd(x,num,dt) end
+function set_journal(num,dt) end
+function set_diskjournal(x,num,dt) end
 function set_quantum(n) end
 function set_network(tx,rx,thr) end
 function send_keyboard() end
 function execute(n) end
+function set_serial(x) end
+function dumpregistry() end
 
 function subscribe_result(x) 
 	if result_subscriptions==nil then result_subscriptions='' end

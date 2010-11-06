@@ -20,6 +20,8 @@ set_journal=set_journal_helper
 set_diskjournal=set_diskjournal_helper
 set_quantum=set_quantum_helper
 send_keyboard=send_keyboard_helper
+set_serial=set_serial_helper
+dumpregistry=dumpregistry_helper
 
 if type(simnow)~='table' or type(simnow.commands)~='function' then
 	error("missing simnow.commands function")
