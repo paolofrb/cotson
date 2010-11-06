@@ -81,6 +81,7 @@ struct Proxy : public CMonitorConsumer
 	int machineID;
 
 // NOT in the INTF
+    void LoadOptions();
 	bool UpdateCpu(uint64_t,uint64_t,uint64_t);
 	bool UpdateDev(uint64_t,uint64_t,uint64_t);
 	void SetQuantum(uint64_t);
@@ -229,10 +230,7 @@ extern "C" DLLEXPORT CMonitorConsumer *SimNowGetMonitorInterface(const char *nam
 	Call::init()();
 	
 	proxy=Proxy::get();
-	proxy->sync_quantum_f = proxy->sync_quantum_s = Option::get<uint64_t>("mp_sync_quantum");
-	if(Option::has("mp_sync_quantum_sim"))
-	    proxy->sync_quantum_s = Option::get<uint64_t>("mp_sync_quantum_sim");
-
+	proxy->LoadOptions();
 	return proxy;
 }
 
@@ -246,7 +244,7 @@ Proxy::Proxy() :
 	info_valid(0),
 	regs_valid(false),
 	fregs_valid(false),
-	time_feedback(Option::get<bool>("time_feedback")),
+	time_feedback(false),
 	regvalue(false)
 {
 }
@@ -475,6 +473,14 @@ void Proxy::ExternalEventTiming(EVENTTIMINGINFO* einfo)
 
 //// NONE OF THE FOLLOWING ARE PART OF THE IAnalysisConsumer INTERFACE
 
+void Proxy::LoadOptions()
+{
+	sync_quantum_f = sync_quantum_s = Option::get<uint64_t>("mp_sync_quantum");
+	if(Option::has("mp_sync_quantum_sim"))
+	    sync_quantum_s = Option::get<uint64_t>("mp_sync_quantum_sim");
+    time_feedback=Option::get<bool>("time_feedback");
+}
+
 bool Proxy::UpdateDev(uint64_t devid ,uint64_t key,uint64_t val)
 {
 	// Updating device events does not flush the cache
@@ -644,6 +650,13 @@ const set<string>& Cotson::statistics_names()
 }
 
 uint64_t Cotson::nanos() { return proxy->nanos; }
+
+void Cotson::reload_options()
+{
+	// called when options may have changed, 
+	// for example when a sampler changes
+	proxy->LoadOptions();
+}
 
 void Cotson::Cpu::init(uint64_t devid)
 {

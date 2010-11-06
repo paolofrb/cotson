@@ -336,6 +336,7 @@ void AbAeterno::startSample()
 void AbAeterno::break_sample()
 {
     Interleaver::get().break_sample();
+	Cotson::reload_options(); // new sampler may change options
     endSample();
 }
 

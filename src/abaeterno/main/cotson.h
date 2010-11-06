@@ -24,6 +24,7 @@ namespace Cotson {
 const std::set<std::string>& statistics_names();
 
 uint64_t nanos();
+void reload_options();
 
 namespace Cpu {
 
