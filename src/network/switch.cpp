@@ -275,7 +275,9 @@ void Switch::send(const Node::Ptr to_node, const Packet& packet, uint64_t now)
 	    return;
 
     int64_t delay = timing_ ? timing_->get_delay() : 0;
-    if (!force_queue_ && delay <= lround(quantum_) && to_node->data_valid()) {
+    if (   (!sync_started_ || (!force_queue_ && delay <= lround(quantum_)))
+	    && to_node->data_valid()
+	) {
         really_send(to_node, packet);
 	}
 	else {
@@ -322,8 +324,10 @@ bool Switch::stop_node(Node& n)
     }
     // Mark the node as stopped
     LOG2("(SYNC) Stop node [", n.mac().str(), "]");
-    n.stop();
-    sync_cluster(n.getSimtime());
+	if (n.sync_valid()) {
+        sync_cluster(n.getSimtime());
+        n.stop();
+	}
     return rv;
 }
 
@@ -335,8 +339,10 @@ bool Switch::heartbeat_node(Node& n)
         rv = false;
     }
     LOG2("(SYNC) Hartbeat node [", n.mac().str(), "]");
-	n.start();
-    sync_cluster(n.getSimtime());
+	if (n.sync_valid()) {
+	    n.start();
+        sync_cluster(n.getSimtime());
+	}
 	return rv;
 }
 
@@ -445,8 +451,6 @@ bool Switch::simtime_advance(uint64_t ntime)
 	}
     tmin_ = t0;
     tmax_ = t1;
-	if (tmax_ == 0)
-	    return false;
 	if (gt_ == 0 && !sync_started_) {
 	    LOG1("(SWITCH) Start synchronization [",t0,t1,"]");
 		sync_started_ = true;
@@ -575,10 +579,10 @@ inline void Switch::send_sync(bool force)
 
 void Switch::timeout()
 {
-	if (GT() > 0) {
+	if (GT() > 0)
 	    sync_cluster(0);
-	    send_sync(true); // Force a sync
-    }
+    LOG1("(SYNC) TIMEOUT", GT(), nextgt_, tmin_, tmax_, quantum_);
+	send_sync(true); // Force a sync
 }
 
 void Switch::send_terminate()

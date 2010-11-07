@@ -148,7 +148,7 @@ void ControlPacketProcessor::time_query(EventHandler *h)
 	// Message from abaeterno asking a resend of the last time
 	Stats::get().n_msg_++;
 	Node::Ptr node = process_timing_message(h);
-	if (node->valid())
+	if (node->sync_valid())
 	    switch_->timeout(); // force a sync
 }
 

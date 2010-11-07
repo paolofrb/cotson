@@ -63,10 +63,10 @@ public:
                 vcol.push_back(result[i]);   // column names
             for(int i=0;i<ncol*nrow;++i) // flat data
   	            vdata.push_back(result[ncol+i]);
+            sqlite3_free_table(result);
         }
 		else 
 			ERROR(errmsg);
-        sqlite3_free_table(result);
         return rc;
     }
 	void begin_transaction() { exec("BEGIN TRANSACTION;"); }

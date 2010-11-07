@@ -43,7 +43,7 @@ void Reactor::handle_events(void)
             max_fd = (*hi)->fill(max_fd,&rfds,&wfds,&xfds);
 
         // Multiplex the file descriptors
-		timeval timeout = {1,0}; // timeout after 1s for safety
+		timeval timeout = {10,0}; // timeout after 1s fo0r safety
 		int nb = ::select(max_fd+1,&rfds,&wfds,&xfds,&timeout);
         if (nb == -1) {
 			perror("Error in select");
