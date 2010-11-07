@@ -13,11 +13,14 @@
 // $Id$
 
 #include "mediator_server.h"
+#include "liboptions.h"
 
 #include <unistd.h>
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
+
+using namespace boost;
 
 boost::mutex io_mutex;
 
@@ -118,13 +121,31 @@ int MediatorServer::init()
     return 0;
 }
 
+void MediatorServer::Heartbeat()
+{
+	int hbms=Option::get<int>("sync_heartbeat"); 
+	if (hbms<=0)
+	    return;
+	int hbs = hbms/1000;
+	int hbns = (hbms%1000)*1000000;
+	timespec ts={1,0};
+	while(true) {
+	    ts.tv_sec=hbs;
+	    ts.tv_nsec=hbns;
+        ::nanosleep(&ts,0);
+	    switch_.timeout();
+	}
+}
+
 int MediatorServer::run()
 {
     // Enter in the reactors never ending loop
-	boost::thread ct(boost::bind(&Reactor::handle_events,ctrl_reactor_));
-	boost::thread dt(boost::bind(&Reactor::handle_events,data_reactor_));
+	thread ct(bind(&Reactor::handle_events,ctrl_reactor_));
+	thread dt(bind(&Reactor::handle_events,data_reactor_));
+	thread ht(bind(&MediatorServer::Heartbeat,this));
 	ct.join();
 	dt.join();
+	ht.join();
     return 0;
 }
 

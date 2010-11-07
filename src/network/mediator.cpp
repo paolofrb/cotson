@@ -58,6 +58,7 @@ namespace
     optionR o22("heartbeat", 					 "Sets up a mediator heartbeat");
     option  o23("heartbeat_interval",     "1000", "packets between db logs");
     option  o24("network.mediator_nodeid",   "0", "cluster node id (for db logs)");
+    option  o25("sync_heartbeat",         "1000", "sync heartbeat (ms)");
 }
 
 namespace 

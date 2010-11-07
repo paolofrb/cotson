@@ -67,6 +67,9 @@ private:
     Reactor data_reactor_;
     Reactor ctrl_reactor_;
 
+	// Heartbeat (sends periodic time events to the cluster)
+	void Heartbeat();
+
     // The PacketProcessor for control and data packets;
     ControlPacketProcessor control_processor_;
 
