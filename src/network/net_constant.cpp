@@ -33,20 +33,13 @@ namespace constant
 	registerClass<TimingModel,Constant> constant_c("constant");
 }
 
-Constant::Constant(Parameters &p) : latency_(1)
+Constant::Constant(Parameters &p) : 
+    latency_(p.get<uint64_t>("latency","1"))
 {
-    // Constructor
-    // The options are parsed by the parameters class (see parameters.h)
-    // 'has' method can be used to probe if a parameter was defined
-    // Scalars can be obtained by 'get'
-    // Vectors can be obtained by 'getV'  
-    if(p.has("latency"))
-		latency_=p.get<uint64_t>("latency");
 }
 
 Constant::~Constant()
 {
-     // Destructor
 }
 
 void Constant::startquantum(uint64_t gt, uint64_t nextgt) 
