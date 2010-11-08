@@ -581,7 +581,7 @@ void Switch::timeout()
 {
 	if (GT() > 0)
 	    sync_cluster(0);
-    LOG1("(SYNC) TIMEOUT", GT(), nextgt_, tmin_, tmax_, quantum_);
+    LOG2("(SYNC) TIMEOUT", GT(), nextgt_, tmin_, tmax_, quantum_);
 	send_sync(true); // Force a sync
 }
 

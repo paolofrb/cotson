@@ -14,6 +14,7 @@
 
 #include "mediator_server.h"
 #include "liboptions.h"
+#include "log.h"
 
 #include <unistd.h>
 #include <boost/shared_ptr.hpp>
@@ -22,7 +23,7 @@
 
 using namespace boost;
 
-boost::mutex io_mutex;
+mutex io_mutex;
 
 MediatorServer::MediatorServer(uint16_t ctrl_port,
                                uint16_t data_port,
@@ -133,6 +134,7 @@ void MediatorServer::Heartbeat()
 	    ts.tv_sec=hbs;
 	    ts.tv_nsec=hbns;
         ::nanosleep(&ts,0);
+        LOG1("(SYNC) HEARTBEAT", switch_.GT(), switch_.nextGT());
 	    switch_.timeout();
 	}
 }
