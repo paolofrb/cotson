@@ -597,6 +597,16 @@ void Switch::send_terminate()
 	   dump_->flush();
 }
 
+void Switch::send_cpuid(uint64_t x,uint16_t y,uint16_t z)
+{
+    GlobalTime tmsg;
+    tmsg.mkcpuid(x,y,z);
+    if (tmsg.sendto(sync_socket_,&sync_addr_) != tmsg.len())
+        cout << "(SYNC) WARNING: Cannot send cpuid message: " << strerror(errno) << endl;
+	else
+	    cout << "(SYNC) sent cpuid message: " << y << " " << z << " " << x << endl;
+}
+
 void Switch::dump_nodes()
 {
 	if (verbose_ < 1)

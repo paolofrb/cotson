@@ -36,6 +36,7 @@ public:
     uint32_t net_delay() const { return net_delay_; }
     inline void net_delay(uint32_t d) { net_delay_ = d; }
 	inline bool terminated() const { return gtime_.terminated(); }
+    void cpuid(uint64_t,uint16_t,uint16_t);
 
 	void start();
 	void stop();
@@ -59,6 +60,8 @@ private:
 	    boost::mutex gtmutex;
 		bool end;
 	    boost::condition new_gt;
+	    uint16_t med_seqno_;
+        void check_med_seq(const GlobalTime&);
 	};
 
     void sync(uint64_t);
@@ -71,7 +74,6 @@ private:
     inline void send_msg(const TimeStamp&);
 	inline void usleep(int64_t) const;
 	inline void next();
-    uint16_t gtcheck(const GlobalTime&,uint16_t);
 
 	const uint32_t log_;
     uint64_t net_delay_;

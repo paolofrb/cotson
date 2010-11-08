@@ -100,6 +100,19 @@ int ControlPacketProcessor::process(EventHandler *handler)
 			    cerr << "Warning: ignore terminate, len " << len << endl;
 		    break; 
 
+		case TimingMessage::CpuidMsg:
+			if (TimeStamp::check(len)) {
+	            TimeStamp tdata(packet_.buf());
+	            uint64_t x = tdata.tstamp();
+	            uint16_t y = tdata.nodeid();
+	            uint16_t z = tdata.seqno();
+			    cout << "(CTRL) got cpuid message: " << y << " " << z << " " << x << endl;
+				switch_->send_cpuid(x,y,z);
+			}
+			else 
+			    cerr << "Warning: ignore cpuid, len " << len << endl;
+		    break; 
+
         default:
             cout << "(CTRL) Unknown timing message: 0x" 
 			     << hex << type << dec << endl;
@@ -155,8 +168,8 @@ void ControlPacketProcessor::time_query(EventHandler *h)
 Node::Ptr ControlPacketProcessor::process_timing_message(EventHandler *h)
 {
 	TimeStamp tdata(packet_.buf());
-	uint32_t nodeid = tdata.nodeid();
 	uint64_t tstamp = tdata.tstamp();
+	uint16_t nodeid = tdata.nodeid();
 	uint16_t seqno = tdata.seqno();
 
 	// Register the new node in the switch

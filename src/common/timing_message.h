@@ -30,12 +30,13 @@ namespace TimingMessage
 	enum Type {
 		UnknownMsg = 0x0,
 	    PortRequestMsg = 0x0700, // Request data port
-		TimeStampMsg = 0x0701,   // Timestamp
-		NodeStartMsg = 0x0702,   // Node start
-		NodeStopMsg = 0x0703,    // Node stop
-		GTimeMsg = 0x0704,       // Global time
-		TerminateMsg = 0x0705,   // Terminate mediator
-		TimeQueryMsg = 0x0706,   // What's the time?
+		TimeStampMsg   = 0x0701, // Timestamp
+		NodeStartMsg   = 0x0702, // Node start
+		NodeStopMsg    = 0x0703, // Node stop
+		GTimeMsg       = 0x0704, // Global time
+		TerminateMsg   = 0x0705, // Terminate mediator
+		TimeQueryMsg   = 0x0706, // What's the time?
+		CpuidMsg       = 0x0707, // Node-to-node commands
 	};
 
 	// Message type from packet
@@ -71,15 +72,15 @@ public:
 	TimeStamp(uint16_t);
 	uint16_t seqno() const { return data_.seqno; }
 	uint64_t tstamp() const { return data_.tstamp; }
-	uint32_t nodeid() const { return data_.nodeid; }
-	bool valid() { return data_.type != TimingMessage::UnknownMsg; }
+	uint16_t nodeid() const { return data_.nodeid; }
+	bool valid() { return data_.type != htons(TimingMessage::UnknownMsg); }
 	static bool check(ssize_t l) { return l == sizeof(Data); }
 private:
 	struct Data { // Must overlap with Ethernet header (src[6],dst[6],type[2])
         uint64_t tstamp; // simulated time (us) -- 8B align 8
-        uint32_t nodeid; // node                -- 4B align 4
-		uint16_t type;   // type                -- 2B align 2
+        uint16_t nodeid; // node                -- 2B align 2
 		uint16_t seqno;  // sequence number     -- 2B align 2
+		uint16_t type;   // type                -- 2B align 2
 	} __PACKED__; // It should already be packed (see alignments above)
 	Data data_;
 };
@@ -91,18 +92,27 @@ public:
 	GlobalTime();
 	GlobalTime(uint16_t);
 	GlobalTime(uint64_t, uint32_t, uint16_t);
-	uint32_t lat() const { return data_.lat; }
+	uint16_t lat() const { return data_.lat; }
 	uint64_t gt() const { return data_.gt; }
 	uint16_t seqno() const { return data_.seqno; }
-	bool is_terminate() const { return data_.gt == static_cast<uint64_t>(-1); }
-	void mkterminate() { data_.gt = static_cast<uint64_t>(-1); }
-	bool valid() { return data_.type != TimingMessage::UnknownMsg; }
+	bool is_terminate() const { return data_.type == htons(TimingMessage::TerminateMsg); }
+	bool is_cpuid() const { return data_.type == htons(TimingMessage::CpuidMsg); }
+	void mkterminate() { data_.type = htons(TimingMessage::TerminateMsg); }
+	void mkcpuid(uint64_t x,uint16_t y, uint16_t z) 
+	{
+		// FIXME: horrible hack, should define own struct
+	    data_.gt = x; // 64b
+	    data_.lat = y; // 16b
+	    data_.seqno = z; // 16b
+	    data_.type = htons(TimingMessage::CpuidMsg); 
+	}
+	bool valid() { return data_.type != htons(TimingMessage::UnknownMsg); }
 private:
 	struct Data { // Must overlap with Ethernet header (src[6],dst[6],type[2])
         uint64_t gt;      // next sync time (us)     -- 8B align 8
-        uint32_t lat;     // network latency (us)    -- 4B align 4
-		uint16_t type;    // type                    -- 2B align 2
+        uint16_t lat;     // network latency (us)    -- 2B align 2
 		uint16_t seqno;   // sequence number         -- 2B align 2
+		uint16_t type;    // type                    -- 2B align 2
 	} __PACKED__; // It should already be packed (see alignments above)
 	Data data_;
 };
@@ -120,20 +130,6 @@ private:
 	    uint16_t data_port;   // data_port --  2B align 2
 	} __PACKED__; // It should already be packed (see alignments above)
 	Data data_;
-};
-
-// generic ethernet packet
-class EtherPacket : public TimingMessage::Base
-{
-public:
-    EtherPacket(const ether_header* eh, const void* p, size_t n)
-	    : Base(new uint8_t(sizeof(ether_header)+n), sizeof(ether_header)+n)
-	{
-		copy(eh,0,sizeof(ether_header));
-		copy(p,sizeof(ether_header),n);
-	}
-	~EtherPacket() { delete[] reinterpret_cast<uint8_t*>(Base::ptr_); }
-private:
 };
 
 #undef __PACKED__

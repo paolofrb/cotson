@@ -36,12 +36,14 @@ class CpuidCall : public boost::noncopyable
 
 	public:
 		 
-	static CpuidCall& get() {
+	static CpuidCall& get() 
+	{
 		static CpuidCall singleton;
 		return singleton;
 	}
 	
-	static void add(uint64_t a,FunctionalCall&f,SimulationCall& s) {
+	static void add(uint64_t a, FunctionalCall& f, SimulationCall& s) 
+	{
 		CpuidCall& me=get();
 		if(me.funcs.find(a)!=me.funcs.end())
 			throw std::runtime_error("cannot add two hooks to the same cpuid: "+
@@ -49,25 +51,32 @@ class CpuidCall : public boost::noncopyable
 		me.funcs[a]=std::make_pair(f,s);
 	}
 
-	static bool has(uint64_t a) {
+	static bool has(uint64_t a) 
+	{
 		CpuidCall& me=get();
 		return me.funcs.find(a)!=me.funcs.end();
 	}
 
-	static void functional(FunctionalState f,uint64_t nanos,uint64_t devid,
+	static void functional(
+	    FunctionalState f,
+		uint64_t nanos,
+		uint64_t devid,
 		uint64_t a,uint64_t b,uint64_t c) 
 	{
 		CpuidCall& me=get();
 		Funcs::iterator i=me.funcs.find(a);
 		if(i==me.funcs.end())
 			return;
-		FunctionalCall foo=i->second.first;
-		if(!foo)
+		FunctionalCall fcall=i->second.first;
+		if(!fcall)
 			return;
-		foo(f,nanos,devid,a,b,c);		
+		fcall(f,nanos,devid,a,b,c);		
 	}
 
-	static InstructionInQueue simulation(Instruction*inst,uint64_t nanos,uint64_t devid)
+	static InstructionInQueue simulation(
+	    Instruction*inst,
+		uint64_t nanos,
+		uint64_t devid)
 	{
 		CpuidCall& me=get();
 	 	uint64_t a,b,c;
@@ -75,10 +84,10 @@ class CpuidCall : public boost::noncopyable
 		Funcs::iterator i=me.funcs.find(a);
 		if(i==me.funcs.end())
 			return DISCARD;
-		SimulationCall bar=i->second.second;
-		if(!bar)
+		SimulationCall scall=i->second.second;
+		if(!scall)
 			return DISCARD;
-		return bar(inst,nanos,devid);		
+		return scall(inst,nanos,devid);		
 	}
 };
 

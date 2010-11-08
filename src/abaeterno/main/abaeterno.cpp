@@ -65,6 +65,7 @@ option  o43("prefetch",                       "add load to prefetch operations")
 option  o44("clflush",                        "add load to clflush operations");
 
 option  o50("print_stats",                    "print statistics on stdout");
+option  o51("network_cpuid",                  "send cpuid commands to all nodes in the cluster");
 }
 
 namespace {
@@ -92,7 +93,8 @@ AbAeterno::AbAeterno() :
     cyclesPerUsec(0),
     translated_insts(0),
     tag_prefetch(Option::get<bool>("prefetch",false)),
-    print_stats(Option::get<bool>("print_stats",false))
+    print_stats(Option::get<bool>("print_stats",false)),
+	net_cpuid(Option::get<bool>("network_cpuid",false))
 {
     add("nSimulation",    stateCounter[SIMULATION]);
     add("nSimpleWarming", stateCounter[SIMPLE_WARMING]);
@@ -116,7 +118,7 @@ AbAeterno::AbAeterno() :
     }
 
     NetworkTiming* nt=NetworkTiming::get();
-    if(nt) 
+    if(nt)
         add("cluster.",*nt);
 
     clear_metrics();
@@ -337,6 +339,7 @@ void AbAeterno::break_sample()
 {
     Interleaver::get().break_sample();
 	Cotson::reload_options(); // new sampler may change options
+	cout << "### TRACER CHANGE " << Cotson::nanos() << endl;
     endSample();
 }
 
@@ -467,7 +470,16 @@ void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
     LOG("\tRSI:   ",RSI);
     LOG("\tRBX:   ",RBX);
 
-    FunctionalState fs=sim_state == FUNCTIONAL ? ONLY_FUNCTIONAL : FUNCTIONAL_AND_TIMING;
+    FunctionalState fs= (sim_state == FUNCTIONAL) ? ONLY_FUNCTIONAL : FUNCTIONAL_AND_TIMING;
     CpuidCall::functional(fs,nanos,devid,RDI,RSI,RBX);
+	if (net_cpuid && NetworkTiming::get())
+	    NetworkTiming::get()->cpuid(RBX,RDI,RSI);
+}
+
+void AbAeterno::network_cpuid(uint64_t RBX,uint16_t RDI,uint16_t RSI)
+{
+	cerr << "Got cpuid from network: " << RDI << " " << RSI << " " << RBX << endl;
+    FunctionalState fs= (sim_state == FUNCTIONAL) ? ONLY_FUNCTIONAL : FUNCTIONAL_AND_TIMING;
+    CpuidCall::functional(fs,Cotson::nanos(),0,RDI,RSI,RBX);
 }
 

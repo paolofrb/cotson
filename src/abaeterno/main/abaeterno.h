@@ -55,6 +55,7 @@ public:
 	void endQuantum();
 	void translate(uint64_t);
 	void execute(uint64_t,uint64_t,uint32_t);
+	void network_cpuid(uint64_t,uint16_t,uint16_t);
 	bool inject_tag(uint64_t,uint32_t,const uint8_t*);
 	bool has_pending_tags() { return !translated_tags.empty(); }
 	
@@ -81,5 +82,6 @@ private:
 	int translated_insts;
 	bool tag_prefetch;
 	bool print_stats;
+	bool net_cpuid;
 };
 #endif 

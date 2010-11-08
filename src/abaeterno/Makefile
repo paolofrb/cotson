@@ -206,6 +206,8 @@ main/network_timing.o: ../common/lua.hpp ../common/units.h ../common/cast.h
 main/network_timing.o: ../common/uint64_t_hash.h ../common/parameters.h
 main/network_timing.o: ../common/param_factory.h ../common/options.h
 main/network_timing.o: lib/callme.h ../common/error.h lib/callbacks.h
+main/network_timing.o: main/abaeterno.h sampler/sampler.h hw_model/states.h
+main/network_timing.o: main/profiler.h lib/circbuf.h lib/hashmap.h
 main/profiler.o: lib/abaeterno_config.h lib/logger.h lib/selector.h
 main/profiler.o: main/profiler.h lib/circbuf.h lib/hashmap.h main/cotson.h
 main/profiler.o: ../common/metric.h hw_model/machine.h hw_model/cpu.h
@@ -814,12 +816,6 @@ sampler/random.o: ../common/lua.hpp ../common/units.h ../common/cast.h
 sampler/random.o: ../common/uint64_t_hash.h ../common/parameters.h
 sampler/random.o: ../common/param_factory.h ../common/options.h
 sampler/random.o: sampler/sampler.h hw_model/states.h
-sampler/sampler.o: lib/abaeterno_config.h sampler/sampler.h hw_model/states.h
-sampler/sampler.o: ../common/liboptions.h ../common/kill.h
-sampler/sampler.o: ../common/static_set.h ../common/lua_register.h
-sampler/sampler.o: ../common/lua.hpp ../common/units.h ../common/cast.h
-sampler/sampler.o: ../common/uint64_t_hash.h ../common/parameters.h
-sampler/sampler.o: ../common/param_factory.h ../common/options.h
 sampler/selective.o: lib/abaeterno_config.h main/abaeterno.h
 sampler/selective.o: ../common/libmetric.h ../common/metric.h
 sampler/selective.o: ../common/tagged_metric.h ../common/heartbeat.h

@@ -20,6 +20,7 @@
 #include "callme.h"
 #include "error.h"
 #include "callbacks.h"
+#include "abaeterno.h"
 
 #include <errno.h>
 #include <netdb.h>
@@ -277,30 +278,29 @@ inline void NetworkTiming::send_msg(const TimeStamp& msg)
 	nsync_out_++;
 }
 
-uint16_t NetworkTiming::gtcheck(const GlobalTime& gt, uint16_t mseq)
+void NetworkTiming::GT::check_med_seq(const GlobalTime &gt)
 {
     // check for out of sequence (missed sync packets)
-	uint16_t next_mseq = mseq + 1;
-    if (mseq && (gt.seqno() != next_mseq)) {
+	uint16_t next_med_seqno = med_seqno_ + 1;
+    if (med_seqno_ && (gt.seqno() != next_med_seqno)) {
         WARNING("Warning: missed sync packet",
-			" simtime " , gtime_.gt(),
+			" simtime " , gt.gt(),
 			" msgtime " , gt.gt(),
-			" prevseq " , mseq,
+			" prevseq " , med_seqno_,
 			" seq " , gt.seqno());
 	    // now what?
     }
-    return gt.seqno();
+    med_seqno_ = gt.seqno();
 }
 
 void NetworkTiming::global_time()
 {
 	// loop forever, listening to the multicast socket
-	double dtimeout = Option::get<double>("network.timeout",1.0);
+	double dtimeout = Option::get<double>("network.timeout",2.0);
 	int noadvance = Option::get<uint>("network.noadvance",100);
 	bool askfortime = Option::get<bool>("network.asktime",false);
 	uint32_t s  = static_cast<uint32_t>(dtimeout);
 	uint32_t ns = static_cast<uint32_t>((dtimeout-static_cast<double>(s))*1e9);
-	uint16_t med_seqno = 0;
 	int nstalled = 0;
 	fd_set rfd;
 	FD_ZERO(&rfd);
@@ -313,10 +313,12 @@ void NetworkTiming::global_time()
 	    if (nfd && FD_ISSET(sync_sock_,&r)) {
 	        GlobalTime gt(sync_sock_);
 			if (gt.valid()) {
+			    LOG("GOT GT: ",gt.gt(),gt.lat(),gt.seqno());
                 nsync_in_++;
-			    med_seqno = gtcheck(gt,med_seqno);
 				advance = gtime_.process(gt);
 			}
+			else
+			    LOG("GOT INVALID GT: ",gt.gt(),gt.lat(),gt.seqno());
 		}
 		else // no sync packets before timeout
 		    asktime("Sync timeout",askfortime);
@@ -377,6 +379,13 @@ void NetworkTiming::asktime(const char *s, bool message)
 	    send_msg(TimeStamp(TimingMessage::TimeQueryMsg,now,med_nodeid_,++seqno_));
 }
 
+void NetworkTiming::cpuid(uint64_t x,uint16_t y,uint16_t z)
+{
+	uint64_t now = simu_time();
+	cout << "Sending cpuid message at " << now << ": " << y << " " << z << " " << x << endl;
+	send_msg(TimeStamp(TimingMessage::CpuidMsg,x,y,z));
+}
+
 void NetworkTiming::warn(const string& s)
 {
 	int e = errno; (void)e; // avoid compiler warning 
@@ -386,7 +395,7 @@ void NetworkTiming::warn(const string& s)
 
 //=======  Global Time synchronization ========
 
-NetworkTiming::GT::GT():clust_gt(0),clust_lat(0),gtmutex(),end(false) { }
+NetworkTiming::GT::GT():clust_gt(0),clust_lat(0),gtmutex(),end(false),med_seqno_(0) { }
 
 inline uint64_t NetworkTiming::GT::gt()
 {
@@ -422,14 +431,23 @@ bool NetworkTiming::GT::process(const GlobalTime& gt)
     if (gt.is_terminate()) {
 	    cerr << "Received termination message" << endl;
 		terminate();
-		return true;
+		return true; // never gets here
 	}
-    else if (gt.gt() > clust_gt) { // filter out OoO messages
+	if (gt.is_cpuid()) {
+		uint64_t x = gt.gt();
+		uint16_t y = gt.lat();
+		uint16_t z = gt.seqno();
+	    cerr << "Received cpuid message: " << y << " " << z << " " << x << endl;
+		AbAeterno::get().network_cpuid(x,y,z);
+		return false; // no advance
+	}
+	check_med_seq(gt);
+	if (gt.gt() > clust_gt) { // filter out OoO messages
         clust_gt = gt.gt();
         clust_lat = gt.lat();
         new_gt.notify_one();
-		return true;
+		return true; // advance
     }
-	return false;
+	return false; // no advance
 }
 

@@ -48,8 +48,7 @@ ssize_t Base::recv(int fd)
     return ::read(fd,ptr_,sz_);
 }
 
-
-}
+} // namespace
 
 // TimeStamp messages
 TimeStamp::TimeStamp(const void* p)
@@ -61,10 +60,10 @@ TimeStamp::TimeStamp(const void* p)
 TimeStamp::TimeStamp(uint16_t t, uint64_t ts, uint32_t id, uint16_t sn)
     : Base(&data_,sizeof(Data)) 
 {
-    data_.type = htons(t); // TimeStampMsg, NodeStartMsg, NodeStopMsg, TerminateMsg
     data_.tstamp = ts;
     data_.nodeid = id;
     data_.seqno = sn;
+    data_.type = htons(t);
 }
 
 TimeStamp::TimeStamp(uint16_t fd)
@@ -77,6 +76,8 @@ TimeStamp::TimeStamp(uint16_t fd)
             case TimingMessage::NodeStartMsg:
             case TimingMessage::NodeStopMsg:
             case TimingMessage::TimeQueryMsg:
+		    case TimingMessage::CpuidMsg:
+		    case TimingMessage::TerminateMsg:
                 return;
             default:
                 break;
@@ -97,26 +98,34 @@ GlobalTime::GlobalTime(uint16_t fd)
     : Base(&data_,sizeof(Data)) 
 {
     ssize_t nb = ::read(fd,&data_,len());
-    if (nb == len() && ntohs(data_.type) == TimingMessage::GTimeMsg)
-        return;
-    data_.type = TimingMessage::UnknownMsg;
+    if (nb == len()) {
+        switch(ntohs(data_.type)) {
+		    case TimingMessage::GTimeMsg:
+		    case TimingMessage::CpuidMsg:
+		    case TimingMessage::TerminateMsg:
+                return;
+            default:
+                break;
+		}
+	}
+    data_.type = htons(TimingMessage::UnknownMsg);
 }
 
 GlobalTime::GlobalTime(uint64_t t0, uint32_t l, uint16_t sn)
     : Base(&data_,sizeof(Data)) 
 {
-    data_.type = htons(TimingMessage::GTimeMsg);
     data_.gt = t0;
     data_.lat = l;
     data_.seqno = sn;
+    data_.type = htons(TimingMessage::GTimeMsg);
 }
 
 // DataPort messages
 DataPort::DataPort(uint16_t p) 
     : Base(&data_,sizeof(Data)) 
 {
-    data_.type = htons(TimingMessage::PortRequestMsg);
-    data_.data_port = p;
     ::memset(&data_,0,12);
+    data_.data_port = p;
+    data_.type = htons(TimingMessage::PortRequestMsg);
 }
 

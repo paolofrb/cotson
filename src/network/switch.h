@@ -99,6 +99,9 @@ public:
 	// Termination
 	void send_terminate();
 
+	// Cpuid
+	void send_cpuid(uint64_t,uint16_t,uint16_t);
+
 	// Global time
 	inline uint64_t GT() const { return gt_; }
 	inline uint64_t nextGT() const { return nextgt_; }
