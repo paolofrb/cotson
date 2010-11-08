@@ -168,7 +168,7 @@ Timer1::Timer1(Parameters& p) : CpuTimer(&cycles,&commit_insn),
 	max_window_size(p.get<uint32_t>("max_window_size","128")),
 	pipe_stages(p.get<uint32_t>("pipe_stages","5")),
 	bpred_latency(p.get<uint32_t>("bpred_latency","0")),
-	history(p.has("history") ? p.get<uint32_t>("history") : 32768),
+	history(p.get<uint32_t>("history","32768",false)), // no track
 
 	// simulation state
 	bpred_delay(bpred_latency), bpred_activity(false), fetch_delay(0),

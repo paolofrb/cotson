@@ -91,8 +91,8 @@ AbAeterno::AbAeterno() :
     cycles(0),
     cyclesPerUsec(0),
     translated_insts(0),
-    tag_prefetch(Option::has("prefetch") && Option::get<bool>("prefetch")),
-    print_stats(Option::has("print_stats") && Option::get<bool>("print_stats"))
+    tag_prefetch(Option::get<bool>("prefetch",false)),
+    print_stats(Option::get<bool>("print_stats",false))
 {
     add("nSimulation",    stateCounter[SIMULATION]);
     add("nSimpleWarming", stateCounter[SIMPLE_WARMING]);

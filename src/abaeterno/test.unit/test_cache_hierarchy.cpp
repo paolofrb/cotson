@@ -188,7 +188,7 @@ BOOST_AUTO_TEST_CASE( test_moesi_states_with_bus )
  	Parameters pb;
 	pb.set("name",     "BUS");
 	pb.set("latency",  "10");
-	pb.set("bandwidth",  "4");
+	pb.set("bandwidth",  "1");
 	pb.set("protocol", "SIMPLE");
 	Interface* bus = new Bus<Memory::Protocol::SIMPLE>(pb);
 	

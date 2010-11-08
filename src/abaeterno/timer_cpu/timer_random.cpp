@@ -44,7 +44,7 @@ registerClass<CpuTimer,TimerRandom> timer_random_c("random");
 TimerRandom::TimerRandom(Parameters& p) : CpuTimer(&cycles,&instructions),
 	instructions(0),
 	cycles(0),
-	rng(p.has("seed") ? p.get<uint>("seed") : time(0)),
+	rng(p.has("seed")?p.get<uint>("seed"):time(0)),
 	ipc_range(p.get<double>("min_ipc","0.5"),p.get<double>("max_ipc","2.0")),
 	ipc_gen(rng,ipc_range)
 {

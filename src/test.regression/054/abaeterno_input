@@ -30,8 +30,8 @@ function build()
 	end
 
 	mem=Memory{ name="main", latency=150 } 
-	bus=Bus{ name="bus", protocol='MOESI', latency=25, bandwidth=4, next=mem } 
-	busT=Bus{ name="tlb_bus", protocol='MOESI', latency=25, bandwidth=4, next=mem }
+	bus=Bus{ name="bus", protocol='MOESI', latency=25, bandwidth=1, next=mem } 
+	busT=Bus{ name="tlb_bus", protocol='MOESI', latency=25, bandwidth=1, next=mem }
 
 	i=0
 	while i < cpus() do

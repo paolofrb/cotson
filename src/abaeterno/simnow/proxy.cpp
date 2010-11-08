@@ -475,9 +475,8 @@ void Proxy::ExternalEventTiming(EVENTTIMINGINFO* einfo)
 
 void Proxy::LoadOptions()
 {
-	sync_quantum_f = sync_quantum_s = Option::get<uint64_t>("mp_sync_quantum");
-	if(Option::has("mp_sync_quantum_sim"))
-	    sync_quantum_s = Option::get<uint64_t>("mp_sync_quantum_sim");
+	sync_quantum_f = Option::get<uint64_t>("mp_sync_quantum");
+	sync_quantum_s = Option::get<uint64_t>("mp_sync_quantum_sim",sync_quantum_f);
     time_feedback=Option::get<bool>("time_feedback");
 }
 

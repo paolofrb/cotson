@@ -171,7 +171,7 @@ BOOST_AUTO_TEST_CASE( test_no_hit_on_emtpy_w_bus )
  	Parameters pb;
 	pb.set("name",     "BUS"+modestr);
 	pb.set("latency",  "10");
-	pb.set("bandwidth",  "16");
+	pb.set("bandwidth",  "1");
 	pb.set("protocol", "SIMPLE");
 	Interface* bus = new Bus<Memory::Protocol::SIMPLE>(pb);
 	c.setNext(Interface::Shared(bus));

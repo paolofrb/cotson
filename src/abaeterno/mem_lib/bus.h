@@ -67,17 +67,10 @@ class Bus : public Interface {
 template <typename Protocol>
 Bus<Protocol>::Bus(const Parameters& p): 
 	protocol(), 
-	infinite_bandwidth(false),
-	bandwidth(1),
+	infinite_bandwidth(p.get<bool>("infinite_bandwidth","false",false)), // no track
+	bandwidth(p.get<uint32_t>("bandwidth","1",false)), // no track
 	latency(p.get<uint32_t>("latency"))
 {
-		if (p.has("infinite_bandwidth")){ 
-			LOG(name,"bus has infinite_bandwidth, no queue model");
-			infinite_bandwidth = p.get<bool>("infinite_bandwidth");
-		}
-		if (p.has("bandwidth"))
-			p.get<uint32_t>("bandwidth");
-				
 		name = p.get<std::string>("name");
 		add("bw",bw_);
 		add("update",update_);

@@ -39,7 +39,7 @@ public:
 
 	void start();
 	void stop();
-    void asktime(const char *);
+    void asktime(const char*, bool);
     void terminate();
 private:
 

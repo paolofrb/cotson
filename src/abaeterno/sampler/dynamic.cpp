@@ -80,10 +80,10 @@ Dynamic::Dynamic(Parameters&p) :
 	simulation   (p.get<uint64_t>("simulation")),
 	sensitivity  (p.get<double>("sensitivity") / 100.0),
 	maxfunctional(p.get<uint32_t>("maxfunctional")),
-	windowsize   (p.has("window") ? p.get<uint32_t>("window") : 10),
+	windowsize   (p.get<uint32_t>("window","10",false)), // no track
 	variables    (p.getV<string>("variable")),
-	flatten      (p.has("flatten") ? p.get<bool>("flatten") : false),
-	sigma        (p.has("sigma") ? p.get<double>("sigma") : 1.0),
+	flatten      (p.get<bool>("flatten","false",false)), // no track
+	sigma        (p.get<double>("sigma","1.0",false)), // no track
 	nfunctional(0)
 {
     firstfunctional =   (functional > simulation+warming)

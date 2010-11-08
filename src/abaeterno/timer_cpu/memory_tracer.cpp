@@ -74,8 +74,8 @@ MemoryTracer::MemoryTracer(Parameters& p) : CpuTimer(&cycles,&instructions),
 	cache_ld(0),cache_st(0),flush(0),
 	mem_rd(0),mem_wr(0),access(0),
 	shared(p.get<bool>("shared")),
-	binary(p.has("binary")?p.get<bool>("binary"):false),
-	code(p.has("code")?p.get<bool>("code"):false)
+	binary(p.get<bool>("binary","false",false)), // no track
+	code(p.get<bool>("code","false",false)) // no track
 {
 	add("instructions",instructions);
 	add("cycles",cycles);

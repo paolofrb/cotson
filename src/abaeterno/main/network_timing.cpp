@@ -42,10 +42,11 @@ option o8("network.multicast_port", "multicast port for cluster messages");
 option o9("network.timeout", "safety timeout for global time messages ");
 option o10("network.noadvance", "no-advance interval threshold");
 option o11("network.log", "log interval for networking stats");
+option o12("network.asktime", "ask time when out of sync");
 
 scoped_ptr<NetworkTiming> unique_network_timing;
 
-void network_timing_init() { 
+void network_timing_init() {
 	if(Option::has("network.quantum_max")) 
 		unique_network_timing.reset(new NetworkTiming()); 
 }
@@ -96,19 +97,15 @@ bool NetworkTiming::Terminated() {
 
 
 NetworkTiming::NetworkTiming() :
-	log_(Option::has("network.log")?Option::get<uint>("network.log"):0),
+	log_(Option::get<uint>("network.log",0)),
 	net_delay_(0), last_ts_(0),
 	net_latency_(Option::get<int>("network.latency")), // us
 	med_latency_(Option::get<int>("network.mediator_latency")), // us
 	med_host_(Option::get<string>("network.host")),
 	med_port_(Option::get<uint>("network.control_port")),
-	sync_port_(  Option::has("network.multicast_port") 
-	           ? Option::get<uint>("network.multicast_port")
-			   : 0),
+	sync_port_(Option::get<uint>("network.multicast_port",0)),
 	med_nodeid_(Option::get<uint32_t>("network.mediator_nodeid")),
-	med_quantum_(  Option::has("network.quantum_max")
-	             ? Option::get<uint>("network.quantum_max")
-				 : 0), 
+	med_quantum_(Option::get<uint>("network.quantum_max", 0)),
 	med_sock_(-1), sync_sock_(-1), med_ok_(false), t0_(0), 
 	sync_delay_(0), sync_no_(0), nsync_in_(0), nsync_out_(0),
     gtime_(), seqno_(0)
@@ -298,12 +295,9 @@ uint16_t NetworkTiming::gtcheck(const GlobalTime& gt, uint16_t mseq)
 void NetworkTiming::global_time()
 {
 	// loop forever, listening to the multicast socket
-	double dtimeout =    Option::has("network.timeout")
-		               ? Option::get<double>("network.timeout")
-		               : 1.0;
-	int noadvance =   Option::has("network.noadvance")
-	                ? Option::get<uint>("network.noadvance")
-			        : 100;
+	double dtimeout = Option::get<double>("network.timeout",1.0);
+	int noadvance = Option::get<uint>("network.noadvance",100);
+	bool askfortime = Option::get<bool>("network.asktime",false);
 	uint32_t s  = static_cast<uint32_t>(dtimeout);
 	uint32_t ns = static_cast<uint32_t>((dtimeout-static_cast<double>(s))*1e9);
 	uint16_t med_seqno = 0;
@@ -325,12 +319,12 @@ void NetworkTiming::global_time()
 			}
 		}
 		else // no sync packets before timeout
-		    asktime("Sync timeout");
+		    asktime("Sync timeout",askfortime);
 		
 		// check for stall condition
 		nstalled = advance ? 0 : nstalled + 1;
 	    if (nstalled == noadvance) {
-	        asktime("No progress");
+	        asktime("No progress",askfortime);
 	        nstalled = 0;
 	    }
 	}
@@ -375,11 +369,12 @@ void NetworkTiming::terminate()
 	GT().terminate();
 }
 
-void NetworkTiming::asktime(const char *s)
+void NetworkTiming::asktime(const char *s, bool message)
 {
 	uint64_t now = simu_time();
 	cout << "Warning: " << s << " now=" << now << " gt=" << gtime_.gt() << endl;
-	send_msg(TimeStamp(TimingMessage::TimeQueryMsg,now,med_nodeid_,++seqno_));
+	if (message)
+	    send_msg(TimeStamp(TimingMessage::TimeQueryMsg,now,med_nodeid_,++seqno_));
 }
 
 void NetworkTiming::warn(const string& s)

@@ -37,10 +37,10 @@ double Predictor::predict(double x)
 Predictor::Predictor(uint64_t id):
     observations(4,1.0),
     predictions(4,1.0),
-    a0(Option::has("tpredictor.a0") ? Option::get<double>("tpredictor.a0") : 1.0),
-    a1(Option::has("tpredictor.a1") ? Option::get<double>("tpredictor.a1") : 0.0),
-    m0(Option::has("tpredictor.m0") ? Option::get<double>("tpredictor.m0") : 0.0),
-    m1(Option::has("tpredictor.m1") ? Option::get<double>("tpredictor.m1") : 0.0),
+    a0(Option::get<double>("tpredictor.a0",1.0)),
+    a1(Option::get<double>("tpredictor.a1",0.0)),
+    m0(Option::get<double>("tpredictor.m0",0.0)),
+    m1(Option::get<double>("tpredictor.m1",0.0)),
 	devid(id)
 { }
 

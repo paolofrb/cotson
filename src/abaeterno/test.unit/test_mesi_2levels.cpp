@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE( test_mesi_states_with_bus_2levels_WB_ )
  	Parameters pb;
 	pb.set("name",     "BUS");
 	pb.set("latency",  "10");
-	pb.set("bandwidth",  "4");
+	pb.set("bandwidth",  "1");
 	pb.set("protocol", "MESI");
 	Interface* bus = new Bus<Memory::Protocol::MESI>(pb);
 	
@@ -398,7 +398,7 @@ BOOST_AUTO_TEST_CASE( test_mesi_states_with_bus_2levels_WT_ )
  	Parameters pb;
 	pb.set("name",     "BUS");
 	pb.set("latency",  "10");
-	pb.set("bandwidth",  "4");
+	pb.set("bandwidth",  "1");
 	pb.set("protocol", "MESI");
 	Interface* bus = new Bus<Memory::Protocol::MESI>(pb);
 	

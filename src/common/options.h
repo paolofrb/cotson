@@ -84,6 +84,7 @@ public:
 	
 	static bool has(const char*name);
 	template<typename T> static T get(const char*name);
+	template<typename T> static T get(const char*name,const T& defval);
 	template<typename T> static std::vector<T> getV(const char*name);
 	static const std::vector<std::string>& unknown() { return unknown_; }
 	static const std::map<std::string,std::string>& requested() { return requested_; }
@@ -138,6 +139,12 @@ T Option::get(const char*name)
     const std::string& v=opt->value();
     track(name,v);
     return cast<T>(v,name);
+}
+
+template<typename T>
+T Option::get(const char*name, const T& defval)
+{
+    return has(name) ? get<T>(name): defval;
 }
 
 template<typename T>

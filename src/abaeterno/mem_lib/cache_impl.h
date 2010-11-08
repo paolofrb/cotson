@@ -91,9 +91,9 @@ CacheImpl<Storage,Timer>::CacheImpl(const Parameters& p):
 	storage(p),
 	timer(p),
 	cache(storage.cache),
-	max_updates(p.has("max_updates")?p.get<uint32_t>("max_updates"):-1),
-	max_invalidates(p.has("max_invalidations")?p.get<uint32_t>("max_invalidations"):-1),
-	events(p.has("max_events")?p.get<uint32_t>("max_events"):20000),
+	max_updates(p.get<uint32_t>("max_updates","-1",false)), // no track
+	max_invalidates(p.get<uint32_t>("max_invalidations","-1",false)), // no track
+	events(p.get<uint32_t>("max_events","20000",false)), // no track
 	writethrough(p.get<std::string>("write_policy")=="WT"),
 	writeallocate(p.get<bool>("write_allocate",writethrough?"false":"true")),
 	simulating(true)

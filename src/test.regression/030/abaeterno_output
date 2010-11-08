@@ -1,7 +1,7 @@
 Input values: 
 
 allow_unknown                                               true
-bus.bandwidth                                               4
+bus.bandwidth                                               1
 bus.latency                                                 25
 bus.next                                                    main
 bus.protocol                                                MOESI
@@ -192,7 +192,7 @@ sampler.type                                                smarts
 sampler.warming                                             2M
 slirp                                                       false
 time_feedback                                               true
-tlb_bus.bandwidth                                           4
+tlb_bus.bandwidth                                           1
 tlb_bus.latency                                             25
 tlb_bus.next                                                main
 tlb_bus.protocol                                            MOESI
