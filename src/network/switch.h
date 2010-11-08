@@ -107,6 +107,7 @@ public:
 	inline uint64_t nextGT() const { return nextgt_; }
 	void timeout();
 	void send_sync(bool); // Send a sync back to simulation
+        bool sync_started() const { return sync_started_; }
 
 private:
 	inline void GT_advance();
