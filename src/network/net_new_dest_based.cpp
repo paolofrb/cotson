@@ -70,11 +70,7 @@ NewDestBased::NewDestBased(Parameters &p) : latency(0),quantum(0),mac_prefix(0xF
     unknown_mac_lat = p.get<uint64_t>("unknown_mac_latency");
     broadcast_lat = p.get<uint64_t>("broadcast_latency");
     switch_latency = p.get<double>("switch_latency");
-	if (p.has("switch_bandwidth"))
-	    switch_bandwidth = p.get<double>("switch_bandwidth");
-	else
-		switch_bandwidth = 0;
-		
+	switch_bandwidth = p.get<double>("switch_bandwidth","0.0",false);
 	add("packets", packets);
 	add("bytes", bytes);
 	

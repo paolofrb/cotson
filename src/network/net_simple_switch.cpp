@@ -33,8 +33,6 @@ public:
     uint64_t get_delay();
     uint32_t register_lat() { return 0; }
 
-    enum {DEFAULT_MAX_BANDWITH = 80000, DEFAULT_LATENCY = 0, DEFAULT_CFACTOR = 8};
-
 protected:
 
     uint64_t max_bandwith_;
@@ -56,20 +54,13 @@ namespace simple_switch {
 };
 
 SimpleSwitch::SimpleSwitch(Parameters &p) :
-        max_bandwith_(DEFAULT_MAX_BANDWITH),
-        latency_(DEFAULT_LATENCY),
-        cfactor_(DEFAULT_CFACTOR),
+        max_bandwith_(p.get<int>("max_bandwith","80000",false)),
+        latency_(p.get<int>("latency","0",false)),
+        cfactor_(p.get<int>("cfactor","8",false)),
         quantum_(0),
         messages_(0),
         bytes_(0)
-{ 
-    if (p.has("max_bandwith"))
-        max_bandwith_ = p.get<int>("max_bandwith");
-    if (p.has("latency"))
-        latency_ = p.get<int>("latency");
-    if (p.has("cfactor"))
-        cfactor_ = p.get<int>("cfactor");
-
+{
 	if (verbose_ > 0) 
 	{
         cout << "latency=" << latency_ << endl;
