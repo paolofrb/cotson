@@ -86,6 +86,7 @@ Switch::Switch(
     quantum_ = qmax_;
     
     beat_interval_ = Option::get<uint64_t>("heartbeat_interval");
+    throttle_usec_ = Option::get<int>("throttle");
     beat_gt_ = 0;
     HeartBeat::add(*this);
     add("nanos",nanos_);
@@ -620,26 +621,20 @@ void Switch::dump_nodes()
     cout << "------------------------------------------------" << endl;
 }
 
-#define MAXBW (2000.0/8.0) // 2Gb/s for all nodes
 void Switch::throttle(uint64_t b)
 {
-// TODO: clean up the UDB throttler
-#if 0
-    static uint64_t db = 0;
+    if (throttle_usec_ <=0)
+        return;
     static uint64_t t0 = 0;
-
-    uint64_t dt = Stats::get().elapsed()-t0;
-    db += b;
-
-    double tput = static_cast<double>(db)/static_cast<double>(dt);
-    if (tput > MAXBW/static_cast<double>(numnodes_)) {
-        cout << "Throttle: db=" << db << " thruput=" << tput << endl;
-        timespec ts = {0,1000}; // 1us
+    int dt = Stats::get().elapsed()-t0;
+    timespec ts = {0,0};
+    if (dt < throttle_usec_) {
+        uint64_t tt = throttle_usec_ - dt;
+        LOG1("Transmit pacing ",tt);
+        ts.tv_nsec = 1000 * tt;
         ::nanosleep(&ts,0);
-        t0 = Stats::get().elapsed();
-        db = 0;
     }
-#endif
+    t0 = Stats::get().elapsed();
 }
 
 #include <fstream>

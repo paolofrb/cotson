@@ -45,9 +45,9 @@ class Switch : public metric
 {
 public:
     Switch(DataPacketProcessor*, Scheduler*, 
-	       uint32_t, uint16_t, uint8_t, const char*, 
-		   double, double, double, double,
-		   bool, const char*, int);
+           uint32_t, uint16_t, uint8_t, const char*, 
+           double, double, double, double,
+           bool, const char*, int);
     ~Switch();
 
     // Registers a new node with mac and address:port
@@ -69,7 +69,7 @@ public:
     void really_send(const Node::Ptr, const Packet&);
 
     // UDP transmit pacing (throttle)
-	void throttle(uint64_t);
+    void throttle(uint64_t);
 
     // A node stopped
     bool stop_node(Node&);
@@ -89,28 +89,28 @@ public:
     // Register a timing model in the switch
     inline void register_timing_model(TimingModel* timing) 
     { 
-    	timing_ = timing; 
-    	add("timer.", *timing_);
+        timing_ = timing; 
+        add("timer.", *timing_);
     }
 
     // Get the timing model
     TimingModel* get_timing() { return timing_; }
 
-	// Termination
-	void send_terminate();
+    // Termination
+    void send_terminate();
 
-	// Cpuid
-	void send_cpuid(uint64_t,uint16_t,uint16_t);
+    // Cpuid
+    void send_cpuid(uint64_t,uint16_t,uint16_t);
 
-	// Global time
-	inline uint64_t GT() const { return gt_; }
-	inline uint64_t nextGT() const { return nextgt_; }
-	void timeout();
-	void send_sync(bool); // Send a sync back to simulation
+    // Global time
+    inline uint64_t GT() const { return gt_; }
+    inline uint64_t nextGT() const { return nextgt_; }
+    void timeout();
+    void send_sync(bool); // Send a sync back to simulation
         bool sync_started() const { return sync_started_; }
 
 private:
-	inline void GT_advance();
+    inline void GT_advance();
 
     // Send a packet to a node (enqueue if needed)
     void send(const Node::Ptr, const Packet&, uint64_t);
@@ -127,26 +127,26 @@ private:
     // Get the node with that port
     inline Node::Ptr find_node(const sockaddr_in&);
 
-	// Get the node with that id
+    // Get the node with that id
     inline Node::Ptr find_node(uint32_t);
 
-	// Get the node with that id
+    // Get the node with that id
     void erase_dup_nodes(const sockaddr_in&);
 
-	// Read quantum dynamically from file
-	inline bool quantum_from_file();
+    // Read quantum dynamically from file
+    inline bool quantum_from_file();
 
-	void die(const std::string&);
-	bool simtime_advance(uint64_t);
+    void die(const std::string&);
+    bool simtime_advance(uint64_t);
     void sync_cluster(uint64_t);
-	uint64_t compute_quantum(uint64_t,uint64_t);
+    uint64_t compute_quantum(uint64_t,uint64_t);
 
-	void dump_nodes();
+    void dump_nodes();
 
-	// The set of all nodes
+    // The set of all nodes
     typedef std::set<Node::Ptr> NodeSet;
-	NodeSet nodes_;
-	int numnodes_;
+    NodeSet nodes_;
+    int numnodes_;
 
     // The map to translate from macaddress to nodes 
     typedef std::map <MacAddress,Node::Ptr> NodesMacMap;
@@ -159,32 +159,33 @@ private:
     Scheduler* scheduler_;
 
     bool slirp_on_;
-	bool vde_on_;
+    bool vde_on_;
     uint32_t max_messages_;
     uint32_t mac_base_;
 
     // The timing model.
     TimingModel* timing_;
-	int sync_socket_;
-	sockaddr_in sync_addr_;
-	uint64_t last_sync_;
-	uint64_t last_qtime_;
-	uint64_t last_qpacks_;
-	double quantum_;
-	const double qmin_;
-	const double qmax_;
-	const double qup_;
-	const double qdown_;
-	bool force_queue_;
-	// Time data
-	uint64_t gt_, nextgt_, tmin_, tmax_, nanos_;
-	uint64_t beat_gt_, beat_interval_;
-	// Compressed tracefile
-	DumpGzip* const dump_; 
-	boost::mutex nmutex_;
-	uint16_t seqno_;
-	bool sync_started_;
+    int sync_socket_;
+    sockaddr_in sync_addr_;
+    uint64_t last_sync_;
+    uint64_t last_qtime_;
+    uint64_t last_qpacks_;
+    double quantum_;
+    const double qmin_;
+    const double qmax_;
+    const double qup_;
+    const double qdown_;
+    bool force_queue_;
+    // Time data
+    uint64_t gt_, nextgt_, tmin_, tmax_, nanos_;
+    uint64_t beat_gt_, beat_interval_;
+    // Compressed tracefile
+    DumpGzip* const dump_; 
+    boost::mutex nmutex_;
+    uint16_t seqno_;
+    bool sync_started_;
     int verbose_;
+    int throttle_usec_;
 };
 
 #endif /*SWICTH_H_*/

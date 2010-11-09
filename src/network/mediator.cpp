@@ -59,6 +59,7 @@ namespace
     option  o23("heartbeat_interval",     "1000", "packets between db logs");
     option  o24("network.mediator_nodeid",   "0", "cluster node id (for db logs)");
     option  o25("sync_heartbeat",         "1000", "sync heartbeat (ms)");
+    option  o26("throttle",                 "10", "Transmit pacing (min delay) between udp sendto (us)");
 }
 
 namespace 
