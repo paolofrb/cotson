@@ -92,6 +92,8 @@ if [[ $force != 1 ]]; then
     fi
 fi
 echo "SimNow version is $simnow_ver"
+/bin/rm -f $root/simnow
+ln -fs $simnow_dir $root/simnow
 
 ########################################################################
 dist=`lsb_release -i -s`
