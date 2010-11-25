@@ -20,14 +20,18 @@ require 'scheduler'
 require 'control_script'
 require 'ftools'
 
+
 node_sandbox=[]
 med_sandbox=nil
+clean_sandbox=false
 output=[]
 control_script=nil
 
 def sbname(opts,t)
 	return File.join(opts[:tmpdir],opts[:runid]+"-#{$$}#{t}")
 end
+
+trap("INT") { raise CotsonError.new(:CtrlC); }
 
 begin
   if ARGV.size == 0 then
@@ -45,9 +49,10 @@ begin
       :abaeterno_so, :abaeterno_so_link,
       :clean_sandbox, :screen,
       :copy_files, :copy_files_prefix
+    clean_sandbox=opts[:clean_sandbox]
 
     sb=Sandbox.new(lua_defs,opts,sbname(opts,''))
-    node_sandbox.push sb
+    node_sandbox.push sb 
     sb.install :abaeterno_in, :simnow_pre, :simnow_dir, :abaeterno_so, 
         sb.run(opts[:one_node_script])
 
@@ -57,6 +62,7 @@ begin
       :clean_sandbox,
       :subscribe_result,
       :copy_files, :copy_files_prefix
+    clean_sandbox=opts[:clean_sandbox]
 
     if opts.scheduler?
       scheduler=SchedulerFactory.create_scheduler(lua_defs)
@@ -159,7 +165,6 @@ begin
       debug "stopping node" 
       x.kill  
     end
-
     debug "stopping mediator" 
     med_sandbox.kill 
 
@@ -185,9 +190,15 @@ begin
 rescue Exception => e
   finish e, :med_sandbox => med_sandbox, :node_sandbox => node_sandbox, :output => output
 ensure
-  debug "cleaning sandboxes" 
-  node_sandbox.each { |x| x.clean }
-  med_sandbox.clean if med_sandbox
-  control_script.destroy if control_script
+  if clean_sandbox then
+    debug "cleaning sandboxes" 
+    node_sandbox.each { |x| x.clean }
+    med_sandbox.clean if med_sandbox
+    control_script.destroy if control_script
+  else
+    debug "killing sandboxes" 
+    node_sandbox.each { |x| x.kill }
+    med_sandbox.kill if med_sandbox
+  end
 end
 

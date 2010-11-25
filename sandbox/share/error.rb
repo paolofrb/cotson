@@ -151,6 +151,7 @@ class ErrorMessage
     :SimnowCommandsNotDeclared => {:message => "[[simnow.commands]] function was not declared in COTSon simulation configuration lua file", :solution => "Check COTSon documentation and create the simnow.commands function in your lua configuration files with the necessary options.\nTo reproduce the error with lua execute '{{lua}} {{script}} {{luainput}}'." },
     :UserScriptNotFound => {:message => "User script referenced by [[execute]] function call was not found or the [[execute]] function is not being called", :solution => "Check if [[execute]] function is called inside of [[simnow.commands]] and if the referenced script (parameter) exists in the current directory.\nTo reproduce the error with lua execute '{{lua}} {{script}} {{luainput}}'." },
     :VNCTimeOut => {:message => "The startup of a node got frozen because it was not possible to initialize the VNC server using the display {{display}} for sandbox {{sandbox}}.\nThe command used was:'{{command}}'", :solution => "It is very likely that you have reached the maximum amount of VNC servers that can be run simultaneously.\nTo check the problem cause run the command '{{command}}'.\nYou can solve this problem by checking if the running VNC servers are necessary and killing the ones that are not or by increasing the amount of VNC servers that can be run simultaneously.\nThe VNC program being used by COTSon is {{program}}" },
+	:CtrlC => {:message => "Got Ctrl-C", :solution => "None (you pressed ctrl-c!)" },
     }
 end
 
@@ -266,6 +267,9 @@ class CotsonError < StandardError
       when :StartVNC
         return :DisplayNotAvalilabe if @info[:display] == nil
         return :VNCTimeOut if @info[:wait] >= @info[:timeout]
+
+      when :CtrlC
+        return :CtrlC
         
     end
     return nil
