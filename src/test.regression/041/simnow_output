@@ -1,5 +1,5 @@
 Loading module abaeterno.so.
-Using image path: "/home/frb/h2/OPENSOURCE/cotson/data"
+Using image path: "/home/frb/h2/isca11/cotson/data"
 Known Device: Deerhound RevB QuadCore Socket L1
 Known Device: Intel(R) Pro/1000 MT/PT Desktop Network Adapter
 Known Device: USB JumpDrive
@@ -31,11 +31,12 @@ Known Device: Winbond W83627HF SIO
 Known Device: Machine
 Known Device: Matrox(R) MGA-G4x0 Graphics Adapter
 Known Device: quadcore
+Known Device: TFMem
 Known Device: Unnamed Group
 Using library path: "./libs"
 
-1 exec> open ../data/node.bsd
-Opening "../data/node.bsd"
+1 exec> open /home/frb/h2/isca11/cotson/data/1p.bsd
+Opening "/home/frb/h2/isca11/cotson/data/1p.bsd"
 created device Machine
 Instructions per Microsecond: 3200
 CPU Model Name: Opteron
@@ -70,9 +71,9 @@ Could allocate map memory
 info: creating device #16 "Intel(R) Pro/1000 MT/PT Desktop Network Adapter"
 BSD Load completed!
 
-1 exec> ide:0.image master ../data/node.hdd
-ATA: Image [../data/node.hdd] does not have an ID field.
-MASTER drive Image file is now ../data/node.hdd
+1 exec> ide:0.image master /home/frb/h2/isca11/cotson/data/karmic64.img
+ATA: Image [/home/frb/h2/isca11/cotson/data/karmic64.img] does not have an ID field.
+MASTER drive Image file is now /home/frb/h2/isca11/cotson/data/karmic64.img
 
 1 exec> ide:0.journal master on
 Journaling was already enabled
@@ -143,36 +144,36 @@ Journaling was already enabled
 
 1 exec> go
 Hybrid flash map with LRU strategy.
-TIME=0.017813 ms IPC ( 0.0762128 )
-TIME=0.049064 ms IPC ( 0.152893 )
-TIME=0.080315 ms IPC ( 0.715544 )
-TIME=0.111566 ms IPC ( 0.267688 )
-TIME=0.142817 ms IPC ( 0.405029 )
-TIME=0.174068 ms IPC ( 0.545859 )
-TIME=0.205319 ms IPC ( 0.481115 )
-TIME=0.23657 ms IPC ( 0.363951 )
-TIME=0.267821 ms IPC ( 0.419054 )
-TIME=0.299072 ms IPC ( 0.539455 )
-TIME=0.330323 ms IPC ( 0.496642 )
-TIME=0.361574 ms IPC ( 0.378738 )
-TIME=0.392825 ms IPC ( 0.561219 )
-TIME=0.424076 ms IPC ( 0.565741 )
-TIME=0.455327 ms IPC ( 0.502641 )
-TIME=0.486578 ms IPC ( 0.516951 )
-TIME=0.517829 ms IPC ( 0.461081 )
-TIME=0.54908 ms IPC ( 0.53077 )
-TIME=0.580331 ms IPC ( 0.521068 )
-TIME=0.611582 ms IPC ( 0.461641 )
-TIME=0.642833 ms IPC ( 0.382532 )
-TIME=0.674084 ms IPC ( 0.361417 )
-TIME=0.705335 ms IPC ( 0.658523 )
-TIME=0.736586 ms IPC ( 0.446265 )
-TIME=0.767837 ms IPC ( 0.42681 )
-TIME=0.799088 ms IPC ( 0.446595 )
-TIME=0.830339 ms IPC ( 0.471685 )
-TIME=0.86159 ms IPC ( 0.491701 )
-TIME=0.892841 ms IPC ( 0.502183 )
-TIME=0.924092 ms IPC ( 0.214727 )
-TIME=0.955343 ms IPC ( 0.0582681 )
-TIME=0.986594 ms IPC ( 1 )
+TIME=0.017813 ms IPC ( 0.073969 )
+TIME=0.049064 ms IPC ( 0.167036 )
+TIME=0.080315 ms IPC ( 0.793894 )
+TIME=0.111566 ms IPC ( 0.218316 )
+TIME=0.142817 ms IPC ( 0.448288 )
+TIME=0.174068 ms IPC ( 0.504698 )
+TIME=0.205319 ms IPC ( 0.428956 )
+TIME=0.23657 ms IPC ( 0.619778 )
+TIME=0.267821 ms IPC ( 0.406437 )
+TIME=0.299072 ms IPC ( 0.597194 )
+TIME=0.330323 ms IPC ( 0.34644 )
+TIME=0.361574 ms IPC ( 0.59304 )
+TIME=0.392825 ms IPC ( 0.532173 )
+TIME=0.424076 ms IPC ( 0.401242 )
+TIME=0.455327 ms IPC ( 0.552139 )
+TIME=0.486578 ms IPC ( 0.331666 )
+TIME=0.517829 ms IPC ( 0.60029 )
+TIME=0.54908 ms IPC ( 0.515024 )
+TIME=0.580331 ms IPC ( 0.315602 )
+TIME=0.611582 ms IPC ( 0.564064 )
+TIME=0.642833 ms IPC ( 0.516046 )
+TIME=0.674084 ms IPC ( 0.357175 )
+TIME=0.705335 ms IPC ( 0.520322 )
+TIME=0.736586 ms IPC ( 0.422074 )
+TIME=0.767837 ms IPC ( 0.518555 )
+TIME=0.799088 ms IPC ( 0.703644 )
+TIME=0.830339 ms IPC ( 0.762421 )
+TIME=0.86159 ms IPC ( 0.782972 )
+TIME=0.892841 ms IPC ( 0.778887 )
+TIME=0.924092 ms IPC ( 0.786058 )
+TIME=0.955343 ms IPC ( 0.788056 )
+TIME=0.986594 ms IPC ( 0.780099 )
 MAX NANOS: 1000032

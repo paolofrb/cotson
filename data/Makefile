@@ -5,13 +5,16 @@ include ../src/Make.conf
 DIST=karmic
 HDD=$(DIST)64.img
 
-build: 1p.bsd 4p.bsd $(HDD)
+RBSDS=$(shell ls *-reset.bsd)
+BSDS=$(patsubst %-reset.bsd,%.bsd,$(RBSDS))
+
+build: $(BSDS) $(HDD)
 
 clean:
-	$(RM) *-boot $(HDD)
+	$(RM) $(BSDS) *-boot $(HDD)
 
 distclean: clean
-	$(RM) 1p.bsd 4p.bsd $(DIST) $(HDD)
+	$(RM) $(DIST) $(HDD)
 
 $(HDD):
 	./vmbuild $(DIST) $(HDD)

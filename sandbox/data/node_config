@@ -42,6 +42,10 @@ $netscript stop > /dev/null 2>&1
 /sbin/ifconfig eth0 down
 pkill -9 dhclient3  ## just in case
 
+# modprobe -r e1000
+# modprobe e1000 TxIntDelay=0 RxIntDelay=0 InterruptThrottleRate=3 
+# dmesg | tail -n 80
+
 log "  generating /etc/network/interfaces"
 cat > /etc/network/interfaces<<EOF
 auto lo

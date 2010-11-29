@@ -161,7 +161,7 @@ cpu0.timer.instructions                                     3649
 cpu0.timer.memory_loads                                     992
 cpu0.timer.memory_stores                                    678
 cpu0.trace_cache_size                                       0
-cpu0.valid_translation_bytes                                423013
+cpu0.valid_translation_bytes                                423020
 cpu0.write_mmios                                            0
 cpu0.write_pios                                             2
 cycles                                                      40000
