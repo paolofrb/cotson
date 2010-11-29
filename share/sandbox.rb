@@ -218,7 +218,12 @@ class Sandbox < Location
   end
 
   def kill
-    run_output("kill")
+    begin 
+      i,o=run_output("kill")
+      return i==0
+    rescue Exception=> e
+      return false
+    end
   end
 
   def status
