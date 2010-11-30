@@ -11,10 +11,10 @@ BSDS=$(patsubst %-reset.bsd,%.bsd,$(RBSDS))
 build: $(BSDS) $(HDD)
 
 clean:
-	$(RM) $(BSDS) *-boot $(HDD)
+	$(RM) $(BSDS) *-boot
 
 distclean: clean
-	$(RM) $(DIST) $(HDD)
+	$(RM) $(HDD)
 
 $(HDD):
 	./vmbuild $(DIST) $(HDD)
@@ -26,7 +26,7 @@ lzma: $(HDD)
 
 %.bsd: %-reset.bsd $(HDD)
 	if [[ -f tf.rom && ! -f $(SIMNOW_DIR)/Images/tf.rom ]]; then \
-	    cp tf.rom $(SIMNOW_DIR)/Images; \
+	    $(CP) tf.rom $(SIMNOW_DIR)/Images; \
 	fi; \
 	./initbsd $(SIMNOW_DIR) $*; \
 	echo "#### Note: don't worry if you see a 'segmentation fault' just above"
