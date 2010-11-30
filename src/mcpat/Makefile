@@ -4,7 +4,8 @@ MCPAT = mcpat0.8_r274
 include ../Make.conf
 
 mcpat: $(MCPAT)
-	$(MAKE) -C $(MCPAT); $(CP) $(MCPAT)/mcpat .
+	$(MAKE) -C $(MCPAT) OPT="-O3 -msse2 -mfpmath=sse -DNTHREADS=4 -Icacti" opt; \
+	$(CP) $(MCPAT)/mcpat .
 
 $(MCPAT): $(MCPAT).tar.gz
 	$(RM) $(MCPAT); tar xfz $(MCPAT).tar.gz
@@ -17,10 +18,11 @@ install: mcpat cotson2mcpat
 	$(CP) cotson2mcpat $(PREFIX)/sbin
 
 clean:
-	$(RM) mcpat mcpat.db mcpat.xml mcpat.xml.txt testmcpat*
+	$(RM) mcpat mcpat.db mcpat.xml mcpat.xml.txt testmcpat*; \
+	$(MAKE) -C $(MCPAT) clean
 
 distclean: clean
-	$(RM) $(MCPAT).tar.gz $(MCPAT) 
+	$(RM) $(MCPAT).tar.gz $(MCPAT)
 
 test: mcpat cotson2mcpat
 	$(RM) mcpat.db mcpat.xml; \

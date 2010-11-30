@@ -2,7 +2,7 @@ HERE = $(shell pwd)
 subdirs = libluabind slirp disksim distorm common abaeterno network tools examples mcpat
 
 ## toplevel tools
-all: build_abaeterno build_network build_tools build_examples
+all: build_abaeterno build_network build_tools build_examples build_mcpat
 
 ## libraries
 libs=build_libluabind build_slirp build_disksim build_distorm build_common
@@ -67,6 +67,9 @@ build_network: $(libs)
 build_common: build_libluabind
 
 build_examples: build_abaeterno
+
+build_mcpat:
+	$(MAKE) -C mcpat
 
 release:
 	$(MAKE) OPT=release
