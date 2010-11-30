@@ -55,7 +55,7 @@ begin
     sb=Sandbox.new(lua_defs,opts,sbname(opts,''))
     node_sandbox.push sb
     sb.install :abaeterno_in, :simnow_pre, :simnow_dir,
-      :abaeterno_so, :bsd, :hdd
+      :abaeterno_so
     sb.run(opts[:one_node_script])
 
   else
@@ -105,12 +105,12 @@ begin
           :vncviewer, :xterm, :screen, :Xvnc, :Xvnc_args, :Xvncwm, 
           :simnow_dir, :simnow_dir_link,
           :abaeterno_so, :abaeterno_so_link,
-          :user_script, :clean_sandbox,
+          :user_script, :clean_sandbox, :node_config,
           :subscribe_result
 
         nsb=Sandbox.new(lua_defs,nopts,sbname(opts,"-node-#{node}"))
         nsb.install :abaeterno_in, :simnow_pre_cluster, :simnow_dir,
-          :abaeterno_so, :bsd, :hdd, :user_script, :cluster_sh
+          :abaeterno_so, :user_script, :cluster_sh, :node_config
 
         node_sandbox.push nsb
       end
