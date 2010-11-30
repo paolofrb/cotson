@@ -1,5 +1,5 @@
 HERE = $(shell pwd)
-subdirs = libluabind slirp disksim distorm common abaeterno network tools examples
+subdirs = libluabind slirp disksim distorm common abaeterno network tools examples mcpat
 
 ## toplevel tools
 all: build_abaeterno build_network build_tools build_examples
