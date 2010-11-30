@@ -66,15 +66,15 @@ build_network: $(libs)
 
 build_common: build_libluabind
 
-build_examples: build_abaeterno
+build_examples: build_abaeterno install_abaeterno
 
-build_mcpat:
+build_mcpat: build_abaeterno install_abaeterno
 	$(MAKE) -C mcpat
 
 release:
-	$(MAKE) OPT=release
+	$(MAKE) OPT=release build; $(MAKE) OPT=release install 
 
 debug:
-	$(MAKE) OPT=debug
+	$(MAKE) OPT=debug build; $(MAKE) OPT=debug install
 
 # DO NOT DELETE
