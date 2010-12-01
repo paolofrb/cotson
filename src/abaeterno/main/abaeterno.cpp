@@ -474,8 +474,10 @@ void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
     CpuidCall::functional(fs,nanos,devid,RDI,RSI,RBX);
     if (net_cpuid && NetworkTiming::get())
         NetworkTiming::get()->cpuid(RBX,RDI,RSI);
+#if 0 // BUGGY
     if (RDI==9) // End fastforward
         Cotson::end_fastforward();
+#endif
 }
 
 void AbAeterno::network_cpuid(uint64_t RBX,uint16_t RDI,uint16_t RSI)
