@@ -13,7 +13,7 @@ build_%:
 	@echo "########## Build $* #############"; \
 	$(MAKE) --directory=./$* all
 
-install_%:
+install_%: build_%
 	@echo "########## Install $* #############"; \
 	$(MAKE) --directory=./$* install
 
@@ -32,10 +32,10 @@ distclean_web:
 	$(RM) web/config/database_cotson.yml; \
 
 release:
-	$(MAKE) OPT=release build; $(MAKE) OPT=release install
+	$(MAKE) OPT=release install
 
 debug:
-	$(MAKE) OPT=debug build; $(MAKE) OPT=debug install
+	$(MAKE) OPT=debug install
 
 src/Make.conf: src/Make.conf.in 
 	if test -e config.status; then \

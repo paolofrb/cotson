@@ -30,7 +30,7 @@ build_%:
 	@echo "########## Build $* #############"; \
 	$(MAKE) --directory=./$* all
 
-install_%:
+install_%: build_%
 	@echo "########## Install $* #############"; \
 	$(MAKE) --directory=./$* install
 
@@ -66,15 +66,15 @@ build_network: $(libs)
 
 build_common: build_libluabind
 
-build_examples: build_abaeterno install_abaeterno
+build_examples: install_abaeterno
 
-build_mcpat: build_abaeterno install_abaeterno
+build_mcpat: install_abaeterno
 	$(MAKE) -C mcpat
 
 release:
-	$(MAKE) OPT=release build; $(MAKE) OPT=release install 
+	$(MAKE) OPT=release install
 
 debug:
-	$(MAKE) OPT=debug build; $(MAKE) OPT=debug install
+	$(MAKE) OPT=debug install
 
 # DO NOT DELETE

@@ -25,6 +25,7 @@ const std::set<std::string>& statistics_names();
 
 uint64_t nanos();
 void reload_options();
+void end_fastforward();
 
 namespace Cpu {
 

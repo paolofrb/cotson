@@ -94,7 +94,7 @@ AbAeterno::AbAeterno() :
     translated_insts(0),
     tag_prefetch(Option::get<bool>("prefetch",false)),
     print_stats(Option::get<bool>("print_stats",false)),
-	net_cpuid(Option::get<bool>("network_cpuid",false))
+    net_cpuid(Option::get<bool>("network_cpuid",false))
 {
     add("nSimulation",    stateCounter[SIMULATION]);
     add("nSimpleWarming", stateCounter[SIMPLE_WARMING]);
@@ -338,8 +338,8 @@ void AbAeterno::startSample()
 void AbAeterno::break_sample()
 {
     Interleaver::get().break_sample();
-	Cotson::reload_options(); // new sampler may change options
-	cout << "### TRACER CHANGE " << Cotson::nanos() << endl;
+    Cotson::reload_options(); // new sampler may change options
+    cout << "### TRACER CHANGE " << Cotson::nanos() << endl;
     endSample();
 }
 
@@ -374,12 +374,12 @@ void AbAeterno::check_end()
 
 bool AbAeterno::needs_sim_tag(const uint8_t* op, uint32_t n) const
 {
-	if (sim_state != SIMULATION)
-	    return false;
+    if (sim_state != SIMULATION)
+        return false;
     if (tag_prefetch && n > 1 && Cotson::X86::is_prefetch(op))
-	    return true;
+        return true;
     if (n > 1 && Cotson::X86::is_clflush(op,op+2))
-	    return true;
+        return true;
     return false;
 }
 
@@ -472,13 +472,15 @@ void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
 
     FunctionalState fs= (sim_state == FUNCTIONAL) ? ONLY_FUNCTIONAL : FUNCTIONAL_AND_TIMING;
     CpuidCall::functional(fs,nanos,devid,RDI,RSI,RBX);
-	if (net_cpuid && NetworkTiming::get())
-	    NetworkTiming::get()->cpuid(RBX,RDI,RSI);
+    if (net_cpuid && NetworkTiming::get())
+        NetworkTiming::get()->cpuid(RBX,RDI,RSI);
+    if (RDI==9) // End fastforward
+        Cotson::end_fastforward();
 }
 
 void AbAeterno::network_cpuid(uint64_t RBX,uint16_t RDI,uint16_t RSI)
 {
-	cerr << "Got cpuid from network: " << RDI << " " << RSI << " " << RBX << endl;
+    cerr << "Got cpuid from network: " << RDI << " " << RSI << " " << RBX << endl;
     FunctionalState fs= (sim_state == FUNCTIONAL) ? ONLY_FUNCTIONAL : FUNCTIONAL_AND_TIMING;
     CpuidCall::functional(fs,Cotson::nanos(),0,RDI,RSI,RBX);
 }
