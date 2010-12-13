@@ -183,6 +183,11 @@ tigervnc tigervnc-server tigervnc-server-module xorg-x11-twm \
     vncargs1="-ac -SecurityTypes None -br -pn -httpd /usr/share/vnc-java"
     vncargs2="-desktop "
     llua="llua"
+
+    #SELinux complains if the SimNow LinuxLibs execute code in the stack
+    #The following command clears the stack-execute bit in the SimNow LinuxLibs
+    #(alternatively, SELinux can be disabled)
+    execstack -c $root/simnow/linuxlibs/lib*.so.*
 fi
 
 echo ""
