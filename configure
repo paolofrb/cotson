@@ -45,7 +45,7 @@ do
         --cc) cc=$2; shift; shift;;
         --cxx) cxx=$2; shift; shift;;
         --vnctest) vnctest=$2; shift; shift;;
-		--force) force=1; shift;;
+	--force) force=1; shift;;
         *) echo "Usage: $0"
            echo "--simnow_dir simnow_location           set simnow dir"
            echo "--data_dir data_location               set data dir"
@@ -59,16 +59,78 @@ done
 
 ########################################################################
 if [[ "$simnow_dir" == "" ]]; then
-    echo ""
-    echo "ERROR: Cannot find SimNow"
-    echo "       You have to define the SIMNOW_DIR env variable"
-    echo "       or pass '--simnow_dir <simnow_directory>' to $0"
-    echo ""
-    echo "       To download a free copy of simnow, please visit"
-    echo "       http://developer.amd.com/cpu/simnow"
-    echo ""
+
+    sdir="${root}/simnow-linux64-${SIMNOW_SUPPORTED_VER}pub"
+    if [[ -d "$sdir" ]]; then
+        simnow_dir="$sdir"
+    else
+
+        echo ""
+        echo "ERROR: Cannot find SimNow"
+        echo "       You have to define the SIMNOW_DIR env variable"
+        echo "       or pass '--simnow_dir <simnow_directory>' to $0"
+        echo ""
+        echo "       To download a free copy of simnow, please visit"
+        echo "       http://developer.amd.com/cpu/simnow"
+        echo ""
+        exit 1
+    fi
+fi
+
+if [[ ! -d "$simnow_dir" ]]; then
+    echo "ERROR: Directory '$simnow_dir' not found..."
     exit 1
 fi
+########################################################################
+ich0=`which lsb_release 2>&1`
+ich1=`echo "$ich0"|grep "not found"`
+ich2=`echo "$ich0"|grep "no lsb_release"`
+ec=0
+if [ "$ich1" != "" -o "$ich2" != "" ]; then
+   #try
+   sudo yum -y install redhat-lsb
+   ec=$?
+fi
+
+if [ $ec != 0 ]; then
+   echo "Couldn't find 'lsb_release'command"
+   exit 1
+fi
+
+dist=`lsb_release -i -s`
+ver=`lsb_release -c -s`
+echo "Distribution '$dist' - Version '$ver'"
+
+ok=0
+case $dist in
+    Ubuntu)
+        case $ver in 
+            karmic | intrepid | jaunty) ok=1 ;; 
+        esac
+        ;;
+    Debian)
+        case $ver in 
+            lenny | squeeze) ok=1 ;; 
+        esac
+        ;;
+    Fedora)
+        case $ver in
+            Goddard | Laughlin) ok=1 ;;
+        esac
+        ;;
+esac
+
+if [[ -z $ok ]]; then
+    echo ""
+    echo "Sorry: $dist $ver not supported"
+    echo "Supported versions are: Ubuntu karmic|jaunty|intrepid and Debian squeeze|lenny and Fedora Goddard|Laughlin"
+    echo ""
+    exit 1;
+fi
+
+echo "$dist $ver supported"
+########################################################################
+
 simnow_dir=`cd $simnow_dir; pwd`
 echo "Using SimNow in $simnow_dir"
 lib1="$simnow_dir/linuxlibs/libgcc_s.so.1"
@@ -96,48 +158,44 @@ echo "SimNow version is $simnow_ver"
 ln -fs $simnow_dir $root/simnow
 
 ########################################################################
-dist=`lsb_release -i -s`
-ver=`lsb_release -c -s`
 
-ok=0
-case $dist in
-    Ubuntu)
-        case $ver in 
-            karmic | intrepid | jaunty) ok=1 ;; 
-        esac
-        ;;
-    Debian)
-        case $ver in 
-            lenny | squeeze) ok=1 ;; 
-        esac
-        ;;
-esac
-
-if [[ -z $ok ]]; then
-    echo ""
-    echo "Sorry: $dist $ver not supported"
-    echo "Supported versions are: Ubuntu karmic|jaunty|intrepid and Debian squeeze|lenny"
-    echo ""
-    exit 1;
-fi
-
-echo "$dist $ver supported"
-
-pkgs="g++ bison flex ruby rubygems libopenssl-ruby libsqlite3-ruby vnc4server vnc-java 
+if [[ $dist == "Debian" ||  $dist == "Ubuntu" ]]; then
+    pkgs="g++ bison flex ruby rubygems libopenssl-ruby libsqlite3-ruby vnc4server vnc-java \
 rxvt xfwm4 xfonts-100dpi xfonts-75dpi zsh sharutils build-essential xvnc4viewer screen \
 liblua5.1-0 liblua5.1-0-dev libpqxx-dev zlib1g-dev indent xutils-dev libsqlite3-dev \
 sqlite3 libdbd-sqlite3-perl libdbd-pg-perl gnuplot libboost-dev libboost-thread-dev lzma"
+    cmdi="apt-get -q -q"
+    xvnc="Xvnc4"
+    xvncservctrl="vnc4server"
+    vncargs1="-ac -SecurityTypes None -br -pn -httpd /usr/share/vnc-java"
+    vncargs2="-desktop="
+    llua="llua5.1"
+elif [[ $dist == "Fedora" ]]; then
+    pkgs="gcc gcc-c++ make dpkg bison flex ruby rubygems rxvt xfwm4 zsh sharutils screen \
+gnuplot indent zlib-devel imake xorg-x11-utils ruby-libs openssl ruby-sqlite3 \
+vnc-server rxvt lua* libpqxx* boost-devel boost-thread sqlite-devel sqlite lzma \
+perl-Class-DBI-SQLite perl-pgsql_perl5 xorg-x11-fonts-100dpi.noarch xorg-x11-fonts-75dpi \
+tigervnc tigervnc-server tigervnc-server-module xorg-x11-twm \
+"
+    cmdi="yum -y"
+    xvnc="Xvnc"
+    xvncservctrl="vncserver"
+    vncargs1="-ac -SecurityTypes None -br -pn -httpd /usr/share/vnc-java"
+    vncargs2="-desktop "
+    llua="llua"
+fi
 
 echo ""
 echo "Checking and installing packages ($pkgs)"
 echo "*** NOTE: sudo access required ***"
 echo ""
-sudo apt-get -q -y install $pkgs
+sudo $cmdi install $pkgs
 if [[ $? -ne 0 ]]; then
     echo "Could not install one or more of $pkgs"
-    echo "Please check your distribution and edit 'configure' to reflect it"
+     echo "Please check your distribution and edit 'configure' to reflect it"
     exit 1
 fi
+echo "Package installation FINISHED"
 ########################################################################
 
 # Fix missing rgb.txt if needed
@@ -165,24 +223,36 @@ fi
 echo "Using $v"
 
 ##########################################################################
-xvnc="Xvnc4"
 xfixes=""
-grep -q XFIXES `which vnc4server`
+grep -q XFIXES `which $xvncservctrl`
 if [[ $? -eq 0 ]]; then
     xfixes="-extension XFIXES"
 	echo "Adding '$xfixes' to vnc args"
 fi
-vncargs="-ac -SecurityTypes None -br -pn -httpd /usr/share/vnc-java $xfixes -desktop="
+vncargs="$vncargs1 $xfixes $vncargs2"
 vncwm="xfwm4 --display="
 aa_so="$src_dir/abaeterno/abaeterno.so"
 med_exe="$src_dir/network/mediator"
 
 for s in \
-	src/Make.conf \
-	etc/cotson \
-	etc/regression-test \
-	etc/daemon-start \
-	web/etc/local-defaults \
+        src/examples/tracer/Makefile \
+        src/network/Makefile \
+        src/common/Makefile \
+        src/abaeterno/Makefile \
+; do
+        cp $s $s.in
+done
+
+for s in \
+        src/Make.conf \
+        etc/cotson \
+        etc/regression-test \
+        etc/daemon-start \
+        web/etc/local-defaults \
+        src/examples/tracer/Makefile \
+        src/network/Makefile \
+        src/common/Makefile \
+        src/abaeterno/Makefile \
 ; do
     sed -e "s:@simnow_dir@:$simnow_dir:" \
         -e "s:@data_dir@:$data_dir:" \
@@ -192,11 +262,13 @@ for s in \
         -e "s:@cc@:$cc:" \
         -e "s:@cxx@:$cxx:" \
         -e "s:@root@:$root:" \
-		-e "s:@xvnc@:$xvnc:" \
-		-e "s#@vncargs@#$vncargs#" \
-		-e "s:@vncwm@:$vncwm:" \
+                -e "s:@xvnc@:$xvnc:" \
+                -e "s#@vncargs@#$vncargs#" \
+                -e "s:@vncwm@:$vncwm:" \
+        -e "s:llua5.1:$llua:" \
     $s.in > $s
 done
+
 
 #############################################################
 if [[ $vnctest -gt 0 ]]; then
@@ -217,8 +289,8 @@ EOF
     i=0; while [[ $i -lt $vnctest ]]; do
         p=`expr 50 + $i`
         echo "Testing vnc port :$p"
-        vnc4server :$p >> $tmpvnc/log 2>&1
-        vnc4server -kill :$p >> $tmpvnc/log 2>&1
+        $xvncservctrl :$p >> $tmpvnc/log 2>&1
+        $xvncservctrl -kill :$p >> $tmpvnc/log 2>&1
         i=`expr $i + 1`
     done
     nd=`grep -c 'desktop' $tmpvnc/log`

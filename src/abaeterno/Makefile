@@ -32,7 +32,7 @@ INJLIBS = ../common/libaacommon.a \
 
 ALL_INJLIBS = -Wl,-whole-archive  $(INJLIBS) -Wl,-no-whole-archive
 
-SHLIBS = -lpqxx -lsqlite3 -llua5.1 $(THREAD_LIBS) 
+SHLIBS = -lpqxx -lsqlite3 -llua5.1 $(THREAD_LIBS) -ldl -lz
 
 ################################################################################
 MAIN = $(wildcard main/*.cpp)

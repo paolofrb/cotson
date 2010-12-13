@@ -5,7 +5,7 @@ include ../Make.conf
 LIBSTDCPP32 = $(shell ls /usr/lib32/libstdc++.so.* | tail -n 1)
 
 mcpat: $(MCPAT)
-	$(MAKE) -C $(MCPAT) OPT="-O3 -msse2 -mfpmath=sse -DNTHREADS=4 -Icacti -L ." opt; \
+	$(MAKE) -C $(MCPAT) OPT="-O3 -msse2 -mfpmath=sse -DNTHREADS=4 -m64 -Icacti -L ." opt; \
 	$(CP) $(MCPAT)/mcpat .
 
 $(MCPAT): $(MCPAT).tar.gz
