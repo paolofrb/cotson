@@ -131,34 +131,6 @@ fi
 echo "$dist $ver supported"
 ########################################################################
 
-simnow_dir=`cd $simnow_dir; pwd`
-echo "Using SimNow in $simnow_dir"
-lib1="$simnow_dir/linuxlibs/libgcc_s.so.1"
-lib2="$simnow_dir/linuxlibs/libstdc++.so.6"
-if [[ -f $lib1 || -f $lib2 ]]; then
-    echo "To avoid system conflicts, we remove $lib1 and $lib2"
-    /bin/rm -f $lib1 $lib2
-fi
-if [[ -f $lib1 || -f $lib2 ]]; then
-    echo "ERROR: Something went wrong"
-    echo "       make sure $simnow_dir is writeable or remove $lib1 and $lib2 manually"
-    exit 1
-fi
-
-if [[ $force != 1 ]]; then
-    simnow_ver=`cd $simnow_dir; ./simnow --version | awk '/SimNow version/{print $6;}'|sed 's/,//'`
-    if [[ $simnow_ver != $SIMNOW_SUPPORTED_VER ]]; then
-        echo "ERROR: simnow version is '$simnow_ver'"
-	    echo "       The supported version is $SIMNOW_SUPPORTED_VER"
-	    exit 1
-    fi
-fi
-echo "SimNow version is $simnow_ver"
-/bin/rm -f $root/simnow
-ln -fs $simnow_dir $root/simnow
-
-########################################################################
-
 if [[ $dist == "Debian" ||  $dist == "Ubuntu" ]]; then
     pkgs="g++ bison flex ruby rubygems libopenssl-ruby libsqlite3-ruby vnc4server vnc-java \
 rxvt xfwm4 xfonts-100dpi xfonts-75dpi zsh sharutils build-essential xvnc4viewer screen \
@@ -187,8 +159,37 @@ tigervnc tigervnc-server tigervnc-server-module xorg-x11-twm \
     #SELinux complains if the SimNow LinuxLibs execute code in the stack
     #The following command clears the stack-execute bit in the SimNow LinuxLibs
     #(alternatively, SELinux can be disabled)
-    execstack -c $root/simnow/linuxlibs/lib*.so.*
+    execstack -c $simnow_dir/linuxlibs/lib*.so.*
 fi
+########################################################################
+
+simnow_dir=`cd $simnow_dir; pwd`
+echo "Using SimNow in $simnow_dir"
+lib1="$simnow_dir/linuxlibs/libgcc_s.so.1"
+lib2="$simnow_dir/linuxlibs/libstdc++.so.6"
+if [[ -f $lib1 || -f $lib2 ]]; then
+    echo "To avoid system conflicts, we remove $lib1 and $lib2"
+    /bin/rm -f $lib1 $lib2
+fi
+if [[ -f $lib1 || -f $lib2 ]]; then
+    echo "ERROR: Something went wrong"
+    echo "       make sure $simnow_dir is writeable or remove $lib1 and $lib2 manually"
+    exit 1
+fi
+
+if [[ $force != 1 ]]; then
+    simnow_ver=`cd $simnow_dir; ./simnow --version | awk '/SimNow version/{print $6;}'|sed 's/,//'`
+    if [[ $simnow_ver != $SIMNOW_SUPPORTED_VER ]]; then
+        echo "ERROR: simnow version is '$simnow_ver'"
+	    echo "       The supported version is $SIMNOW_SUPPORTED_VER"
+	    exit 1
+    fi
+fi
+echo "SimNow version is $simnow_ver"
+/bin/rm -f $root/simnow
+ln -fs $simnow_dir $root/simnow
+
+########################################################################
 
 echo ""
 echo "Checking and installing packages ($pkgs)"
