@@ -187,7 +187,7 @@ void TimerDep::reg_write(const Opcode* opc, uint64_t t)
 {
 	if (opc) // set ready time for dest registers
 	{
-		const Opcode::regs& dst_regs = opc->getSrcRegs();
+		const Opcode::regs& dst_regs = opc->getDstRegs();
 	    for(Opcode::regs::const_iterator i=dst_regs.begin(); i!=dst_regs.end(); ++i)
 		{
 	        n_reg_writes++;
