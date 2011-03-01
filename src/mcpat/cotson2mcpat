@@ -808,12 +808,12 @@ sub load_metrics
         $h->execute();
         $hb1 = (($h->fetchrow_array())[0]);
 	}
-
+	my $hbsel =    $hb0 == $hb1
+	            ? "metrics.heartbeat_id = $hb0"
+	            : "metrics.heartbeat_id >= $hb0 AND metrics.heartbeat_id <= $hb1";
     $h = query("
         SELECT name,value FROM metric_names,metrics
-        WHERE metrics.heartbeat_id >= $hb0 AND
-        metrics.heartbeat_id <= $hb1 AND
-        metric_names.metric_id=metrics.metric_id;");
+        WHERE $hbsel AND metric_names.metric_id=metrics.metric_id;");
     $h->execute();
     while (my @row=$h->fetchrow_array()) {
         my $k = $row[0];

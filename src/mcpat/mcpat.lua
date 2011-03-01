@@ -10,7 +10,7 @@ options = {
 }
 
 one_node_script="run_interactive"
-display=os.getenv("DISPLAY")
+-- display=os.getenv("DISPLAY")
 
 simnow.commands=function()
 	use_bsd('1p.bsd')
