@@ -185,6 +185,24 @@ function dumpregistry_helper()
 	print('dumpregistry')
 end
 
+function analyzer_helper(cmd,anl,cpu)
+	xcpu="" if cpu~=nil then xcpu="cpu:"..cpu.."." end
+	if     cmd=="load"    then print(xcpu.."loadanalyzer "..anl)
+	elseif cmd=="unload"  then print(xcpu.."unloadanalyzer "..anl)
+	elseif cmd=="enable"  then print(xcpu.."enableanalyzer "..anl.." 1")
+	elseif cmd=="disable" then print(xcpu.."enableanalyzer "..anl.." 0")
+	elseif cmd=="show"    then print(xcpu.."showanalyzers ")
+	else
+	   error("ANALYZER ERROR:\
+Usage: analyzer(load,    'analyzer_name analyzer_params', [,cpu])\
+   or  analyzer(unload,  'analyzer_num'  [,cpu])\
+   or  analyzer(enable,  'analyzer_num'  [,cpu])\
+   or  analyzer(disable, 'analyzer_num'  [,cpu])\
+   or  analyzer(show)\
+       ");
+	end
+end
+
 function set_network_helper(tx,rx,thr)
 	low=NODE%256
 	high=(NODE-low)/256
@@ -217,6 +235,7 @@ function send_keyboard() end
 function execute(n) end
 function set_serial(x) end
 function dumpregistry() end
+function analyzer(cmd,anl,cpu) end
 
 function subscribe_result(x) 
 	if result_subscriptions==nil then result_subscriptions='' end

@@ -22,6 +22,7 @@ set_quantum=set_quantum_helper
 send_keyboard=send_keyboard_helper
 set_serial=set_serial_helper
 dumpregistry=dumpregistry_helper
+analyzer=analyzer_helper
 
 if type(simnow)~='table' or type(simnow.commands)~='function' then
 	error("missing simnow.commands function")

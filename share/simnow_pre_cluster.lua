@@ -23,6 +23,7 @@ send_keyboard=send_keyboard_helper
 set_network=set_network_helper
 set_serial=set_serial_helper
 dumpregistry=dumpregistry_helper
+analyzer=analyzer_helper
 
 function execute(n)
 	send_keyboard("xget ../data/cluster.sh b ; sh ./b")	
