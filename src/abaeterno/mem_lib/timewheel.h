@@ -172,7 +172,8 @@ public:
 		if (ti != ttags.end()) {
 		    // lazy cleanup of old events
 		    Events& tevents=ti->second;
-			while (!tevents.empty() && fpool.isfree(tevents.top()))
+			while (    (!tevents.empty() && fpool.isfree(tevents.top()))
+			        || (!tevents.empty() && tevents.top()->tag != tag))
 			    tevents.pop();
 			if (!tevents.empty())
 		        return tevents.top();
