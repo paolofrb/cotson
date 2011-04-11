@@ -63,7 +63,7 @@ Switch::Switch(
         qup_(qup),
         qdown_(qdown),
         force_queue_(force_queue),
-        gt_(0),nextgt_(0),tmin_(ULONG_MAX),tmax_(0),nanos_(0),
+        gt_(0),nextgt_(qmin_),tmin_(ULONG_MAX),tmax_(0),nanos_(0),
         dump_(tracefile ? new DumpGzip(tracefile) : 0),
         nmutex_(), seqno_(0), sync_started_(false), verbose_(v)
 {
@@ -578,7 +578,7 @@ inline void Switch::send_sync(bool force)
 void Switch::timeout()
 {
     if (GT() > 0)
-        sync_cluster(0);
+        sync_cluster(GT());
     LOG2("(SYNC) TIMEOUT", GT(), nextgt_, tmin_, tmax_, quantum_);
     send_sync(true); // Force a sync
 }

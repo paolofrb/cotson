@@ -9,7 +9,7 @@ mediator = {
 		experiment_id=1, 
 		experiment_description="test mediator"
     },
-	timer= { name="med", type="simple", max_bandwidth=1000, latency=100, cfactor=8 },
+	timer= { type="simple", max_bandwidth=1000, latency=12, cfactor=10 },
 	slirp=false,
 	quantum_min=40,
 	quantum_max=40,

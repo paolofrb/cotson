@@ -177,6 +177,7 @@ int main(int argc, char **argv)
 
 	vector<FakeNode> nodes;
 	MacAddress destmac(0x01020304,0); // random address
+	MacAddress node1(0xfacd0100,1);
 
 	if (mode==0) { // timestamp before data
 	    // create 10 nodes
@@ -190,8 +191,10 @@ int main(int argc, char **argv)
 	        nodes[i].send_timestamp(TimingMessage::TimeStampMsg,10);
 
 	    // send data messages
-	    for (uint i=0; i < NN; ++i)
+	    for (uint i=0; i < NN; ++i) {
 	        nodes[i].send_message(destmac,"hello1");
+	        nodes[i].send_message(node1,"hhh1");
+	    }
 	}
 	if (mode==1) { // timestamp+data mixed
 	    for (uint i=0; i < NN; ++i) {
@@ -199,6 +202,7 @@ int main(int argc, char **argv)
 		    if (!n.ok()) return 1;
 	        n.send_timestamp(TimingMessage::TimeStampMsg,10);
 	        n.send_message(destmac,"hello2");
+	        n.send_message(node1,"hhh2");
 	        nodes.push_back(n);
 	    }
 	}
@@ -210,8 +214,10 @@ int main(int argc, char **argv)
 	        nodes.push_back(n);
         }
 	    // send data messages
-	    for (uint i=0; i < NN; ++i)
+	    for (uint i=0; i < NN; ++i) {
 	        nodes[i].send_message(destmac,"hello0");
+	        nodes[i].send_message(node1,"hhh0");
+		}
 	    // send initial timestamp
 	    for (uint i=0; i < NN; ++i)
 	        nodes[i].send_timestamp(TimingMessage::TimeStampMsg,10);
@@ -221,6 +227,7 @@ int main(int argc, char **argv)
 		    FakeNode n(med_host,med_port, sync_mcast_ip,sync_port, i+1);
 		    if (!n.ok()) return 1;
 	        n.send_message(destmac,"hello3");
+	        n.send_message(node1,"hhh3");
 	        n.send_timestamp(TimingMessage::TimeStampMsg,10);
 	        nodes.push_back(n);
 	    }

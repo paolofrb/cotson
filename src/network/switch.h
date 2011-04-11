@@ -90,6 +90,7 @@ public:
     inline void register_timing_model(TimingModel* timing) 
     { 
         timing_ = timing; 
+        timing_->startquantum_mt(gt_,nextgt_);
         add("timer.", *timing_);
     }
 

@@ -23,7 +23,7 @@ fi
 wait
 
 c0=`grep 'CTRL' med$mode.log | wc -l`
-d0=`grep 'DATA' med$mode.log | wc -l`
+d0=`grep 'DATA.*Peer' med$mode.log | wc -l`
 c1=`grep CTRL test$mode.log | awk '{print $2}'`
 d1=`grep DATA test$mode.log | awk '{print $2}'`
 

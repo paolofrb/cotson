@@ -12,12 +12,12 @@ include $(ROOT)/Make.conf
 
 install: 
 
-test: medtester
-	@./run.sh 0; sleep 1;\
-	./run.sh 1; sleep 1;\
-	./run.sh 2; sleep 1;\
-	./run.sh 3; sleep 1; \
-	echo "########## DONE ###########"
+.PHONY: test test0 test1 test2 test3
+
+test: test_0 test_1 test_2 test_3
+
+test_%: medtester
+	@./run.sh $*; sleep 1
 
 medtester: $(OBJS)
 	$(CXX) -o $(@) $(OBJS) \

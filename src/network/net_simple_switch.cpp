@@ -35,7 +35,7 @@ public:
 
 protected:
 
-    uint64_t max_bandwith_;
+    uint64_t max_bw_;
     uint64_t latency_;
     uint64_t cfactor_;
 
@@ -54,19 +54,17 @@ namespace simple_switch {
 };
 
 SimpleSwitch::SimpleSwitch(Parameters &p) :
-        max_bandwith_(p.get<int>("max_bandwith","80000",false)),
+        max_bw_(p.get<int>("max_bw","80000",false)),
         latency_(p.get<int>("latency","0",false)),
         cfactor_(p.get<int>("cfactor","8",false)),
         quantum_(0),
         messages_(0),
         bytes_(0)
 {
-	if (verbose_ > 0) 
-	{
-        cout << "latency=" << latency_ << endl;
-        cout << "max_bandwith=" << max_bandwith_ << endl;
-        cout << "cfactor=" << cfactor_ << endl;
-    }
+	// Don't use verbose, not yet set
+    cout << "simple: latency=" << latency_ << endl;
+    cout << "simple: max_bw=" << max_bw_ << endl;
+    cout << "simple: cfactor=" << cfactor_ << endl;
 	add("packets",messages_);
 	add("congested_packets",cmessages_);
 	add("bytes",bytes_);
@@ -77,6 +75,8 @@ SimpleSwitch::SimpleSwitch(Parameters &p) :
 void 
 SimpleSwitch::startquantum(uint64_t gt, uint64_t nextgt)
 {
+	if (verbose_ > 1)
+	    cout << "simple: startquantum " << gt << " " << nextgt << endl;
 	uint64_t q = nextgt - gt;
     if (q != 0)
 	    quantum_ = q;
@@ -96,13 +96,21 @@ SimpleSwitch::get_delay()
     // Models a simple switch with constant throuput below some value 
 	// if max bandwith == 0 there is no limit
 
-    if (max_bandwith_ == 0) 
+    if (max_bw_ == 0) 
 	    return latency_;
 
-    if (bytes_* 8 < quantum_* max_bandwith_ * 1000000)
+	if (verbose_ > 2)
+	    cout << "simple: bytes " << bytes_ 
+		     << " quantum " << quantum_ 
+			 << " maxbw " << max_bw_ << endl;
+
+    if (bytes_* 8 < quantum_* max_bw_ * 1000000) {
 	    return latency_;
+	}
     else {
 		cmessages_++;
+		if (verbose_ > 2)
+		    cout << "simple: congestion" << endl;
 	    return latency_ * cfactor_; // N times more latency
     }
 }
