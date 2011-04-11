@@ -16,6 +16,18 @@ using namespace std;
 int N_ctrl=0;
 int N_data=0;
 
+struct EtherPacket : public TimingMessage::Base
+{
+    EtherPacket(const ether_header* eh, const void* p, size_t n) : 
+	    Base(new uint8_t(sizeof(ether_header)+n), sizeof(ether_header)+n)
+        {
+            copy(eh,0,sizeof(ether_header));
+            copy(p,sizeof(ether_header),n);
+        }
+    ~EtherPacket() { delete[] reinterpret_cast<uint8_t*>(Base::ptr_); }
+};
+
+
 class FakeNode
 {
 public:
