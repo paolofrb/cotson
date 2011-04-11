@@ -39,6 +39,7 @@ mediator = {
 	heartbeat_interval=10000, -- 10msec
 	heartbeat={ type="file_last" },
 	heartbeat1={ type="sqlite", dbfile=DBFILE, experiment_id=EXP },
+	timer={ type="simple", max_bandwidth=1000, latency=12, cfactor=10 },
 	tracefile="/tmp/net-trace.gz", -- dump a trace
 	slirp=false, -- don't NAT with the external world
 }
