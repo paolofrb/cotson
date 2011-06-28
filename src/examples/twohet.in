@@ -60,10 +60,10 @@ if NODE == 1 then
 		nic:timer{ name='nic'..i, type="simple_nic" }
 		i=i+1
 	end
+	mem=Memory{ name="main", latency=1 } 
 	i=0 while i < cpus() do
 	    cpu=get_cpu(i)
-	    cpu:timer{ name='cpu0', type="timer0" }
-	    mem=Memory{ name="main", latency=1 } 
+	    cpu:timer{ name='cpu'..i, type="timer0" }
 	    cpu:instruction_cache(mem)
 	    cpu:data_cache(mem)
 	    cpu:instruction_tlb(mem)
@@ -95,10 +95,10 @@ else
 		nic:timer{ name='nic'..i, type="simple_nic" }
 		i=i+1
 	end
+	mem=Memory{ name="main", latency=1 } 
 	i=0 while i < cpus() do
 	    cpu=get_cpu(i)
-	    cpu:timer{ name='cpu0', type="timer0" }
-	    mem=Memory{ name="main", latency=1 } 
+	    cpu:timer{ name='cpu'..i, type="timer0" }
 	    cpu:instruction_cache(mem)
 	    cpu:data_cache(mem)
 	    cpu:instruction_tlb(mem)
