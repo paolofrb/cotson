@@ -7,7 +7,7 @@ EXAMPLES= \
 	functional \
 	mem_tracer mem_tracer2 trace_stats  \
 	one_cpu_simple smarts dynamic multiple_cpu_interval \
-	twonodes \
+	twonodes twohet \
 	tracer
 
 run: $(addprefix run_, $(EXAMPLES))
@@ -52,6 +52,14 @@ run_twonodes:
 	../../bin/cotson twonodes.in > run_twonodes.log 2>&1 ; \
 	echo "Dumping the network trace"; \
 	../tools/traceplayer /tmp/net-trace.gz 0 1
+
+run_twohet:
+	@echo "Running a cluster of 2 heterogeneous nodes pinging each other"; \
+	echo "Simulation runs in background -- be patient (a few minutes)"; \
+	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
+	/bin/rm -f run_twohet.log /tmp/twohet.db; \
+	( (sleep 10; echo "Firing console view"; ./twohet-ctrl view) &); \
+	../../bin/cotson twohet.in > run_twohet.log 2>&1 
 
 
 run_netperf:
