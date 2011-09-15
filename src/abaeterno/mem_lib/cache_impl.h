@@ -77,6 +77,7 @@ private:
 	
 	const uint32_t max_updates; //maximum number of parallel updates
 	const uint32_t max_invalidates; //maximum number of parallel invalidations
+	uint32_t max_latency; //maximum latency
 
 	TimeWheel events;     // future events
 	const bool writethrough;  // writethrough policy (writeback if false)
@@ -93,6 +94,7 @@ CacheImpl<Storage,Timer>::CacheImpl(const Parameters& p):
 	cache(storage.cache),
 	max_updates(p.get<int32_t>("max_updates","-1",false)), // no track
 	max_invalidates(p.get<int32_t>("max_invalidations","-1",false)), // no track
+	max_latency(0), // no track
 	events(p.get<uint32_t>("max_events","20000",false)), // no track
 	writethrough(p.get<std::string>("write_policy")=="WT"),
 	writeallocate(p.get<bool>("write_allocate",writethrough?"false":"true")),
@@ -179,14 +181,14 @@ CacheImpl<Storage,Timer>::read(
 	
 	// check to see if miss is coming
 	const Future* pending=simulating ? events.has(tag,Future::UPDATE,tstamp) : 0;
-	if(pending)
+	if(pending && pending->when <= tstamp+max_latency)
 	{
 		read_half_miss_++;
 		MOESI_state new_ms = pending->moesi;
 		uint64_t pending_latency = pending->when - tstamp;
 		uint32_t new_lat = latency > pending_latency ? latency : pending_latency;
 		lookup_[new_ms]++;
-		LOG(name,"read latency",new_lat,"half miss - moesi",new_ms);
+		LOG(name,"read latency",new_lat,"half miss - moesi",new_ms,"max_lat",max_latency);
 		return MemState(new_lat,new_ms);
     }
 
@@ -210,11 +212,14 @@ CacheImpl<Storage,Timer>::read(
 
 	inclusive_invalidations(evict->tag,tstamp+new_latency,mt);
 
-    Future f(tstamp+new_latency+latency,tag,m.phys,new_moesi,mt,Future::UPDATE,evict);
+	uint32_t rd_lat = latency + new_latency;
+	max_latency = rd_lat > max_latency ? rd_lat : max_latency;
+
+    Future f(tstamp+rd_lat,tag,m.phys,new_moesi,mt,Future::UPDATE,evict);
 	simulating ? events.insert(f) : perform_update(f);
 		
-    LOG(name,"read latency",latency+new_latency,"miss - moesi",new_moesi);
-	return MemState(latency+new_latency,new_moesi);
+    LOG(name,"read latency",rd_lat,"miss - moesi",new_moesi);
+	return MemState(rd_lat,new_moesi);
 }
 
 template <typename Storage, typename Timer>
@@ -273,8 +278,8 @@ CacheImpl<Storage,Timer>::write(
 	}
 	
 	// check to see if miss is coming
-	const Future* pending = simulating ? events.has(tag,Future::UPDATE,tstamp) : 0;
-	if(pending)
+	const Future* pending=simulating ? events.has(tag,Future::UPDATE,tstamp) : 0;
+	if(pending && pending->when <= tstamp+max_latency)
 	{
 	    write_half_miss_++;
 		uint64_t when=pending->when;
@@ -284,7 +289,8 @@ CacheImpl<Storage,Timer>::write(
 		uint32_t tot_latency = latency + when - tstamp; 
 		// Note: we don't add nstate.latency() because we assume this happens in background
 		const_cast<Future*>(pending)->moesi=new_ms; // FIXME: changing data off a const ptr!!
-		LOG(name,tstamp,"write half miss, moesi before",ms,"after",new_ms,"lat",tot_latency);
+		LOG(name,tstamp,"write half miss, moesi before",ms,"after",new_ms,
+		    "lat",tot_latency,"max_lat",max_latency);
 		update_[ms]++;
 		return MemState(tot_latency,new_ms);
     }
@@ -296,7 +302,11 @@ CacheImpl<Storage,Timer>::write(
 	update_[upstate]++;
 	const MemState& nstate = writeMiss(m,tstamp,mt,upstate);
 	uint32_t new_latency = nstate.latency();
+
 	MOESI_state new_ms = nstate.moesi();
+	uint32_t wr_lat = latency + new_latency;
+	max_latency = wr_lat > max_latency ? wr_lat : max_latency;
+
 	if (writeallocate)
 	{
 	    // Find line to evict, invalidate and schedule line update for later
@@ -308,11 +318,12 @@ CacheImpl<Storage,Timer>::write(
 		// Schedule invalidations
 	    inclusive_invalidations(evict->tag,tstamp+new_latency,mt);
 
-        Future f(tstamp+new_latency+latency,tag,m.phys,new_ms,mt,Future::UPDATE,evict);
+        Future f(tstamp+wr_lat,tag,m.phys,new_ms,mt,Future::UPDATE,evict);
 	    simulating ? events.insert(f) : perform_update(f);
 	}
-	LOG(name,"write latency",latency+new_latency,"miss - moesi",new_ms);
-	return MemState(latency+new_latency,new_ms);
+
+	LOG(name,"write latency",wr_lat,"miss - moesi",new_ms);
+	return MemState(wr_lat,new_ms);
 }
 
 template <typename Storage, typename Timer>
@@ -362,6 +373,7 @@ void CacheImpl<Storage,Timer>::beginSimulation()
 	events.reset();
     timer.reset();
 	simulating=true;
+	max_latency = 0;
 }
 
 template <typename Storage, typename Timer>

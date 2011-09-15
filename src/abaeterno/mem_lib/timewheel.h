@@ -217,16 +217,17 @@ private:
     INLINE void update_pending(uint64_t c, Future::Type tp)
 	{
 		// lazy update of pending events for a given type
-		size_t n=0;
+		int np=0;
 		for (size_t i=0; i<npending; ++i) {
 			FuturePtr fp = pending[i];
 			if (fp && fp->when >= c && fp->type==tp) {
 				save_tag(fp);
 				pending[i]=0;
-			    n++;
 		    }
+			else if (fp)
+			    np++;
 		}
-		if (n==npending)
+		if (np==0)
 		    npending=0;
 	}
     INLINE void flush_pending()

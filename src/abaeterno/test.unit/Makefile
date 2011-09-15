@@ -4,7 +4,7 @@ TOBJ = $(TSRC:.cpp=.o)
 $(TEST):
 	@echo "#### Linking test $@"; \
 	$(CXX) -o $@ $^ $(LIBS); \
-	echo "#### Running test $@ (output in test.unit/$@.log)"; \
+	echo "#### Running test $@ (output in $@.log)"; \
 	$@ > $@.log
 
 %.o: %.cpp
