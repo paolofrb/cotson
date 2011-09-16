@@ -66,6 +66,7 @@ option  o44("clflush",                        "add load to clflush operations");
 
 option  o50("print_stats",                    "print statistics on stdout");
 option  o51("network_cpuid",                  "send cpuid commands to all nodes in the cluster");
+option  o52("align_timers",			          "align the timer cycles at each MP quantum start");
 }
 
 namespace {
@@ -205,6 +206,11 @@ void AbAeterno::prepareToRun()
             cout << fmt % i->first % i->second << endl;
         cout << "[missing values may be requested later!!]" << endl << endl;
     }
+
+	bool align_timers = true;
+	if (Option::has("align_timers") && Option::get<bool>("align_timers")==false)
+	    align_timers = false;
+	Interleaver::get().initialize(align_timers);
 }
 
 void AbAeterno::end()

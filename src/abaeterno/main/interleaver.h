@@ -19,7 +19,7 @@
 
 class Interleaver : public SimpleStateObserver
 {
-	Interleaver() {}
+	Interleaver():align_timers(true) {}
 	~Interleaver() {}
 
 public:
@@ -33,6 +33,7 @@ public:
 	void config(uint64_t,Instructions&,const TraceNeeds*);
 	void end_quantum();
 	void break_sample();
+	void initialize(bool a) { align_timers = a; }
 
 protected:
 	void update_cpus();
@@ -55,6 +56,7 @@ protected:
 	    inline bool operator()(const CpuData* p1,const CpuData* p2) { return !(p1->order<p2->order); }
 	};
 	std::vector<CpuData> cpus;
+	bool align_timers;
 };
 
 #endif

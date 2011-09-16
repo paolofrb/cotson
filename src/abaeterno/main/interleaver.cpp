@@ -49,10 +49,13 @@ void Interleaver::update_cpus()
 	// max cycle of all CPUs, to account for idle time of CPUs that
 	// may have executed fewer instructions
 	uint64_t max_cycle = 0;
- 	for(uint i=0;i<cpus.size();i++)
+	if (align_timers) 
 	{
-	    uint64_t cycle = *(cpus[i].pcycles);
-		max_cycle = cycle > max_cycle ? cycle : max_cycle;
+ 	    for(uint i=0;i<cpus.size();i++)
+	    {
+	        uint64_t cycle = *(cpus[i].pcycles);
+		    max_cycle = cycle > max_cycle ? cycle : max_cycle;
+	    }
 	}
  	for(uint i=0;i<cpus.size();i++) 
 	    cpus[i].update(max_cycle);
@@ -63,7 +66,8 @@ void Interleaver::CpuData::update(uint64_t max_cycle)
 	order=0;
     emit=tn->st[sim_state()].emit;
 	pcycles=tn->cycles;
-	tn->idle(max_cycle-*pcycles);
+	if (max_cycle > *pcycles)
+	    tn->idle(max_cycle-*pcycles);
 	initial_cycles=*pcycles;
 	LOG("CPU",dev,"cycle",*pcycles,"elems",ins->elems());
 }
