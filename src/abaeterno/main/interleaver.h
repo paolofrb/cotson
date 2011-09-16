@@ -23,6 +23,7 @@ class Interleaver : public SimpleStateObserver
 	~Interleaver() {}
 
 public:
+
 	inline static Interleaver& get()
 	{
 		static Interleaver singleton;
@@ -30,11 +31,30 @@ public:
 	}
 
 	void config(uint64_t,Instructions&,const TraceNeeds*);
-	void notify();
+	void end_quantum();
 	void break_sample();
 
 protected:
-	std::vector<std::pair<Instructions*,const TraceNeeds*> > it;
+	void update_cpus();
+	struct CpuData 
+	{
+	    Instructions *ins;
+		const TraceNeeds *tn;
+		uint32_t dev;
+		EmitFunction emit;
+		uint64_t* pcycles;
+	    uint64_t initial_cycles;
+	    uint64_t order;
+
+		CpuData(Instructions* i,const TraceNeeds *t, uint32_t d):ins(i),tn(t),dev(d) { update(0); }
+	    inline void set_now() { order = *pcycles - initial_cycles; }
+		void update(uint64_t);
+	};
+    struct CpuCmp 
+	{ 
+	    inline bool operator()(const CpuData* p1,const CpuData* p2) { return !(p1->order<p2->order); }
+	};
+	std::vector<CpuData> cpus;
 };
 
 #endif

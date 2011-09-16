@@ -506,7 +506,7 @@ cpu1.timer.call_miss                                        0
 cpu1.timer.commit_insn                                      0
 cpu1.timer.cond_count                                       0
 cpu1.timer.cond_miss                                        0
-cpu1.timer.cycles                                           0
+cpu1.timer.cycles                                           549698
 cpu1.timer.dcache.data_invalidation                         0
 cpu1.timer.dcache.inclusion_invalidation                    0
 cpu1.timer.dcache.l2cache.bus.bw                            6286
@@ -779,7 +779,7 @@ cpu2.timer.call_miss                                        0
 cpu2.timer.commit_insn                                      0
 cpu2.timer.cond_count                                       0
 cpu2.timer.cond_miss                                        0
-cpu2.timer.cycles                                           0
+cpu2.timer.cycles                                           549698
 cpu2.timer.dcache.data_invalidation                         0
 cpu2.timer.dcache.inclusion_invalidation                    0
 cpu2.timer.dcache.l2cache.bus.bw                            6286
@@ -1052,7 +1052,7 @@ cpu3.timer.call_miss                                        0
 cpu3.timer.commit_insn                                      0
 cpu3.timer.cond_count                                       0
 cpu3.timer.cond_miss                                        0
-cpu3.timer.cycles                                           0
+cpu3.timer.cycles                                           549698
 cpu3.timer.dcache.data_invalidation                         0
 cpu3.timer.dcache.inclusion_invalidation                    0
 cpu3.timer.dcache.l2cache.bus.bw                            6286
@@ -1394,8 +1394,8 @@ cpu1.timer.dtlb.l2tlb.tlb_bus.av_wait_time_write            -nan
 cpu1.timer.dtlb.l2tlb.write_miss_rate                       -nan
 cpu1.timer.dtlb.read_miss_rate                              -nan
 cpu1.timer.dtlb.write_miss_rate                             -nan
-cpu1.timer.fetch_ipc                                        -nan
-cpu1.timer.ftq_full_rate                                    -nan
+cpu1.timer.fetch_ipc                                        0
+cpu1.timer.ftq_full_rate                                    0
 cpu1.timer.icache.l2cache.bus.av_bw                         2.6434
 cpu1.timer.icache.l2cache.bus.av_wait_time_read             32.1344
 cpu1.timer.icache.l2cache.bus.av_wait_time_readx            264.05
@@ -1404,7 +1404,7 @@ cpu1.timer.icache.l2cache.read_miss_rate                    -nan
 cpu1.timer.icache.l2cache.write_miss_rate                   -nan
 cpu1.timer.icache.read_miss_rate                            -nan
 cpu1.timer.icache.write_miss_rate                           -nan
-cpu1.timer.ipc                                              -nan
+cpu1.timer.ipc                                              0
 cpu1.timer.itlb.l2tlb.read_miss_rate                        -nan
 cpu1.timer.itlb.l2tlb.tlb_bus.av_bw                         1.06748
 cpu1.timer.itlb.l2tlb.tlb_bus.av_wait_time_read             26.8405
@@ -1416,7 +1416,7 @@ cpu1.timer.itlb.write_miss_rate                             -nan
 cpu1.timer.ret_miss_rate                                    -nan
 cpu1.timer.twolev.miss_rate                                 -nan
 cpu1.timer.uncond_miss_rate                                 -nan
-cpu1.timer.window_full_rate                                 -nan
+cpu1.timer.window_full_rate                                 0
 cpu2.timer.btb.miss_rate                                    -nan
 cpu2.timer.call_miss_rate                                   -nan
 cpu2.timer.cond_miss_rate                                   -nan
@@ -1436,8 +1436,8 @@ cpu2.timer.dtlb.l2tlb.tlb_bus.av_wait_time_write            -nan
 cpu2.timer.dtlb.l2tlb.write_miss_rate                       -nan
 cpu2.timer.dtlb.read_miss_rate                              -nan
 cpu2.timer.dtlb.write_miss_rate                             -nan
-cpu2.timer.fetch_ipc                                        -nan
-cpu2.timer.ftq_full_rate                                    -nan
+cpu2.timer.fetch_ipc                                        0
+cpu2.timer.ftq_full_rate                                    0
 cpu2.timer.icache.l2cache.bus.av_bw                         2.6434
 cpu2.timer.icache.l2cache.bus.av_wait_time_read             32.1344
 cpu2.timer.icache.l2cache.bus.av_wait_time_readx            264.05
@@ -1446,7 +1446,7 @@ cpu2.timer.icache.l2cache.read_miss_rate                    -nan
 cpu2.timer.icache.l2cache.write_miss_rate                   -nan
 cpu2.timer.icache.read_miss_rate                            -nan
 cpu2.timer.icache.write_miss_rate                           -nan
-cpu2.timer.ipc                                              -nan
+cpu2.timer.ipc                                              0
 cpu2.timer.itlb.l2tlb.read_miss_rate                        -nan
 cpu2.timer.itlb.l2tlb.tlb_bus.av_bw                         1.06748
 cpu2.timer.itlb.l2tlb.tlb_bus.av_wait_time_read             26.8405
@@ -1458,7 +1458,7 @@ cpu2.timer.itlb.write_miss_rate                             -nan
 cpu2.timer.ret_miss_rate                                    -nan
 cpu2.timer.twolev.miss_rate                                 -nan
 cpu2.timer.uncond_miss_rate                                 -nan
-cpu2.timer.window_full_rate                                 -nan
+cpu2.timer.window_full_rate                                 0
 cpu3.timer.btb.miss_rate                                    -nan
 cpu3.timer.call_miss_rate                                   -nan
 cpu3.timer.cond_miss_rate                                   -nan
@@ -1478,8 +1478,8 @@ cpu3.timer.dtlb.l2tlb.tlb_bus.av_wait_time_write            -nan
 cpu3.timer.dtlb.l2tlb.write_miss_rate                       -nan
 cpu3.timer.dtlb.read_miss_rate                              -nan
 cpu3.timer.dtlb.write_miss_rate                             -nan
-cpu3.timer.fetch_ipc                                        -nan
-cpu3.timer.ftq_full_rate                                    -nan
+cpu3.timer.fetch_ipc                                        0
+cpu3.timer.ftq_full_rate                                    0
 cpu3.timer.icache.l2cache.bus.av_bw                         2.6434
 cpu3.timer.icache.l2cache.bus.av_wait_time_read             32.1344
 cpu3.timer.icache.l2cache.bus.av_wait_time_readx            264.05
@@ -1488,7 +1488,7 @@ cpu3.timer.icache.l2cache.read_miss_rate                    -nan
 cpu3.timer.icache.l2cache.write_miss_rate                   -nan
 cpu3.timer.icache.read_miss_rate                            -nan
 cpu3.timer.icache.write_miss_rate                           -nan
-cpu3.timer.ipc                                              -nan
+cpu3.timer.ipc                                              0
 cpu3.timer.itlb.l2tlb.read_miss_rate                        -nan
 cpu3.timer.itlb.l2tlb.tlb_bus.av_bw                         1.06748
 cpu3.timer.itlb.l2tlb.tlb_bus.av_wait_time_read             26.8405
@@ -1500,5 +1500,5 @@ cpu3.timer.itlb.write_miss_rate                             -nan
 cpu3.timer.ret_miss_rate                                    -nan
 cpu3.timer.twolev.miss_rate                                 -nan
 cpu3.timer.uncond_miss_rate                                 -nan
-cpu3.timer.window_full_rate                                 -nan
+cpu3.timer.window_full_rate                                 0
 END__DATA

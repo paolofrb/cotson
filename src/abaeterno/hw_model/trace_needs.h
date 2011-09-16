@@ -18,6 +18,7 @@
 
 class Instruction; 
 typedef delegate<const Instruction *> EmitFunction;
+typedef delegate<uint64_t>IdleFunction;
 
 #define NEED_CODE (1)
 #define NEED_MEM  (1<<1)
@@ -78,6 +79,7 @@ public:
 	int  history; // max number of instructions that a timer may remember
 
 	StateNeeds st[SIM_STATES];
+	IdleFunction idle;
 
 	uint64_t* cycles;
 	uint64_t* instructions;

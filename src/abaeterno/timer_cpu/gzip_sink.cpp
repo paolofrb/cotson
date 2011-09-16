@@ -25,24 +25,26 @@ public:
 	void simple_warming(const Instruction*) {}
 	void full_warming(const Instruction*) {}
 	void simulation(const Instruction*);
+	void idle(uint64_t);
 
 private:
 	boost::scoped_ptr<DumpGzip> dump;	
 	const std::string tracefile;
 
 	uint64_t instructions;
+	uint64_t cycles;
 };
 
 registerClass<CpuTimer,GzipSink> gzip_sink_c("gzip_sink");
 
-GzipSink::GzipSink(Parameters&p) : CpuTimer(&instructions,&instructions),
+GzipSink::GzipSink(Parameters&p) : CpuTimer(&cycles,&instructions),
 	tracefile(p.get<string>("tracefile"))
 {
 	dump.reset(new DumpGzip(tracefile));
 	if(!(*dump))
 		throw invalid_argument("Error opening tracefile " + tracefile);
 	
-	add("cycles",instructions);
+	add("cycles",cycles);
 	add("instructions",instructions);
 	add_ratio("ipc","instructions","cycles");   
 	clear_metrics();
@@ -56,4 +58,11 @@ void GzipSink::simulation(const Instruction* inst)
 	if(!(*dump))
 		throw runtime_error("Error dumping data");
 	++instructions;
+	++cycles;
 }
+
+void GzipSink::idle(uint64_t c)
+{
+    cycles += c;
+}
+

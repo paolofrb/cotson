@@ -25,9 +25,11 @@ public:
 	void simple_warming(const Instruction*) {}
 	void full_warming(const Instruction*) {}
 	void simulation(const Instruction*);
+	void idle(uint64_t);
 
 private:
 	uint64_t instructions;
+	uint64_t cycles;
 	uint64_t interval_instructions;
 	uint64_t basic_blocks;
 	
@@ -46,8 +48,9 @@ private:
 
 registerClass<CpuTimer,SimPointProfile> simpoint_profile_c("simpoint_profile");
 
-SimPointProfile::SimPointProfile(Parameters&p) : CpuTimer(&instructions,&instructions),
+SimPointProfile::SimPointProfile(Parameters&p) : CpuTimer(&cycles,&instructions),
 	instructions(0),
+	cycles(0),
 	interval_instructions(0),
 	basic_blocks(0),
 	bbCounter(0), instCounter(0),
@@ -55,7 +58,7 @@ SimPointProfile::SimPointProfile(Parameters&p) : CpuTimer(&instructions,&instruc
 	gz(p.get<string>("logfile","/tmp/simpoint_profile.log.gz"))
 {
 	add("instructions",instructions);
-	add("cycles",instructions);
+	add("cycles",cycles);
 	add("basic_blocks",basic_blocks);
 	add_ratio("insts_x_bb","instructions","basic_blocks");
 	clear_metrics();
@@ -66,6 +69,7 @@ SimPointProfile::~SimPointProfile() { }
 void SimPointProfile::simulation(const Instruction* inst)
 {
 	instructions++;
+	cycles++;
 	interval_instructions++;
 	
 	// End of BB?
@@ -75,6 +79,11 @@ void SimPointProfile::simulation(const Instruction* inst)
 		basic_blocks++;
 		interval_instructions = 0;         
 	} 
+}
+
+void SimPointProfile::idle(uint64_t c)
+{
+    cycles += c;
 }
 
 void SimPointProfile::newBB(uint64_t pc, uint64_t numInst)

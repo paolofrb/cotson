@@ -25,12 +25,14 @@ public:
 	void simple_warming(const Instruction*) {}
 	void full_warming(const Instruction*) {}
 	void simulation(const Instruction*);
+	void idle(uint64_t);
 
 private:
  	ofstream disfile;
 	bool advanced_stats;
 	string disasm_file;
 	uint64_t instructions;
+	uint64_t cycles;
 	uint64_t insn[InstType::_MAXCTRL];
 
 	enum { LOAD=0, STORE=1 };
@@ -39,7 +41,7 @@ private:
 
 registerClass<CpuTimer,TraceStats> trace_stats_c("trace_stats");
 
-TraceStats::TraceStats(Parameters& p) : CpuTimer(&instructions,&instructions),
+TraceStats::TraceStats(Parameters& p) : CpuTimer(&cycles,&instructions),
 	advanced_stats(false),
 	disasm_file(p.get<string>("trace_file"))
 {
@@ -50,7 +52,7 @@ TraceStats::TraceStats(Parameters& p) : CpuTimer(&instructions,&instructions),
 	add("instruction_ret",insn[InstType::CTRL_RET]);
 	add("instruction_iret",insn[InstType::CTRL_IRET]);
 	add("instruction_branch",insn[InstType::CTRL_BRANCH]);
-	add("cycles",instructions);
+	add("cycles",cycles);
 	add("memory_loads",mem[LOAD]);
 	add("memory_stores",mem[STORE]);
 	clear_metrics();
@@ -70,6 +72,7 @@ TraceStats::~TraceStats()
 void TraceStats::simulation(const Instruction* inst)
 {
 	instructions++;
+	cycles++;
 	insn[inst->Type()]++;
 	mem[LOAD]+=inst->Loads();	
 	mem[STORE]+=inst->Stores();	
@@ -77,3 +80,9 @@ void TraceStats::simulation(const Instruction* inst)
 	if (advanced_stats)
 		inst->disasm(disfile);
 }
+
+void TraceStats::idle(uint64_t c)
+{
+    cycles += c;
+}
+

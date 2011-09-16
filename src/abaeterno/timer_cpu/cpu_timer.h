@@ -31,6 +31,7 @@ public:
 		trace_needs.st[FULL_WARMING].set(EmitFunction::bind<CpuTimer,&CpuTimer::full_warming>(this));
 		trace_needs.st[SIMULATION].set(EmitFunction::bind<CpuTimer,&CpuTimer::simulation>(this));
 		trace_needs.st[END].clear();
+		trace_needs.idle=IdleFunction::bind<CpuTimer,&CpuTimer::idle>(this);
 	}
 	virtual ~CpuTimer() {}
 	
@@ -38,6 +39,7 @@ public:
 	virtual void simulation(const Instruction*)=0;
 	virtual void simple_warming(const Instruction*)=0;
 	virtual void full_warming(const Instruction*)=0;
+	virtual void idle(uint64_t)=0;
 
 	virtual void addMemory(std::string,Memory::Interface::Shared) {}
 

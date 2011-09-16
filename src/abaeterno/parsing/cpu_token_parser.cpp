@@ -39,7 +39,7 @@ CpuTokenParser::CpuTokenParser(TokenQueue* q,vector<uint64_t>& h,uint64_t d) :
 void CpuTokenParser::provide(const TraceNeeds *tn)
 {
     trace_needs=tn;
-    Interleaver::get().config(devid,insns,trace_needs);
+    Interleaver::get().config(devid,insns,tn);
 }
 
 void CpuTokenParser::process_pending(Instruction *inst)

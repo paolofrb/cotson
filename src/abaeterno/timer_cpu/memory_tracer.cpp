@@ -31,6 +31,7 @@ public:
 	void simple_warming(const Instruction*);
 	void full_warming(const Instruction*);
 	void addMemory(string,Memory::Interface::Shared); 
+	void idle(uint64_t);
 
 protected:
 	void endSimulation();
@@ -281,6 +282,11 @@ void MemoryTracer::full_warming(const Instruction* inst)
 	}
     cycles++;
     instructions++;
+}
+
+void MemoryTracer::idle(uint64_t c)
+{
+    cycles += c;
 }
 
 void MemoryTracer::simple_warming(const Instruction* inst)

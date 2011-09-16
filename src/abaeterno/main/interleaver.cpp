@@ -8,6 +8,7 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
+// #define _DEBUG_THIS_
 
 // $Id$
 #include "abaeterno_config.h"
@@ -22,57 +23,62 @@ using namespace std;
 void Interleaver::config(uint64_t dev,Instructions& insns,const TraceNeeds* tn)
 {
 	LOG("config device",dev);
-	ERROR_IF(dev!=it.size(),"Device '", dev, "' is not the device I was hoping to get");
+	ERROR_IF(dev!=cpus.size(),"Device '", dev, "' is not the device I was hoping to get");
 	insns.create(100,tn->history+1);
-	it.push_back(make_pair(&insns,tn));
+	cpus.push_back(CpuData(&insns,tn,dev));
 }
 
-namespace {
-struct cpu_time_ordering
+namespace
 {
-	Instructions* ins;
-	const TraceNeeds* tn;
-	uint64_t initial_cycles;
-	uint64_t order;
+    static bool exec_cpuid(const Instruction* inst)
+    {
+	    uint64_t a,b,c;
+	    boost::tie(a,b,c)=inst->cpuid_registers();
+	    LOG("CPUID");
+	    LOG("\tRDI:   ",a);
+	    LOG("\tRSI:   ",b);
+	    LOG("\tRBX:   ",c);
+	    Instruction* ii=const_cast<Instruction*>(inst);
+	    return CpuidCall::simulation(ii,Cotson::nanos(),10)==DISCARD;
+    }
+}
 
-	cpu_time_ordering(pair<Instructions*,const TraceNeeds*>p):
-		ins(p.first),tn(p.second),initial_cycles(*tn->cycles),order(0) {}
-	void set_now() { order=*tn->cycles-initial_cycles; }
-	
-	inline bool operator<(const cpu_time_ordering& other) const 
+void Interleaver::update_cpus() 
+{
+    // At every mpquantum CPUs must be re-aligned to the
+	// max cycle of all CPUs, to account for idle time of CPUs that
+	// may have executed fewer instructions
+	uint64_t max_cycle = 0;
+ 	for(uint i=0;i<cpus.size();i++)
 	{
-		return !(order<other.order); 
+	    uint64_t cycle = *(cpus[i].pcycles);
+		max_cycle = cycle > max_cycle ? cycle : max_cycle;
 	}
-};
-
-static bool exec_cpuid(const Instruction* inst)
-{
-	uint64_t a,b,c;
-	boost::tie(a,b,c)=inst->cpuid_registers();
-	LOG("CPUID");
-	LOG("\tRDI:   ",a);
-	LOG("\tRSI:   ",b);
-	LOG("\tRBX:   ",c);
-	Instruction* ii=const_cast<Instruction*>(inst);
-	return CpuidCall::simulation(ii,Cotson::nanos(),10)==DISCARD;
-}
+ 	for(uint i=0;i<cpus.size();i++) 
+	    cpus[i].update(max_cycle);
 }
 
-void Interleaver::notify() 
+void Interleaver::CpuData::update(uint64_t max_cycle)
 {
-// 	cout << "notify A: " << Cotson::nanos() << " : ";
-// 	for(uint i=0;i<it.size();i++)
-// 		cout << it[i].first->elems() << " ";
-// 	cout << endl;
- 	LOG("notify");
+	order=0;
+    emit=tn->st[sim_state()].emit;
+	pcycles=tn->cycles;
+	tn->idle(max_cycle-*pcycles);
+	initial_cycles=*pcycles;
+	LOG("CPU",dev,"cycle",*pcycles,"elems",ins->elems());
+}
+
+void Interleaver::end_quantum() 
+{
+ 	LOG("end_quantum");
+	update_cpus();
 
 	// one cpu shortcut
-	if (it.size()==1)
+	if (cpus.size()==1)
 	{
  	    LOG("one cpu shortcut");
-		Instructions* ins = it[0].first;
-		const TraceNeeds* tn = it[0].second;
-		const EmitFunction& emit = tn->st[sim_state()].emit;
+		Instructions* ins = cpus[0].ins;
+		const EmitFunction& emit = cpus[0].emit;
 		while(ins->elems())
 		{
 		    const Instruction* nn=ins->next();
@@ -82,54 +88,34 @@ void Interleaver::notify()
 	    return;
 	}
 
-	priority_queue<cpu_time_ordering> pq;
-	for(uint i=0;i<it.size();i++)
-		pq.push(cpu_time_ordering(it[i]));
+	priority_queue<CpuData*,vector<CpuData*>,CpuCmp> cpu_queue;
 
-	for(;;)
-	{
-		cpu_time_ordering t=pq.top();pq.pop();
-		if(t.ins->elems()==0)
-			break;
-		
-		const Instruction* nn=t.ins->next();
-        if(nn->is_cpuid() && exec_cpuid(nn))
-		{
-		    pq.push(t);
-		    continue;
-		}
-		
-		t.tn->st[sim_state()].emit(nn);
-		t.set_now();
-		pq.push(t);
+	for(uint i=0;i<cpus.size();i++) {
+		const Instructions* ins = cpus[i].ins;
+	    if(ins && ins->elems())
+	        cpu_queue.push(&cpus[i]);
 	}
 
-// 	cout << "notify B: " << Cotson::nanos() << " : ";
-// 	for(uint i=0;i<it.size();i++)
-// 		cout << it[i].first->elems() << " ";
-// 	cout << endl;
-
-	for(;!pq.empty();)
+	while (!cpu_queue.empty())
 	{
-		cpu_time_ordering t=pq.top();pq.pop();
-		if(t.ins->elems()==0)
-			continue;
-		
-		const Instruction* nn=t.ins->next();
-        if(nn->is_cpuid() && exec_cpuid(nn))
+		CpuData *fcpu = cpu_queue.top(); 
+		const Instruction* nn=fcpu->ins->next();
+        if(!(nn->is_cpuid() && exec_cpuid(nn)))
 		{
-		    pq.push(t);
-		    continue;
+		    fcpu->emit(nn);   // emit instruction to the timer
+		    fcpu->set_now();  // set new cpu time
+		    cpu_queue.pop();  // remove CPU from queue
+			// and re-insert it with new timing if
+			// there are instructions left to be processed
+		    if(fcpu->ins->elems())
+		        cpu_queue.push(fcpu); 
 		}
-		
-		t.tn->st[sim_state()].emit(nn);
-		t.set_now();
-		pq.push(t);
 	}
 }
 
-void Interleaver::break_sample() {
-	for(uint i=0;i<it.size();i++)
-		it[i].first->clear();
+void Interleaver::break_sample() 
+{
+	for(uint i=0;i<cpus.size();i++)
+		cpus[i].ins->clear();
 }
 

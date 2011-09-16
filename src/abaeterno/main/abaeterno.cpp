@@ -224,7 +224,7 @@ void AbAeterno::endQuantum()
     try
     {
         Machine::get().empty_queues();
-        Interleaver::get().notify();
+        Interleaver::get().end_quantum();
     }
     catch(runtime_error& e)
     {

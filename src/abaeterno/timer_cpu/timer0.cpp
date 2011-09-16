@@ -27,6 +27,7 @@ public:
 	void simple_warming(const Instruction*);
 	void full_warming(const Instruction*);
 	void simulation(const Instruction*);
+	void idle(uint64_t);
 
 	void addMemory(std::string,Memory::Interface::Shared); 
 
@@ -159,6 +160,12 @@ void Timer0::simulation(const Instruction* inst)
 	}
 	
 	prev_inst = inst;
+	cycles = (uint64_t)dcycles;
+}
+
+void Timer0::idle(uint64_t c)
+{
+    dcycles += (double)c;
 	cycles = (uint64_t)dcycles;
 }
 

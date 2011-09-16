@@ -30,6 +30,7 @@ public:
 	void simple_warming(const Instruction*);
 	void full_warming(const Instruction*);
 	void simulation(const Instruction*);
+	void idle(uint64_t);
 
 	void addMemory(std::string,Memory::Interface::Shared); 
 
@@ -319,6 +320,12 @@ void Timer1::full_warming(const Instruction* inst)
 void Timer1::simulation(const Instruction* inst)
 {
 	simulateInstruction(inst);
+}
+
+void Timer1::idle(uint64_t c)
+{
+    cycles += c;
+    cycles_internal += c;
 }
 
 void Timer1::simulateInstruction(const Instruction* inst)
