@@ -157,7 +157,7 @@ inline uint64_t TimerDep::reg_read(uint8_t r)
 	n_reg_reads++;
 	uint8_t rr = rename(r,false);
 	uint64_t t = regcycle[rr];
-    LOG(" -- reg read",(int)r,":",(int)rr,"cycle",t);
+    LOG(id()," -- reg read",(int)r,":",(int)rr,"cycle",t);
     return t;
 }
 
@@ -195,7 +195,7 @@ void TimerDep::reg_write(const Opcode* opc, uint64_t t)
 			uint8_t r = *i;
 			uint8_t rr = rename(r,true); // new renaming
 		    regcycle[rr] = t;
-			LOG(" -- reg write",(int)r,":",(int)rr,"cycle",t);
+			LOG(id()," -- reg write",(int)r,":",(int)rr,"cycle",t);
 	    }
 	}
 }
@@ -218,7 +218,7 @@ void TimerDep::simulation(const Instruction* inst)
 		    if (twolev->Lookup(lpc, twolev_record,taken)) 
 			{
 			    fetch_cycle += branch_mispred_penalty;
-				LOG("mispredict: fetch",fetch_cycle);
+				LOG(id(),"mispredict: fetch",fetch_cycle);
 		    }
 		
 		    // Update branch predictor
@@ -230,12 +230,12 @@ void TimerDep::simulation(const Instruction* inst)
 	/* Instruction Cache */
 	if(icache)
 	{
-		LOG("++ INSTRUCTION:", hex, pc);
+		LOG(id(),"++ INSTRUCTION:", hex, pc);
 		// inst->disasm(cout); cout << dec;
 		uint64_t latency =   icache->read(pc,fetch_cycle,this)
 			               + itlb->read(pc,(uint64_t)fetch_cycle,this);
 		fetch_cycle += latency;
-		LOG(" icache latency =",latency, "fetch",fetch_cycle);
+		LOG(id()," icache latency =",latency, "fetch",fetch_cycle);
 	}
 
 	/* Register read */
@@ -256,11 +256,11 @@ void TimerDep::simulation(const Instruction* inst)
 		for(; il != el; ++il)
 		{
 	        xcycle = res_mem.allocate(xcycle);
-			LOG(" -- LOAD:", xcycle, *il);
+			LOG(id()," -- LOAD:", xcycle, *il);
 			uint64_t cache_lat = dcache->read(*il,xcycle,this);
 			uint64_t tlb_lat = dtlb->read(*il,xcycle,this);
 			uint64_t latency = tlb_lat + (is_prefetch ? 0 : cache_lat);
-			LOG("     load latency =",latency);
+			LOG(id(),"     load latency =",latency);
 			if (latency > max_load_latency)
 				max_load_latency=latency;
 		}
@@ -273,10 +273,10 @@ void TimerDep::simulation(const Instruction* inst)
 		for(; is != es; ++is)
 		{
 	        xcycle = res_mem.allocate(xcycle);
-			LOG(" -- STORE:", xcycle, *is);
+			LOG(id()," -- STORE:", xcycle, *is);
 			dcache->write(*is,xcycle,this);
 			uint64_t latency = dtlb->read(*is,xcycle,this);
-			LOG("     store latency =",latency);
+			LOG(id(),"     store latency =",latency);
 		    if (latency > max_store_latency)
 		        max_store_latency = latency;
 		}
@@ -290,7 +290,7 @@ void TimerDep::simulation(const Instruction* inst)
 	xcycle = res_exe.allocate(xcycle);
 	if (xcycle > cycles)
 	    cycles = xcycle;
-	LOG(" -- xcycle",xcycle,"memcycle",memcycle,"cycles",cycles);
+	LOG(id()," -- xcycle",xcycle,"memcycle",memcycle,"cycles",cycles);
 	prev_inst = inst;
 }
 
@@ -351,7 +351,7 @@ void TimerDep::full_warming(const Instruction* inst)
 
 void TimerDep::beginSimulation()
 {
-	LOG("clear metrics");
+	LOG(id(),"clear metrics");
 	clear_metrics();
 	fetch_cycle=0;
 	lastreg=0;
@@ -364,7 +364,7 @@ void TimerDep::beginSimulation()
 
 void TimerDep::endSimulation()
 {
-	LOG("clearing timer");
+	LOG(id(),"clearing timer");
 	prev_inst=0;
 	fetch_cycle=0;
 }

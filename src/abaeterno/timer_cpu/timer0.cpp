@@ -8,6 +8,7 @@
 // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
+// #define _DEBUG_THIS_
 
 // $Id$
 #include "abaeterno_config.h"
@@ -52,8 +53,6 @@ private:
 	const double commit_cpi;
 	const double dcache_fudge;
 	const double icache_fudge;
-
-	uint64_t regcycle[256]; // register ready time
 };
 
 registerClass<CpuTimer,Timer0> timer0_c("timer0");
@@ -116,12 +115,14 @@ void Timer0::simulation(const Instruction* inst)
 
 	if(icache)
 	{
-		LOG(" -- INSTRUCTION:", hex, pc);
+		LOG(id(),dec,cycles," -- INSTRUCTION:", hex, pc);
 		uint64_t latency = icache->read(pc,(uint64_t)dcycles,this)+
 			itlb->read(pc,(uint64_t)dcycles,this);
-		LOG(" icache latency =",latency);
-		if (latency)
+		if (latency) 
+		{
+		    LOG(id()," icache latency =",dec,latency);
 			dcycles += icache_fudge * latency;
+	    }
 	}
 
 	if(dcache)
@@ -132,13 +133,15 @@ void Timer0::simulation(const Instruction* inst)
 		bool is_prefetch=inst->is_prefetch();
 		for(; il != el; ++il)
 		{
-			LOG(" -- LOAD:", *il);
+			LOG(id()," -- LOAD:", *il);
 			uint64_t cache_lat = dcache->read(*il,(uint64_t)dcycles,this);
 			uint64_t tlb_lat = dtlb->read(*il,(uint64_t)dcycles,this);
 			uint64_t latency = tlb_lat + (is_prefetch ? 0 : cache_lat);
-			LOG(" load latency =",latency);
 			if (latency > max_load_latency)
+			{
+			    LOG(id()," load latency =",dec,latency);
 				max_load_latency=latency;
+		    }
 		}
 		if(max_load_latency)
 			dcycles += dcache_fudge * max_load_latency;
@@ -148,12 +151,14 @@ void Timer0::simulation(const Instruction* inst)
 		const Instruction::MemIterator es = inst->StoresEnd();
 		for(; is != es; ++is)
 		{
-			LOG(" -- STORE:", *is);
+			LOG(id()," -- STORE:", *is);
 			dcache->write(*is,(uint64_t)dcycles,this);
 			uint64_t latency = dtlb->read(*is,(uint64_t)dcycles,this);
-			LOG(" store latency =",latency);
 			if (latency > max_store_latency)
+			{
+			    LOG(id()," store latency =",dec,latency);
 				max_store_latency=latency;
+		    }
 		}
 		if(max_store_latency)
 			dcycles += dcache_fudge * max_store_latency;
@@ -221,15 +226,14 @@ void Timer0::full_warming(const Instruction* inst)
 
 void Timer0::beginSimulation()
 {
-	LOG("clear metrics");
+	LOG(id(),"clear metrics");
 	clear_metrics();
 	dcycles = 0.0;
-	(void)memset(regcycle,0,256*sizeof(uint64_t));
 }
 
 void Timer0::endSimulation()
 {
-	LOG("clearing timer");
+	LOG(id(),"clearing timer");
 	prev_inst = 0;
 	dcycles = 0.0;
 }
