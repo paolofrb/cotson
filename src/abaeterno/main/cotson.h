@@ -29,14 +29,14 @@ void end_fastforward();
 
 namespace Cpu {
 
-	struct Stats {
-	    uint64_t ipc_insts;
-	    uint64_t ipc_cycles;
-		difference insts;
-		difference idles;
-		uint64_t cycles;
-		Stats():ipc_insts(0),ipc_cycles(0),insts(),idles(),cycles(0) {}
-	};
+    struct Stats {
+        uint64_t ipc_insts;
+        uint64_t ipc_cycles;
+        difference insts;
+        difference idles;
+        uint64_t cycles;
+        Stats():ipc_insts(0),ipc_cycles(0),insts(),idles(),cycles(0) {}
+    };
 
     uint64_t instructions(uint64_t devid);
     uint64_t idlecount(uint64_t devid);
@@ -44,7 +44,7 @@ namespace Cpu {
     uint64_t statistic(uint64_t devid,const std::string&);
     void set_ipc(uint64_t devid,uint64_t insts,uint64_t cycles);
     const Stats& stats(uint64_t devid);
-	void init(uint64_t devid);
+    void init(uint64_t devid);
     void flush(uint64_t devid);
     void force_flush();
     void set_quantum_s(); // simulation
@@ -102,7 +102,7 @@ namespace Inject {
         bool is_cpuid;
         bool is_fp;
         bool is_cr3_change; 
-		std::vector<uint8_t> src_regs, dst_regs, mem_regs;
+        std::vector<uint8_t> src_regs, dst_regs, mem_regs;
     };
 
     struct info_opcode {
@@ -136,11 +136,11 @@ namespace Memory {
     void write_physical_memory(uint64_t address,uint32_t length,uint8_t*buf);
     void read_virtual_memory(uint64_t address,uint32_t length,uint8_t*buf);
     void write_virtual_memory(uint64_t address,uint32_t length,uint8_t*buf);
-	uint64_t address_from_tag(const Inject::info_tag&);
+    uint64_t address_from_tag(const Inject::info_tag&);
 }
 
 namespace X86 {
-    // GR regs
+    // GR regs (for reading)
     uint64_t IntegerReg(int);
     uint16_t SelectorES();
     uint16_t FlagsES();
@@ -187,10 +187,10 @@ namespace X86 {
     uint64_t IORestartRSI();
     uint64_t IORestartRDI();
     uint64_t IORestartDword();
-    uint8_t  IORestartFlag();
-    uint8_t  HLTRestartFlag();
-    uint8_t  NMIBlocked();
-    uint8_t  CurrentPL();
+    uint8_t IORestartFlag();
+    uint8_t HLTRestartFlag();
+    uint8_t NMIBlocked();
+    uint8_t CurrentPL();
     uint64_t EFERRegister();
     uint32_t MachineState();
     uint32_t Revision();
@@ -249,12 +249,32 @@ namespace X86 {
     uint64_t  mmx7Mant();
     uint16_t  mmx7Exp();
 
-	// Save and restore regs
-	size_t RegSize(); // total regsize
-	void SaveRegs(uint8_t*);
-	void RestoreRegs(const uint8_t*);
+    // Set functions
+    void IntegerReg(int,uint64_t);
+    void R15(uint64_t);
+    void R14(uint64_t);
+    void R13(uint64_t);
+    void R12(uint64_t);
+    void R11(uint64_t);
+    void R10(uint64_t);
+    void R9(uint64_t);
+    void R8(uint64_t);
+    void RDI(uint64_t);
+    void RSI(uint64_t);
+    void RBP(uint64_t);
+    void RSP(uint64_t);
+    void RBX(uint64_t);
+    void RDX(uint64_t);
+    void RCX(uint64_t);
+    void RAX(uint64_t);
 
-	// Other utilities
+    // Save and restore regs
+    size_t RegSize(); // total regsize
+    void SaveRegs(uint8_t*);
+    void RestoreRegs(const uint8_t*);
+    void UpdateRegs(void);
+
+    // Other utilities
     inline bool is_cpuid(const uint8_t* b)
     {
         return b[0]==0x0F && b[1]==0xA2;
@@ -272,16 +292,16 @@ namespace X86 {
         return b[0]==0x0F && b[1]==0xAE && (m[0]&0x38)==0x38;
     }
     inline bool is_fp(const uint8_t* b)
-	{
-		switch(b[0]) 
-		{
-		    case 0xd8: case 0xd9: case 0xda: case 0xdb:
-		    case 0xdc: case 0xdd: case 0xde: case 0xdf: // X87
-		        return true;
-		    default:
+    {
+        switch(b[0]) 
+        {
+            case 0xd8: case 0xd9: case 0xda: case 0xdb:
+            case 0xdc: case 0xdd: case 0xde: case 0xdf: // X87
+                return true;
+            default:
                 return false;
-		}
-	}
+        }
+    }
 }
 
 const std::set<TokenQueue*>& queues();

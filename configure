@@ -81,6 +81,21 @@ if [[ ! -d "$simnow_dir" ]]; then
     echo "ERROR: Directory '$simnow_dir' not found..."
     exit 1
 fi
+
+mapcount=`sysctl -n vm.max_map_count`
+minmap=4194304
+if [[ $mapcount -lt $minmap ]]; then
+    echo "ERROR: vm.max_map_count = $mapcount is too small"
+    echo "    Increase it to at least $minmap by running"
+    echo "        sudo sysctl -w vm.max_map_count=$minmap"
+    echo ""
+    echo "    To make it permanent, add the following line to /etc/sysctl.conf"
+    echo "        vm.max_map_count = $minmap"
+    exit 1
+else
+    echo "VM configuration is ok: vm.max_map_count = $mapcount"
+fi
+
 ########################################################################
 ich0=`which lsb_release 2>&1`
 ich1=`echo "$ich0"|grep "not found"`
@@ -105,7 +120,7 @@ ok=0
 case $dist in
     Ubuntu)
         case $ver in 
-            karmic | intrepid | jaunty) ok=1 ;; 
+            karmic | intrepid | jaunty | maverick | natty | oneiric ) ok=1 ;; 
         esac
         ;;
     Debian)
@@ -120,7 +135,7 @@ case $dist in
         ;;
 esac
 
-if [[ -z $ok ]]; then
+if [[ $ok -eq 0 ]]; then
     echo ""
     echo "Sorry: $dist $ver not supported"
     echo "Supported versions are: Ubuntu karmic|jaunty|intrepid and Debian squeeze|lenny and Fedora Goddard|Laughlin"

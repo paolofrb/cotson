@@ -143,7 +143,7 @@ struct Proxy : public CMonitorConsumer
         return cur_info;
     }
 
-    const X8664REG& gr()
+    X8664REG& gr()
     {
         ERROR_IF(!code_injector,"no code injector present right now");
         if (!regs_valid) 
@@ -154,7 +154,7 @@ struct Proxy : public CMonitorConsumer
         return regs;
     }
 
-    const FX86REG& fr()
+    FX86REG& fr()
     {
         ERROR_IF(!code_injector,"no code injector present right now");
         if (!fregs_valid) 
@@ -1078,7 +1078,7 @@ uint64_t Cotson::t2c(uint64_t t)
 
 const set<TokenQueue*>& Cotson::queues() { return proxy->queues; }
 
-// General Register access
+// General Register access (read)
 uint64_t Cotson::X86::IntegerReg(int reg) { return proxy->gr().IntegerRegs[reg]; }
 uint16_t Cotson::X86::SelectorES() { return proxy->gr().SelectorES; }
 uint16_t Cotson::X86::FlagsES() { return proxy->gr().FlagsES; }
@@ -1191,6 +1191,25 @@ uint16_t Cotson::X86::mmx6Exp() { return proxy->fr().mmx6Exp; }
 uint64_t Cotson::X86::mmx7Mant() { return proxy->fr().mmx7Mant; }
 uint16_t Cotson::X86::mmx7Exp() { return proxy->fr().mmx7Exp; }
 
+// Set functions
+void Cotson::X86::IntegerReg(int r,uint64_t v) { proxy->gr().IntegerRegs[r]=v; }
+void Cotson::X86::R15(uint64_t v) { proxy->gr().IntegerRegs[0]=v; }
+void Cotson::X86::R14(uint64_t v) { proxy->gr().IntegerRegs[1]=v; }
+void Cotson::X86::R13(uint64_t v) { proxy->gr().IntegerRegs[2]=v; }
+void Cotson::X86::R12(uint64_t v) { proxy->gr().IntegerRegs[3]=v; }
+void Cotson::X86::R11(uint64_t v) { proxy->gr().IntegerRegs[4]=v; }
+void Cotson::X86::R10(uint64_t v) { proxy->gr().IntegerRegs[5]=v; }
+void Cotson::X86::R9(uint64_t v)  { proxy->gr().IntegerRegs[6]=v; }
+void Cotson::X86::R8(uint64_t v)  { proxy->gr().IntegerRegs[7]=v; }
+void Cotson::X86::RDI(uint64_t v) { proxy->gr().IntegerRegs[8]=v; }
+void Cotson::X86::RSI(uint64_t v) { proxy->gr().IntegerRegs[9]=v; }
+void Cotson::X86::RBP(uint64_t v) { proxy->gr().IntegerRegs[10]=v; }
+void Cotson::X86::RSP(uint64_t v) { proxy->gr().IntegerRegs[11]=v; }
+void Cotson::X86::RBX(uint64_t v) { proxy->gr().IntegerRegs[12]=v; }
+void Cotson::X86::RDX(uint64_t v) { proxy->gr().IntegerRegs[13]=v; }
+void Cotson::X86::RCX(uint64_t v) { proxy->gr().IntegerRegs[14]=v; }
+void Cotson::X86::RAX(uint64_t v) { proxy->gr().IntegerRegs[15]=v; }
+
 inline static size_t GRSize() { return sizeof(X8664REG); }
 inline static size_t FRSize() { return sizeof(FX86REG); }
 size_t Cotson::X86::RegSize() { return GRSize()+FRSize(); }
@@ -1214,3 +1233,10 @@ void Cotson::X86::RestoreRegs(const uint8_t *p)
     (void)memcpy(reinterpret_cast<void*>(&fr),p+GRSize(),FRSize());
     proxy->fr(fr);
 }
+
+void Cotson::X86::UpdateRegs(void)
+{
+    // Commit local register changes
+    proxy->gr(proxy->gr());
+}
+

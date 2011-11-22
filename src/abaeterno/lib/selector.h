@@ -61,6 +61,12 @@ public:
 	static void off(const std::string& elem) { allowed().erase(elem); }
 };
 
+#if defined(__GNUC__)
+#define __UNUSED __attribute__((unused))
+#else
+#define __UNUSED /**/
+#endif
+
 #ifndef NDEBUG
 
 	#define COND_SELECTOR(NMSPC)         \
@@ -70,14 +76,14 @@ public:
 			Local(const Selector& l) {     \
 				l.Do(__FILE__,__LINE__);    \
 			}                              \
-		} _ = NMSPC ::Make
+		} __UNUSED _ = NMSPC ::Make
 
 	#define SELECTOR(NMSPC)              \
 		if (false) ; else struct Local {  \
 			Local(const Selector& l) {     \
 				l.Do(__FILE__,__LINE__);    \
 			}                              \
-		} _ = NMSPC ::Make
+		} __UNUSED _ = NMSPC ::Make
 
 #else
 
@@ -88,14 +94,14 @@ public:
 			Local(const Selector& l) {     \
 				l.Do(__FILE__,__LINE__);    \
 			}                              \
-		} _ = NMSPC ::Make
+		} __UNUSED _ = NMSPC ::Make
 
 	#define SELECTOR(NMSPC)              \
 		if (true) ; else struct Local {   \
 			Local(const Selector& l) {     \
 				l.Do(__FILE__,__LINE__);    \
 			}                              \
-		} _ = NMSPC ::Make
+		} __UNUSED _ = NMSPC ::Make
 
 #endif
 
