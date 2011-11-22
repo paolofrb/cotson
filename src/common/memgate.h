@@ -20,8 +20,8 @@
 #ifdef USE_MEMGATE
 
 #define MEMGATE_HOOKS \
-void* operator new  (size_t size) { return MemGate::Bag::get().malloc(size, false); } \
-void* operator new[](size_t size) { return MemGate::Bag::get().malloc(size, true);  } \
+void* operator new  (std::size_t size) { return MemGate::Bag::get().malloc(size, false); } \
+void* operator new[](std::size_t size) { return MemGate::Bag::get().malloc(size, true);  } \
 void  operator delete  (void *p) { MemGate::Bag::get().free(p, false); }              \
 void  operator delete[](void *p) { MemGate::Bag::get().free(p, true);  }
 
@@ -39,12 +39,12 @@ class Element
 {
 public:
 	static uint64_t base_addr;
-	size_t size;
+	std::size_t size;
 	bool array;
 	std::vector<uint64_t> stack;
 
 	Element();
-	Element(size_t size_,bool array_);
+	Element(std::size_t size_,bool array_);
 };
 
 class Bag 
@@ -59,7 +59,7 @@ class Bag
 	void start();
 	void stop(); 
 
-	void* malloc(size_t size, bool array);
+	void* malloc(std::size_t size, bool array);
 	void free(void *p, bool array);
 
 	virtual ~Bag(); 
