@@ -16,8 +16,12 @@
 // Reserved function of CPUID in AMD64.
 // We will use this function to pass information from the
 // code executing in the vm to abaeterno
+
 #define RESERVED_CPUID_FUNCTION 0x80000009
-#define CPUID_FUNCTION_MASK 	  0xFFFFFFFF
+#define RESERVED_CPUID_RANGE    1024
+// #define CPUID_FUNCTION_MASK 	  0xFFFFFFFF
+
+#define IS_COTSON_CPUID(x) ((x)>=RESERVED_CPUID_FUNCTION && (x)<RESERVED_CPUID_FUNCTION+RESERVED_CPUID_RANGE)
 
 #include "instruction.h"
 

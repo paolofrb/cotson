@@ -458,7 +458,7 @@ void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
         return;
 
     uint64_t RAX = Cotson::X86::RAX();  // CPUID function
-    if (RAX != RESERVED_CPUID_FUNCTION) // Is this our own CPUID call?
+    if (!IS_COTSON_CPUID(RAX)) // Is this our own CPUID call?
         return;
 
     uint64_t RDI = Cotson::X86::RDI();  // Tracer function

@@ -170,7 +170,7 @@ void CpuTokenParser::run()
             case EVENT_CPUID:
             {
                 if(count!=9) ERROR("a cpuid should have 9 tokens");
-                if(p[2] == RESERVED_CPUID_FUNCTION) // RAX
+                if(IS_COTSON_CPUID(p[2])) // RAX
                 {
                     uint64_t RDI=p[4];
                     uint64_t RSI=p[6];
