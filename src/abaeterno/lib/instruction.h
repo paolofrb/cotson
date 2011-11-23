@@ -68,7 +68,7 @@ private:
 	Accesses loads,stores;
 	InstType type;
 	
-	uint64_t RDI, RSI, RBX; // CPUID registers
+	uint64_t RAX, RDI, RSI, RBX; // CPUID registers
 	uint64_t cr3;
 	uint64_t iid;
 	static uint64_t unique_id;
@@ -79,6 +79,7 @@ private:
 		type=other.type;
 		iid=other.iid;
 		cr3=other.cr3;
+		RAX=other.RAX;
 		RDI=other.RDI;
 		RSI=other.RSI;
 		RBX=other.RBX;
@@ -108,6 +109,7 @@ public:
 		p->loads.clear();
 		p->stores.clear();
 		p->cr3=lcr3;
+		p->RAX=0;
 		p->RDI=0;
 		p->RSI=0;
 		p->RBX=0;
@@ -130,16 +132,17 @@ public:
 	INLINE bool is_ret()      const { return type.is_ret(); }
 	INLINE bool is_call()     const { return type.is_call(); }
 
-	INLINE void cpuid_registers(uint64_t _rdi, uint64_t _rsi, uint64_t _rbx)
+	INLINE void cpuid_registers(uint64_t _rax, uint64_t _rdi, uint64_t _rsi, uint64_t _rbx)
 	{
+		RAX = _rax;
 		RDI = _rdi;
 		RSI = _rsi;
 		RBX = _rbx;
 	}
 	
-	INLINE boost::tuple<uint64_t,uint64_t,uint64_t> cpuid_registers() const
+	INLINE boost::tuple<uint64_t,uint64_t,uint64_t,uint64_t> cpuid_registers() const
 	{
-		return boost::make_tuple(RDI,RSI,RBX);
+		return boost::make_tuple(RAX,RDI,RSI,RBX);
 	}
 	
 	void disasm(std::ostream&) const;

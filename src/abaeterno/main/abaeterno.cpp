@@ -461,28 +461,31 @@ void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
     if (!IS_COTSON_CPUID(RAX)) // Is this our own CPUID call?
         return;
 
-    uint64_t RDI = Cotson::X86::RDI();  // Tracer function
-    uint64_t RSI = Cotson::X86::RSI();  // Tracer value
-    uint64_t RBX = Cotson::X86::RBX();  // Tracer param
+    uint64_t RDI = Cotson::X86::RDI(); 
+    uint64_t RSI = Cotson::X86::RSI();
+    uint64_t RBX = Cotson::X86::RBX();
 
     LOG("AbAeterno::execute");
     LOG("\tnanos: ",nanos);
     LOG("\tdevid: ",devid);
+    LOG("\tRAX:   ",RAX);
     LOG("\tRDI:   ",RDI);
     LOG("\tRSI:   ",RSI);
     LOG("\tRBX:   ",RBX);
 
     FunctionalState fs= (sim_state == FUNCTIONAL) ? ONLY_FUNCTIONAL : FUNCTIONAL_AND_TIMING;
-    CpuidCall::functional(fs,nanos,devid,RDI,RSI,RBX);
-    if (net_cpuid && NetworkTiming::get())
-        NetworkTiming::get()->cpuid(RBX,RDI,RSI);
-#if 0 // BUGGY
-    if (RDI==9) // End fastforward
-        Cotson::end_fastforward();
-#endif
+
+	if (IS_COTSON_EXT_CPUID(RAX))
+        CpuidCall::functional(fs,nanos,devid,COTSON_EXT_CPUID_OP(RAX),RDI,RSI);
+	else
+	{
+        CpuidCall::functional(fs,nanos,devid,RDI,RSI,RBX);
+        if (net_cpuid && NetworkTiming::get())
+            NetworkTiming::get()->cpuid(RBX,RDI,RSI);
+    }
 }
 
-void AbAeterno::network_cpuid(uint64_t RBX,uint16_t RDI,uint16_t RSI)
+void AbAeterno::network_cpuid(uint64_t RBX, uint16_t RDI, uint16_t RSI)
 {
     cerr << "Got cpuid from network: " << RDI << " " << RSI << " " << RBX << endl;
     FunctionalState fs= (sim_state == FUNCTIONAL) ? ONLY_FUNCTIONAL : FUNCTIONAL_AND_TIMING;

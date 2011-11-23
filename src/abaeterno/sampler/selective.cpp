@@ -53,8 +53,8 @@ void Selective::functional_call(FunctionalState fs,uint64_t b,uint64_t c)
 
 InstructionInQueue Selective::simulation_call(Instruction* inst)
 {
-	uint64_t a,b,c;
-	tie(a,b,c)=inst->cpuid_registers();
+	uint64_t op,a,b,c;
+	tie(op,a,b,c)=inst->cpuid_registers();
 	current=lexical_cast<int>(Option::run_function(changer, c==0, b));
 	AbAeterno::get().break_sample();
 	return DISCARD;
@@ -67,7 +67,7 @@ Selective::Selective(Parameters&p) :
 {
 	FunctionalCall f=bind(&Selective::functional_call,this,_1,_5,_6);
 	SimulationCall s=bind(&Selective::simulation_call,this,_1);
-	CpuidCall::add(10,f,s); 
+	CpuidCall::add(COTSON_RESERVED_CPUID_SELECTIVE,f,s); 
 
 	string constructor=p.get<string>("constructor");
 	int quantity=p.get<int>("quantity");

@@ -52,16 +52,12 @@ void Interleaver::config(uint64_t dev,Instructions& insns,const TraceNeeds* tn)
 
 namespace
 {
-    static bool exec_cpuid(const Instruction* inst)
+    static bool selective_discard(const Instruction* inst)
     {
-	    uint64_t a,b,c;
-	    boost::tie(a,b,c)=inst->cpuid_registers();
-	    LOG("CPUID");
-	    LOG("\tRDI:   ",a);
-	    LOG("\tRSI:   ",b);
-	    LOG("\tRBX:   ",c);
+        if(!inst->is_cpuid())
+		    return false;
 	    Instruction* ii=const_cast<Instruction*>(inst);
-	    return CpuidCall::simulation(ii,Cotson::nanos(),10)==DISCARD;
+	    return CpuidCall::simulation(ii,Cotson::nanos(),COTSON_RESERVED_CPUID_SELECTIVE)==DISCARD;
     }
 }
 
@@ -126,7 +122,7 @@ void Interleaver::end_quantum_onecpu(CpuData* cpu)
 	while(ins->elems())
 	{
 	    const Instruction* nn=ins->next();
-        if(! (nn->is_cpuid() && exec_cpuid(nn)) )
+        if(!selective_discard(nn))
 		    emit(nn);
 	}
 }
@@ -158,7 +154,7 @@ void Interleaver::end_quantum()
 	{
 		CpuData *fcpu = cpu_queue.top(); 
 		const Instruction* nn=fcpu->ins->next();
-        if(!(nn->is_cpuid() && exec_cpuid(nn)))
+        if(!selective_discard(nn))
 		{
 			LOG("emit",fcpu->dev,"order",fcpu->order);
 		    fcpu->emit(nn);   // emit instruction to the timer

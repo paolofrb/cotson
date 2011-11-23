@@ -53,10 +53,11 @@ InstructionInQueue simulation_callback(
 	uint64_t devid)
 {
 	cout << "simulation" << endl;
-	uint64_t a,b,c;
-	tie(a,b,c)=inst->cpuid_registers();
+	uint64_t op,a,b,c;
+	tie(op,a,b,c)=inst->cpuid_registers();
 	cout << "  nanos:" << nanos << endl;
 	// cout << "  core: " << devid << endl; // right now this does not work!
+	cout << " op:    " << hex << op << dec << endl;
 	cout << "  a:    " << a << endl;
 	cout << "  b:    " << b << endl;
 	// Note that we can't call Cotson::Memory here because we're past

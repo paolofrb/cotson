@@ -172,19 +172,21 @@ void CpuTokenParser::run()
                 if(count!=9) ERROR("a cpuid should have 9 tokens");
                 if(IS_COTSON_CPUID(p[2])) // RAX
                 {
+                    uint64_t RAX=p[2];
                     uint64_t RDI=p[4];
                     uint64_t RSI=p[6];
                     uint64_t RBX=p[8];
 
                     LOG("EVENT_CPUID");
                     LOG("\tdevid: ",devid);
+                    LOG("\tRAX:   ",hex,RAX);
                     LOG("\tRDI:   ",hex,RDI);
                     LOG("\tRSI:   ",hex,RSI);
                     LOG("\tRBX:   ",hex,RBX);
                     // Fake instruction for the interleaver
                     Instruction* fake_insn = insns.alloc();
                     Instruction::init(fake_insn,0,0,8,cur_cr3,0,InstType::CPUID); 
-                    fake_insn->cpuid_registers(RDI,RSI,RBX);
+                    fake_insn->cpuid_registers(RAX,RDI,RSI,RBX);
                 }
             }
             break;
