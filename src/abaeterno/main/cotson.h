@@ -124,7 +124,7 @@ namespace Inject {
     };
 
     const info_instruction& current_opcode(boost::function<uint8_t*(int)>);
-    void tag(uint32_t tag);
+    void tag(uint32_t tag,bool normal);
     void save_tag_info(uint64_t,uint32_t,tag_type);
     uint64_t PC(bool);
     info_opcode translate_info();
@@ -283,6 +283,11 @@ namespace X86 {
     {
         return b[0]==0x0F && (b[1]==0x18 || b[1]==0x0D);
     }
+	inline bool is_cotson_asm(const uint8_t* op)
+	{
+	    // prefetchnta 0x2dafxxxx(...)
+	    return is_prefetch(op) && op[6]==0x2d && op[5]==0xaf;
+	}
     inline bool is_cr3mov(const uint8_t* b, const uint8_t *m)
     {
         return b[0]==0x0F && b[1]==0x22 && (m[0]&0x38)==0x18;

@@ -359,7 +359,8 @@ UINT64 Proxy::MonitorCallback(int m, UINT64 nTag)
 //INTF
 void Proxy::FrequencyCallBack(int m, UINT64 devid, CCodeInjector* inj, UINT32 freq) 
 {
-  // Do nothing, we use proxy->getProcessorFreq()
+    // cout << "Device " << devid << " frequency changed to " << freq << endl;
+    // Do nothing, we use proxy->getProcessorFreq()
 }
 
 //INTF
@@ -754,6 +755,7 @@ uint64_t Cotson::Cpu::statistic(uint64_t devid,const string& s)
 void Cotson::Cpu::flush(uint64_t devid)
 {
     Profiler::get().clear_tags(devid);
+    AbAeterno::get().clear_tags(devid);
 }
 
 void Cotson::Cpu::set_ipc(uint64_t devid,uint64_t insts,uint64_t cycles) 
@@ -970,10 +972,11 @@ Cotson::Inject::info_opcode Cotson::Inject::translate_info()
     return info_opcode(t->nOpcodeCount,t->pOpcodeBuffer + t->nOpcodeOffset);
 }
 
-void Cotson::Inject::tag(uint32_t tag) 
+void Cotson::Inject::tag(uint32_t tag, bool normal) 
 {
     CODETRANSLATESTRUCT *t=proxy->translate_struct;
     ERROR_IF(!t,"no translation structure present right now");
+	t->bTranslateNormally = normal;
     t->nInstructionTag = tag;  
 }
 
@@ -1039,7 +1042,7 @@ void Cotson::Memory::write_virtual_memory(uint64_t address,uint32_t length,uint8
     ERROR_IF(!proxy->code_injector,"no code injector present right now");
     uint32_t r;
     proxy->code_injector->WriteLinearMemory(address,buf,length,&r);
-    ERROR_IF(length!=r,"WritePhysicalMemoryError");
+    ERROR_IF(length!=r,"WriteVirtualMemoryError");
 }
 
 uint64_t Cotson::Memory::address_from_tag(const Cotson::Inject::info_tag& ti)

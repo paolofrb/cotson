@@ -66,6 +66,7 @@ option  o44("clflush",                        "add load to clflush operations");
 
 option  o50("print_stats",                    "print statistics on stdout");
 option  o51("network_cpuid",                  "send cpuid commands to all nodes in the cluster");
+option  o52("custom_asm",                     "extend custom asm to prefetchnta");
 }
 
 namespace {
@@ -94,7 +95,8 @@ AbAeterno::AbAeterno() :
     translated_insts(0),
     tag_prefetch(Option::get<bool>("prefetch",false)),
     print_stats(Option::get<bool>("print_stats",false)),
-    net_cpuid(Option::get<bool>("network_cpuid",false))
+    net_cpuid(Option::get<bool>("network_cpuid",false)),
+    custom_asm(Option::get<bool>("custom_asm",false))
 {
     add("nSimulation",    stateCounter[SIMULATION]);
     add("nSimpleWarming", stateCounter[SIMPLE_WARMING]);
@@ -393,7 +395,7 @@ void AbAeterno::translate(uint64_t devid)
         translated_tags.clear();
         if (Profiler::get().on())  // tag beginning of each translated block
         {
-            Cotson::Inject::tag(++code_tag);
+            Cotson::Inject::tag(++code_tag,true);
             translated_tags.push_back(code_tag);
         }
     }
@@ -402,17 +404,23 @@ void AbAeterno::translate(uint64_t devid)
     const Cotson::Inject::info_opcode& op = Cotson::Inject::translate_info();
     if (op.length > 1 && Cotson::X86::is_cpuid(op.opcode))
     {   // cpuid
-        Cotson::Inject::tag(++code_tag);
+        Cotson::Inject::tag(++code_tag,true);
     }
+	else if (custom_asm && Cotson::X86::is_cotson_asm(op.opcode))
+	{
+		// prefetchnta (mapped to cpuid-style custom calls)
+        Cotson::Inject::tag(++code_tag,false);
+		asm_tags[devid][code_tag]= (op.opcode[4]<<8) | op.opcode[3];
+	}
     else if (Profiler::get().cr3() && op.length > 2
              && Cotson::X86::is_cr3mov(op.opcode,op.opcode+2)) 
     {   // cr3 change
-        Cotson::Inject::tag(++code_tag); 
+        Cotson::Inject::tag(++code_tag,true); 
         translated_tags.push_back(code_tag);
     }
     else if (needs_sim_tag(op.opcode,op.length))
     {  // Save a list of the instructions we tag
-        Cotson::Inject::tag(++code_tag);
+        Cotson::Inject::tag(++code_tag,true);
         translated_tags.push_back(code_tag);
     }
 }
@@ -457,6 +465,17 @@ void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
     if (Profiler::get().execute(nanos,tag,devid))
         return;
 
+    FunctionalState fs= (sim_state == FUNCTIONAL) ? ONLY_FUNCTIONAL : FUNCTIONAL_AND_TIMING;
+
+	uint32_t asmop = asm_tags[devid][tag];
+	if (asmop) 
+	{
+        uint64_t RAX = Cotson::X86::RAX();  // ARG1
+        uint64_t RDI = Cotson::X86::RDI();  // ARG2
+        CpuidCall::functional(fs,nanos,devid,asmop+COTSON_RESERVED_ASM_BASE,RAX,RDI);
+	    return;
+	}
+
     uint64_t RAX = Cotson::X86::RAX();  // CPUID function
     if (!IS_COTSON_CPUID(RAX)) // Is this our own CPUID call?
         return;
@@ -472,8 +491,6 @@ void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
     LOG("\tRDI:   ",RDI);
     LOG("\tRSI:   ",RSI);
     LOG("\tRBX:   ",RBX);
-
-    FunctionalState fs= (sim_state == FUNCTIONAL) ? ONLY_FUNCTIONAL : FUNCTIONAL_AND_TIMING;
 
 	if (IS_COTSON_EXT_CPUID(RAX))
         CpuidCall::functional(fs,nanos,devid,COTSON_EXT_CPUID_OP(RAX),RDI,RSI);

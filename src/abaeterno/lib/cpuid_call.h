@@ -18,13 +18,14 @@
 // code executing in the vm to abaeterno
 
 #define COTSON_RESERVED_CPUID_BASE       0x80000009
-#define COTSON_RESERVED_CPUID_RANGE      16384
+#define COTSON_RESERVED_CPUID_RANGE      30000
 #define COTSON_RESERVED_CPUID_EXT        (COTSON_RESERVED_CPUID_BASE+1000)
 #define COTSON_RESERVED_CPUID_SELECTIVE  10
+#define COTSON_RESERVED_ASM_BASE         5000
 
-#define IS_COTSON_CPUID(x) ( \
-    ((x) >= COTSON_RESERVED_CPUID_BASE) && \
-    ((x) <  COTSON_RESERVED_CPUID_BASE+COTSON_RESERVED_CPUID_RANGE) )
+#define IS_COTSON_CPUID(rax) ( \
+    ((rax) >= COTSON_RESERVED_CPUID_BASE) && \
+    ((rax) <  COTSON_RESERVED_CPUID_BASE+COTSON_RESERVED_CPUID_RANGE) )
 
 #define IS_COTSON_EXT_CPUID(x) \
     ((x) >= COTSON_RESERVED_CPUID_EXT)
@@ -57,7 +58,7 @@ class CpuidCall : public boost::noncopyable
     {
         if(a >= COTSON_RESERVED_CPUID_RANGE)
             throw std::runtime_error("cpuid op "+ 
-                boost::lexical_cast<std::string>(a) + "exceeds max of " +
+                boost::lexical_cast<std::string>(a) + " exceeds max of " +
                 boost::lexical_cast<std::string>(COTSON_RESERVED_CPUID_RANGE-1));
 
         CpuidCall& me=get();

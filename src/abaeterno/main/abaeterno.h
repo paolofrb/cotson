@@ -48,6 +48,7 @@ private:
 
 	uint64_t code_tag;
 	std::deque<uint32_t> translated_tags;
+	std::map< uint32_t,std::map<uint32_t,uint32_t> > asm_tags;
 	uint64_t samples;
 	void do_compute_metrics();
 
@@ -58,6 +59,7 @@ public:
 	void network_cpuid(uint64_t,uint16_t,uint16_t);
 	bool inject_tag(uint64_t,uint32_t,const uint8_t*);
 	bool has_pending_tags() { return !translated_tags.empty(); }
+	void clear_tags(uint32_t d) { asm_tags[d].clear(); }
 	
 private:
 	void endSample();
@@ -83,5 +85,6 @@ private:
 	bool tag_prefetch;
 	bool print_stats;
 	bool net_cpuid;
+	bool custom_asm;
 };
 #endif 
