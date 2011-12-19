@@ -285,8 +285,9 @@ namespace X86 {
     }
 	inline bool is_cotson_asm(const uint8_t* op)
 	{
-	    // prefetchnta 0x2dafxxxx(...)
-	    return is_prefetch(op) && op[6]==0x2d && op[5]==0xaf;
+	    // prefetchnta 0x2dafxxxx(%rr)
+		// 0f 18 rr xx xx xx xx
+	    return op[0]==0x0F && op[1]==0x18 && op[6]==0x2d && op[5]==0xaf;
 	}
     inline bool is_cr3mov(const uint8_t* b, const uint8_t *m)
     {
