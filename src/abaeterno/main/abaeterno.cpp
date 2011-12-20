@@ -410,7 +410,8 @@ void AbAeterno::translate(uint64_t devid)
 	{
 		// prefetchnta (mapped to cpuid-style custom calls)
         Cotson::Inject::tag(++code_tag,false);
-		asm_tags[devid][code_tag]= (op.opcode[4]<<8) | op.opcode[3];
+		asm_tags[devid][code_tag]= 
+		    (op.opcode[5]<<16) | (op.opcode[4]<<8) | op.opcode[3];
 	}
     else if (Profiler::get().cr3() && op.length > 2
              && Cotson::X86::is_cr3mov(op.opcode,op.opcode+2)) 
@@ -467,12 +468,12 @@ void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
 
     FunctionalState fs= (sim_state == FUNCTIONAL) ? ONLY_FUNCTIONAL : FUNCTIONAL_AND_TIMING;
 
-	uint32_t asmop = asm_tags[devid][tag];
-	if (asmop) 
+	uint32_t atag = asm_tags[devid][tag];
+	if (atag) 
 	{
-        uint64_t RAX = Cotson::X86::RAX();  // ARG1
-        uint64_t RDI = Cotson::X86::RDI();  // ARG2
-        CpuidCall::functional(fs,nanos,devid,asmop+COTSON_RESERVED_ASM_BASE,RAX,RDI);
+	    uint32_t op = (atag>>8)+COTSON_RESERVED_ASM_BASE;
+		uint8_t reg = atag & 0xff;
+        CpuidCall::functional(fs,nanos,devid,op,reg,0);
 	    return;
 	}
 
