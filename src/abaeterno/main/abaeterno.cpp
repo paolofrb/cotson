@@ -471,9 +471,11 @@ void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
 	uint32_t atag = asm_tags[devid][tag];
 	if (atag) 
 	{
-	    uint32_t op = (atag>>8)+COTSON_RESERVED_ASM_BASE;
+		// imm=byte[2], op=byte[1], reg=byte[0]
 		uint8_t reg = atag & 0xff;
-        CpuidCall::functional(fs,nanos,devid,op,reg,0);
+	    uint8_t op  = (atag>>8)  & 0xff;
+		uint8_t imm = (atag>>16) & 0xff;
+        CpuidCall::functional(fs,nanos,devid,op+COTSON_RESERVED_ASM_BASE,reg,imm);
 	    return;
 	}
 
