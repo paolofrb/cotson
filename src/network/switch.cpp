@@ -434,7 +434,7 @@ bool Switch::simtime_advance(uint64_t ntime)
     uint64_t t0 = ntime ? ntime : ULONG_MAX;
     uint64_t t1 = ntime ? ntime : 0;
     int nw = 0;
-    int nx = 0;
+    // int nx = 0;
     for (NodeSet::iterator i = nodes_.begin(); i != nodes_.end(); ++i) {
         const Node::Ptr node = *i;
         if (node && node->sync_valid()) {
@@ -443,7 +443,7 @@ bool Switch::simtime_advance(uint64_t ntime)
             t1 = t > t1 ? t : t1;
             if (t < nextGT()) {
                nw++;
-               nx = node->id();
+               // nx = node->id();
             }
         }
     }

@@ -206,7 +206,8 @@ CacheImpl<Storage,Timer>::read(
 	MOESI_state new_moesi = nstate.moesi();
 
 	// Find line to evict, invalidate and schedule update for later
-	Line* evict = storage.find_lru(m.phys);
+	// (if an INVALID line was found for the tag, force to use that one)
+	Line* evict = cl ? cl : storage.find_lru(m.phys);
 	ERROR_IF(!evict,"null evict line in read");
 	evict->lru = ~0ULL; // mark line with max lru to reserve it
 
@@ -310,7 +311,8 @@ CacheImpl<Storage,Timer>::write(
 	if (writeallocate)
 	{
 	    // Find line to evict, invalidate and schedule line update for later
-	    Line* evict = storage.find_lru(m.phys);
+	    // (if an INVALID line was found for the tag, force to use that one)
+	    Line* evict = cl ? cl : storage.find_lru(m.phys);
 	    ERROR_IF(!evict,"null evict line in write");
 		LOG("schedule write allocate",std::hex,tag,"evict",evict->tag,std::dec);
 	    evict->lru = ~0ULL; // mark line with max lru to reserve it

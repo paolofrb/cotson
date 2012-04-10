@@ -33,6 +33,8 @@
 #include "main_memory.h"
 
 #include "storage_basic.h"
+#include "storage_two_way.h"
+#include "storage_four_way.h"
 #include "cache_timing_basic.h"
 #include "cache_timing_l2.h"
 
@@ -661,3 +663,54 @@ BOOST_AUTO_TEST_CASE( test_mesi_states_with_bus_2levels_WT_ )
 	BOOST_CHECK_EQUAL(l2->state(m4,time),  MODIFIED); 
 	
 }
+
+// With last level WRITE BACK
+BOOST_AUTO_TEST_CASE( test_mesi_states_with_bus_2levels_inv_WB_ )
+{
+	//CPU A - L1
+	Parameters p1a;
+	p1a.set("size",      "16");
+	p1a.set("line_size", "1");
+	p1a.set("num_sets",  "2");
+	p1a.set("latency",   "0");
+	p1a.set("type",      "...");
+	p1a.set("write_policy","WB");
+	p1a.set("name",      "L1-CPU_A");
+	Interface* l1a = new CacheImpl<Storage::TwoWay,Timing::Basic>(p1a);
+
+	//CPU B - L1
+	Parameters p1b;
+	p1b.set("size",      "16");
+	p1b.set("line_size", "1");
+	p1b.set("num_sets",  "2");
+	p1b.set("latency",   "0");
+	p1b.set("type",      "...");
+	p1b.set("write_policy","WB");
+	p1b.set("name",      "L1-CPU_B");
+	Interface* l1b = new CacheImpl<Storage::TwoWay,Timing::Basic>(p1b);
+
+	//BUS
+ 	Parameters pb;
+	pb.set("name",     "BUS");
+	pb.set("latency",  "10");
+	pb.set("bandwidth",  "1");
+	pb.set("protocol", "MESI");
+	Interface* bus = new Bus<Memory::Protocol::MESI>(pb);
+
+	//L2
+	Parameters p2;
+	p2.set("size",      "16");
+	p2.set("line_size", "1");
+	p2.set("num_sets",  "4");
+	p2.set("latency",   "20");
+	p2.set("type",      "...");
+	p2.set("write_policy","WB");
+	p2.set("name",      "L2");
+	Interface* l2 = new CacheImpl<Storage::FourWay,Timing::Basic>(p2);
+
+	// Link caches and bus
+	l1a->setNext(Interface::Shared(bus));
+	l1b->setNext(Interface::Shared(bus));
+	bus->setNext(Interface::Shared(l2));
+}
+
