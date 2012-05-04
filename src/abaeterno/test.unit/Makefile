@@ -1,15 +1,15 @@
 TEST = $(TSRC:.cpp=)
 TOBJ = $(TSRC:.cpp=.o)
 
-$(TEST):
+$(TEST): $(TOBJ)
 	@echo "#### Linking test $@"; \
 	$(CXX) -o $@ $^ $(LIBS); \
 	echo "#### Running test $@ (output in $@.log)"; \
-	$@ > $@.log
+	$@ --log_level=all > $@.log
 
 %.o: %.cpp
 	@echo "$< ==> $@"; \
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -D_DEBUG_THIS_ -c $< -o $@
 
 include test.unit/make.deps
 

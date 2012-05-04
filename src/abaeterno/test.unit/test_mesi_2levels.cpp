@@ -202,10 +202,13 @@ BOOST_AUTO_TEST_CASE( test_mesi_states_with_bus_2levels_WB_ )
 	mt.reset();
 	lat=l1b->read(m,time,mt,NOT_FOUND).latency();
 	BOOST_CHECK_EQUAL(lat,0+10+0u); //miss L1_B, snoop from L1_A
-	time+=lat+TIME_TO_STABLE;
+	time+=lat;
+	BOOST_CHECK_EQUAL(l2->state(m,time),  EXCLUSIVE); // Before writeback
+	time+=TIME_TO_STABLE;
 	BOOST_CHECK_EQUAL(l1a->state(m,time), SHARED);
 	BOOST_CHECK_EQUAL(l1b->state(m,time), SHARED);	
-	BOOST_CHECK_EQUAL(l2->state(m,time),  EXCLUSIVE); 
+	BOOST_CHECK_EQUAL(l2->state(m,time),  MODIFIED); // After writeback
+	MOESI_state last_l2=MODIFIED;
 
 	//Read from CPU_A (from SHARED to SHARED in L1_A and
 	//from SHARED to SHARED in L1_A )
@@ -216,7 +219,7 @@ BOOST_AUTO_TEST_CASE( test_mesi_states_with_bus_2levels_WB_ )
 	time+=lat+TIME_TO_STABLE;
 	BOOST_CHECK_EQUAL(l1a->state(m,time), SHARED);
 	BOOST_CHECK_EQUAL(l1b->state(m,time), SHARED);	
-	BOOST_CHECK_EQUAL(l2->state(m,time),  EXCLUSIVE); 
+	BOOST_CHECK_EQUAL(l2->state(m,time),  last_l2); 
 
 	//Read from CPU_B (from SHARED to SHARED in L1_B and
 	//from SHARED to SHARED in L1_A )
@@ -227,7 +230,7 @@ BOOST_AUTO_TEST_CASE( test_mesi_states_with_bus_2levels_WB_ )
 	time+=lat+TIME_TO_STABLE;
 	BOOST_CHECK_EQUAL(l1a->state(m,time), SHARED);
 	BOOST_CHECK_EQUAL(l1b->state(m,time), SHARED);	
-	BOOST_CHECK_EQUAL(l2->state(m,time),  EXCLUSIVE); 
+	BOOST_CHECK_EQUAL(l2->state(m,time),  last_l2); 
 
 	//Write from CPU_A (from SHARED to EXCLUSIVE in L1_A and
 	//from SHARED to INVALID in L1_B )
@@ -238,7 +241,7 @@ BOOST_AUTO_TEST_CASE( test_mesi_states_with_bus_2levels_WB_ )
 	time+=lat+TIME_TO_STABLE;
 	BOOST_CHECK_EQUAL(l1a->state(m,time), EXCLUSIVE);
 	BOOST_CHECK_EQUAL(l1b->state(m,time), INVALID);	
-	BOOST_CHECK_EQUAL(l2->state(m,time),  EXCLUSIVE); //WRITE BACK; no change of state
+	BOOST_CHECK_EQUAL(l2->state(m,time),  last_l2); //WRITE BACK; no change of state
 
 	//Read from CPU_B (from INVALID to SHARED in L1_B and
 	//from EXCLUSIVE to SHARED in L1_A )
@@ -249,7 +252,7 @@ BOOST_AUTO_TEST_CASE( test_mesi_states_with_bus_2levels_WB_ )
 	time+=lat+TIME_TO_STABLE;
 	BOOST_CHECK_EQUAL(l1a->state(m,time), SHARED);
 	BOOST_CHECK_EQUAL(l1b->state(m,time), SHARED);	
-	BOOST_CHECK_EQUAL(l2->state(m,time),  EXCLUSIVE); 
+	BOOST_CHECK_EQUAL(l2->state(m,time),  last_l2); 
 
 	//Write from CPU_B (from SHARED to EXCLUSIVE in L1_B and
 	//from SHARED to INVALID in L1_A )
@@ -260,7 +263,7 @@ BOOST_AUTO_TEST_CASE( test_mesi_states_with_bus_2levels_WB_ )
 	time+=lat+TIME_TO_STABLE;
 	BOOST_CHECK_EQUAL(l1a->state(m,time), INVALID);
 	BOOST_CHECK_EQUAL(l1b->state(m,time), EXCLUSIVE);	
-	BOOST_CHECK_EQUAL(l2->state(m,time),  EXCLUSIVE); //WRITE BACK; no change of state
+	BOOST_CHECK_EQUAL(l2->state(m,time),  last_l2); //WRITE BACK; no change of state
 
 	//Write from CPU_A (from INVALID to MODIFIED in L1_A and
 	//from EXCLUSIVE to INVALID in L1_B )
@@ -271,7 +274,7 @@ BOOST_AUTO_TEST_CASE( test_mesi_states_with_bus_2levels_WB_ )
 	time+=lat+TIME_TO_STABLE;
 	BOOST_CHECK_EQUAL(l1a->state(m,time), MODIFIED);
 	BOOST_CHECK_EQUAL(l1b->state(m,time), INVALID);	
-	BOOST_CHECK_EQUAL(l2->state(m,time),  EXCLUSIVE); //WRITE BACK; no change of state
+	BOOST_CHECK_EQUAL(l2->state(m,time),  last_l2); //WRITE BACK; no change of state
 	
 	
 	//NEW MEMORY LOCATION

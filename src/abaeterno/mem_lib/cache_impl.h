@@ -439,6 +439,7 @@ INLINE void CacheImpl<Storage,Timer>::perform_update(const Future& f)
 	// Writeback if needed
 	if (!writethrough && replace->moesi.isDirty())
 	{
+		LOG(name,"writeback tag",replace->tag);
 		writeback_++;
 	    uint64_t raddr = cache.addr_from_group_id(replace->tag);
 		Access wba(raddr,raddr,item_size_); // writeback address
@@ -460,6 +461,17 @@ INLINE void CacheImpl<Storage,Timer>::perform_invalidate(const Future& f)
 	{
 		LOG(name,"invalidate tag",f.tag, "update moesi state from", 
 		    cl->moesi, "to", f.moesi, "cycle" , f.when);
+		// Writeback if needed
+		if (!writethrough && cl->moesi.isDirty() && f.moesi==SHARED)
+	    {
+		    LOG(name,"writeback tag",cl->tag);
+		    writeback_++;
+	        uint64_t raddr = cache.addr_from_group_id(cl->tag);
+		    Access wba(raddr,raddr,item_size_); // writeback address
+		    Trace wbmt(f.mt.getCpu()); // writeback memtrace
+		    next->write(wba,f.when,wbmt.add(this,WRITE),cl->moesi);
+		    // Note: we ignore the writeback timing (in the background)
+	    }
 		cl->moesi = f.moesi;
 		if(f.moesi==INVALID)
 		{
