@@ -658,3 +658,104 @@ BOOST_AUTO_TEST_CASE( test_moesi_states_with_bus_2levels_WT_ )
 	BOOST_CHECK_EQUAL(l1b->state(m4,time), MODIFIED);	
 	BOOST_CHECK_EQUAL(l2->state(m4,time),  MODIFIED); 
 }
+
+BOOST_AUTO_TEST_CASE( test_moesi_inclusive_inv )
+{
+	//CPU A - L1
+	Parameters p1a;
+	p1a.set("size",      "16");
+	p1a.set("line_size", "1");
+	p1a.set("num_sets",  "1");
+	p1a.set("latency",   "0");
+	p1a.set("type",      "...");
+	p1a.set("write_policy","WB");
+	p1a.set("write_allocate","true");
+	p1a.set("name",      "L1-CPU_A");
+	Interface* l1a = new CacheImpl<Storage::Basic,Timing::Basic>(p1a);
+ 
+	//CPU B - L1
+	Parameters p1b;
+	p1b.set("size",      "16");
+	p1b.set("line_size", "1");
+	p1b.set("num_sets",  "1");
+	p1b.set("latency",   "0");
+	p1b.set("type",      "...");
+	p1b.set("write_policy","WB");
+	p1b.set("write_allocate","true");
+	p1b.set("name",      "L1-CPU_B");
+	Interface* l1b = new CacheImpl<Storage::Basic,Timing::Basic>(p1b);
+ 
+	//BUS
+ 	Parameters pb;
+	pb.set("name",     "BUS");
+	pb.set("latency",  "10");
+	pb.set("bandwidth",  "1");
+	pb.set("protocol", "MOESI");
+	Interface* bus = new Bus<Memory::Protocol::MOESI>(pb);
+	
+	//L2
+	Parameters p2;
+	p2.set("size",      "16");
+	p2.set("line_size", "1");
+	p2.set("num_sets",  "1"); 
+	p2.set("latency",   "20");
+	p2.set("type",      "...");
+	p2.set("write_policy","WT");
+	p2.set("write_allocate","true");
+	p2.set("name",      "L2");
+	Interface* l2 = new CacheImpl<Storage::Basic,Timing::Basic>(p2);
+ 
+	
+	// Link caches and bus
+	l1a->setNext(Interface::Shared(bus));
+	l1b->setNext(Interface::Shared(bus));
+	bus->setNext(Interface::Shared(l2));
+ 
+ 	// Link bus with main memory
+	Parameters pm;
+	pm.set("latency", "100");
+	pm.set("name",    "main_memory");
+	pm.set("type",    "...");
+	l2->setNext(Interface::Shared(new Main(pm)));
+
+	StateObserver::transition(SIMULATION);
+
+	uint64_t address=100;
+	uint64_t address2=100+16; // same line
+	uint64_t time=10;
+	uint32_t lat=0;
+	Access m(address);
+	Access m2(address2);
+	Trace mt(0);
+
+	//Read from CPU_A (from INVALID to EXCLUSIVE in L1_A & L2)
+    BOOST_TEST_MESSAGE("***_WT_ 1st Read CPU A" );
+	mt.reset();
+	lat=l1a->read(m,time,mt,INVALID).latency();
+	BOOST_CHECK_EQUAL(lat,0+10+20+100u); // L1a miss, L2 miss
+	time+=lat+TIME_TO_STABLE;
+	BOOST_CHECK_EQUAL(l1a->state(m,time), EXCLUSIVE);
+	BOOST_CHECK_EQUAL(l1b->state(m,time), NOT_FOUND);
+	BOOST_CHECK_EQUAL(l2->state(m,time),  EXCLUSIVE);
+
+	//Read from CPU_B (from EXCLUSIVE to SHARED in L1_A & L1_B)
+    BOOST_TEST_MESSAGE("***_WT_ 1st Read CPU B" );
+	mt.reset();
+	lat=l1b->read(m,time,mt,INVALID).latency();
+	BOOST_CHECK_EQUAL(lat,0+10); // L1b miss, snoop
+	time+=lat+TIME_TO_STABLE;
+	BOOST_CHECK_EQUAL(l1a->state(m,time), SHARED);
+	BOOST_CHECK_EQUAL(l1b->state(m,time), SHARED);
+	BOOST_CHECK_EQUAL(l2->state(m,time),  EXCLUSIVE);
+
+	//Read from CPU_A (from EXCLUSIVE to SHARED in L1_A & L1_B)
+    BOOST_TEST_MESSAGE("***_WT_ 2st Read CPU A" );
+	mt.reset();
+	lat=l1a->read(m2,time,mt,INVALID).latency();
+	BOOST_CHECK_EQUAL(lat,0+10+20+100u); // L1a miss, L2 miss
+	time+=lat+TIME_TO_STABLE;
+	BOOST_CHECK_EQUAL(l1a->state(m2,time), EXCLUSIVE); // m2 in L1a
+	BOOST_CHECK_EQUAL(l1b->state(m,time), INVALID); // L1b inclusive invalidation
+	BOOST_CHECK_EQUAL(l2->state(m2,time),  EXCLUSIVE); // m2 in L2
+}
+

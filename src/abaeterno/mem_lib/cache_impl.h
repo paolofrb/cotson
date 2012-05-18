@@ -138,8 +138,8 @@ CacheImpl<Storage,Timer>::inclusive_invalidations(
 	uint64_t tstamp,
 	Trace& mt
 ) {
-	if (prevs.size() <= 1) // L1 or not shared
-	   return;
+	if (prevs.size()==0) // L1 caches
+	   return; 
 	uint64_t evict_addr = cache.addr_from_group_id(evict_tag);
 	Access evict(evict_addr,evict_addr,item_size_);
 	const Interface* who=mt.getMem();
