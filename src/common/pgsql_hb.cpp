@@ -201,11 +201,13 @@ void PostgresHB::do_beat()
 	if(count==0)
 	{
 		writer->add(Option::requested());
-		writer->subscribe(met);
+		for(vector<metric*>::iterator mi=mets.begin(); mi!=mets.end(); mi++)
+		    writer->subscribe(*mi);
 	}
 	count++;
 	writer->start_heartbeat(count);
-	writer->beat(met);
+	for(vector<metric*>::iterator mi=mets.begin(); mi!=mets.end(); mi++)
+	    writer->beat(*mi);
 }
 
 void PostgresHB::do_last_beat()

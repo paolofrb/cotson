@@ -203,11 +203,13 @@ void SqliteHB::do_beat()
 	if(count==0)
 	{
 		add(Option::requested());
-		subscribe(met);
+		for(vector<metric*>::iterator mi=mets.begin(); mi!=mets.end(); mi++)
+		    subscribe(*mi);
 	}
 	count++;
 	start_heartbeat(count);
-	beat(met);
+	for(vector<metric*>::iterator mi=mets.begin(); mi!=mets.end(); mi++)
+	    beat(*mi);
 }
 
 void SqliteHB::do_last_beat()

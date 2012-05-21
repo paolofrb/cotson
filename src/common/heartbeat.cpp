@@ -65,7 +65,7 @@ void HeartBeat::add(metric& m)
 {
 	init();
 	for(size_t i=0; i<hearts.size(); ++i)
-		hearts[i]->met=&m; 
+		hearts[i]->mets.push_back(&m); 
 }
 
 void HeartBeat::add_aggregable(metric& m) 

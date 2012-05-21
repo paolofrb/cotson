@@ -54,10 +54,14 @@ void FileHBLast::dump(const string& logname)
 		log << fmt % i->first % i->second << endl; 
 
 	log << endl << "Output values: " << endl << endl;
-	for(metric::iterator i=met->names_begin();i!=met->names_end();i++)
-		log << fmt % *i % (*met)[*i] << endl;
-	for(metric::iterator i=met->ratios_begin();i!=met->ratios_end();i++)
-		log << fmt % *i % met->ratio(*i) << endl;
+	for(vector<metric*>::iterator mi=mets.begin(); mi!=mets.end(); mi++)
+	{
+		metric* met = *mi;
+	    for(metric::iterator i=met->names_begin();i!=met->names_end();i++)
+		    log << fmt % *i % (*met)[*i] << endl;
+	    for(metric::iterator i=met->ratios_begin();i!=met->ratios_end();i++)
+		    log << fmt % *i % met->ratio(*i) << endl;
+    }
 
 	log << "END__DATA" << endl;
 	log.flush(); 

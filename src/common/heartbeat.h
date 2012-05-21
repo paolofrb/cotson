@@ -22,7 +22,7 @@
 class HeartBeat
 {
 public:
-	HeartBeat(): met(0) {}
+	HeartBeat(): mets() {}
 	virtual ~HeartBeat() {} 
 
 	static void add(metric&); 
@@ -31,7 +31,7 @@ public:
 	static void last_beat();
 
 protected:
-	metric* met;
+	std::vector<metric*> mets;
 	std::vector< boost::shared_ptr<Aggregator> > aggr;
 
 	virtual void do_beat() = 0;
