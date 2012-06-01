@@ -18,6 +18,7 @@
 #include <math.h>
 #include <iostream>
 #include <stdlib.h>
+#include <unistd.h> /* native ::read - GCC 4.7.0 complains without this */
 #include "timing_message.h"
 
 #define NUM_RETRIES 5
@@ -94,8 +95,7 @@ GlobalTime::GlobalTime()
     data_.type = htons(TimingMessage::GTimeMsg);
 }
 
-GlobalTime::GlobalTime(uint16_t fd)
-    : Base(&data_,sizeof(Data)) 
+GlobalTime::GlobalTime(uint16_t fd) : Base(&data_,sizeof(Data)) 
 {
     ssize_t nb = ::read(fd,&data_,len());
     if (nb == len()) {
