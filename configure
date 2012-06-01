@@ -17,7 +17,7 @@
 SIMNOW_SUPPORTED_VER="4.6.2"
 DEBIAN_SUPPORTED_VERS="lenny | squeeze"
 FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle"
-UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric"
+UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise"
 
 status_args="$*"
 simnow_dir=""
