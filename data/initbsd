@@ -29,6 +29,12 @@ case $machine_id in
 	;;
 esac
 
+##RG PATCH (not enough time to login with more cores
+if [[ "$machine_id" = "32p" ]]; then
+  secs="20"
+else
+  secs="18"
+fi
 
 ## Do we have a display?
 df="-c"
@@ -64,8 +70,9 @@ e1000.linkconnect down
 e1000.setmediatorhost off
 e1000.setmacaddress fa:cd:00:00:00:00
 EOF
-## Run 18s to boot
-for i in {1..18}; do 
+## Run $secs seconds to boot
+echo "SECONDS=$secs"
+for ((i=1;i<=secs;i++)); do
     run_1s $bootscript
 done
 ## Send login and passwd (root/root) 
