@@ -215,7 +215,7 @@ void NetworkTiming::usleep(int64_t t) const
         return;
     uint64_t s = t / 1000000ULL;
     uint64_t ns = (t - s*1000000ULL) * 1000;
-    timespec ts = {s,ns};
+    timespec ts = {(__time_t)s,(long int)ns}; /* explict cast: library struct requires these types*/
     timespec tr = {0,0};
     LOG ("Sleep started",t,"us");
     while (::nanosleep(&ts,&tr) == -1 && errno == EINTR) {

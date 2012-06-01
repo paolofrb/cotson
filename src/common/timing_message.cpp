@@ -95,7 +95,8 @@ GlobalTime::GlobalTime()
     data_.type = htons(TimingMessage::GTimeMsg);
 }
 
-GlobalTime::GlobalTime(uint16_t fd) : Base(&data_,sizeof(Data)) 
+GlobalTime::GlobalTime(uint16_t fd)
+    : Base(&data_,sizeof(Data)) 
 {
     ssize_t nb = ::read(fd,&data_,len());
     if (nb == len()) {
