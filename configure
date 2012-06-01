@@ -12,9 +12,12 @@
 # We have not tested linux distributions other than Debian or Ubuntu, 
 # although it should be possible to find the equivalent packages 
 # that install the required libraries
-#
+
 
 SIMNOW_SUPPORTED_VER="4.6.2"
+DEBIAN_SUPPORTED_VERS="lenny | squeeze"
+FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle"
+UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric"
 
 status_args="$*"
 simnow_dir=""
@@ -47,11 +50,12 @@ do
         --vnctest) vnctest=$2; shift; shift;;
 	--force) force=1; shift;;
         *) echo "Usage: $0"
-           echo "--simnow_dir simnow_location           set simnow dir"
-           echo "--data_dir data_location               set data dir"
-           echo "--cc c-compiler                        set C compiler"
-           echo "--cxx c++-compiler                     set C++ compiler"
-           echo "--vnctest N                            test N vnc ports"
+           echo "--simnow_dir simnow_location            set simnow dir"
+           echo "--data_dir data_location                set data dir"
+           echo "--cc c-compiler                         set C compiler"
+           echo "--cxx c++-compiler                      set C++ compiler"
+           echo "--distro release_name (e.g. karmic)     set Linux Distribution"
+           echo "--vnctest N                             test N vnc ports"
 		   echo "--force                                ignore simnow version"
            exit 1
     esac
@@ -59,22 +63,26 @@ done
 
 ########################################################################
 if [[ "$simnow_dir" == "" ]]; then
+    bdir1="${root}"
+    bdir2=`dirname $bdir1`
+    bdir3=`dirname $bdir2`
+    sdir="simnow-linux64-${SIMNOW_SUPPORTED_VER}pub"
+    # Maek some attempt to automatically locate a simnow instllation
+    if [[ -d "$bdir3/$sdir" ]]; then simnow_dir="$bdir3/$sdir"; fi
+    if [[ -d "$bdir2/$sdir" ]]; then simnow_dir="$bdir2/$sdir"; fi
+    if [[ -d "$bdir1/$sdir" ]]; then simnow_dir="$bdir1/$sdir"; fi
+fi
 
-    sdir="${root}/simnow-linux64-${SIMNOW_SUPPORTED_VER}pub"
-    if [[ -d "$sdir" ]]; then
-        simnow_dir="$sdir"
-    else
-
-        echo ""
-        echo "ERROR: Cannot find SimNow"
-        echo "       You have to define the SIMNOW_DIR env variable"
-        echo "       or pass '--simnow_dir <simnow_directory>' to $0"
-        echo ""
-        echo "       To download a free copy of simnow, please visit"
-        echo "       http://developer.amd.com/cpu/simnow"
-        echo ""
-        exit 1
-    fi
+if [[ "$simnow_dir" == "" ]]; then
+    echo ""
+    echo "ERROR: Cannot find SimNow"
+    echo "       You have to define the SIMNOW_DIR env variable"
+    echo "       or pass '--simnow_dir <simnow_directory>' to $0"
+    echo ""
+    echo "       To download a free copy of simnow, please visit"
+    echo "       http://developer.amd.com/cpu/simnow"
+    echo ""
+    exit 1
 fi
 
 if [[ ! -d "$simnow_dir" ]]; then
@@ -82,7 +90,10 @@ if [[ ! -d "$simnow_dir" ]]; then
     exit 1
 fi
 
-mapcount=`sysctl -n vm.max_map_count`
+#info
+echo "SIMNOW_DIR: '$simnow_dir'"
+
+mapcount=`sudo sysctl -n vm.max_map_count`
 minmap=4194304
 if [[ $mapcount -lt $minmap ]]; then
     echo "ERROR: vm.max_map_count = $mapcount is too small"
@@ -100,14 +111,19 @@ fi
 ich0=`which lsb_release 2>&1`
 ich1=`echo "$ich0"|grep "not found"`
 ich2=`echo "$ich0"|grep "no lsb_release"`
-ec=0
-if [ "$ich1" != "" -o "$ich2" != "" ]; then
+ec1=0
+ec2=0
+if [[ "$ich1" != "" || "$ich2" != "" ]]; then
+   #fon't know yet which distro
    #try
-   sudo yum -y install redhat-lsb
-   ec=$?
+   sudo yum -y install redhat-lsb 2>/dev/null
+   ec1=$?
+   #try
+   apt-get -q -q install lsb 2>/dev/null
+   ec2=$?
 fi
 
-if [ $ec != 0 ]; then
+if [[ $ec1 != 0 && $ec2 != 0 ]]; then
    echo "Couldn't find 'lsb_release'command"
    exit 1
 fi
@@ -117,20 +133,21 @@ ver=`lsb_release -c -s`
 echo "Distribution '$dist' - Version '$ver'"
 
 ok=0
+shopt -s extglob
 case $dist in
     Ubuntu)
-        case $ver in 
-            karmic | intrepid | jaunty | maverick | natty | oneiric | precise ) ok=1 ;; 
+        case "$ver" in
+            @(${UBUNTU_SUPPORTED_VERS// /}) ) ok=1 ;;
         esac
         ;;
     Debian)
-        case $ver in 
-            lenny | squeeze) ok=1 ;; 
+        case "$ver" in
+            @(${DEBIAN_SUPPORTED_VERS// /}) ) ok=1 ;;
         esac
         ;;
     Fedora)
-        case $ver in
-            Goddard | Laughlin) ok=1 ;;
+        case "$ver" in
+            @(${FEDORA_SUPPORTED_VERS// /}) ) ok=1 ;;
         esac
         ;;
 esac
@@ -138,7 +155,10 @@ esac
 if [[ $ok -eq 0 ]]; then
     echo ""
     echo "Sorry: $dist $ver not supported"
-    echo "Supported versions are: Ubuntu karmic|jaunty|intrepid and Debian squeeze|lenny and Fedora Goddard|Laughlin"
+    echo "Supported versions are:"
+    echo "   UBUNTU: $UBUNTU_SUPPORTED_VERS"
+    echo "   DEBIAN: $DEBIAN_SUPPORTED_VERS"
+    echo "   FEDORA: $FEDORA_SUPPORTED_VERS"
     echo ""
     exit 1;
 fi
@@ -227,7 +247,7 @@ if [[ ! -f /etc/X11/rgb.txt ]]; then
 fi
 
 thread_lib="-lboost_thread -lpthread"
-ldconfig -p | grep -q boost_thread-mt
+sudo ldconfig -p | grep -q boost_thread-mt
 if [[ $? -eq 0 ]]; then
     thread_lib="-lboost_thread-mt -lpthread"
 fi
