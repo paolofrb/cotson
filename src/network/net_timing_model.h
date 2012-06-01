@@ -22,6 +22,7 @@
 #include <boost/program_options.hpp>
 #include <boost/pool/detail/mutex.hpp>
 #include <boost/ref.hpp>
+#include <boost/version.hpp> // brings BOOST_VERSION
 
 #include "metric.h"
 
@@ -63,11 +64,16 @@ public:
 	// Set verbosity
 	virtual void verbose(int);
 
-
 protected:
     int verbose_;
     
+#if BOOST_VERSION < 104800
     boost::details::pool::pthread_mutex mux;
+#else
+    // pthread_mutex is not available in BOOST >= 1.48 ..
+    // --> SHOULD BE TESTED (RG120601)
+    boost::details::pool::default_mutex mux;
+#endif
 };
 
 #endif /*TIMINGMODEL_H_*/
