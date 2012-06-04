@@ -292,7 +292,8 @@ string CommandSocket::Keyboard::next()
 	    out += string(ks);
 	    out += "\n";
 	    cout << "    " << out << flush;
-        timespec ts = {0,delay}; // stroke delay
+        timespec ts = {0,(long int)delay}; // stroke delay
+                       /* added explicit cast required by struct timespec */
         ::nanosleep(&ts,0);
 	}
 	else 
