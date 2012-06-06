@@ -23,18 +23,13 @@ fi
 
 ## Don't ask :-(
 drive="master"
+secs="18" 
 case $machine_id in
 "8p"|"16p"|"32p")
     drive="slave"
+    secs="28" 
 	;;
 esac
-
-##RG PATCH (not enough time to login with more cores
-if [[ "$machine_id" = "32p" ]]; then
-  secs="20"
-else
-  secs="18"
-fi
 
 ## Do we have a display?
 df="-c"
