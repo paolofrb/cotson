@@ -14,7 +14,7 @@
 
 require 'yaml'
 
-class Config
+class CConfig
 	def initialize(file)
 		@file=file
 		@data=Hash.new
