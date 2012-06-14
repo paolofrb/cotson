@@ -79,9 +79,18 @@ class Sandbox < Location
       f.puts "./user_script #{@opts[:NODE]} #{@opts[:TOTAL]} 2>&1 | tee stdout.log"
       f.puts "xput stdout.log #{@root}/data/stdout.log"
       s_id=0
-      @opts[:subscribe_result].each do |s|
-        f.puts "xput #{s.chomp} #{@root}/data/res_#{s_id}.#{File.basename(s)}" 
-        s_id += 1
+#RG+12 porting from ruby 1.8 to 1.9
+      a = @opts[:subscribe_result]
+      if a.respond_to?(:lines) then
+        @opts[:subscribe_result].lines.each do |s|
+          f.puts "xput #{s.chomp} #{@root}/data/res_#{s_id}.#{File.basename(s)}" 
+          s_id += 1
+        end
+      else
+        @opts[:subscribe_result].each do |s|
+          f.puts "xput #{s.chomp} #{@root}/data/res_#{s_id}.#{File.basename(s)}" 
+          s_id += 1
+        end
       end
       f.puts "touch l"
       f.puts "xput l terminate"
@@ -220,8 +229,10 @@ class Sandbox < Location
   def kill
     begin 
       i,o=run_output("kill")
+      o = o   # RG -- reduce warnings
       return i==0
-    rescue Exception=> e
+#    rescue Exception=> e   # RG -- reduce warnings
+    rescue Exception
       return false
     end
   end
@@ -229,8 +240,10 @@ class Sandbox < Location
   def status
     begin 
       i,o=run_output("status")
+      o = o   # RG -- reduce warnings
       return i==0
-    rescue Exception=> e
+#    rescue Exception=> e   # RG -- reduce warnings
+    rescue Exception
       return false
     end
   end

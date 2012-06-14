@@ -15,9 +15,12 @@ module ActiveSupport #:nodoc:
           _original_to_s(format)
         end
         
-        yaml_as "tag:yaml.org,2002:float"
+#RG-1
+#        yaml_as "tag:yaml.org,2002:float"
         def to_yaml( opts = {} )
-          YAML::quick_emit( nil, opts ) do |out|
+#RG-1+1
+#          YAML::quick_emit( nil, opts ) do |out|
+          YAML::Emitter.new.reset(opts).emit(nil) do |out|
             # This emits the number without any scientific notation.
             # I prefer it to using self.to_f.to_s, which would lose precision.
             #

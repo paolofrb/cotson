@@ -18,13 +18,17 @@ require 'cotson'
 require 'daemon_service'
 require 'scheduler'
 require 'control_script'
-require 'ftools'
+#require 'ftools'  #RG+1
+require 'fileutils'
 
 node_sandbox=[]
 med_sandbox=nil
 clean_sandbox=false
 output=[]
 control_script=nil
+
+#RG+1
+ENV['RUBYOPT']="-W0"
 
 def sbname(opts,t)
 	return File.join(opts[:tmpdir],opts[:runid]+"-#{$$}#{t}")
@@ -135,18 +139,24 @@ begin
     names=%w{host control_port multicast_ip multicast_port quantum_max}
     names.each do |x|
       vals[x]=med_sandbox.get_mediator_value(x).chomp
+      debug "#{x} #{vals[x]}"  #RG
     end
 
     debug "setting mediator configuration into nodes" 
+    i=1 #RG
     node_sandbox.each do |x|
       vals.each do |y,z|
+        debug "#{i}: #{y} #{z}"  #RG
         x.set_mediator_value(y,z) 
       end
+      i+=1 #RG
     end
 
+    i=1 #RG
     node_sandbox.each do |x|
-      debug "starting node" 
+      debug "starting node #{i}"  #RG
       output << x.start_go
+      i+=1 #RG
     end
 
     debug_nnl("waiting ")

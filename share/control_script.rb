@@ -178,7 +178,8 @@ class ControlScript
     selected(parms).each do |sb|
       begin
         res = sb.kill
-      rescue Exception => e
+#      rescue Exception => e   # RG -- reduce warnings
+      rescue Exception
       end
     
       puts "--- #{sandbox_desc(sb)} ---"

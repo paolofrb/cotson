@@ -23,7 +23,8 @@ module ActiveSupport
       def delete(name, options = nil)
         super
         File.delete(real_file_path(name))
-      rescue SystemCallError => e
+#      rescue SystemCallError => e  #RG - reduce warnings
+      rescue SystemCallError
         # If there's no cache, then there's nothing to complain about
       end
 
@@ -33,7 +34,8 @@ module ActiveSupport
           if f =~ matcher
             begin
               File.delete(f)
-            rescue SystemCallError => e
+#            rescue SystemCallError => e  #RG - reduce warnings
+            rescue SystemCallError
               # If there's no cache, then there's nothing to complain about
             end
           end
@@ -65,6 +67,6 @@ module ActiveSupport
             end
           end
         end
-      end
+    end
   end
 end

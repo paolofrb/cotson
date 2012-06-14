@@ -9,13 +9,15 @@ module Kernel
         # 1. Requiring the module is unsuccessful, maybe it's a gem and nobody required rubygems yet. Try.
         begin
           require 'rubygems'
-        rescue LoadError => rubygems_not_installed
+#        rescue LoadError => rubygems_not_installed
+        rescue LoadError  #RG -- reduce warnings
           raise cannot_require
         end
         # 2. Rubygems is installed and loaded. Try to load the library again
         begin
           require library_name
-        rescue LoadError => gem_not_installed
+#        rescue LoadError => gem_not_installed
+        rescue LoadError  #RG -- reduce warnings
           raise cannot_require
         end
       end

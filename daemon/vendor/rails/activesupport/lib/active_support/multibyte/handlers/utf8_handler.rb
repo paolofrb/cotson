@@ -398,15 +398,20 @@ module ActiveSupport::Multibyte::Handlers #:nodoc:
           current = codepoints[pos]
           if (
               # CR X LF
-              one = ( previous == UCD.boundary[:cr] and current == UCD.boundary[:lf] ) or
+#              one = ( previous == UCD.boundary[:cr] and current == UCD.boundary[:lf] ) or  #RG -- reduce warnings
+              ( previous == UCD.boundary[:cr] and current == UCD.boundary[:lf] ) or
               # L X (L|V|LV|LVT)
-              two = ( UCD.boundary[:l] === previous and in_char_class?(current, [:l,:v,:lv,:lvt]) ) or
+#              two = ( UCD.boundary[:l] === previous and in_char_class?(current, [:l,:v,:lv,:lvt]) ) or  #RG -- reduce warnings
+              ( UCD.boundary[:l] === previous and in_char_class?(current, [:l,:v,:lv,:lvt]) ) or
               # (LV|V) X (V|T)
-              three = ( in_char_class?(previous, [:lv,:v]) and in_char_class?(current, [:v,:t]) ) or
+#              three = ( in_char_class?(previous, [:lv,:v]) and in_char_class?(current, [:v,:t]) ) or  #RG -- reduce warnings
+              ( in_char_class?(previous, [:lv,:v]) and in_char_class?(current, [:v,:t]) ) or
               # (LVT|T) X (T)
-              four = ( in_char_class?(previous, [:lvt,:t]) and UCD.boundary[:t] === current ) or
+#              four = ( in_char_class?(previous, [:lvt,:t]) and UCD.boundary[:t] === current ) or  #RG -- reduce warnings
+              ( in_char_class?(previous, [:lvt,:t]) and UCD.boundary[:t] === current ) or
               # X Extend
-              five = (UCD.boundary[:extend] === current)
+#              five = (UCD.boundary[:extend] === current)  #RG -- reduce warnings
+              (UCD.boundary[:extend] === current)
             )
           else
             unpacked << codepoints[marker..pos-1]

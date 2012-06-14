@@ -51,7 +51,7 @@ class DaemonServiceCall
     end
     
 		@result	
-   end
+        end
 
 	def post(path,parms={})
     begin 
@@ -64,7 +64,7 @@ class DaemonServiceCall
     end
 
     @result	
-   end
+        end
 
 	def delete(path)
     begin 
@@ -76,7 +76,7 @@ class DaemonServiceCall
     end
 
     @result	
-   end
+        end
 
 	public
 	def initialize(server,id=nil)
@@ -130,7 +130,7 @@ class DaemonServiceCall
 
   def start_go
 		get("/sandboxes/#{@id}/start_go.xml")
-	end
+  end
 
   def stop
     get("/sandboxes/#{@id}/stop.xml")
@@ -154,7 +154,7 @@ class DaemonServiceCall
 
   def get_mediator_value(key=nil)
 		get("/sandboxes/#{@id}/get_mediator_value.xml", 'key' => key)['data']
-	end
+  end
 
   def get_vnc_webport
     get("/sandboxes/#{@id}/get_vnc_webport.xml")['data']
@@ -171,7 +171,7 @@ class DaemonServiceCall
 
 	def copy_files (opts)
 		post("/sandboxes/#{@id}/copy_files.xml", opts)
-  end
+        end
 
   def id
     return @id

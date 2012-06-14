@@ -156,7 +156,7 @@ module ActiveSupport #:nodoc:
                       XML_FORMATTING[type_name] ? XML_FORMATTING[type_name].call(value) : value,
                       attributes
                     )
-                end
+                  end
               end
             end
             
@@ -182,6 +182,7 @@ module ActiveSupport #:nodoc:
                 when 'Hash'
                   if value['type'] == 'array'
                     child_key, entries = value.detect { |k,v| k != 'type' }   # child_key is throwaway
+                    child_key = child_key  #RG -- reduce warnings
                     if entries.nil? || (c = value['__content__'] && c.blank?)
                       []
                     else

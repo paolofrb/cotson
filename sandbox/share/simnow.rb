@@ -15,6 +15,8 @@
 require 'execute'
 require 'vnc'
 require 'filecopy'
+#RG+1
+require 'fileutils'
 
 class Simnow
 	def Simnow.interactive
@@ -144,7 +146,7 @@ class Simnow
 			end
 			return a
 		end
-	end
+  end
 
 	def Simnow.gdb
 		debug2 'preparing gdb-simnow execution'

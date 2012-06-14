@@ -37,7 +37,8 @@ class VNC
     end
     # Fire up the window manager in the background (will die with vnc)
     cmd2 = "#{CF[:Xvncwm]}:#{display}"
-    a2=Execute.run_background(cmd2,$here.data('vncwm.log'))
+#    a2=Execute.run_background(cmd2,$here.data('vncwm.log'))   # RG -- reduce warnings
+    Execute.run_background(cmd2,$here.data('vncwm.log'))
     [vnc_pid, display]
   end
 

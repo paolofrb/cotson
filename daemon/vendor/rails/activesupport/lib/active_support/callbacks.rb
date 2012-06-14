@@ -100,7 +100,8 @@ module ActiveSupport
         if chain.is_a?(CallbackChain)
           chain.each { |callback| self | callback }
         else
-          if (found_callback = find(chain)) && (index = index(chain))
+#          if (found_callback = find(chain)) && (index = index(chain)) #RG -- reducing warnings
+          if (find(chain)) && (index = index(chain))
             self[index] = chain
           else
             self << chain
@@ -183,7 +184,7 @@ module ActiveSupport
                   "Callbacks must be a symbol denoting the method to call, a string to be evaluated, " +
                   "a block to be invoked, or an object responding to the callback method."
               end
-            end
+          end
         end
 
         def should_run_callback?(*args)

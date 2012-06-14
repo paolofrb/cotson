@@ -407,7 +407,8 @@ module Dependencies #:nodoc:
   # Convert the provided const desc to a qualified constant name (as a string).
   # A module, class, symbol, or string may be provided.
   def to_constant_name(desc) #:nodoc:
-    name = case desc
+#    name = case desc  #RG -- reduce warnings
+    case desc
       when String then desc.starts_with?('::') ? desc[2..-1] : desc
       when Symbol then desc.to_s
       when Module

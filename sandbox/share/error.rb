@@ -105,7 +105,8 @@ class ErrorMessage
     info.each_pair do |key, value| 
       res.gsub!("{{#{key.id2name}}}",colored_text(HIGHLIGHT_BG,HIGHLIGHT_FG,value))
     end
-    while res =~ /\[\[([\w\s\.\/\'\_\=\{\}\@\-_]+)\]\]/ do
+#    while res =~ /\[\[([\w\s\.\/\'\_\=\{\}\@\-_]+)\]\]/ do  #RG -- reduce warnings
+    while res =~ /\[\[([\w\s\.\/\'\=\{\}\@\-]+)\]\]/ do
       res.gsub!("[[#{$1}]]",colored_text(HIGHLIGHT_BG,HIGHLIGHT_FG,$1))
     end
     res
@@ -312,7 +313,8 @@ def error_message(exception, values=nil)
         end
         values.delete(:node_sandbox)
       end
-    rescue Exception => e
+#    rescue Exception => e  #RG -- reduce warnings
+    rescue Exception
       values[:additional_info]= 'Could not copy sandboxes logfiles.'
     end
   end

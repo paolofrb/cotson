@@ -54,3 +54,4 @@ function build()
 		i=i+1
 	end
 end
+-- vim:ft=lua

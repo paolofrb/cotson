@@ -10,7 +10,8 @@ module ActiveSupport
       # Converts a JSON string into a Ruby object.
       def decode(json)
         YAML.load(convert_json_to_yaml(json))
-      rescue ArgumentError => e
+#      rescue ArgumentError => e  #RG -- reduce warnings
+      rescue ArgumentError
         raise ParseError, "Invalid JSON string"
       end
       

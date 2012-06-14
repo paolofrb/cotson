@@ -66,7 +66,12 @@ class Execute
       when 'background'
         command+=" > #{options[:save_file]} " if options[:save_file]
         command +=" 2>&1 " if options[:merge_stderr] && options[:save_file]
-        pid=%x{#{command} & echo \$!}.to_a[-1].to_i
+#RG (should work also with RUBY_VERSION < 1.8  (TO BE TESTED)
+#          if "#{RUBY_VERSION}" &lt; "1.9.0" then
+#             pid=%x{#{command} & echo \$!}.to_a[-1].to_i
+#          else
+             pid=%x{#{command} & echo \$!}.lines.to_a[-1].to_i
+#          end
         { :pid => pid }
       when 'detach'
         pid=Process.fork { exec(command) }
@@ -89,10 +94,20 @@ class Execute
           " -dmS sessionname #{command}"
         output=%x{#{command}}
         status=$?.exitstatus
-        so=%x{#{options[:screen_exe]} -ls}.
+#RG-4
+#        so=%x{#{options[:screen_exe]} -ls}.
+#          split.
+#          find { |x| x =~ /^[0-9]+\.sessionname$/ }.
+#          map { |x| x.gsub(/^([0-9]+)\.sessionname$/,'\\1') }
+#RG+8 patch: sometimes we fond something that is not an Array but it is a string (therefore no method 'map')
+        so1=%x{#{options[:screen_exe]} -ls}.
           split.
-          find { |x| x =~ /^[0-9]+\.sessionname$/ }.
-          map { |x| x.gsub(/^([0-9]+)\.sessionname$/,'\\1') }
+          find { |x| x =~ /^[0-9]+\.sessionname$/ }
+        if so1.kind_of?(Array) then
+          so=so1.map { |x| x.gsub(/^([0-9]+)\.sessionname$/,'\\1') }
+        else
+          so=[ so1.gsub(/^([0-9]+)\.sessionname$/,'\\1') ]
+        end
         { :output => output, :status => status, :pid => so[-1]}
     else
       raise CotsonError.new(:ExecuteRun, :mode=>mode)
@@ -131,7 +146,7 @@ class Execute
 
   def Execute.runs?(pid)
     return false if ! pid
-    a=%x{ps -p #{pid}}
+    %x{ps -p #{pid}}   # RG -- reduce warnings
     $?.exitstatus == 0
   end
 

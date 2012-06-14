@@ -22,7 +22,8 @@ class Send
 			r=s.recv( 16384 )
 			s.close
 			r
-		rescue Exception => f
+#		rescue Exception => f   # RG -- reduce warnings
+		rescue Exception
 			nil
 		end
 	end

@@ -14,10 +14,12 @@
 
 require 'location'
 require 'error'
-require 'config'
+#require 'config'  #RG  -- conflict with another system 'config' class
+require 'cconfig'  #RG  -- 'config' renamed 'CConfig' for CotsonConfig
 require 'database'
 begin
-  CF=Config.new($here.data('config'))
+#  CF=Config.new($here.data('config'))
+  CF=CConfig.new($here.data('config'))
   DB=Database.new($here.data('database'))
 rescue Exception => e
   #Error ocurred before function finish is defined
@@ -45,8 +47,8 @@ def finish(e, values=nil)
 		puts "backtrace:"
 		puts e.backtrace 
 		puts
-	end
-	exit(-1)
+  end
+  exit(-1)
 end
 
 require 'simnow'
