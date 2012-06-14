@@ -45,7 +45,6 @@ clean_%:
 distclean_%:
 	@echo "########## Distclean $* #############"; \
 	$(MAKE) --directory=./$* distclean
-	rm -f libstdc++.so
 
 test_%:
 	echo "########## Regression Tests #############"; \

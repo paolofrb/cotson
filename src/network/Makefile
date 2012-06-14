@@ -15,7 +15,7 @@ AALIBS=../common/libaacommon.a ../slirp/libslirp.a ../libluabind/libluabind.a
 mediator: $(OBJS) $(AALIBS)
 	$(CXX) -o $(@) $(OBJS) \
     -Wl,--whole-archive $(AALIBS) -Wl,-no-whole-archive \
-	-lpqxx -lsqlite3 -llua -lz -ldl \
+	-lpqxx -lsqlite3 -llua5.1 -lz -ldl \
 	$(THREAD_LIBS) 
 
 clean:
