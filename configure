@@ -130,6 +130,7 @@ fi
 
 dist=`lsb_release -i -s`
 ver=`lsb_release -c -s`
+vernum=`lsb_release -r -s`
 echo "Distribution '$dist' - Version '$ver'"
 
 ok=0
@@ -180,7 +181,7 @@ sqlite3 libdbd-sqlite3-perl libdbd-pg-perl gnuplot libboost-dev libboost-thread-
     vncargs2="-desktop="
     llua="llua5.1"
 elif [[ $dist == "Fedora" ]]; then
-    if [[ $ver -lt 17 ]]; then
+    if [[ $vernum -lt 17 ]]; then
         rubygemsqlite="ruby-sqlite3"
     else
         rubygemsqlite="rubygem-sqlite3"
