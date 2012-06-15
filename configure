@@ -182,12 +182,12 @@ sqlite3 libdbd-sqlite3-perl libdbd-pg-perl gnuplot libboost-dev libboost-thread-
     llua="llua5.1"
 elif [[ $dist == "Fedora" ]]; then
     if [[ $vernum -lt 17 ]]; then
-        rubygemsqlite="ruby-sqlite3"
+        rubystuff="ruby-sqlite3 rubygem-test-unit"
     else
-        rubygemsqlite="rubygem-sqlite3"
+        rubystuff="rubygem-sqlite3 rubygem-bigdecimal rubygem-test-unit"
     fi
     pkgs="gcc gcc-c++ make dpkg bison flex ruby rubygems rxvt xfwm4 zsh sharutils screen \
-gnuplot indent zlib-devel imake xorg-x11-utils ruby-libs openssl $rubygemsqlite \
+gnuplot indent zlib-devel imake xorg-x11-utils ruby-libs openssl ${rubystuff} \
 vnc-server rxvt lua* libpqxx* boost-devel boost-thread sqlite-devel sqlite lzma \
 perl-Class-DBI-SQLite perl-pgsql_perl5 xorg-x11-fonts-100dpi.noarch xorg-x11-fonts-75dpi \
 tigervnc tigervnc-server tigervnc-server-module xorg-x11-twm \
