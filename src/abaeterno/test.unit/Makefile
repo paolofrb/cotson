@@ -9,7 +9,7 @@ $(TEST): $(TOBJ)
 
 %.o: %.cpp
 	@echo "$< ==> $@"; \
-	$(CXX) $(CXXFLAGS) -D_DEBUG_THIS_ -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 include test.unit/make.deps
 
