@@ -5,11 +5,14 @@ include ../Make.conf
 LIBSTDCPP32 = $(shell ls /usr/lib32/libstdc++.so.* | tail -n 1)
 
 mcpat: $(MCPAT)
-	$(MAKE) -C $(MCPAT) OPT="-O3 -msse2 -mfpmath=sse -DNTHREADS=4 -m64 -Icacti -L ." opt; \
+	$(MAKE) -C $(MCPAT) OPT="-m32 -O3 -msse2 -mfpmath=sse -DNTHREADS=4 -Icacti -L ." opt; \
 	$(CP) $(MCPAT)/mcpat .
 
-$(MCPAT): $(MCPAT).tar.gz
+$(MCPAT): $(MCPAT).tar.gz $(MCPAT).patch
 	$(RM) $(MCPAT); tar xfz $(MCPAT).tar.gz; \
+	d=`tar tf $(MCPAT).tar.gz | head -1`; \
+	mv $$d $(MCPAT); \
+	patch -p0 < $(MCPAT).patch; \
 	if [[ ! -f /usr/lib32/libstdc++.so ]]; then \
 		ln -fs $(LIBSTDCPP32) $(MCPAT)/libstdc++.so; \
 	fi

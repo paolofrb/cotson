@@ -54,32 +54,28 @@ simnow.commands=function()
 end
 
 function build()
-	i=0
-	while i < disks() do
+	i=0 while i < disks() do
 		disk=get_disk(i)
 		disk:timer{ name='disk'..i, type="simple_disk" }
 		i=i+1
 	end
 
-	i=0
-	while i < nics() do
+	i=0 while i < nics() do
 		nic=get_nic(i)
 		nic:timer{ name='nic'..i, type="simple_nic" }
 		i=i+1
 	end
 
-	x=cpus()
-	if x ~= 1 then
-		error("This experiment only wants to handle 1 cpu")
+	mem=Memory{ name="main", latency=100 } 
+	i=0 while i < cpus() do
+	    cpu=get_cpu(i)
+	    cpu:timer{ name='cpu'..i, type="timer0" }
+	    cpu:instruction_cache(mem)
+	    cpu:data_cache(mem)
+	    cpu:instruction_tlb(mem)
+	    cpu:data_tlb(mem)
+		i=i+1
 	end
-
-	cpu=get_cpu(0)
-	cpu:timer{ name='cpu0', type="timer0" }
-	mem=Memory{ name="main", latency=1 } 
-	cpu:instruction_cache(mem)
-	cpu:data_cache(mem)
-	cpu:instruction_tlb(mem)
-	cpu:data_tlb(mem)
 end
 
 --- This is for remote execution (with daemons). Edit as appropriate
