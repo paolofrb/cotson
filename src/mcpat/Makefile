@@ -23,7 +23,9 @@ install: mcpat cotson2mcpat
 	$(CP) cotson2mcpat $(PREFIX)/sbin
 
 clean:
-	$(MAKE) -C $(MCPAT) clean; \
+	if [[ -d $(MCPAT) ]]; then \
+	    $(MAKE) -C $(MCPAT) clean; \
+	fi; \
 	$(RM) $(MCPAT) mcpat mcpat.db mcpat.xml mcpat.xml.txt testmcpat* libstdc++.so
 
 

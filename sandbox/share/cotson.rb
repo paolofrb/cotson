@@ -41,7 +41,7 @@ def debug2(*args)
 end
 
 def finish(e, values=nil)
-  puts error_message e, values
+  puts error_message(e, values)
 
   if CF[:debug]
 		puts "backtrace:"
