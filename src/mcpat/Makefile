@@ -9,9 +9,7 @@ mcpat: $(MCPAT)
 	$(CP) $(MCPAT)/mcpat .
 
 $(MCPAT): $(MCPAT).tar.gz $(MCPAT).patch
-	$(RM) $(MCPAT); tar xfz $(MCPAT).tar.gz; \
-	d=`tar tf $(MCPAT).tar.gz | head -1`; \
-	mv $$d $(MCPAT); \
+	$(RM) -rf $(MCPAT); mkdir $(MCPAT); tar --strip=1 -C $(MCPAT) -zxf $(MCPAT).tar.gz; \
 	patch -p0 < $(MCPAT).patch; \
 	if [[ ! -f /usr/lib32/libstdc++.so ]]; then \
 		ln -fs $(LIBSTDCPP32) $(MCPAT)/libstdc++.so; \

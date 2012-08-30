@@ -1,4 +1,4 @@
-
+.NOTPARALLEL:
 # DiskSim Storage Subsystem Simulation Environment (Version 4.0)
 # Revision Authors: John Bucy, Greg Ganger
 # Contributors: John Griffin, Jiri Schindler, Steve Schlosser

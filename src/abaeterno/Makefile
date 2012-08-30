@@ -93,26 +93,21 @@ lib/version_info.h: always
 
 ################################################################################
 .PHONY: test clean_test
-TESTSRC=$(wildcard test.unit/*.cpp)
-TESTS=$(patsubst %.cpp,%,$(notdir $(TESTSRC)))
-test: test.unit/make.deps $(addprefix run_, $(TESTS))
+test: $(AAOBJS) test.unit/make.deps
+	$(MAKE) -f test.unit/Makefile run \
+	        TCXX="$(CXX)" TCXXFLAGS="$(CXXFLAGS) $(SIMNOW_FLAGS)" \
+	        TLIBS="$(AALIBS) $(SHLIBS)"
 
-test.unit/make.deps: always
+test.unit/make.deps: always test.unit/testunitdep.pl
 	perl test.unit/testunitdep.pl > $@
-
-run_%:
-	@echo "######## TEST $*"; \
-	$(MAKE) -f test.unit/Makefile TSRC=test.unit/$*.cpp \
-	        CXX="$(CXX)" CXXFLAGS="$(CXXFLAGS) $(SIMNOW_FLAGS)" \
-	        LIBS="$(AALIBS) $(SHLIBS)"
 
 ## Note: some hosts need -lboost_unit_test_framework
 
 ################################################################################
 clean_test:
-	echo "Clean test.unit"; \
-	$(RM) $(TESTSRC:.cpp=) $(TESTSRC:.cpp=.log) $(TESTSRC:.cpp=.o) \
-	      test.unit/make.deps \
+	@ echo "Clean test.unit"; \
+	$(MAKE) -f test.unit/Makefile clean; \
+	$(RM) test.unit/make.deps
 
 clean: clean_test
 	@echo "Clean abaeterno"; \

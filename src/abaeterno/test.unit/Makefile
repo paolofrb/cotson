@@ -1,15 +1,21 @@
+TSRC=$(wildcard test.unit/*.cpp)
 TEST = $(TSRC:.cpp=)
 TOBJ = $(TSRC:.cpp=.o)
 
-$(TEST): $(TOBJ)
+run: $(TEST)
+
+clean: 
+	$(RM) $(TSRTSRC:.cpp=) $(TSRC:.cpp=.log) $(TSRC:.cpp=.o)
+
+$(TEST):
 	@echo "#### Linking test $@"; \
-	$(CXX) -o $@ $^ $(LIBS); \
+	$(TCXX) -o $@ $^ $(TLIBS); \
 	echo "#### Running test $@ (output in $@.log)"; \
 	$@ --log_level=all > $@.log
 
 %.o: %.cpp
 	@echo "$< ==> $@"; \
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(TCXX) $(TCXXFLAGS) -c $< -o $@
 
 include test.unit/make.deps
 
