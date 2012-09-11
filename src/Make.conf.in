@@ -17,7 +17,7 @@ OPTS = -fPIC -Wall -O2 -g $(DEFS) $(XOPTS)
 
 ifeq ("$(OPT)","debug")
 ## Debug
-OPTS = -fPIC -Wall -O0 -g $(DEFS) $(XOPTS) -DINLINE='__attribute__((__used__))'
+OPTS = -fPIC -Wall -O0 -g $(DEFS) $(XOPTS) -DINLINE='__attribute__((__used__)) inline'
 endif
 
 ifeq ("$(OPT)","release")
