@@ -190,7 +190,7 @@ elif [[ $dist == "Fedora" ]]; then
 gnuplot indent zlib-devel imake xorg-x11-utils ruby-libs openssl ${rubystuff} \
 vnc-server rxvt lua* libpqxx* boost-devel boost-thread sqlite-devel sqlite lzma \
 perl-Class-DBI-SQLite perl-pgsql_perl5 xorg-x11-fonts-100dpi.noarch xorg-x11-fonts-75dpi \
-tigervnc tigervnc-server tigervnc-server-module xorg-x11-twm \
+tigervnc tigervnc-server tigervnc-server-module xorg-x11-twm glibc-devel.i686 \
 "
     cmdi="yum -y"
     xvnc="Xvnc"
