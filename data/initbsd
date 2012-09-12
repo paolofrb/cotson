@@ -2,6 +2,9 @@
 
 simnow_dir="$1"
 machine_id="$2"
+iso_image="$3"
+ram_dimension="$4"
+
 
 if [[ ! -f "$simnow_dir/simnow" ]]; then
     echo "Usage: $0 /path/to/simnow/dir machine"
@@ -31,11 +34,172 @@ case $machine_id in
 	;;
 esac
 
+
 ## Do we have a display?
 df="-c"
 if [[ "$DISPLAY" != "" ]]; then
     df=""
 fi
+
+
+function load_ram {
+	case $machine_id in
+	"1p"|"2p")
+		echo "dimm:0.deletedimm 1" >> $1
+		echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_$2_Reg.spd" >> $1
+		;;
+	"4p"|"8p")
+		if [ "$2" == "128M" ]; then
+			echo "4p and 8p requires at least 256M"  ;
+			rm $1;
+			exit 1;
+		fi
+		echo "dimm:0.deletedimm 1" >> $1
+                echo "dimm:1.deletedimm 1" >> $1
+		if [ "$2" == "256M" ]; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_128M_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_128M_Reg.spd" >> $1
+		fi
+		if [ "$2" == "512M" ] ; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_256M_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_256M_Reg.spd" >> $1
+		fi
+		if [ "$2" == "1G" ] ; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_512M_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_512M_Reg.spd" >> $1
+		fi
+		if [ "$2" == "2G" ] ; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_1G_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_1G_Reg.spd" >> $1
+		fi
+		if [ "$2" == "4G" ] ; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_2G_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_2G_Reg.spd" >> $1
+		fi
+		if [ "$2" == "8G" ] ; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_4G_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_4G_Reg.spd" >> $1
+		fi
+		if [ "$2" == "16G" ] ; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_8G_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_8G_Reg.spd" >> $1
+		fi
+		;;
+	"16p")
+		if [ "$2" == "128M" ] || [ "$2" == "256M" ]  ; then
+			echo "16p  requires at least 512M";
+			rm $1;
+			exit 1;
+		fi
+		echo "dimm:0.deletedimm 1" >> $1
+                echo "dimm:1.deletedimm 1" >> $1
+		echo "dimm:2.deletedimm 1" >> $1
+		echo "dimm:3.deletedimm 1" >> $1
+		if [ "$2" == "512M" ] ; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_128M_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_128M_Reg.spd" >> $1
+			echo "dimm:2.importspd 0 $simnow_dir/Images/simnow_DDR2_128M_Reg.spd" >> $1
+			echo "dimm:3.importspd 0 $simnow_dir/Images/simnow_DDR2_128M_Reg.spd" >> $1
+		fi
+		if [ "$2" == "1G" ] ; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_256M_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_256M_Reg.spd" >> $1
+			echo "dimm:2.importspd 0 $simnow_dir/Images/simnow_DDR2_256M_Reg.spd" >> $1
+			echo "dimm:3.importspd 0 $simnow_dir/Images/simnow_DDR2_256M_Reg.spd" >> $1
+		fi
+		if [ "$2" == "2G" ] ; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_512M_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_512M_Reg.spd" >> $1
+			echo "dimm:2.importspd 0 $simnow_dir/Images/simnow_DDR2_512M_Reg.spd" >> $1
+			echo "dimm:3.importspd 0 $simnow_dir/Images/simnow_DDR2_512M_Reg.spd" >> $1
+		fi
+		if [ "$2" == "4G" ] ; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_1G_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_1G_Reg.spd" >> $1
+			echo "dimm:2.importspd 0 $simnow_dir/Images/simnow_DDR2_1G_Reg.spd" >> $1
+			echo "dimm:3.importspd 0 $simnow_dir/Images/simnow_DDR2_1G_Reg.spd" >> $1
+		fi
+		if [ "$2" == "8G" ] ; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_2G_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_2G_Reg.spd" >> $1
+			echo "dimm:2.importspd 0 $simnow_dir/Images/simnow_DDR2_2G_Reg.spd" >> $1
+			echo "dimm:3.importspd 0 $simnow_dir/Images/simnow_DDR2_2G_Reg.spd" >> $1
+		fi
+		if [ "$2" == "16G" ] ; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_4G_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_4G_Reg.spd" >> $1
+			echo "dimm:2.importspd 0 $simnow_dir/Images/simnow_DDR2_4G_Reg.spd" >> $1
+			echo "dimm:3.importspd 0 $simnow_dir/Images/simnow_DDR2_4G_Reg.spd" >> $1
+		fi
+		;;
+	"32p")
+		if [ "$2" == "128M" ] || [ "$2" == "256M" ] || [ "$2" == "256M" ] || [ "$2" == "512M" ]  ; then
+			echo "32p  requires at least 1G" ;
+			rm $1;
+			exit 1;
+		fi
+		echo "dimm:0.deletedimm 1" >> $1
+                echo "dimm:1.deletedimm 1" >> $1
+		echo "dimm:2.deletedimm 1" >> $1
+		echo "dimm:3.deletedimm 1" >> $1
+		echo "dimm:4.deletedimm 1" >> $1
+                echo "dimm:5.deletedimm 1" >> $1
+		echo "dimm:6.deletedimm 1" >> $1
+		echo "dimm:7.deletedimm 1" >> $1
+		if [ "$2" == "1G" ] ; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_128M_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_128M_Reg.spd" >> $1
+			echo "dimm:2.importspd 0 $simnow_dir/Images/simnow_DDR2_128M_Reg.spd" >> $1
+			echo "dimm:3.importspd 0 $simnow_dir/Images/simnow_DDR2_128M_Reg.spd" >> $1
+			echo "dimm:4.importspd 0 $simnow_dir/Images/simnow_DDR2_128M_Reg.spd" >> $1
+			echo "dimm:5.importspd 0 $simnow_dir/Images/simnow_DDR2_128M_Reg.spd" >> $1
+			echo "dimm:6.importspd 0 $simnow_dir/Images/simnow_DDR2_128M_Reg.spd" >> $1
+			echo "dimm:7.importspd 0 $simnow_dir/Images/simnow_DDR2_128M_Reg.spd" >> $1
+		fi
+		if [ "$2" == "2G" ] ; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_256M_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_256M_Reg.spd" >> $1
+			echo "dimm:2.importspd 0 $simnow_dir/Images/simnow_DDR2_256M_Reg.spd" >> $1
+			echo "dimm:3.importspd 0 $simnow_dir/Images/simnow_DDR2_256M_Reg.spd" >> $1
+			echo "dimm:4.importspd 0 $simnow_dir/Images/simnow_DDR2_256M_Reg.spd" >> $1
+			echo "dimm:5.importspd 0 $simnow_dir/Images/simnow_DDR2_256M_Reg.spd" >> $1
+			echo "dimm:6.importspd 0 $simnow_dir/Images/simnow_DDR2_256M_Reg.spd" >> $1
+			echo "dimm:7.importspd 0 $simnow_dir/Images/simnow_DDR2_256M_Reg.spd" >> $1
+		fi
+		if [ "$2" == "4G" ] ; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_512M_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_512M_Reg.spd" >> $1
+			echo "dimm:2.importspd 0 $simnow_dir/Images/simnow_DDR2_512M_Reg.spd" >> $1
+			echo "dimm:3.importspd 0 $simnow_dir/Images/simnow_DDR2_512M_Reg.spd" >> $1
+			echo "dimm:4.importspd 0 $simnow_dir/Images/simnow_DDR2_512M_Reg.spd" >> $1
+			echo "dimm:5.importspd 0 $simnow_dir/Images/simnow_DDR2_512M_Reg.spd" >> $1
+			echo "dimm:6.importspd 0 $simnow_dir/Images/simnow_DDR2_512M_Reg.spd" >> $1
+			echo "dimm:7.importspd 0 $simnow_dir/Images/simnow_DDR2_512M_Reg.spd" >> $1
+		fi
+		if [ "$2" == "8G" ] ; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_1G_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_1G_Reg.spd" >> $1
+			echo "dimm:2.importspd 0 $simnow_dir/Images/simnow_DDR2_1G_Reg.spd" >> $1
+			echo "dimm:3.importspd 0 $simnow_dir/Images/simnow_DDR2_1G_Reg.spd" >> $1
+			echo "dimm:4.importspd 0 $simnow_dir/Images/simnow_DDR2_1G_Reg.spd" >> $1
+			echo "dimm:5.importspd 0 $simnow_dir/Images/simnow_DDR2_1G_Reg.spd" >> $1
+			echo "dimm:6.importspd 0 $simnow_dir/Images/simnow_DDR2_1G_Reg.spd" >> $1
+			echo "dimm:7.importspd 0 $simnow_dir/Images/simnow_DDR2_1G_Reg.spd" >> $1
+		fi
+		if [ "$2" == "16G" ] ; then
+			echo "dimm:0.importspd 0 $simnow_dir/Images/simnow_DDR2_2G_Reg.spd" >> $1
+			echo "dimm:1.importspd 0 $simnow_dir/Images/simnow_DDR2_2G_Reg.spd" >> $1
+			echo "dimm:2.importspd 0 $simnow_dir/Images/simnow_DDR2_2G_Reg.spd" >> $1
+			echo "dimm:3.importspd 0 $simnow_dir/Images/simnow_DDR2_2G_Reg.spd" >> $1
+			echo "dimm:4.importspd 0 $simnow_dir/Images/simnow_DDR2_2G_Reg.spd" >> $1
+			echo "dimm:5.importspd 0 $simnow_dir/Images/simnow_DDR2_2G_Reg.spd" >> $1
+			echo "dimm:6.importspd 0 $simnow_dir/Images/simnow_DDR2_2G_Reg.spd" >> $1
+			echo "dimm:7.importspd 0 $simnow_dir/Images/simnow_DDR2_2G_Reg.spd" >> $1
+		fi
+		;;
+	esac
+}			
+
 
 ####################################################
 function run_1s {
@@ -56,15 +220,21 @@ function send_root {
 bootscript="$datadir/$machine_id-boot"
 
 echo "################ CREATING $bsd ############"
+
 cat > $bootscript << EOF
 open $bsd0
 SetLogConsoleEnabled 1
-ide:0.image $drive $datadir/karmic64.img
+ide:0.image $drive $datadir/$iso_image
 ide:0.journal $drive on
 e1000.linkconnect down
 e1000.setmediatorhost off
 e1000.setmacaddress fa:cd:00:00:00:00
 EOF
+
+if [ ! -z "${ram_dimension}" ]; then 
+	load_ram $bootscript $ram_dimension 
+fi
+
 ## Run $secs seconds to boot
 echo "SECONDS=$secs"
 for ((i=1;i<=secs;i++)); do
@@ -79,6 +249,8 @@ run_1s $bootscript
 ## Save and quit (don't worry about crashes after save)
 echo "shell.save $bsd" >> $bootscript
 echo "quit" >> $bootscript
+
 ( cd $simnow_dir; ./simnow $df -d -i $datadir -e $bootscript )
+
 
 exit 0
