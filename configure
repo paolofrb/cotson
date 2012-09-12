@@ -173,7 +173,8 @@ if [[ $dist == "Debian" ||  $dist == "Ubuntu" ]]; then
     pkgs="g++ g++-multilib bison flex ruby rubygems libopenssl-ruby libsqlite3-ruby vnc4server vnc-java \
 rxvt xfwm4 xfonts-100dpi xfonts-75dpi zsh sharutils build-essential xvnc4viewer screen \
 liblua5.1-0 liblua5.1-0-dev $pqxx zlib1g-dev indent xutils-dev libsqlite3-dev \
-sqlite3 libdbd-sqlite3-perl libdbd-pg-perl gnuplot libboost-dev libboost-thread-dev lzma"
+sqlite3 libdbd-sqlite3-perl libdbd-pg-perl gnuplot libboost-dev libboost-thread-dev lzma \
+libxcursor1 libxrender1 libsm6 libxi6 libfontconfig1 "
     cmdi="apt-get -q -q"
     xvnc="Xvnc4"
     xvncservctrl="vnc4server"
