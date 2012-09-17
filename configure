@@ -253,6 +253,7 @@ if [[ $dist == "Fedora" ]]; then
 	echo "*** NOTE: sudo access required ***"
 	echo ""
 	sudo $cmdi downgrade $screen_downgrade
+	sudo sh -c "echo 'exclude=screen' >> /etc/yum.conf"
 fi
 # end workaround 
 
