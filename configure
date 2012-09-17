@@ -246,23 +246,29 @@ echo "*** NOTE: sudo access required ***"
 echo ""
 sudo $cmdi install $pkgs
 
-# Workaround for screen 4.1 bug
-if [[ $dist == "Fedora" ]]; then
-	echo ""
-	echo "Downgrade of package ($pkgs)"
-	echo "*** NOTE: sudo access required ***"
-	echo ""
-	sudo $cmdi downgrade $screen_downgrade
-	sudo sh -c "echo 'exclude=screen' >> /etc/yum.conf"
-fi
-# end workaround 
-
 if [[ $? -ne 0 ]]; then
     echo "Could not install one or more of $pkgs"
      echo "Please check your distribution and edit 'configure' to reflect it"
     exit 1
 fi
+
+# Workaround for screen 4.1 bug
+if [[ $dist == "Fedora" && `screen -v | awk  '$3 != "4.00.03"'` ]]; then
+	echo ""
+	echo "Downgrade of package ($pkgs)"
+	echo "*** NOTE: sudo access required ***"
+	echo ""
+	sudo $cmdi downgrade $screen_downgrade
+	grep screen /etc/yum.conf
+	if [[ $? -ne 0 ]]; then
+	        echo "Add screen to exclude entry in yum.conf"	
+		sudo sh -c "echo 'exclude=screen' >> /etc/yum.conf" 
+	fi
+fi
+# end workaround 
+
 echo "Package installation FINISHED"
+
 ########################################################################
 
 # Fix missing rgb.txt if needed
