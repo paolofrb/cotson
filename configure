@@ -193,6 +193,11 @@ vnc-server rxvt lua* libpqxx* boost-devel boost-thread sqlite-devel sqlite lzma 
 perl-Class-DBI-SQLite perl-pgsql_perl5 xorg-x11-fonts-100dpi.noarch xorg-x11-fonts-75dpi \
 tigervnc tigervnc-server tigervnc-server-module xorg-x11-twm glibc-devel.i686 libstdc++.i686 \
 "
+    if [[ `uname -m` == "x86_64" ]]; then 
+	    screen_downgrade="ftp://ftp.pbone.net/mirror/archive.fedoraproject.org/fedora/linux/releases/13/Fedora/x86_64/os/Packages/screen-4.0.3-15.fc12.x86_64.rpm"
+    else
+	    screen_downgrade="ftp://ftp.pbone.net/mirror/archive.fedoraproject.org/fedora/linux/releases/13/Fedora/i386/os/Packages/screen-4.0.3-15.fc12.i686.rpm"
+    fi
     cmdi="yum -y"
     xvnc="Xvnc"
     xvncservctrl="vncserver"
@@ -240,6 +245,17 @@ echo "Checking and installing packages ($pkgs)"
 echo "*** NOTE: sudo access required ***"
 echo ""
 sudo $cmdi install $pkgs
+
+# Workaround for screen 4.1 bug
+if [[ $dist == "Fedora" ]]; then
+	echo ""
+	echo "Downgrade of package ($pkgs)"
+	echo "*** NOTE: sudo access required ***"
+	echo ""
+	sudo $cmdi downgrade $screen_downgrade
+fi
+# end workaround 
+
 if [[ $? -ne 0 ]]; then
     echo "Could not install one or more of $pkgs"
      echo "Please check your distribution and edit 'configure' to reflect it"
