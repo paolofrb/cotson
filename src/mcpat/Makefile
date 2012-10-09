@@ -8,12 +8,8 @@ mcpat: $(MCPAT)
 	$(MAKE) -C $(MCPAT) OPT="-m32 -O3 -msse2 -mfpmath=sse -DNTHREADS=4 -Icacti -L ." opt; \
 	$(CP) $(MCPAT)/mcpat .
 
-$(MCPAT): $(MCPAT).tar.gz $(MCPAT).patch
-	$(RM) -rf $(MCPAT); mkdir $(MCPAT); tar --strip=1 -C $(MCPAT) -zxf $(MCPAT).tar.gz; \
-	patch -p0 < $(MCPAT).patch; \
-	if [[ ! -f /usr/lib32/libstdc++.so ]]; then \
-		ln -fs $(LIBSTDCPP32) $(MCPAT)/libstdc++.so; \
-	fi
+$(MCPAT): $(MCPAT).tar.gz
+	$(RM) -rf $(MCPAT); mkdir $(MCPAT); tar --strip=1 -C $(MCPAT) -zxf $(MCPAT).tar.gz
 
 $(MCPAT).tar.gz:
 	wget http://www.hpl.hp.com/research/mcpat/$(MCPAT).tar.gz
