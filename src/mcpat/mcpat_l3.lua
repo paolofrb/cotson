@@ -1,5 +1,5 @@
-debug = 3
-display = ":0"
+-- debug = 3
+-- display = ":0"
 options = {
 	fastforward="200M",
 	time_feedback = true,
