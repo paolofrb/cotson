@@ -1,5 +1,6 @@
 all: mcpat
 
+SHELL = /bin/bash
 MCPAT = mcpat0.8_r274
 include ../Make.conf
 LIBSTDCPP32 = $(shell ls /usr/lib32/libstdc++.so.* | tail -n 1)
@@ -19,7 +20,7 @@ install: mcpat cotson2mcpat
 	$(CP) cotson2mcpat $(PREFIX)/sbin
 
 clean:
-	if [[ -d $(MCPAT) ]]; then \
+	if [ -d $(MCPAT) ]; then \
 	    $(MAKE) -C $(MCPAT) clean; \
 	fi; \
 	$(RM) $(MCPAT) mcpat mcpat.db mcpat.xml mcpat.xml.txt testmcpat* libstdc++.so
@@ -28,8 +29,14 @@ clean:
 distclean: clean
 	$(RM) $(MCPAT).tar.gz
 
-test: mcpat cotson2mcpat
+test: mcpat cotson2mcpat mcpat.lua
 	$(RM) mcpat.db mcpat.xml; \
 	../../bin/cotson DBFILE=\"`pwd`/mcpat.db\" mcpat.lua ; \
 	./cotson2mcpat file:mcpat.db 1 mcpat.xml -r -v ; \
 	less mcpat.xml.txt
+
+test3: mcpat cotson2mcpat mcpat_l3.lua
+	$(RM) mcpat_l3.db mcpat_l3.xml; \
+	../../bin/cotson DBFILE=\"`pwd`/mcpat_l3.db\" mcpat_l3.lua ; \
+	./cotson2mcpat file:mcpat_l3.db 1 mcpat_l3.xml -r -v ; \
+	less mcpat_l3.xml.txt

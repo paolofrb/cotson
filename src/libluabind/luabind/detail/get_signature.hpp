@@ -159,7 +159,8 @@ namespace luabind { namespace detail
 
 #endif // LUABIND_GET_SIGNATURE_HPP_INCLUDED
 
-#elif BOOST_PP_ITERATION_FLAGS() == 1
+#else
+#if BOOST_PP_ITERATION_FLAGS() == 1
 
 	// member functions
 	template<class T, class C BOOST_PP_COMMA_IF(BOOST_PP_ITERATION()) BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), class A)>
@@ -210,6 +211,7 @@ namespace luabind { namespace detail
 		s += ")";
 	}
 
+#endif
 #endif
 
 #endif // LUABIND_NO_ERROR_CHECKING

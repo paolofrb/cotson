@@ -17,7 +17,7 @@
 SIMNOW_SUPPORTED_VER="4.6.2"
 DEBIAN_SUPPORTED_VERS="lenny | squeeze"
 FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle"
-UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise"
+UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise | quantal"
 
 status_args="$*"
 simnow_dir=""
@@ -169,8 +169,8 @@ echo "$dist $ver supported"
 
 if [[ $dist == "Debian" ||  $dist == "Ubuntu" ]]; then
 	pqxx=libpqxx-dev 
-	if [[ $ver == "precise" ]]; then pqxx=libpqxx3-dev; fi
-    pkgs="g++ g++-multilib bison flex ruby rubygems libopenssl-ruby libsqlite3-ruby vnc4server vnc-java \
+	if [[ $ver == "precise" || $ver == "quantal" ]]; then pqxx=libpqxx3-dev; fi
+    pkgs="g++ g++-multilib bison flex ruby ruby1.8 rubygems libopenssl-ruby libsqlite3-ruby vnc4server vnc-java \
 rxvt xfwm4 xfonts-100dpi xfonts-75dpi zsh sharutils build-essential xvnc4viewer screen \
 liblua5.1-0 liblua5.1-0-dev $pqxx zlib1g-dev indent xutils-dev libsqlite3-dev \
 sqlite3 libdbd-sqlite3-perl libdbd-pg-perl gnuplot libboost-dev libboost-thread-dev lzma \
@@ -181,6 +181,15 @@ libxcursor1 libxrender1 libsm6 libxi6 libfontconfig1 "
     vncargs1="-ac -SecurityTypes None -br -pn -httpd /usr/share/vnc-java"
     vncargs2="-desktop="
     llua="llua5.1"
+
+	if ruby --version | grep 1.9; then
+		echo "### Installing ruby1.8"
+		sudo apt-get install ruby1.8 -y
+	    ruby18=`update-alternatives --list ruby | grep 1.8`
+	    sudo update-alternatives --set ruby $ruby18
+    fi
+
+###################################################################################
 elif [[ $dist == "Fedora" ]]; then
     if [[ $vernum -lt 17 ]]; then
         rubystuff="ruby-sqlite3 rubygem-test-unit"

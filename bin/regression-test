@@ -18,11 +18,12 @@ require 'cotson'
 
 errors=0
 begin
-	test=nil
+	xtest=nil
 	tests,argv=RegressionTest.find_all(ARGV)
 	raise CotsonError.new(:RegressionTest, :arguments=>ARGV.join(' '), :tests => tests, :argv => argv) if tests.empty?
 
 	tests.each do |test|
+		xtest = test
 
 		puts "testing #{test}"
 	    $stdout.flush
@@ -45,7 +46,7 @@ begin
 	puts "#{tests.length-errors}/#{tests.length} successful tests"
 
 rescue Exception => e
-	finish e, :tests=>tests, :test => test 
+	finish e, :tests=>tests, :test => xtest 
 end
 
 exit(errors)

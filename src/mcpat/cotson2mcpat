@@ -240,6 +240,7 @@ my $l2s = count_param('l2cache%.size');
 my $l3s = count_param('l3cache%.size');
 my $dcaches = count_param('dcache%.size');
 my $l2priv = ($l2s == $dcaches && $l2s > 1) ? 1 : 0;
+my $clev = $l2s > 0 ? ($l3s > 0 ? 3 : 2) : 1;
 
 print FH "<?xml version=\"1.0\" ?>\n";
 print FH "<!-- experiment $expdesc , cpumodel $CPUMODEL -->\n";
@@ -250,10 +251,12 @@ param("homogeneous_cores",$HC);
 param("homogeneous_L2s",$HL2);
 param("number_of_cores",$cpus);
 
-param("number_cache_levels",$l2s > 0 ? ($l3s > 0 ? 3 : 2) : 1);
+param("number_cache_levels",$clev);
 param("number_of_L2s",$l2s);
 param("Private_L2",$l2priv);
 param("number_of_L3s",$l3s);
+
+print("CPU $cpus, DISK $disks, NIC $nics, CLEVELS $clev, L2PRIV $l2priv\n");
 
 mcpat_defaults('system');
 
@@ -291,7 +294,15 @@ if ($HL2==1 or $l2priv==0) { ## Shared L2 (system level)
         $sample_rate);
     # process_tlb("system.T20","T20","l2tlb","$cpu.timer.dcache.l2tlb",$sample_rate);
 }
-process_cache("system.L30","L30","L3","l3cache",0,$sample_rate);
+if ($l3s > 0) {
+    process_cache("system.L30","L30","L3",
+	    "l3cache",
+		"cpu0.timer.dcache.l2cache.l3cache",
+		$sample_rate);
+}
+else {
+    process_cache("system.L30","L30","L3","l3cache",0,$sample_rate);
+}
 process_noc("system.Noc0","noc0",$sample_rate);
 process_mainmem("system.mem","mem",$sample_rate);
 process_memctrl("system.mc","mc",$sample_rate);

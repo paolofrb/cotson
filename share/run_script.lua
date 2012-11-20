@@ -10,32 +10,24 @@
 -- OTHER DEALINGS IN THE SOFTWARE.
 --
 
--- $Id$
+-- $Id: user_script.lua 15 2010-01-08 14:59:25Z paolofrb $
 
 dofile(arg[0]:gsub("(.+)/.+","%1/defaults.lua"))
 
-use_bsd=use_bsd_helper
-use_hdd=use_hdd_helper
-set_journal=set_journal_helper
-set_diskjournal=set_diskjournal_helper
-set_quantum=set_quantum_helper
-send_keyboard=send_keyboard_helper
-set_serial=set_serial_helper
-dumpregistry=dumpregistry_helper
-analyzer=analyzer_helper
 run_script=''
-
-function execute(n)
-	run_script=n
-    send_keyboard("xget ../data/run.sh b ; sh ./b")
+function execute(x)
+	l=location(x)
+	check_exists(l,"user script '"..x.."' does not exist")
+	puts(l)
 end
 
 if type(simnow)~='table' or type(simnow.commands)~='function' then
-	error("missing simnow.commands function")
+	error("no simnow.commands function")
 end
-simnow.commands()
 
-if type(simnow)=='table' and type(simnow.xcommands)=='function' then
-    simnow.xcommands()
+if run_script=='' then
+	simnow.commands()
+else
+	execute(run_script)
 end
 

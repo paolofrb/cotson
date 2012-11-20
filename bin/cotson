@@ -52,14 +52,15 @@ begin
       :vncviewer, :xterm, :screen, :Xvnc, :Xvnc_args, :Xvncwm,
       :simnow_dir, :simnow_dir_link,
       :abaeterno_so, :abaeterno_so_link,
-      :clean_sandbox, :screen,
-      :copy_files, :copy_files_prefix
+	  :clean_sandbox, :screen, 
+      :copy_files, :copy_files_prefix,
+      :subscribe_result, :run_script
     clean_sandbox=opts[:clean_sandbox]
 
     sb=Sandbox.new(lua_defs,opts,sbname(opts,''))
     node_sandbox.push sb
     sb.install :abaeterno_in, :simnow_pre, :simnow_dir,
-      :abaeterno_so
+      :abaeterno_so, :run_sh
     sb.run(opts[:one_node_script])
 
   else

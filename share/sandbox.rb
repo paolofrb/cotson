@@ -65,6 +65,33 @@ class Sandbox < Location
     FileUtils.cp_r(@opts[:user_script], data('user_script'))
   end
 
+  def install_run_sh
+   if @opts[:run_script]!=""
+    FileUtils.cp_r(@opts[:run_script], data('run_script'))
+    debug2 "installing run.sh"
+    File.open(data('run.sh'),"w") do |f|
+      f.puts "xget ../data/run_script run_script"
+      f.puts "chmod +x run_script"
+      f.puts "./run_script 2>&1 | tee stdout.log"
+      f.puts "xput stdout.log #{@root}/data/stdout.log"
+      f.puts "touch l; xput l terminate"
+      s_id=0
+      a = @opts[:subscribe_result]
+      if a.respond_to?(:lines) then
+        @opts[:subscribe_result].lines.each do |s|
+          f.puts "xput #{s.chomp} #{@root}/data/res_#{s_id}.#{File.basename(s)}" 
+          s_id += 1
+        end
+      else
+        @opts[:subscribe_result].each do |s|
+          f.puts "xput #{s.chomp} #{@root}/data/res_#{s_id}.#{File.basename(s)}" 
+          s_id += 1
+        end
+      end
+    end
+   end
+  end
+
   def install_cluster_sh
     debug2 "installing cluster.sh"
     
@@ -79,7 +106,6 @@ class Sandbox < Location
       f.puts "./user_script #{@opts[:NODE]} #{@opts[:TOTAL]} 2>&1 | tee stdout.log"
       f.puts "xput stdout.log #{@root}/data/stdout.log"
       s_id=0
-#RG+12 porting from ruby 1.8 to 1.9
       a = @opts[:subscribe_result]
       if a.respond_to?(:lines) then
         @opts[:subscribe_result].lines.each do |s|
@@ -92,8 +118,7 @@ class Sandbox < Location
           s_id += 1
         end
       end
-      f.puts "touch l"
-      f.puts "xput l terminate"
+      f.puts "touch l; xput l terminate"
     end
   end
 

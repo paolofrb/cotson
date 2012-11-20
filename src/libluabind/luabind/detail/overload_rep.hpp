@@ -96,7 +96,8 @@ namespace luabind { namespace detail
 
 #endif // LUABIND_OVERLOAD_REP_HPP_INCLUDED
 
-#elif BOOST_PP_ITERATION_FLAGS() == 1
+#else
+#if BOOST_PP_ITERATION_FLAGS() == 1
 
 #define LUABIND_PARAM(z, n, _) m_params_.push_back(LUABIND_TYPEID(A##n));
 #define LUABIND_POLICY_DECL(z,n,offset) typedef typename detail::find_conversion_policy<n + offset, Policies>::type BOOST_PP_CAT(p,n);
@@ -138,4 +139,5 @@ namespace luabind { namespace detail
 #undef LUABIND_POLICY_DECL
 #undef LUABIND_PARAM
 
+#endif
 #endif
