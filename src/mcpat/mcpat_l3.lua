@@ -1,7 +1,7 @@
 -- debug = 3
 -- display = ":0"
 options = {
-	fastforward="200M",
+	fastforward="100M", -- so we get some activity
 	time_feedback = true,
 	heartbeat = { type="sqlite", dbfile=DBFILE, experiment_id=1, experiment_description="test run"},
     max_nanos="200M",
