@@ -23,11 +23,11 @@ clean:
 	if [ -d $(MCPAT) ]; then \
 	    $(MAKE) -C $(MCPAT) clean; \
 	fi; \
-	$(RM) $(MCPAT) mcpat mcpat.db mcpat.xml mcpat.xml.txt testmcpat* libstdc++.so
+	$(RM) $(MCPAT) mcpat mcpat.db *.db *.xml *.xml.txt
 
 
 distclean: clean
-	$(RM) $(MCPAT).tar.gz
+	$(RM) $(MCPAT).tar.gz 
 
 test: mcpat cotson2mcpat mcpat.lua
 	$(RM) mcpat.db mcpat.xml; \
