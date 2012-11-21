@@ -14,28 +14,25 @@
 #define CACHE_H
 
 #include "liboptions.h"
-
 #include "debug_mem.h"
-
-template<typename Addr>
-Addr ilog2(Addr n)
-{
-	Addr i;
-	for(i=0;n>0;n>>=1,i++);
-	return i-1;
-}
-
-template<typename Addr>
-Addr ilog2(units<Addr> n)
-{
-	Addr i;
-	Addr n_=n;
-	for(i=0;n_>0;n_>>=1,i++);
-	return i-1;
-}
 
 namespace Memory
 {
+
+template<typename Addr> 
+inline static size_t ilog2(Addr x)
+{
+#if defined(__GNUC__)
+    // Use optimized gcc builtin
+	uint64_t n = static_cast<uint64_t>(x);
+    return 8*sizeof(uint64_t)-__builtin_clzll((n))-1;
+#else
+	size_t i=-1;
+	for(uint64_t n=static_cast<uint64_t>(x); n>0; n>>=1,i++);
+	return i;
+#endif
+}
+
 
 // needed for the template friend function!
 template<typename Elem,typename Addr>  class Cache;

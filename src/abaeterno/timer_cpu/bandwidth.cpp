@@ -377,7 +377,7 @@ void Bandwidth::addMemory(string name,Memory::Interface::Shared c)
 	{
 		icache=c; 
 		add("icache.",*icache); 
-		wi.reset(new Waiting(ilog2(icache->item_size())));
+		wi.reset(new Waiting(Memory::ilog2(icache->item_size())));
 		/*for(uint i=0;i<=icache->item_size();++i)
 		{
 			fetch_width[i]=0;

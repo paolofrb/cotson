@@ -13,24 +13,16 @@
 
 #include "cache_timing_l2.h"
 #include "error.h"
+#include "cache.h"
 
 namespace Memory {
 namespace Timing {
 
-static inline uint32_t _log2(uint32_t num)
-{
-    uint32_t log2 = 0;
-
+static inline uint32_t _log2(uint32_t num) 
+{ 
     if (num == 0)
-	  throw std::runtime_error("Cannot compute log2(0)");
-
-    while (num > 1)
-    {
-      num = (num >> 1);
-      log2++;
-    }
-
-    return log2;
+ 	    throw std::runtime_error("Cannot compute log2(0)");
+    return Memory::ilog2(num); 
 }
 
 static inline void reset_vector(std::vector<uint64_t>& vect)
