@@ -10,6 +10,8 @@
 //
 
 // $Id$
+// #define _DEBUG_THIS_
+
 #include "abaeterno_config.h"
 
 #include "cpu_token_parser.h"
@@ -101,14 +103,16 @@ void CpuTokenParser::run()
                 const Opcode *op = opcodes.find(p2);
                 if (op)
                 {
-                    ERROR_IF(p[count-1]!=op->getLength(), "opcode length mismatch");
+					uint len = op->getLength();
+                    ERROR_IF(p[count-1]!=len, "opcode length mismatch");
                     current_inst=insns.alloc();
                     Instruction::init(
 					    current_inst,
-						p1,p2,op->getLength(),
+						p2,p1,len, // p2 virtual, p1 physical
 						cur_cr3,
 						op,op->getType()); 
-                    LOG(hex,static_cast<void*>(this),"inst",hex,p1);
+                    LOG("EVENT_INSTRUCTION ", Memory::Access(p2,p1,len), 
+					    hex, static_cast<void*>(this), dec);
 					process_pending(current_inst);
                 }
                 else

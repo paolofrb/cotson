@@ -175,7 +175,7 @@ CacheImpl<Storage,Timer>::read(
 	    LOG(name,"hit",m,mt);
 		cl->lru = ++lru_counter;
 		lookup_[cl->moesi]++;
-		LOG(name,"read hit - moesi:",cl->moesi);
+		LOG(name,"read hit - state:",cl->moesi);
 		return MemState(latency,cl->moesi);
 	}
 	
@@ -188,7 +188,7 @@ CacheImpl<Storage,Timer>::read(
 		uint64_t pending_latency = pending->when - tstamp;
 		uint32_t new_lat = latency > pending_latency ? latency : pending_latency;
 		lookup_[new_ms]++;
-		LOG(name,"read latency",new_lat,"half miss - moesi",new_ms,"max_lat",max_latency);
+		LOG(name,"read latency",new_lat,"half miss - state",new_ms,"max_lat",max_latency);
 		return MemState(new_lat,new_ms);
     }
 
@@ -219,7 +219,7 @@ CacheImpl<Storage,Timer>::read(
     Future f(tstamp+rd_lat,tag,m.phys,new_moesi,mt,Future::UPDATE,evict);
 	simulating ? events.insert(f) : perform_update(f);
 		
-    LOG(name,"read latency",rd_lat,"miss - moesi",new_moesi);
+    LOG(name,"read latency",rd_lat,"miss - state",new_moesi);
 	return MemState(rd_lat,new_moesi);
 }
 
@@ -239,7 +239,7 @@ CacheImpl<Storage,Timer>::readx(
 	if (ms.isValid())
 	{
 		// this happens on write hit, so return MODIFIED, meaning dirty
-		LOG(name,"read latency",0,"readx - moesi:",MODIFIED);
+		LOG(name,"read latency",0,"readx - state:",MODIFIED);
 		return MemState(0,MODIFIED); 
 	}
 	LOG(name,"READX -> READ");
@@ -273,7 +273,7 @@ CacheImpl<Storage,Timer>::write(
 		MOESI_state new_ms = nstate.moesi();
 		uint32_t tot_latency = latency + nstate.latency();
 		cl->moesi = new_ms;
-		LOG(name,tstamp,"write hit, moesi before",ms,"after",new_ms,"lat",tot_latency);
+		LOG(name,tstamp,"write hit, state before",ms,"after",new_ms,"lat",tot_latency);
 		update_[ms]++;
 		return MemState(tot_latency,new_ms); 
 	}
@@ -290,7 +290,7 @@ CacheImpl<Storage,Timer>::write(
 		uint32_t tot_latency = latency + when - tstamp; 
 		// Note: we don't add nstate.latency() because we assume this happens in background
 		const_cast<Future*>(pending)->moesi=new_ms; // FIXME: changing data off a const ptr!!
-		LOG(name,tstamp,"write half miss, moesi before",ms,"after",new_ms,
+		LOG(name,tstamp,"write half miss, state before",ms,"after",new_ms,
 		    "lat",tot_latency,"max_lat",max_latency);
 		update_[ms]++;
 		return MemState(tot_latency,new_ms);
@@ -324,7 +324,7 @@ CacheImpl<Storage,Timer>::write(
 	    simulating ? events.insert(f) : perform_update(f);
 	}
 
-	LOG(name,"write latency",wr_lat,"miss - moesi",new_ms);
+	LOG(name,"write latency",wr_lat,"miss - state",new_ms);
 	return MemState(wr_lat,new_ms);
 }
 
@@ -450,7 +450,7 @@ INLINE void CacheImpl<Storage,Timer>::perform_update(const Future& f)
 
 	// Allocate a new line
 	storage.allocate(replace,f.addr,++lru_counter,f.moesi);
-	LOG(name,"allocate 0x", std::hex,f.addr,std::dec, "new moesi state", f.moesi, "cycle", f.when);
+	LOG(name,"allocate", std::hex,f.addr,std::dec, "state", f.moesi, "cycle", f.when);
 }
 
 template <typename Storage, typename Timer>
@@ -459,7 +459,7 @@ INLINE void CacheImpl<Storage,Timer>::perform_invalidate(const Future& f)
 	Line* cl = f.line;
 	if (cl)
 	{
-		LOG(name,"invalidate tag",f.tag, "update moesi state from", 
+		LOG(name,"invalidate tag",f.tag, "update state from", 
 		    cl->moesi, "to", f.moesi, "cycle" , f.when);
 		// Writeback if needed
 		if (!writethrough && cl->moesi.isDirty() && f.moesi==SHARED)

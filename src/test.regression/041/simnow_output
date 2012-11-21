@@ -1,5 +1,5 @@
 Loading module abaeterno.so.
-Using image path: "/home/frb/h2/isca11/cotson/data"
+Using image path: "/home/frb/TERAFLUX/COTSON/data"
 Known Device: Deerhound RevB QuadCore Socket L1
 Known Device: Intel(R) Pro/1000 MT/PT Desktop Network Adapter
 Known Device: USB JumpDrive
@@ -30,13 +30,11 @@ Known Device: SMB Hub Device
 Known Device: Winbond W83627HF SIO
 Known Device: Machine
 Known Device: Matrox(R) MGA-G4x0 Graphics Adapter
-Known Device: quadcore
-Known Device: TFMem
 Known Device: Unnamed Group
 Using library path: "./libs"
 
-1 exec> open /home/frb/h2/isca11/cotson/data/1p.bsd
-Opening "/home/frb/h2/isca11/cotson/data/1p.bsd"
+1 exec> open /home/frb/TERAFLUX/COTSON/data/1p.bsd
+Opening "/home/frb/TERAFLUX/COTSON/data/1p.bsd"
 created device Machine
 Instructions per Microsecond: 3200
 CPU Model Name: Opteron
@@ -53,7 +51,7 @@ info: creating device #0 "AMD 8th Generation Integrated Northbridge"
 info: creating device #1 "Dimm Bank"
 Dimmdevice: Bank 0, Simulated Size 10000000
 info: creating device #2 "AMD-8111 I/O Hub"
-ATA: Image [/home/frb/h2/OPENSOURCE/cotson/data/karmic64.img] does not have an ID field.
+ATA: Image [/home/frb/TERAFLUX/COTSON/data/karmic64.img] does not have an ID field.
 info: creating device #3 "Memory Device"
 info: creating device #4 "Winbond W83627HF SIO"
 info: creating device #5 "SMB Hub Device"
@@ -71,9 +69,9 @@ Could allocate map memory
 info: creating device #16 "Intel(R) Pro/1000 MT/PT Desktop Network Adapter"
 BSD Load completed!
 
-1 exec> ide:0.image master /home/frb/h2/isca11/cotson/data/karmic64.img
-ATA: Image [/home/frb/h2/isca11/cotson/data/karmic64.img] does not have an ID field.
-MASTER drive Image file is now /home/frb/h2/isca11/cotson/data/karmic64.img
+1 exec> ide:0.image master /home/frb/TERAFLUX/COTSON/data/karmic64.img
+ATA: Image [/home/frb/TERAFLUX/COTSON/data/karmic64.img] does not have an ID field.
+MASTER drive Image file is now /home/frb/TERAFLUX/COTSON/data/karmic64.img
 
 1 exec> ide:0.journal master on
 Journaling was already enabled
@@ -144,36 +142,36 @@ Journaling was already enabled
 
 1 exec> go
 Hybrid flash map with LRU strategy.
-TIME=0.017813 ms IPC ( 0.073969 )
-TIME=0.049064 ms IPC ( 0.167036 )
-TIME=0.080315 ms IPC ( 0.793894 )
-TIME=0.111566 ms IPC ( 0.218316 )
-TIME=0.142817 ms IPC ( 0.448288 )
-TIME=0.174068 ms IPC ( 0.504698 )
-TIME=0.205319 ms IPC ( 0.428956 )
-TIME=0.23657 ms IPC ( 0.619778 )
-TIME=0.267821 ms IPC ( 0.406437 )
-TIME=0.299072 ms IPC ( 0.597194 )
-TIME=0.330323 ms IPC ( 0.34644 )
-TIME=0.361574 ms IPC ( 0.59304 )
-TIME=0.392825 ms IPC ( 0.532173 )
-TIME=0.424076 ms IPC ( 0.401242 )
-TIME=0.455327 ms IPC ( 0.552139 )
-TIME=0.486578 ms IPC ( 0.331666 )
-TIME=0.517829 ms IPC ( 0.60029 )
-TIME=0.54908 ms IPC ( 0.515024 )
-TIME=0.580331 ms IPC ( 0.315602 )
-TIME=0.611582 ms IPC ( 0.564064 )
-TIME=0.642833 ms IPC ( 0.516046 )
-TIME=0.674084 ms IPC ( 0.357175 )
-TIME=0.705335 ms IPC ( 0.520322 )
-TIME=0.736586 ms IPC ( 0.422074 )
-TIME=0.767837 ms IPC ( 0.518555 )
-TIME=0.799088 ms IPC ( 0.703644 )
-TIME=0.830339 ms IPC ( 0.762421 )
-TIME=0.86159 ms IPC ( 0.782972 )
-TIME=0.892841 ms IPC ( 0.778887 )
-TIME=0.924092 ms IPC ( 0.786058 )
-TIME=0.955343 ms IPC ( 0.788056 )
-TIME=0.986594 ms IPC ( 0.780099 )
+TIME=0.017813 ms IPC ( 0.0740536 )
+TIME=0.049064 ms IPC ( 0.163987 )
+TIME=0.080315 ms IPC ( 0.772754 )
+TIME=0.111566 ms IPC ( 0.213466 )
+TIME=0.142817 ms IPC ( 0.458613 )
+TIME=0.174068 ms IPC ( 0.529901 )
+TIME=0.205319 ms IPC ( 0.335547 )
+TIME=0.23657 ms IPC ( 0.587527 )
+TIME=0.267821 ms IPC ( 0.460342 )
+TIME=0.299072 ms IPC ( 0.631199 )
+TIME=0.330323 ms IPC ( 0.354269 )
+TIME=0.361574 ms IPC ( 0.560462 )
+TIME=0.392825 ms IPC ( 0.555669 )
+TIME=0.424076 ms IPC ( 0.615835 )
+TIME=0.455327 ms IPC ( 0.443907 )
+TIME=0.486578 ms IPC ( 0.642937 )
+TIME=0.517829 ms IPC ( 0.567956 )
+TIME=0.54908 ms IPC ( 0.493502 )
+TIME=0.580331 ms IPC ( 0.475697 )
+TIME=0.611582 ms IPC ( 0.283479 )
+TIME=0.642833 ms IPC ( 0.614242 )
+TIME=0.674084 ms IPC ( 0.536687 )
+TIME=0.705335 ms IPC ( 0.292948 )
+TIME=0.736586 ms IPC ( 0.812899 )
+TIME=0.767837 ms IPC ( 0.536293 )
+TIME=0.799088 ms IPC ( 0.675377 )
+TIME=0.830339 ms IPC ( 0.626263 )
+TIME=0.86159 ms IPC ( 0.61092 )
+TIME=0.892841 ms IPC ( 0.577059 )
+TIME=0.924092 ms IPC ( 0.522571 )
+TIME=0.955343 ms IPC ( 0.753725 )
+TIME=0.986594 ms IPC ( 0.811278 )
 MAX NANOS: 1000032
