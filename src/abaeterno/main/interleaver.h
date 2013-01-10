@@ -37,32 +37,28 @@ public:
 
 protected:
 	enum Order { CYCLE, ROUNDROBIN, UNIFORM };
-
 	void update_cpus();
-	struct CpuData 
-	{
-	    Instructions *ins;
-		const TraceNeeds *tn;
-		uint32_t dev;
-		EmitFunction emit;
-		uint64_t* pcycles;
-	    uint64_t initial_cycles;
-	    uint64_t order;
-		uint64_t order_rate; 
-
-		CpuData(Instructions* i,const TraceNeeds *t, uint32_t d):ins(i),tn(t),dev(d) { update(0,0,CYCLE); }
-	    inline void set_order(Order);
-		void update(uint64_t,uint64_t,Order);
-	};
-    struct CpuCmp 
-	{ 
-	    inline bool operator()(const CpuData* p1,const CpuData* p2) { return !(p1->order<p2->order); }
-	};
-	void end_quantum_onecpu(CpuData*);
-
-	std::vector<CpuData> cpus;
 	bool align_timers;
 	Order order_by;
+    struct CpuData
+    {
+        Instructions *ins;
+        const TraceNeeds *tn;
+        uint32_t dev;
+	    Order order_by;
+        EmitFunction emit;
+        uint64_t* pcycles;
+        uint64_t initial_cycles;
+        uint64_t order;
+        uint64_t order_rate; 
+        inline void update(uint64_t,uint64_t);
+        inline void set_order();
+        inline uint emit_ins(uint64_t);
+        inline bool selective_discard(const Instruction*);
+        CpuData(Instructions*,const TraceNeeds *,uint32_t,Order);
+    };
+    struct CpuCmp;
+    std::vector<CpuData> cpus;
 };
 
 #endif

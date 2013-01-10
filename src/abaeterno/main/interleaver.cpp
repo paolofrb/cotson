@@ -21,156 +21,178 @@
 using namespace std;
 
 namespace {
-option o1("align_timers", "align timers to max time every MP quantum");
-option o2("interleaver_order", "cycle", "order CPUs by either cycle | round_robin | uniform");
+    option o1("align_timers", "align timers to max time every MP quantum");
+    option o2("interleaver_order", "cycle", "order CPUs by either cycle | round_robin | uniform");
 }
+
+// ==========================================================================================
+// Private internals to the interleaver module
+// ==========================================================================================
+
+Interleaver::CpuData::CpuData(Instructions* i,const TraceNeeds *t, uint32_t d, Order ob)
+    : ins(i),tn(t),dev(d),order_by(ob) 
+{
+    update(0,0); 
+}
+
+inline bool Interleaver::CpuData::selective_discard(const Instruction* inst)
+{
+    if(!inst->is_cpuid())
+        return false;
+    Instruction* ii=const_cast<Instruction*>(inst);
+    return CpuidCall::simulation(ii,Cotson::nanos(),COTSON_RESERVED_CPUID_SELECTIVE)==DISCARD;
+}
+
+inline void Interleaver::CpuData::update(uint64_t max_cycle, uint64_t max_ins)
+{
+    order = 0;
+    order_rate = 1000;
+
+    emit=tn->st[sim_state()].emit;
+
+    pcycles=tn->cycles;
+    if (max_cycle > *pcycles)
+        tn->idle(max_cycle-*pcycles);
+    initial_cycles=*pcycles;
+
+    uint64_t exe_ins = ins->elems();
+    if (max_ins > exe_ins)
+        order_rate = static_cast<uint64_t>(1000.0 * static_cast<double>(max_ins) / exe_ins);
+        
+    LOG("CPU",dec,dev,"cycle",*pcycles,"exe_ins",exe_ins,"insrate",order_rate);
+}
+
+inline void Interleaver::CpuData::set_order()
+{
+    switch(order_by) 
+    {
+        case CYCLE:
+            order = *pcycles - initial_cycles;
+            break;
+        case ROUNDROBIN:
+            order += 1000;
+            break;
+        case UNIFORM:
+            order += order_rate;
+            break;
+    }
+}
+
+inline uint Interleaver::CpuData::emit_ins(uint64_t next_order)
+{
+    LOG("emit cpu", dev, "ins", ins->elems(),"order",order,"next",next_order);
+    while(order <= next_order && ins->elems())
+    {
+        const Instruction* nn=ins->next();
+        if(!selective_discard(nn))
+		{
+            emit(nn);
+		    set_order();
+	    }
+    }
+	return ins->elems();
+}
+
+struct Interleaver::CpuCmp 
+{
+    inline bool operator()(const CpuData* p1, const CpuData* p2) 
+    {
+	    // if order is the same, disambiguate with device id
+        uint64_t o1 = p1->order;
+        uint64_t o2 = p2->order;
+        uint32_t d1 = p1->dev;
+        uint32_t d2 = p2->dev;
+        return (o1 != o2) ? !(o1 < o2) : d1 > d2;
+    }
+};
+
+// ==========================================================================================
+// Interleaver interface
+// ==========================================================================================
 
 void Interleaver::initialize() 
 {
     align_timers = !(Option::has("align_timers") && Option::get<bool>("align_timers")==false);
-	if (Option::has("interleaver_order"))
-	{
-	    const string &s=Option::get<string>("interleaver_order");
-	    if (s=="cycle")
-	        order_by=CYCLE;
-	    else if (s=="round_robin")
-	        order_by=ROUNDROBIN;
-	    else if (s=="uniform")
-	        order_by=UNIFORM;
+    if (Option::has("interleaver_order"))
+    {
+        const string &s=Option::get<string>("interleaver_order");
+        if (s=="cycle")
+            order_by=CYCLE;
+        else if (s=="round_robin")
+            order_by=ROUNDROBIN;
+        else if (s=="uniform")
+            order_by=UNIFORM;
         else
-	        throw runtime_error("Unkown option interleaver_order=" + s);
+            throw runtime_error("Unkown option interleaver_order=" + s);
     }
 }
 
 void Interleaver::config(uint64_t dev,Instructions& insns,const TraceNeeds* tn)
 {
-	LOG("config device",dec,dev);
-	ERROR_IF(dev!=cpus.size(),"Device '", dev, "' is not the device I was hoping to get");
-	insns.create(100,tn->history+1);
-	cpus.push_back(CpuData(&insns,tn,dev));
-}
-
-namespace
-{
-    static bool selective_discard(const Instruction* inst)
-    {
-        if(!inst->is_cpuid())
-		    return false;
-	    Instruction* ii=const_cast<Instruction*>(inst);
-	    return CpuidCall::simulation(ii,Cotson::nanos(),COTSON_RESERVED_CPUID_SELECTIVE)==DISCARD;
-    }
+    LOG("config device",dec,dev);
+    ERROR_IF(dev!=cpus.size(),"Device '", dev, "' is not the device I was hoping to get");
+    insns.create(100,tn->history+1);
+    cpus.push_back(CpuData(&insns,tn,dev,order_by));
 }
 
 void Interleaver::update_cpus() 
 {
     // At every mpquantum CPUs must be re-aligned to the
-	// max cycle of all CPUs, to account for idle time of CPUs that
-	// may have executed fewer instructions
-	uint64_t max_cycle = 0;
-	uint64_t max_ins = 0;
- 	for(uint i=0;i<cpus.size();i++)
-	{
-	    if (align_timers) 
-		{
-	        uint64_t cycle = *(cpus[i].pcycles);
-		    max_cycle = cycle > max_cycle ? cycle : max_cycle;
-		}
-		uint64_t nins = cpus[i].ins->elems();
-		max_ins = nins > max_ins ? nins : max_ins;
-	}
- 	for(uint i=0;i<cpus.size();i++) 
-	    cpus[i].update(max_cycle,max_ins,order_by);
-}
-
-void Interleaver::CpuData::update(uint64_t max_cycle, uint64_t max_ins,Order order_by)
-{
-	order = order_by==CYCLE ? 0 : dev; // use CPU "dev" number to disambiguate same order
-    emit=tn->st[sim_state()].emit;
-
-	pcycles=tn->cycles;
-	if (max_cycle > *pcycles)
-	    tn->idle(max_cycle-*pcycles);
-	initial_cycles=*pcycles;
-
-	order_rate = 1000;
-	if (max_ins > ins->elems())
-	    order_rate = static_cast<uint64_t>(1000.0 * static_cast<double>(max_ins) / ins->elems());
-	    
-	LOG("CPU",dec,dev,"cycle",*pcycles,"elems",ins->elems(),"insrate",order_rate);
-}
-
-inline void Interleaver::CpuData::set_order(Interleaver::Order order_by)
-{
-	switch(order_by) {
-	    case CYCLE:
-            order = *pcycles - initial_cycles;
-		    break;
-		case ROUNDROBIN:
-	        order += 1000;
-		    break;
-		case UNIFORM:
-	        order += order_rate;
-		    break;
-	}
-}
-
-void Interleaver::end_quantum_onecpu(CpuData* cpu) 
-{
-    LOG("one cpu shortcut");
-	Instructions* ins = cpu->ins;
-	const EmitFunction& emit = cpu->emit;
-	while(ins->elems())
-	{
-	    const Instruction* nn=ins->next();
-        if(!selective_discard(nn))
-		    emit(nn);
-	}
+    // max cycle of all CPUs, to account for idle time of CPUs that
+    // may have executed fewer instructions
+    uint64_t max_cycle = 0;
+    uint64_t max_ins = 0;
+    for(uint i=0;i<cpus.size();i++)
+    {
+        if (align_timers) 
+        {
+            uint64_t cycle = *(cpus[i].pcycles);
+            max_cycle = cycle > max_cycle ? cycle : max_cycle;
+        }
+        uint64_t nins = cpus[i].ins->elems();
+        max_ins = nins > max_ins ? nins : max_ins;
+    }
+    for(uint i=0;i<cpus.size();i++) 
+        cpus[i].update(max_cycle,max_ins);
 }
 
 void Interleaver::end_quantum() 
 {
- 	LOG("end_quantum");
-	update_cpus();
+    LOG("end_quantum");
+    update_cpus();
 
-	if (cpus.size()==1)
-	{
-	    end_quantum_onecpu(&cpus[0]);
-		return;
-	}
+	// Shortcut for 1 CPU
+    if (cpus.size()==1)
+    {
+		cpus[0].emit_ins(-1);
+        return;
+    }
 
-	priority_queue<CpuData*,vector<CpuData*>,CpuCmp> cpu_queue;
-	for(uint i=0;i<cpus.size();i++) {
-		const Instructions* ins = cpus[i].ins;
-	    if(ins && ins->elems())
-	        cpu_queue.push(&cpus[i]);
-	}
-	if (cpu_queue.size()==1)
-	{
-	    end_quantum_onecpu(cpu_queue.top());
-		return;
-	}
+	// Prepare a sorted list of CPUs by order value (eg, cycles)
+    priority_queue<CpuData*,vector<CpuData*>,CpuCmp> cpu_queue;
+    for(uint i=0;i<cpus.size();i++)
+    {
+        const Instructions* ins = cpus[i].ins;
+        if(ins && ins->elems())
+            cpu_queue.push(&cpus[i]);
+    }
 
-	while (!cpu_queue.empty())
-	{
-		CpuData *fcpu = cpu_queue.top(); 
-		const Instruction* nn=fcpu->ins->next();
-        if(!selective_discard(nn))
-		{
-			LOG("emit",fcpu->dev,"order",fcpu->order);
-		    fcpu->emit(nn);   // emit instruction to the timer
-		    fcpu->set_order(order_by);  // set new cpu order
-		    cpu_queue.pop();  // remove CPU from queue
-			// and re-insert it with new timing if
-			// there are instructions left to be processed
-		    if(fcpu->ins->elems())
-		        cpu_queue.push(fcpu); 
-		}
-	}
+	// Interleave instruction emit to timers
+    while (!cpu_queue.empty())
+    {
+        CpuData *fcpu = cpu_queue.top(); 
+        cpu_queue.pop(); // remove top CPU from queue
+        if (cpu_queue.empty())
+            fcpu->emit_ins(-1); // Only 1 CPU left, emit all
+		else 
+		    if (fcpu->emit_ins(cpu_queue.top()->order)) // emit up to next
+                cpu_queue.push(fcpu); // reinsert CPU if not done
+    }
 }
 
 void Interleaver::break_sample() 
 {
-	for(uint i=0;i<cpus.size();i++)
-		cpus[i].ins->clear();
+    for(uint i=0;i<cpus.size();i++)
+        cpus[i].ins->clear();
 }
 

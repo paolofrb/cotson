@@ -1,7 +1,10 @@
 SUBDIRS= hw_model lib main mem_lib parsing sampler timer_cpu timer_dev simnow injector
 
+LUAINC=/usr/include/lua5.1
+LUALIB=-llua5.1
+
 SUBINC = $(patsubst %,-I%,$(SUBDIRS))
-INCLUDE = $(SUBINC) -I../common -I../libluabind -I.. -I/usr/include/lua5.1
+INCLUDE = $(SUBINC) -I../common -I../libluabind -I.. -I$(LUAINC)
 DEPINC = $(SUBINC) -I../common
 XOPTS = -Werror
 
@@ -32,7 +35,7 @@ INJLIBS = ../common/libaacommon.a \
 
 ALL_INJLIBS = -Wl,-whole-archive  $(INJLIBS) -Wl,-no-whole-archive
 
-SHLIBS = -lpqxx -lsqlite3 -llua5.1 $(THREAD_LIBS) -ldl -lz
+SHLIBS = -lpqxx -lsqlite3 $(LUALIB) $(THREAD_LIBS) -ldl -lz
 
 ################################################################################
 MAIN = $(wildcard main/*.cpp)
