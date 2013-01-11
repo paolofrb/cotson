@@ -112,7 +112,8 @@ struct Interleaver::CpuCmp
 
 void Interleaver::initialize() 
 {
-    align_timers = !(Option::has("align_timers") && Option::get<bool>("align_timers")==false);
+    align_timers = Option::get<bool>("align_timers",true);
+	order_by = CYCLE;
     if (Option::has("interleaver_order"))
     {
         const string &s=Option::get<string>("interleaver_order");
@@ -123,7 +124,8 @@ void Interleaver::initialize()
         else if (s=="uniform")
             order_by=UNIFORM;
         else
-            throw runtime_error("Unkown option interleaver_order=" + s);
+            throw runtime_error("Unkown interleaver_order option '" + s + "'\n" +
+			   "allowed options: cycle | round_robin | uniform");
     }
 }
 
