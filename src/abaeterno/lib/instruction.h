@@ -68,7 +68,7 @@ private:
 	Accesses loads,stores;
 	InstType type;
 	
-	uint64_t RAX, RDI, RSI, RBX; // CPUID registers
+	std::vector<uint64_t> xdata; // custom runtime data
 	uint64_t cr3;
 	uint64_t iid;
 	static uint64_t unique_id;
@@ -79,10 +79,8 @@ private:
 		type=other.type;
 		iid=other.iid;
 		cr3=other.cr3;
-		RAX=other.RAX;
-		RDI=other.RDI;
-		RSI=other.RSI;
-		RBX=other.RBX;
+		// pointer to runtime data (custom)
+		xdata=other.xdata;
 		// pointer to opcode data
 		opcode=other.opcode;
 		// memory ops: copy and shrink to fit
@@ -109,17 +107,13 @@ public:
 		p->loads.clear();
 		p->stores.clear();
 		p->cr3=lcr3;
-		p->RAX=0;
-		p->RDI=0;
-		p->RSI=0;
-		p->RBX=0;
+		p->xdata.clear();
 		p->iid = ++unique_id;
 	}
 
 	~Instruction() { }
 
 	uint64_t instruction_id() const { return iid; }
-
 
 	INLINE void Type(InstType t) { type=t; }
 	INLINE InstType Type() const { return type; }
@@ -132,19 +126,9 @@ public:
 	INLINE bool is_ret()      const { return type.is_ret(); }
 	INLINE bool is_call()     const { return type.is_call(); }
 
-	INLINE void cpuid_registers(uint64_t _rax, uint64_t _rdi, uint64_t _rsi, uint64_t _rbx)
-	{
-		RAX = _rax;
-		RDI = _rdi;
-		RSI = _rsi;
-		RBX = _rbx;
-	}
-	
-	INLINE boost::tuple<uint64_t,uint64_t,uint64_t,uint64_t> cpuid_registers() const
-	{
-		return boost::make_tuple(RAX,RDI,RSI,RBX);
-	}
-	
+	INLINE void add_xdata(uint64_t x) { xdata.push_back(x); }
+	INLINE uint64_t get_xdata(int i) const { return xdata[i]; }
+
 	void disasm(std::ostream&) const;
 
 	// INLINE void PC(uint64_t _pc) { pc = _pc; }

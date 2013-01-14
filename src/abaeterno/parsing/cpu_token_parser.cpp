@@ -181,16 +181,12 @@ void CpuTokenParser::run()
                     uint64_t RSI=p[6];
                     uint64_t RBX=p[8];
 
-                    LOG("EVENT_CPUID");
-                    LOG("\tdevid: ",devid);
-                    LOG("\tRAX:   ",hex,RAX);
-                    LOG("\tRDI:   ",hex,RDI);
-                    LOG("\tRSI:   ",hex,RSI);
-                    LOG("\tRBX:   ",hex,RBX);
+                    LOG("EVENT_CPUID: devid",devid,"RAX",hex,RAX);
+                    LOG("\tRDI",hex,RDI,"RSI",RSI,"RBX",RBX);
                     // Fake instruction for the interleaver
                     Instruction* fake_insn = insns.alloc();
-                    Instruction::init(fake_insn,0,0,8,cur_cr3,0,InstType::CPUID); 
-                    fake_insn->cpuid_registers(RAX,RDI,RSI,RBX);
+                    Instruction::init(fake_insn,0,0,8,cur_cr3,0,InstType::CPUID);
+					CpuidCall::add_xdata(fake_insn,RAX,RDI,RSI,RBX);
                 }
             }
             break;

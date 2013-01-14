@@ -112,11 +112,10 @@ namespace Inject {
     };
 
     enum tag_type { PREFETCH=1, CLFLUSH=2 };
-
     struct info_tag {
         tag_type type;
-        int32_t base_reg;
-        int32_t index_reg;
+		int32_t base_reg;
+		int32_t index_reg;
         int64_t disp;
         int64_t scale;
         int64_t segment;
@@ -288,9 +287,13 @@ namespace X86 {
 	    // prefetchnta 0x2dafxxxx(%r1,%r2,1)
 		// 0f 18 84 rr xx xx af 2d
 		//  0  1  2  3  4  5  6  7
-	    return op[0]==0x0F && op[1]==0x18 && op[2]==0x84 && 
-		       op[7]==0x2d && op[6]==0xaf;
+	    return   op[0]==0x0F && op[1]==0x18 && op[2]==0x84 && 
+		         op[7]==0x2d && op[6]==0xaf;
 	}
+	inline uint8_t cotson_asm_reg(const uint8_t* op) { return op[3]; }
+	inline uint8_t cotson_asm_opc(const uint8_t* op) { return op[4]; }
+	inline uint8_t cotson_asm_imm(const uint8_t* op) { return op[5]; }
+
     inline bool is_cr3mov(const uint8_t* b, const uint8_t *m)
     {
         return b[0]==0x0F && b[1]==0x22 && (m[0]&0x38)==0x18;

@@ -341,10 +341,7 @@ void Proxy::TaggedExecution(int m, UINT64 devid, CCodeInjector *inj, void *pPara
     set_injector(inj);
     synch_time();
     LOG("TaggedExecution - tag:",dec,tag,"time",nanos);
-    // First, we check whether this is a tagged operation handled in parsing
-    if (!Machine::get().execute(devid,tag))
-        // If not, we hand it to abaeterno
-        AbAeterno::get().execute(nanos,devid,tag);
+    AbAeterno::get().execute(nanos,devid,tag);
     clear_injector();
 }
 

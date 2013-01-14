@@ -54,7 +54,6 @@ protected:
         inline void update(uint64_t,uint64_t);
         inline void set_order();
         inline uint emit_ins(uint64_t);
-        inline bool selective_discard(const Instruction*);
         CpuData(Instructions*,const TraceNeeds *,uint32_t,Order);
     };
     struct CpuCmp;

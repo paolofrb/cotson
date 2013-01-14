@@ -410,8 +410,9 @@ void AbAeterno::translate(uint64_t devid)
 	{
 		// prefetchnta (mapped to cpuid-style custom calls)
         Cotson::Inject::tag(++code_tag,false);
-		asm_tags[devid][code_tag]= 
-		    (op.opcode[5]<<16) | (op.opcode[4]<<8) | op.opcode[3];
+		asm_tags[devid][code_tag]=   (Cotson::X86::cotson_asm_imm(op.opcode)<<16)
+		                           | (Cotson::X86::cotson_asm_opc(op.opcode)<<8)
+								   | (Cotson::X86::cotson_asm_reg(op.opcode));
 	}
     else if (Profiler::get().cr3() && op.length > 2
              && Cotson::X86::is_cr3mov(op.opcode,op.opcode+2)) 
@@ -463,11 +464,16 @@ bool AbAeterno::inject_tag(uint64_t devid,uint32_t n,const uint8_t* op)
 
 void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
 {
+    // Check whether this is a tagged operation handled in parsing
+    if (Machine::get().execute(devid,tag))
+	    return;
+    // Check whether this is a tagged operation handled in profiling
     if (Profiler::get().execute(nanos,tag,devid))
         return;
 
     FunctionalState fs= (sim_state == FUNCTIONAL) ? ONLY_FUNCTIONAL : FUNCTIONAL_AND_TIMING;
 
+	// Look for the special COTSON ASM ("prefetchnta"), which was previously tagged
 	uint32_t atag = asm_tags[devid][tag];
 	if (atag) 
 	{
@@ -479,29 +485,27 @@ void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
 	    return;
 	}
 
+	// Look for the special COTSON CPUID
     uint64_t RAX = Cotson::X86::RAX();  // CPUID function
-    if (!IS_COTSON_CPUID(RAX)) // Is this our own CPUID call?
-        return;
-
-    uint64_t RDI = Cotson::X86::RDI(); 
-    uint64_t RSI = Cotson::X86::RSI();
-    uint64_t RBX = Cotson::X86::RBX();
-
-    LOG("AbAeterno::execute");
-    LOG("\tnanos: ",nanos);
-    LOG("\tdevid: ",devid);
-    LOG("\tRAX:   ",RAX);
-    LOG("\tRDI:   ",RDI);
-    LOG("\tRSI:   ",RSI);
-    LOG("\tRBX:   ",RBX);
-
-	if (IS_COTSON_EXT_CPUID(RAX))
-        CpuidCall::functional(fs,nanos,devid,COTSON_EXT_CPUID_OP(RAX),RDI,RSI);
-	else
+    if (IS_COTSON_CPUID(RAX)) // Is this our own CPUID call?
 	{
-        CpuidCall::functional(fs,nanos,devid,RDI,RSI,RBX);
-        if (net_cpuid && NetworkTiming::get())
-            NetworkTiming::get()->cpuid(RBX,RDI,RSI);
+        uint64_t RDI = Cotson::X86::RDI(); 
+        uint64_t RSI = Cotson::X86::RSI();
+        uint64_t RBX = Cotson::X86::RBX();
+
+        LOG("CPUID: nanos",nanos,"devid",devid,"RAX",RAX);
+        LOG("\tRDI",RDI,"RSI",RSI,"RBX",RBX);
+
+	    if (IS_COTSON_EXT_CPUID(RAX))
+		{
+            CpuidCall::functional(fs,nanos,devid,COTSON_EXT_CPUID_OP(RAX),RDI,RSI);
+		}
+	    else
+	    {
+            CpuidCall::functional(fs,nanos,devid,RDI,RSI,RBX);
+            if (net_cpuid && NetworkTiming::get())
+                NetworkTiming::get()->cpuid(RBX,RDI,RSI);
+        }
     }
 }
 

@@ -39,7 +39,7 @@ typedef enum { ONLY_FUNCTIONAL, FUNCTIONAL_AND_TIMING } FunctionalState;
 typedef enum { DISCARD, KEEP } InstructionInQueue;
 
 typedef boost::function<void(FunctionalState,uint64_t,uint64_t,uint64_t,uint64_t,uint64_t)> FunctionalCall;
-typedef boost::function<InstructionInQueue(Instruction*,uint64_t,uint64_t)> SimulationCall;
+typedef boost::function<InstructionInQueue(Instruction*,uint64_t)> SimulationCall;
 
 class CpuidCall : public boost::noncopyable
 {
@@ -90,21 +90,28 @@ class CpuidCall : public boost::noncopyable
         fcall(f,nanos,devid,a,b,c);      
     }
 
-    static InstructionInQueue simulation(
-        Instruction*inst,
-        uint64_t nanos,
-        uint64_t devid)
+    static void add_xdata(
+	    Instruction *inst, 
+	    uint64_t rax, uint64_t rdi, uint64_t rsi, uint64_t rbx)
+	{
+	    inst->add_xdata(rax); // 0
+		inst->add_xdata(rdi); // 1
+		inst->add_xdata(rsi); // 2
+		inst->add_xdata(rbx); // 3
+	}
+
+    static InstructionInQueue simulation(Instruction* inst, uint64_t devid)
     {
+		if (!inst->is_cpuid())
+            return KEEP;
         CpuidCall& me=get();
-        uint64_t op,a,b,c;
-        boost::tie(op,a,b,c)=inst->cpuid_registers();
-        Funcs::iterator i=me.funcs.find(a);
+        Funcs::iterator i=me.funcs.find(inst->get_xdata(1)); // RDI (opcode), see above
         if(i==me.funcs.end())
-            return DISCARD;
+            return KEEP;
         SimulationCall scall=i->second.second;
         if(!scall)
-            return DISCARD;
-        return scall(inst,nanos,devid);     
+            return KEEP;
+        return scall(inst,devid);     
     }
 };
 

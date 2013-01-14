@@ -53,8 +53,8 @@ void Selective::functional_call(FunctionalState fs,uint64_t b,uint64_t c)
 
 InstructionInQueue Selective::simulation_call(Instruction* inst)
 {
-	uint64_t op,a,b,c;
-	tie(op,a,b,c)=inst->cpuid_registers();
+	uint64_t  b = inst->get_xdata(2);
+	uint64_t  c = inst->get_xdata(3);
 	current=lexical_cast<int>(Option::run_function(changer, c==0, b));
 	AbAeterno::get().break_sample();
 	return DISCARD;

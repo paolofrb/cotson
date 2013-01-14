@@ -1,9 +1,9 @@
 abaeterno_so="abaeterno-tracer.so"
 
 options = {
-	exit_trigger='cotson_tracer.exit', 
-    -- whenever this file appears in the host we stop simulation. 
-    -- We can use xput in the guest to generate this file when we want to stop
+	-- Tell simulation to end after completion
+	-- The execution script must "xput" a file called terminate
+	exit_trigger='terminate',
 	sampler={ type="selective_tracing",quantity="2",constructor="sampler_constructor",changer="zone_changer" },
 	heartbeat={ type="file_last", logfile="cotson_tracer.log" }, 
 		-- one result file in cotson_tracer.log
@@ -30,23 +30,19 @@ function zone_changer(start,i)
 	end
 end
 
-
 -- change this to point to your bsd and hdd
 -- you can use absolute paths here or else
--- placed the bsd and hdd in the data directory
+-- place the bsd and hdd in the data directory
 -- of this distribution
 simnow.commands=function()
 	use_bsd('1p.bsd')
 	use_hdd('karmic64.img')
 	set_journal()
 	-- we execute run.sh which invokes the custom tracer
-	-- The options.exit_trigger file (when created) stops simulation
-	send_keyboard('xget /tmp/run.sh r;sh -x r;xput r '..options.exit_trigger)
+	execute('run.sh')
 end
 
 function build()
-	os.remove(options.exit_trigger)
-	-- we remove the exit_trigger so simulation can proceed
 	i=0
 	while i < disks() do
 		disk=get_disk(i)
@@ -66,4 +62,5 @@ function build()
 	-- each cpu or else it will fail miserably
 	get_cpu(0):timer{ name='cpu0', type="timer0" }
 end
+
 -- vim:ft=lua

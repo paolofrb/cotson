@@ -35,14 +35,6 @@ Interleaver::CpuData::CpuData(Instructions* i,const TraceNeeds *t, uint32_t d, O
     update(0,0); 
 }
 
-inline bool Interleaver::CpuData::selective_discard(const Instruction* inst)
-{
-    if(!inst->is_cpuid())
-        return false;
-    Instruction* ii=const_cast<Instruction*>(inst);
-    return CpuidCall::simulation(ii,Cotson::nanos(),COTSON_RESERVED_CPUID_SELECTIVE)==DISCARD;
-}
-
 inline void Interleaver::CpuData::update(uint64_t max_cycle, uint64_t max_ins)
 {
     order = 0;
@@ -84,7 +76,7 @@ inline uint Interleaver::CpuData::emit_ins(uint64_t next_order)
     while(order <= next_order && ins->elems())
     {
         const Instruction* nn=ins->next();
-        if(!selective_discard(nn))
+        if (CpuidCall::simulation(const_cast<Instruction*>(nn),dev)!=DISCARD)
 		{
             emit(nn);
 		    set_order();

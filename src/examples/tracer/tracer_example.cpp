@@ -49,13 +49,13 @@ void functional_callback(
 
 InstructionInQueue simulation_callback(
 	Instruction* inst,
-	uint64_t nanos,
 	uint64_t devid)
 {
 	cout << "simulation" << endl;
-	uint64_t op,a,b,c;
-	tie(op,a,b,c)=inst->cpuid_registers();
-	cout << "  nanos:" << nanos << endl;
+	uint64_t op = inst->get_xdata(0);
+	uint64_t  a = inst->get_xdata(1);
+	uint64_t  b = inst->get_xdata(2);
+	uint64_t  c = inst->get_xdata(3);
 	// cout << "  core: " << devid << endl; // right now this does not work!
 	cout << " op:    " << hex << op << dec << endl;
 	cout << "  a:    " << a << endl;

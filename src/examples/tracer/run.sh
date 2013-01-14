@@ -20,3 +20,5 @@ cotson_tracer 10 1 0   ## switch to timing
 ## Call "10" is reserved for the selective sampler
 ## cotson_tracer is part of the guest tools, preinstalled in the BSD
 cotson_tracer 10 1 1  ## back to functional
+
+touch terminate; xput terminate terminate
