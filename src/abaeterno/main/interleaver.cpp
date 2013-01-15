@@ -131,7 +131,7 @@ void Interleaver::config(uint64_t dev,Instructions& insns,const TraceNeeds* tn)
 
 void Interleaver::update_cpus() 
 {
-    // At every mpquantum CPUs must be re-aligned to the
+    // At every mpquantum, CPUs must be re-aligned to the
     // max cycle of all CPUs, to account for idle time of CPUs that
     // may have executed fewer instructions
     uint64_t max_cycle = 0;
@@ -146,7 +146,7 @@ void Interleaver::update_cpus()
         uint64_t nins = cpus[i].ins->elems();
         max_ins = nins > max_ins ? nins : max_ins;
     }
-    for(uint i=0;i<cpus.size();i++) 
+    for(uint i=0;i<cpus.size();i++)  
         cpus[i].update(max_cycle,max_ins);
 }
 
@@ -159,6 +159,7 @@ void Interleaver::end_quantum()
     if (cpus.size()==1)
     {
 		cpus[0].emit_ins(-1);
+	    CpuidCall::reset();
         return;
     }
 
@@ -182,6 +183,7 @@ void Interleaver::end_quantum()
 		    if (fcpu->emit_ins(cpu_queue.top()->order)) // emit up to next
                 cpu_queue.push(fcpu); // reinsert CPU if not done
     }
+	CpuidCall::reset();
 }
 
 void Interleaver::break_sample() 

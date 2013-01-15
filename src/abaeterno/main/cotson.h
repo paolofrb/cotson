@@ -111,15 +111,23 @@ namespace Inject {
         info_opcode(int n,const uint8_t* op):opcode(op),length(n){}
     };
 
-    enum tag_type { PREFETCH=1, CLFLUSH=2 };
+    enum tag_type { PREFETCH=1, CLFLUSH=2, ASM=3 };
     struct info_tag {
         tag_type type;
-		int32_t base_reg;
-		int32_t index_reg;
-        int64_t disp;
-        int64_t scale;
-        int64_t segment;
-        int64_t size_mask;
+		union {
+			struct {
+		        int32_t base_reg;
+		        int32_t index_reg;
+                int64_t disp;
+                int64_t scale;
+                int64_t segment;
+                int64_t size_mask;
+		    } address;
+			struct {
+				int op;
+			    void *xdata;
+			} xasm;
+	    } info;
     };
 
     const info_instruction& current_opcode(boost::function<uint8_t*(int)>);

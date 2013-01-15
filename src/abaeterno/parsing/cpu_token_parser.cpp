@@ -184,11 +184,23 @@ void CpuTokenParser::run()
                     LOG("EVENT_CPUID: devid",devid,"RAX",hex,RAX);
                     LOG("\tRDI",hex,RDI,"RSI",RSI,"RBX",RBX);
                     // Fake instruction for the interleaver
-                    Instruction* fake_insn = insns.alloc();
-                    Instruction::init(fake_insn,0,0,8,cur_cr3,0,InstType::CPUID);
-					CpuidCall::add_xdata(fake_insn,RAX,RDI,RSI,RBX);
+                    Instruction* cpuid_ins = insns.alloc();
+                    Instruction::init(cpuid_ins,0,0,8,cur_cr3,0,InstType::CPUID);
+					CpuidCall::add_cpuid_xdata(cpuid_ins,RAX,RDI,RSI,RBX);
+				    // See lib/cpuid_call.h
                 }
             }
+            break;
+
+            case EVENT_ASM:
+			{
+				// We actually generate a CPUID type instruction (see lib/cpuid_call.h)
+                if(count!=3) ERROR("a ASM should have 3 tokens");
+                LOG("EVENT_ASM: devid",devid,"op",p[1],"xdata",hex,p[2]);
+                Instruction* asm_ins = insns.alloc();
+                Instruction::init(asm_ins,0,0,8,cur_cr3,0,InstType::CPUID);
+				CpuidCall::add_asm_xdata(asm_ins,p[1],p[2]);
+			}
             break;
 
             case EVENT_PREFETCH: // p1:virt.addr, p2:phys.addr 
@@ -263,8 +275,8 @@ void CpuTokenParser::inject(InjectState state)
                 Cotson::Inject::register_token("RBX");
             }
             Cotson::Inject::code();
+            break;
         }
-        break;
         case MEMORY:
             Cotson::Inject::memory();
             break;
@@ -322,6 +334,16 @@ bool CpuTokenParser::execute(uint32_t tag)
             uint64_t va = Cotson::Memory::address_from_tag(ti);
             uint64_t pa = Cotson::Memory::physical_address(va);
             uint64_t tokens[3] = { MAKE_EVENT(EVENT_CLFLUSH,3), va, pa };
+            add_tokens(3,tokens);
+        }
+        break;
+
+        case Cotson::Inject::ASM:
+        {
+            uint64_t op = ti.info.xasm.op;
+            uint64_t xdata = (uint64_t)ti.info.xasm.xdata;
+			LOG("asm tokens: op",op,"xdata",hex,xdata);
+            uint64_t tokens[3] = { MAKE_EVENT(EVENT_ASM,3), op, xdata };
             add_tokens(3,tokens);
         }
         break;

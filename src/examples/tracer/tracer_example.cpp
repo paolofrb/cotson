@@ -17,7 +17,7 @@ namespace {
 
 uint8_t simbuf[20];
 
-void functional_callback(
+void* functional_callback(
 	FunctionalState f,
 	uint64_t nanos,
 	uint64_t devid,
@@ -45,6 +45,8 @@ void functional_callback(
 	uint64_t vc = Cotson::Memory::physical_address(c);
 	Cotson::Memory::read_physical_memory(vc,20,simbuf);
 	cout << "  c:    " << hex << "0x" << c << dec << ": \"" << simbuf << "\"" << endl;
+
+	return 0;
 }
 
 InstructionInQueue simulation_callback(

@@ -32,7 +32,7 @@ private:
 	int current;
 	std::string changer;
 	std::vector<boost::shared_ptr<Sampler> > samplers;
-	void functional_call(FunctionalState,uint64_t,uint64_t);
+	void* functional_call(FunctionalState,uint64_t,uint64_t);
 	InstructionInQueue simulation_call(Instruction*);
 };
 
@@ -42,13 +42,14 @@ using namespace std;
 using namespace boost;
 using namespace boost::assign;
 
-void Selective::functional_call(FunctionalState fs,uint64_t b,uint64_t c)
+void* Selective::functional_call(FunctionalState fs,uint64_t b,uint64_t c)
 {
 	if(fs == ONLY_FUNCTIONAL) 
 	{
 	 	current=lexical_cast<int>(Option::run_function(changer, c==0, b));
 		AbAeterno::get().break_sample();
 	}
+	return 0;
 }
 
 InstructionInQueue Selective::simulation_call(Instruction* inst)
@@ -67,7 +68,7 @@ Selective::Selective(Parameters&p) :
 {
 	FunctionalCall f=bind(&Selective::functional_call,this,_1,_5,_6);
 	SimulationCall s=bind(&Selective::simulation_call,this,_1);
-	CpuidCall::add(COTSON_RESERVED_CPUID_SELECTIVE,f,s); 
+	CpuidCall::add(COTSON_RESERVED_CPUID_SELECTIVE,f,s,0); 
 
 	string constructor=p.get<string>("constructor");
 	int quantity=p.get<int>("quantity");

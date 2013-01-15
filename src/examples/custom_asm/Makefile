@@ -1,9 +1,9 @@
 ROOT=$(shell cd ../..; pwd)
 
-all: abaeterno-tracer.so tracer_app
-	echo "export D=`pwd`" > run.sh; \
-	cat run.sh.in >> run.sh; \
-	$(ROOT)/../bin/cotson cotson_tracer.in
+all: custom_asm.so asm_example
+	echo "xget $(PWD)/asm_example asm_example; chmod +x asm_example; ./asm_example" > run.sh; \
+	$(ROOT)/../bin/cotson example.lua; \
+	cat node.1.stdout.log
 
 INCLUDE = -I$(ROOT)/common -I$(ROOT)/libluabind \
           -I$(ROOT)/abaeterno/lib -I$(ROOT)/abaeterno/main \
@@ -26,15 +26,16 @@ LINKOPTS = \
 	-Wl,--allow-multiple-definition \
     -Wl,-whole-archive
 
-tracer_example.o: tracer_example.cpp
+custom_asm.o: custom_asm.cpp custom_asm.h regtab.h
 
-tracer_app: cotson_tracer.cpp cotson_tracer.h
-	$(CXX) -o $@ cotson_tracer.cpp
+asm_example: asm_example.cpp custom_asm.h
+	$(CXX) -O3 -o $@ asm_example.cpp
 
-abaeterno-tracer.so: tracer_example.o $(ROOT)/abaeterno/abaeterno.a 
+custom_asm.so: custom_asm.o $(ROOT)/abaeterno/abaeterno.a 
 	@echo "Linking $@";\
 	$(CXX) $(LINKOPTS) -o $@ $^ $(ALL_AALIBS) $(SHLIBS)
 
 clean:
-	$(RM) abaeterno-tracer.so tracer_example.o cotson_tracer.o tracer_app *.log cotson_tracer run.sh
+	$(RM) custom_asm.o custom_asm.so asm_example.o asm_example *.log run.sh
+
 # DO NOT DELETE

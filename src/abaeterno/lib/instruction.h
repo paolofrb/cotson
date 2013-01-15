@@ -68,7 +68,7 @@ private:
 	Accesses loads,stores;
 	InstType type;
 	
-	std::vector<uint64_t> xdata; // custom runtime data
+	std::vector<uint64_t> xdata; // runtime data for cpuid | custom asm
 	uint64_t cr3;
 	uint64_t iid;
 	static uint64_t unique_id;

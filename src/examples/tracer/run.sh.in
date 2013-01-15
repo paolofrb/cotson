@@ -4,7 +4,7 @@
 ## (in tracer-example.cpp) so our tracer example gets called. 
 ## As we are using no_timing only the functional callback gets invoked
 
-xget /tmp/tracer_app /tmp/tracer_app
+xget $D/tracer_app /tmp/tracer_app
 chmod +x /tmp/tracer_app
 
 ## First call to the custom tracer (in functional mode)

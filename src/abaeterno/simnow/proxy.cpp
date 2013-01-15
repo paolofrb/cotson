@@ -983,17 +983,17 @@ void Cotson::Inject::save_tag_info(uint64_t d,uint32_t tag,Cotson::Inject::tag_t
     Cotson::Inject::info_tag ti;
     ti.type = tt;
     // Generic memory access info
-    ti.base_reg = ii.bHasBase ? 15-ii.nSIBBaseReg : -1;
-    ti.index_reg = ii.bHasIndex ? 15-ii.nSIBIndexReg : -1;
-    ti.disp = ii.bHasDisplacement ? ii.nDisplacement : 0;
-    ti.scale = (ii.bHasIndex && ii.bHasScale) ? (1 << ii.nSibScale) : 1;
+    ti.info.address.base_reg = ii.bHasBase ? 15-ii.nSIBBaseReg : -1;
+    ti.info.address.index_reg = ii.bHasIndex ? 15-ii.nSIBIndexReg : -1;
+    ti.info.address.disp = ii.bHasDisplacement ? ii.nDisplacement : 0;
+    ti.info.address.scale = (ii.bHasIndex && ii.bHasScale) ? (1 << ii.nSibScale) : 1;
 
     // FIXME: we don't deal with 16b immediates yet..
 
-    ti.segment = ii.nSegment;
-    ti.size_mask =   ii.eAddressSize == Size16Bit ? 0x000000000000FFFF 
-                   : ii.eAddressSize == Size32Bit ? 0x00000000FFFFFFFF
-                                                  : 0xFFFFFFFFFFFFFFFF;
+    ti.info.address.segment = ii.nSegment;
+    ti.info.address.size_mask =   ii.eAddressSize == Size16Bit ? 0x000000000000FFFF 
+                                : ii.eAddressSize == Size32Bit ? 0x00000000FFFFFFFF
+                                                               : 0xFFFFFFFFFFFFFFFF;
     Machine::get().tag(d,tag,ti);
 }
 
@@ -1046,13 +1046,13 @@ uint64_t Cotson::Memory::address_from_tag(const Cotson::Inject::info_tag& ti)
 {
     ERROR_IF(!proxy->code_injector,"no code injector present right now");
 
-    int64_t base = ti.base_reg < 0 ? 0 : X86::IntegerReg(ti.base_reg);
-    int64_t index = ti.index_reg < 0 ? 0 : X86::IntegerReg(ti.index_reg);
-    int64_t va = base + ti.disp + (ti.scale * index);
+    int64_t base = ti.info.address.base_reg < 0 ? 0 : X86::IntegerReg(ti.info.address.base_reg);
+    int64_t index = ti.info.address.index_reg < 0 ? 0 : X86::IntegerReg(ti.info.address.index_reg);
+    int64_t va = base + ti.info.address.disp + (ti.info.address.scale * index);
 
     uint64_t segm = 0;
     bool not64b = X86::FlagsCS() & 0x200;
-    switch(ti.segment)
+    switch(ti.info.address.segment)
     {
         case 0: if (not64b) segm=X86::BaseES(); break;
         case 1: if (not64b) segm=X86::BaseCS(); break;
@@ -1062,7 +1062,7 @@ uint64_t Cotson::Memory::address_from_tag(const Cotson::Inject::info_tag& ti)
         case 5: segm=X86::BaseGS(); break;
         default: break;
     }
-    return ((va + segm) & ti.size_mask);
+    return ((va + segm) & ti.info.address.size_mask);
 }
 
 uint64_t Cotson::c2t(uint64_t c) 

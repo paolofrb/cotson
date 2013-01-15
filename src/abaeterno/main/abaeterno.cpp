@@ -464,12 +464,11 @@ bool AbAeterno::inject_tag(uint64_t devid,uint32_t n,const uint8_t* op)
 
 void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
 {
-    // Check whether this is a tagged operation handled in parsing
-    if (Machine::get().execute(devid,tag))
-	    return;
-    // Check whether this is a tagged operation handled in profiling
-    if (Profiler::get().execute(nanos,tag,devid))
-        return;
+    // Call the tagged operation handler in parsing
+    Machine::get().execute(devid,tag);
+
+    // Call the tagged operation handler in profiling
+    Profiler::get().execute(nanos,tag,devid);
 
     FunctionalState fs= (sim_state == FUNCTIONAL) ? ONLY_FUNCTIONAL : FUNCTIONAL_AND_TIMING;
 
@@ -481,8 +480,16 @@ void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
 		uint8_t reg = atag & 0xff;
 	    uint8_t op  = (atag>>8)  & 0xff;
 		uint8_t imm = (atag>>16) & 0xff;
-        CpuidCall::functional(fs,nanos,devid,op+COTSON_RESERVED_ASM_BASE,reg,imm);
-	    return;
+		int xop = op+COTSON_RESERVED_ASM_BASE;
+        void* xdata = CpuidCall::functional(fs,nanos,devid,xop,reg,imm);
+
+		// Save tag info for passing to the timing simulator
+        Cotson::Inject::info_tag ti;
+		ti.type=Cotson::Inject::ASM;
+		ti.info.xasm.op=xop;
+		ti.info.xasm.xdata = xdata;
+		Machine::get().tag(devid,tag,ti); // register the tag
+        Machine::get().execute(devid,tag); // and call the token parser
 	}
 
 	// Look for the special COTSON CPUID
@@ -491,17 +498,17 @@ void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
 	{
         uint64_t RDI = Cotson::X86::RDI(); 
         uint64_t RSI = Cotson::X86::RSI();
-        uint64_t RBX = Cotson::X86::RBX();
-
-        LOG("CPUID: nanos",nanos,"devid",devid,"RAX",RAX);
-        LOG("\tRDI",RDI,"RSI",RSI,"RBX",RBX);
-
 	    if (IS_COTSON_EXT_CPUID(RAX))
 		{
+            LOG("XCPUID: nanos",nanos,"devid",devid,"RAX",RAX);
+            LOG("\tEXT(RAX)",COTSON_EXT_CPUID_OP(RAX),"RDI",RDI,"RSI",RSI);
             CpuidCall::functional(fs,nanos,devid,COTSON_EXT_CPUID_OP(RAX),RDI,RSI);
 		}
 	    else
 	    {
+            uint64_t RBX = Cotson::X86::RBX();
+            LOG("CPUID: nanos",nanos,"devid",devid,"RAX",RAX);
+            LOG("\tRDI",RDI,"RSI",RSI,"RBX",RBX);
             CpuidCall::functional(fs,nanos,devid,RDI,RSI,RBX);
             if (net_cpuid && NetworkTiming::get())
                 NetworkTiming::get()->cpuid(RBX,RDI,RSI);
@@ -509,10 +516,10 @@ void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
     }
 }
 
-void AbAeterno::network_cpuid(uint64_t RBX, uint16_t RDI, uint16_t RSI)
+void AbAeterno::network_cpuid(uint64_t a, uint16_t b, uint16_t c)
 {
-    cerr << "Got cpuid from network: " << RDI << " " << RSI << " " << RBX << endl;
+    cerr << "Got cpuid from network: " << a << " " << b << " " << c << endl;
     FunctionalState fs= (sim_state == FUNCTIONAL) ? ONLY_FUNCTIONAL : FUNCTIONAL_AND_TIMING;
-    CpuidCall::functional(fs,Cotson::nanos(),0,RDI,RSI,RBX);
+    CpuidCall::functional(fs,Cotson::nanos(),0,a,b,c);
 }
 

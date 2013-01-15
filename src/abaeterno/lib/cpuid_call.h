@@ -38,23 +38,33 @@
 typedef enum { ONLY_FUNCTIONAL, FUNCTIONAL_AND_TIMING } FunctionalState;
 typedef enum { DISCARD, KEEP } InstructionInQueue;
 
-typedef boost::function<void(FunctionalState,uint64_t,uint64_t,uint64_t,uint64_t,uint64_t)> FunctionalCall;
+typedef boost::function<void*(FunctionalState,uint64_t,uint64_t,uint64_t,uint64_t,uint64_t)> FunctionalCall;
 typedef boost::function<InstructionInQueue(Instruction*,uint64_t)> SimulationCall;
+typedef void (*ResetCall)();
 
 class CpuidCall : public boost::noncopyable
 {
     typedef std::map<uint64_t,std::pair<FunctionalCall,SimulationCall> > Funcs;
     Funcs funcs;
+	std::set<ResetCall> rfuncs; // reset functions (optional)
 
-    public:
+public:
          
     static CpuidCall& get() 
     {
         static CpuidCall singleton;
         return singleton;
     }
-    
-    static void add(uint64_t a, FunctionalCall& f, SimulationCall& s) 
+
+    static void reset()
+	{
+        CpuidCall& me=get();
+	    for(std::set<ResetCall>::iterator i=me.rfuncs.begin();i!=me.rfuncs.end();++i)
+		    if (*i)
+			    (*i)();
+	}
+
+    static void add(uint64_t a, FunctionalCall& f, SimulationCall& s, ResetCall r)
     {
         if(a >= COTSON_RESERVED_CPUID_RANGE)
             throw std::runtime_error("cpuid op "+ 
@@ -66,6 +76,7 @@ class CpuidCall : public boost::noncopyable
             throw std::runtime_error("cannot add two hooks to the same cpuid: "+
                 boost::lexical_cast<std::string>(a));
         me.funcs[a]=std::make_pair(f,s);
+		me.rfuncs.insert(r);
     }
 
     static bool has(uint64_t a) 
@@ -74,7 +85,7 @@ class CpuidCall : public boost::noncopyable
         return me.funcs.find(a)!=me.funcs.end();
     }
 
-    static void functional(
+    static void* functional(
         FunctionalState f,
         uint64_t nanos,
         uint64_t devid,
@@ -83,21 +94,27 @@ class CpuidCall : public boost::noncopyable
         CpuidCall& me=get();
         Funcs::iterator i=me.funcs.find(a);
         if(i==me.funcs.end())
-            return;
+            return 0;
         FunctionalCall fcall=i->second.first;
         if(!fcall)
-            return;
-        fcall(f,nanos,devid,a,b,c);      
+            return 0;
+        return fcall(f,nanos,devid,a,b,c);      
     }
 
-    static void add_xdata(
-	    Instruction *inst, 
-	    uint64_t rax, uint64_t rdi, uint64_t rsi, uint64_t rbx)
+    static void add_asm_xdata(Instruction *inst, uint64_t op, uint64_t xdata)
 	{
-	    inst->add_xdata(rax); // 0
-		inst->add_xdata(rdi); // 1
-		inst->add_xdata(rsi); // 2
-		inst->add_xdata(rbx); // 3
+	    inst->add_xdata(xdata);  // 0 ptr to custom data
+	    inst->add_xdata(op);     // 1 opcode
+	}
+
+    static void add_cpuid_xdata(
+	    Instruction *inst, 
+	    uint64_t a, uint64_t b, uint64_t c, uint64_t d)
+	{
+	    inst->add_xdata(a); // 0 magic
+		inst->add_xdata(b); // 1 opcode
+		inst->add_xdata(c); // 2 arg1
+		inst->add_xdata(d); // 3 arg2
 	}
 
     static InstructionInQueue simulation(Instruction* inst, uint64_t devid)
@@ -105,21 +122,21 @@ class CpuidCall : public boost::noncopyable
 		if (!inst->is_cpuid())
             return KEEP;
         CpuidCall& me=get();
-        Funcs::iterator i=me.funcs.find(inst->get_xdata(1)); // RDI (opcode), see above
+        Funcs::iterator i=me.funcs.find(inst->get_xdata(1)); // opcode, see above
         if(i==me.funcs.end())
-            return KEEP;
-        SimulationCall scall=i->second.second;
+            return DISCARD;
+        SimulationCall& scall=i->second.second;
         if(!scall)
-            return KEEP;
+            return DISCARD;
         return scall(inst,devid);     
     }
 };
 
 struct cpuid_call
 {
-    cpuid_call(uint64_t a,FunctionalCall f,SimulationCall s)
+    cpuid_call(uint64_t a,FunctionalCall f,SimulationCall s,ResetCall r=0)
     {
-        CpuidCall::add(a,f,s); 
+        CpuidCall::add(a,f,s,r); 
     }
 };
 
