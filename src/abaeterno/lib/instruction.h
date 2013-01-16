@@ -68,7 +68,7 @@ private:
 	Accesses loads,stores;
 	InstType type;
 	
-	std::vector<uint64_t> xdata; // runtime data for cpuid | custom asm
+	simplevec<uint64_t> xdata; // runtime data for cpuid | custom asm
 	uint64_t cr3;
 	uint64_t iid;
 	static uint64_t unique_id;
@@ -80,7 +80,7 @@ private:
 		iid=other.iid;
 		cr3=other.cr3;
 		// pointer to runtime data (custom)
-		xdata=other.xdata;
+		xdata.copy(other.xdata);
 		// pointer to opcode data
 		opcode=other.opcode;
 		// memory ops: copy and shrink to fit

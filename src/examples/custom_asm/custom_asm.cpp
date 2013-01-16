@@ -8,7 +8,7 @@
 #include "custom_asm.h"
 
 #include <boost/scoped_ptr.hpp>
-#include <boost/pool/object_pool.hpp>
+#include <boost/pool/pool.hpp>
 #include "machine.h"
 
 #include <iostream>
@@ -19,8 +19,7 @@ namespace { // Wrap everything into an anonymous namespace
 
 // Data passed between functional and timing -- locally managed (see pool below)
 struct XData { uint64_t arg1, arg2; };
-typedef boost::object_pool<XData> XDataPool;
-XDataPool xdata_pool;
+boost::pool<> xdata_pool(sizeof(struct XData));
 
 // Local memory
 vector<uint64_t> local_table;
@@ -33,7 +32,7 @@ vector<uint64_t> local_table;
 
 void asm_reset()
 {
-    xdata_pool.XDataPool::~XDataPool(); // call destructor to free memory
+    xdata_pool.release_memory();
 }
 
 inline static uint64_t read_arg1(uint8_t op)
@@ -73,7 +72,7 @@ void* asm_func(
 	uint64_t op,uint64_t regop,uint64_t im) 
 {
 	// Exchange data structure from functional to timing
-	XData* const xdp = (f==ONLY_FUNCTIONAL) ? 0 : xdata_pool.malloc();
+	XData* const xdp = (f==ONLY_FUNCTIONAL) ? 0 : new (xdata_pool.malloc()) XData();
 
     switch (op) {
         case _ASMOP(_TSU_TINIT): {
@@ -153,7 +152,6 @@ InstructionInQueue asm_sim(
             break;
 	}
 	return DISCARD; 
-	xdata_pool.free(xdp);
 }
 
 //===========================================================================================
