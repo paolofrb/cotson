@@ -464,11 +464,6 @@ bool AbAeterno::inject_tag(uint64_t devid,uint32_t n,const uint8_t* op)
 
 void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
 {
-    // Call the tagged operation handler in parsing
-    Machine::get().execute(devid,tag);
-
-    // Call the tagged operation handler in profiling
-    Profiler::get().execute(nanos,tag,devid);
 
     FunctionalState fs= (sim_state == FUNCTIONAL) ? ONLY_FUNCTIONAL : FUNCTIONAL_AND_TIMING;
 
@@ -489,7 +484,6 @@ void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
 		ti.info.xasm.op=xop;
 		ti.info.xasm.xdata = xdata;
 		Machine::get().tag(devid,tag,ti); // register the tag
-        Machine::get().execute(devid,tag); // and call the token parser
 	}
 
 	// Look for the special COTSON CPUID
@@ -514,6 +508,11 @@ void AbAeterno::execute(uint64_t nanos,uint64_t devid, uint32_t tag)
                 NetworkTiming::get()->cpuid(RBX,RDI,RSI);
         }
     }
+
+    // Call the tagged operation handler in parsing
+    Machine::get().execute(devid,tag);
+    // Call the tagged operation handler in profiling
+    Profiler::get().execute(nanos,tag,devid);
 }
 
 void AbAeterno::network_cpuid(uint64_t a, uint16_t b, uint16_t c)

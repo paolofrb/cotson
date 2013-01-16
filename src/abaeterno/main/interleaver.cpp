@@ -77,10 +77,8 @@ inline uint Interleaver::CpuData::emit_ins(uint64_t next_order)
     {
         const Instruction* nn=ins->next();
         if (CpuidCall::simulation(const_cast<Instruction*>(nn),dev)!=DISCARD)
-		{
             emit(nn);
-		    set_order();
-	    }
+		set_order();
     }
 	return ins->elems();
 }
