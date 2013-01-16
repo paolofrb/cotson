@@ -6,7 +6,11 @@
 #include "cotson.h"
 #include "cpuid_call.h"
 #include "custom_asm.h"
+
+#include <boost/scoped_ptr.hpp>
 #include <boost/pool/object_pool.hpp>
+#include "machine.h"
+
 #include <iostream>
 
 using namespace std;
@@ -120,6 +124,8 @@ InstructionInQueue asm_sim(
 	Instruction* inst,
 	uint64_t devid)
 {
+	CpuTimer* timer = Machine::get().cpu(devid)->cpu_timer();
+
 	XData* xdp = reinterpret_cast<XData*>(inst->get_xdata(0)); // saved execution data
 	if (!xdp) {
 		cerr << "Warning: asm instruction with no execution data" << endl;
@@ -129,14 +135,17 @@ InstructionInQueue asm_sim(
     switch (op) {
         case _ASMOP(_TSU_TINIT): {
 			cout << "T" << devid <<": INIT " << xdp->arg1 << endl;
+			if (timer) timer->idle(1); // advance 1 cycle
 		    break;
 		}
         case _ASMOP(_TSU_TWRITE): {
 			cout << "T" << devid <<": WRITE " << xdp->arg1 << " " << xdp->arg2 << endl;
+			if (timer) timer->idle(10); // advance 10 cycles
 		    break;
 		}
         case _ASMOP(_TSU_TREAD):  {
 			cout << "T" << devid <<": READ " << xdp->arg1 << endl;
+			if (timer) timer->idle(100); // advance 100 cycles
 		    break;
 		}
         default:

@@ -45,6 +45,7 @@ class Cpu : public metric, public SimpleStateObserver
 
 	inline uint64_t id() const { return devid; }
 	inline const std::string& name() const { return devname; }
+	inline CpuTimer* cpu_timer() const { return timing.get(); }
 
 	protected:
 

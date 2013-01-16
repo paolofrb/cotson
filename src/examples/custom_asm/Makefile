@@ -7,6 +7,8 @@ all: custom_asm.so asm_example
 
 INCLUDE = -I$(ROOT)/common -I$(ROOT)/libluabind \
           -I$(ROOT)/abaeterno/lib -I$(ROOT)/abaeterno/main \
+		  -I$(ROOT)/abaeterno/hw_model \
+		  -I$(ROOT)/abaeterno/timer_cpu -I$(ROOT)/abaeterno/timer_dev \
           -I/usr/include/lua5.1
 
 include  $(ROOT)/Make.conf
