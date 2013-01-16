@@ -181,6 +181,7 @@ void AbAeterno::do_compute_metrics() {
 void AbAeterno::prepareToRun()
 {
     LOG("prepareToRun");    
+	Interleaver::get().initialize();
     Machine& machine=Machine::get();
 
     cyclesPerUsec=Cotson::t2c(1000);
@@ -207,8 +208,6 @@ void AbAeterno::prepareToRun()
             cout << fmt % i->first % i->second << endl;
         cout << "[missing values may be requested later!!]" << endl << endl;
     }
-
-	Interleaver::get().initialize();
 }
 
 void AbAeterno::end()

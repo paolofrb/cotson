@@ -67,6 +67,9 @@ inline void Interleaver::CpuData::set_order()
         case UNIFORM:
             order += order_rate;
             break;
+        case UNDEF:
+            ERROR("Undefined interleaving order!");
+			break;
     }
 }
 
@@ -92,7 +95,7 @@ struct Interleaver::CpuCmp
         uint64_t o2 = p2->order;
         uint32_t d1 = p1->dev;
         uint32_t d2 = p2->dev;
-        return (o1 != o2) ? !(o1 < o2) : d1 > d2;
+        return (o1 != o2) ? o1 > o2 : d1 > d2;
     }
 };
 
@@ -117,11 +120,13 @@ void Interleaver::initialize()
             throw runtime_error("Unkown interleaver_order option '" + s + "'\n" +
 			   "allowed options: cycle | round_robin | uniform");
     }
+    LOG("initialize",order_by);
 }
 
 void Interleaver::config(uint64_t dev,Instructions& insns,const TraceNeeds* tn)
 {
     LOG("config device",dec,dev);
+    ERROR_IF(order_by==UNDEF,"Interleaver config with undefined order!");
     ERROR_IF(dev!=cpus.size(),"Device '", dev, "' is not the device I was hoping to get");
     insns.create(100,tn->history+1);
     cpus.push_back(CpuData(&insns,tn,dev,order_by));
@@ -162,7 +167,7 @@ void Interleaver::end_quantum()
     }
 
 	// Prepare a sorted list of CPUs by order value (eg, cycles)
-    priority_queue<CpuData*,vector<CpuData*>,CpuCmp> cpu_queue;
+    priority_queue<CpuData*,deque<CpuData*>,CpuCmp> cpu_queue;
     for(uint i=0;i<cpus.size();i++)
     {
         const Instructions* ins = cpus[i].ins;

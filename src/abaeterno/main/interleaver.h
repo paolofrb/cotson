@@ -19,7 +19,7 @@
 
 class Interleaver : public SimpleStateObserver
 {
-	Interleaver():align_timers(true),order_by(CYCLE) {}
+	Interleaver():align_timers(true),order_by(UNDEF) {}
 	~Interleaver() {}
 
 public:
@@ -36,7 +36,7 @@ public:
 	void initialize();
 
 protected:
-	enum Order { CYCLE, ROUNDROBIN, UNIFORM };
+	enum Order { UNDEF=0, CYCLE, ROUNDROBIN, UNIFORM };
 	void update_cpus();
 	bool align_timers;
 	Order order_by;
