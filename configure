@@ -14,7 +14,7 @@
 # that install the required libraries
 
 
-SIMNOW_SUPPORTED_VER="4.6.2"
+SIMNOW_SUPPORTED_VER="4.6.2pub"
 DEBIAN_SUPPORTED_VERS="lenny | squeeze"
 FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle"
 UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise | quantal"
@@ -66,7 +66,7 @@ if [[ "$simnow_dir" == "" ]]; then
     bdir1="${root}"
     bdir2=`dirname $bdir1`
     bdir3=`dirname $bdir2`
-    sdir="simnow-linux64-${SIMNOW_SUPPORTED_VER}pub"
+    sdir="simnow-linux64-${SIMNOW_SUPPORTED_VER}"
     # Maek some attempt to automatically locate a simnow instllation
     if [[ -d "$bdir3/$sdir" ]]; then simnow_dir="$bdir3/$sdir"; fi
     if [[ -d "$bdir2/$sdir" ]]; then simnow_dir="$bdir2/$sdir"; fi
@@ -236,8 +236,8 @@ if [[ -f $lib1 || -f $lib2 ]]; then
 fi
 
 if [[ $force != 1 ]]; then
-    simnow_ver=`cd $simnow_dir; ./simnow --version | awk '/SimNow version/{print $6;}'|sed 's/,//'`
-    if [[ $simnow_ver != $SIMNOW_SUPPORTED_VER ]]; then
+    simnow_ver=`cd $simnow_dir; ./simnow --version | awk '/SimNow version/{print tolower($6);}'|sed 's/[,-]//g'`
+    if [[ $simnow_ver != $SIMNOW_SUPPORTED_VER && "${simnow_ver}pub" != $SIMNOW_SUPPORTED_VER ]]; then
         echo "ERROR: simnow version is '$simnow_ver'"
 	    echo "       The supported version is $SIMNOW_SUPPORTED_VER"
 	    exit 1
@@ -370,7 +370,7 @@ EOF
     export HOME="$tmpvnc"
     i=0; while [[ $i -lt $vnctest ]]; do
         p=`expr 50 + $i`
-        echo "Testing vnc port :$p"
+        echo "Testing vnc ($xvncservctrl) port :$p"
         $xvncservctrl :$p >> $tmpvnc/log 2>&1
         $xvncservctrl -kill :$p >> $tmpvnc/log 2>&1
         i=`expr $i + 1`
