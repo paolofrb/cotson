@@ -16,7 +16,7 @@
 
 SIMNOW_SUPPORTED_VER="4.6.2pub"
 DEBIAN_SUPPORTED_VERS="lenny | squeeze"
-FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle"
+FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle | SphericalCow"
 UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise | quantal"
 
 status_args="$*"
@@ -264,7 +264,7 @@ fi
 # Workaround for screen 4.1 bug
 if [[ $dist == "Fedora" && `screen -v | awk  '$3 != "4.00.03"'` ]]; then
 	echo ""
-	echo "Downgrade of package ($pkgs)"
+	echo "Downgrade of package ($screen_downgrade)"
 	echo "*** NOTE: sudo access required ***"
 	echo ""
 	sudo $cmdi downgrade $screen_downgrade
