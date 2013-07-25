@@ -67,6 +67,7 @@ option  o44("clflush",                        "add load to clflush operations");
 option  o50("print_stats",                    "print statistics on stdout");
 option  o51("network_cpuid",                  "send cpuid commands to all nodes in the cluster");
 option  o52("custom_asm",                     "extend custom asm to prefetchnta");
+option  o53("network_terminate",              "terminate execution on network terminate command");
 }
 
 namespace {
@@ -86,6 +87,7 @@ AbAeterno::AbAeterno() :
     maxNanos(     Option::get<uint64_t>("max_nanos")),
     maxSamples(   Option::get<uint64_t>("max_samples")),
     log_sim_time( Option::get<bool>    ("log_sim_time")),
+    net_terminate( Option::get<bool>   ("network_terminate",true)),
     code_tag(0),
     samples(0),
     next_sample(0),
@@ -368,7 +370,7 @@ void AbAeterno::check_end()
         end();
     }
 
-    if (NetworkTiming::Terminated())
+    if (net_terminate && NetworkTiming::Terminated())
     {
         cerr << "NETWORK END: " << now << endl;
         end();

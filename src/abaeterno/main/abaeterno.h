@@ -45,6 +45,7 @@ private:
 	const uint64_t maxNanos;
 	const uint64_t maxSamples;
 	const bool log_sim_time;
+	const bool net_terminate;
 
 	uint64_t code_tag;
 	std::deque<uint32_t> translated_tags;
