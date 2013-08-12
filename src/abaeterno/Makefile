@@ -7,6 +7,10 @@ SUBINC = $(patsubst %,-I%,$(SUBDIRS))
 INCLUDE = $(SUBINC) -I../common -I../libluabind -I.. -I$(LUAINC)
 DEPINC = $(SUBINC) -I../common
 XOPTS = -Werror
+GCCVERS480CHECK = $(shell expr `gcc -dumpversion | cut -f1-2 -d.` \>= 4.8)
+ifeq "$(GCCVERS480CHECK)" "1"  #RG small patch to compile
+    XOPTS = -Werror -Wno-error=unused-but-set-variable
+endif
 
 SIMNOW_FLAGS = -Isimnow -I$(SIMNOW_DIR)/devel/monitor
 

@@ -16,7 +16,7 @@
 
 SIMNOW_SUPPORTED_VER="4.6.2pub"
 DEBIAN_SUPPORTED_VERS="lenny | squeeze"
-FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle | SphericalCow"
+FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle | SphericalCow | Schrödinger’sCat"
 UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise | quantal | raring"
 
 status_args="$*"
@@ -26,7 +26,7 @@ data_dir="$root/data"
 src_dir="$root/src"
 cc="gcc"
 cxx="g++"
-vnctest=1
+vnctest=0  # default to 0 since on some Ubuntu machines the vnc test closes the connection !
 force=0
 if [[ "$SIMNOW_DIR" != "" ]]; then
     simnow_dir=$SIMNOW_DIR
@@ -273,6 +273,11 @@ if [[ $dist == "Fedora" && `screen -v | awk  '$3 != "4.00.03"'` ]]; then
 	        echo "Add screen to exclude entry in yum.conf"	
 		sudo sh -c "echo 'exclude=screen' >> /etc/yum.conf" 
 	fi
+fi
+# end workaround 
+# Workaround for rubygems-psych bug
+if [[ $dist == "Fedora" && $vernum == 19 ]]; then
+	sudo yum update --enablerepo=updates-testing ruby-2.0.0.247-13.fc19
 fi
 # end workaround 
 
