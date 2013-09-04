@@ -20,8 +20,8 @@ options = {
 	heartbeat={type="sqlite", dbfile="/tmp/netperf.db",experiment_id=1,experiment_description="netperf"},
 }
 
--- Poor man's multicast disambiguation (day+hour+minute+second is in [1:211])
-MCAST=os.date('%d')+os.date('%H')+os.date('%M')+os.date('%S')
+-- Poor man's multicast disambiguation (pid-based)
+MCAST= (cotson_pid % 200) + 1
 mediator = {
 	heartbeat={ type="file_last" },
 	quantum_min=20,

@@ -35,6 +35,7 @@ class Sandbox < Location
     debug2 "installing abaeterno.in"
     File.open(data('abaeterno.in'),"w") do |f|
       f << "root='#{$here}'\n"
+      f << "cotson_pid=#{$$}\n"
       f << @lua_defs.to_str
     end
   end

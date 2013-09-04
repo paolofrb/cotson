@@ -29,12 +29,12 @@ class LuaDefinitions
     LuaDefinitions.check
     LuaDefinitions.check script
     tmpf=Tempfile.new("cotson-lua")
-    tmpf << "root='#{$here}'\n"
+    tmpf << "root='#{$here}'\ncotson_pid=#{$$}\n"
     args.each { |x| tmpf << x.to_str }
     tmpf.close
     a=Execute.run("#{$here.share('lua')} #{$here.share(script)} #{tmpf.path}")
     if a[:status] != 0 then
-      debugtmp='/tmp/lua'+Integer($$).to_s()+'.in'
+      debugtmp="/tmp/lua#{$$}.in"
       FileUtils.cp tmpf.path, debugtmp
       raise CotsonError.new(:LuaDefinitionsRun, :lua=>$here.share('lua'), 
                           :script=>$here.share(script), :luainput=>debugtmp,

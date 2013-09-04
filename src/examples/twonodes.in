@@ -29,8 +29,8 @@ options = {
 	network_cpuid=true, -- send cpuid 'tracer' commands to all nodes
 }
 
--- Poor man's multicast disambiguation (day+hour+minute+second is in [1:211])
-MCAST=os.date('%d')+os.date('%H')+os.date('%M')+os.date('%S')
+-- Poor man's multicast disambiguation (pid-based)
+MCAST= (cotson_pid % 200) + 1
 mediator = {
 	verbose=1,
     multicast_ip="239.200.1."..MCAST,
