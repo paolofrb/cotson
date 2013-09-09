@@ -163,11 +163,12 @@ begin
     debug_nnl("waiting ")
     running=true
     while running do
+      running=false
       node_sandbox.each do |x|
         status=x.status
         debug_nnl(".")
-        if status==false
-          running=false
+        if status==true
+          running=true
           break
         end
       end
