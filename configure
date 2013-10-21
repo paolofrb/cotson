@@ -94,15 +94,29 @@ fi
 echo "SIMNOW_DIR: '$simnow_dir'"
 
 mapcount=`sudo sysctl -n vm.max_map_count`
+goodmapcount=`free -k | awk '/Mem:/{print $2 / 4;}'`
+memgb=`free -m | awk '/Mem:/{print $2;}'`
 minmap=4194304
+
+echo "Your system has $memgb MBs of memory"
+echo "A good max_map_count value is $goodmapcount"
 if [[ $mapcount -lt $minmap ]]; then
     echo "ERROR: vm.max_map_count = $mapcount is too small"
-    echo "    Increase it to at least $minmap by running"
-    echo "        sudo sysctl -w vm.max_map_count=$minmap"
+	echo "    Your system has $memgb GBs of memory"
+    echo "    Increase vm.max_map_count to $goodmapcount by running"
+    echo "        sudo sysctl -w vm.max_map_count=$goodmapcount"
     echo ""
-    echo "    To make it permanent, add the following line to /etc/sysctl.conf"
-    echo "        vm.max_map_count = $minmap"
+    echo "    To make it permanent, add to /etc/sysctl.conf (and run 'sudo sysctl -p')"
+    echo "        vm.max_map_count = $goodmapcount"
     exit 1
+elif [[ $mapcount -lt $goodmapcount ]]; then
+	echo "############################################################################"
+    echo "WARNING: VM configuration (vm.max_map_count=$mapcount) is below optimal"
+	echo "     It would be recommended to increase it to $goodmapcount"
+    echo "        sudo sysctl -w vm.max_map_count=$goodmapcount"
+    echo "    To make it permanent, add to /etc/sysctl.conf (and run 'sudo sysctl -p')"
+    echo "        vm.max_map_count = $goodmapcount"
+	echo "############################################################################"
 else
     echo "VM configuration is ok: vm.max_map_count = $mapcount"
 fi
