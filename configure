@@ -17,7 +17,7 @@
 SIMNOW_SUPPORTED_VER="4.6.2pub"
 DEBIAN_SUPPORTED_VERS="lenny | squeeze"
 FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle | SphericalCow | Schrödinger’sCat"
-UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise | quantal | raring"
+UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise | quantal | raring | trusty"
 
 status_args="$*"
 simnow_dir=""
@@ -183,10 +183,19 @@ echo "$dist $ver supported"
 
 if [[ $dist == "Debian" ||  $dist == "Ubuntu" ]]; then
 	pqxx=libpqxx-dev 
-	if [[ $ver == "precise" || $ver == "quantal" || $ver == "raring" ]]; then pqxx=libpqxx3-dev; fi
-    pkgs="g++ g++-multilib bison flex ruby ruby1.8 rubygems libopenssl-ruby libsqlite3-ruby vnc4server vnc-java \
+	ruby="ruby ruby1.8 rubygems libopenssl-ruby libsqlite3-ruby "
+
+	if [[ $ver == "precise" || $ver == "quantal" || $ver == "raring" ]]; then \
+	    pqxx=libpqxx3-dev
+	fi
+	if [[ $ver == "trusty" ]]; then \
+	    pqxx=libpqxx3-dev
+	    ruby="ruby1.8"
+	fi
+
+    pkgs="g++ g++-multilib bison flex vnc4server vnc-java \
 rxvt xfwm4 xfonts-100dpi xfonts-75dpi zsh sharutils build-essential xvnc4viewer screen \
-liblua5.1-0 liblua5.1-0-dev $pqxx zlib1g-dev indent xutils-dev libsqlite3-dev \
+liblua5.1-0 liblua5.1-0-dev $ruby $pqxx zlib1g-dev indent xutils-dev libsqlite3-dev \
 sqlite3 libdbd-sqlite3-perl libdbd-pg-perl gnuplot libboost-dev libboost-thread-dev lzma \
 libxcursor1 libxrender1 libsm6 libxi6 libfontconfig1 "
     cmdi="apt-get -q -q"
@@ -196,7 +205,8 @@ libxcursor1 libxrender1 libsm6 libxi6 libfontconfig1 "
     vncargs2="-desktop="
     llua="llua5.1"
 
-	if ruby --version | grep 1.9; then
+	ruby --version | grep 1.8
+	if [[ $? -ne 0 ]]; then
 		echo "### Installing ruby1.8"
 		sudo apt-get install ruby1.8 -y
 	    ruby18=`update-alternatives --list ruby | grep 1.8`
@@ -308,6 +318,10 @@ thread_lib="-lboost_thread -lpthread"
 sudo ldconfig -p | grep -q boost_thread-mt
 if [[ $? -eq 0 ]]; then
     thread_lib="-lboost_thread-mt -lpthread"
+fi
+sudo ldconfig -p | grep -q libboost_system
+if [[ $? -eq 0 ]]; then
+    thread_lib="-lboost_system $thread_lib"
 fi
 
 v=`$cc --version | head -n 1`
