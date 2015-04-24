@@ -1,8 +1,8 @@
 INCLUDE = -I. -I../common
 DEPINC = -I. -I../common -I../network
-SRCS = traceplayer.cpp pg_experiment.cpp
+SRCS = traceplayer.cpp pg_experiment.cpp memtrace.cpp
 
-all: traceplayer pg_experiment
+all: traceplayer pg_experiment memtrace
 
 include ../Make.conf
 
@@ -16,6 +16,9 @@ traceplayer: traceplayer.cpp
 
 pg_experiment: pg_experiment.cpp
 	$(CXX) $(CXXFLAGS) -I/usr/include/pqxx -o pg_experiment $< -lpqxx
+
+memtrace: memtrace.cpp
+	$(CXX) $(CXXFLAGS) -I ../network -o memtrace $< -lz
 
 clean:
 	$(RM) $(OBJS) pg_experiment traceplayer
