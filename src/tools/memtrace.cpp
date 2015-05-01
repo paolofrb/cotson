@@ -31,7 +31,9 @@ namespace memtrace { // anonymous
 	const char* gfile = 0;
     const int MAXCPU = 128;
     const int LINESZ = 64;
-    int tdelta = 1000;
+    const int EPOCHSZ = 40000000; // max events per epoch
+    uint64_t tdelta = 1000;
+	uint64_t ts0 = 0; // smallest timestamp
 	ofstream gout;
 
 	struct event {
@@ -42,20 +44,18 @@ namespace memtrace { // anonymous
         int cpu;
 		bool w;
 		event():ts(0),addr(0),cr3(0),cpu(0),w(false) {}
-		bool is_marker() { return cpu==0 && addr==0 && cr3==0; }
+		bool is_epoch_marker() { return cpu==0 && addr==0 && cr3==0; }
 	};
 
     struct mstat {
         uint64_t nr;
         uint64_t nw;
-        inline void dump(const char* s, int n) 
-		{
+        inline void dump(const char* s, int n) {
             if (nr > 0)
                 cout << boost::format("==== %s %5d R %10d W %10d\n") % s % n % nr % nw;
         }
 		inline void update(const event& e) { if (e.w) nw++; else nr++; }
     };
-
 
 	inline ReadGzip& operator>> (ReadGzip& gz, event& t)
 	{
@@ -82,6 +82,8 @@ namespace memtrace { // anonymous
 	}
 
     mstat cstats[MAXCPU];
+	event epoch[EPOCHSZ];
+
 } // namespace memtrace
 
 using namespace memtrace;
@@ -95,6 +97,76 @@ static void usage(const char * s)
 	cerr << "    -g file 	write time/bw graph file" << endl;
 	cerr << "    -td delta 	delta time (for time graphs)" << endl;
     exit(1);
+}
+
+static int evcmp(const void *p1, const void *p2)
+{
+    const event *e1 = static_cast<const event*>(p1);
+    const event *e2 = static_cast<const event*>(p2);
+	return (e1->ts == e2->ts) ? e1->cpu - e2->cpu : e1->ts - e2->ts;
+}
+
+static void report(int evn, const char *s)
+{
+    cout << endl << "=== " << s << " " << epoch[0].ts << endl;
+	uint64_t trd = 0;
+	uint64_t twr = 0;
+    for (int i=0; i<MAXCPU; ++i) {
+		trd += cstats[i].nr;
+		twr += cstats[i].nw;
+        cstats[i].dump("CPU",i);
+    }
+	double nsec = (double)(epoch[evn-1].ts-ts0); // total time in ns
+	double rbw = (double)(trd * LINESZ * 1024)/nsec;
+	double wbw = (double)(twr * LINESZ * 1024)/nsec;
+	cout << "Time (msec)         " << nsec*1e-6 << endl;
+	cout << "GB read             " << trd * LINESZ/(1024*1024) << endl;
+	cout << "GB written          " << twr * LINESZ/(1024*1024) << endl;
+	cout << "Read bw avg (MB/s)  " << rbw << endl;
+	cout << "Write bw avg (MB/s) " << wbw << endl;
+}
+
+static void graph(const event& e)
+{
+    static uint64_t tdcur = 0;
+    static uint64_t rlines = 0;
+    static uint64_t wlines = 0;
+    uint64_t td = e.ts/tdelta;
+    if (td <= tdcur) {
+        if (e.w)
+            wlines++;
+        else
+            rlines++;
+    }
+    else {
+        double rbw = MBps(rlines*LINESZ,tdelta); // MB/s
+        double wbw = MBps(wlines*LINESZ,tdelta); // MB/s
+        double ms = (double)tdcur*tdelta*1e-6;
+        if (rbw > 0 && wbw > 0) {
+            gout << ms << " " << rbw << " " << wbw << endl;
+            tdcur = td;
+            rlines = wlines = 0; 
+       }
+    }
+}
+
+static void process_epoch(int evn, bool last)
+{
+	qsort(epoch,evn,sizeof(event),evcmp); // sort by timestamp
+	if (!ts0) ts0 = epoch[0].ts; // initial timestamp
+
+	for (int i = 0; i < evn; ++i) {
+		const event& e = epoch[i];
+	    cstats[e.cpu].update(e);
+        if (debug) 
+		    cout << e << endl;
+		if (gfile) 
+			graph(e);
+	}
+	if (last)
+	    report(evn,"FINAL");
+    else if(debug)
+	    report(evn,"EPOCH");
 }
 
 int main(int argc, char *argv[]) 
@@ -132,74 +204,24 @@ int main(int argc, char *argv[])
     }
 
     int nt = 0;
-	uint64_t ts0 = 0;
-    uint64_t tdcur = 0;
-    uint64_t rlines = 0;
-    uint64_t wlines = 0;
-
-	event e;
+	int evx = 0;
     while (!trace.eof())  {
-		trace >> e;
-		if (ts0 == 0)
-		    ts0 = e.ts;
-
-        if (e.ts - ts0 > t_end)
-		    break;
-
-		if (e.ts > ts0 && e.ts >= ts0 + t_start) {
-            if (debug && e.is_marker()) {
-                cout << "==== Time "<< e.ts << endl;
-                for (int i=0; i<MAXCPU; ++i)
-                    cstats[i].dump("CPU",i);
-            }
-            else  {
-				cstats[e.cpu].update(e);
-                if (debug) 
-				    cout << e << endl;
-
-				if (gfile) {
-				   uint64_t td = e.ts/tdelta;
-				   if (td <= tdcur) {
-					   if (e.w)
-                           wlines++;
-					   else
-                           rlines++;
-                   }
-                   else {
-					  double rbw = MBps(rlines*LINESZ,tdelta); // MB/s
-					  double wbw = MBps(wlines*LINESZ,tdelta); // MB/s
-					  double ms = (double)tdcur*tdelta*1e-6;
-                      if (rbw > 0 && wbw > 0)
-                          gout << ms << " " << rbw << " " << wbw << endl;
-					  tdcur = td;
-					  rlines = wlines = 0; 
-                  }
-			   }
-            }
-	    }
+		trace >> epoch[evx++]; 
+		if (evx >= EPOCHSZ) {
+		    cerr << "ERROR: increase EPOCHSZ" << endl;
+			exit(1);
+		}
+        if (epoch[evx-1].is_epoch_marker()) {
+			process_epoch(evx-1,false);
+			evx=0;
+        }
         if (nt++ % (1024*1024) == 0) cout << nt/(1024*1024) << " " << flush;
-    }
+	}
+	if (evx>1)
+	    process_epoch(evx-1,true);
+
 	if (gfile)
 	    gout.close();
-
-    cout << endl << "=== FINAL" << endl;
-
-	uint64_t trd = 0;
-	uint64_t twr = 0;
-    for (int i=0; i<MAXCPU; ++i) {
-		trd += cstats[i].nr;
-		twr += cstats[i].nw;
-        cstats[i].dump("CPU",i);
-    }
-	double nsec = (double)(e.ts-ts0); // total time in ns
-	double rbw = (double)(trd * LINESZ * 1024)/nsec;
-	double wbw = (double)(twr * LINESZ * 1024)/nsec;
-	cout << "Time (msec)         " << nsec*1e-6 << endl;
-	cout << "GB read             " << trd * LINESZ/(1024*1024) << endl;
-	cout << "GB written          " << twr * LINESZ/(1024*1024) << endl;
-	cout << "Read bw avg (MB/s)  " << rbw << endl;
-	cout << "Write bw avg (MB/s) " << wbw << endl;
-
     return 0;
 }
 
