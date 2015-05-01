@@ -126,11 +126,12 @@ static void report(int evn, const char *s)
 	cout << "Write bw avg (MB/s) " << wbw << endl;
 }
 
-static void graph(const event& e)
+static void bwgraph(const event& e)
 {
     static uint64_t tdcur = 0;
     static uint64_t rlines = 0;
     static uint64_t wlines = 0;
+
     uint64_t td = e.ts/tdelta;
     if (td <= tdcur) {
         if (e.w)
@@ -142,11 +143,10 @@ static void graph(const event& e)
         double rbw = MBps(rlines*LINESZ,tdelta); // MB/s
         double wbw = MBps(wlines*LINESZ,tdelta); // MB/s
         double ms = (double)tdcur*tdelta*1e-6;
-        if (rbw > 0 && wbw > 0) {
+        if (rbw > 0 && wbw > 0)
             gout << ms << " " << rbw << " " << wbw << endl;
-            tdcur = td;
-            rlines = wlines = 0; 
-       }
+        tdcur = td;
+        rlines = wlines = 0; 
     }
 }
 
@@ -160,8 +160,8 @@ static void process_epoch(int evn, bool last)
 	    cstats[e.cpu].update(e);
         if (debug) 
 		    cout << e << endl;
-		if (gfile) 
-			graph(e);
+		if (gfile)
+			bwgraph(e);
 	}
 	if (last)
 	    report(evn,"FINAL");
