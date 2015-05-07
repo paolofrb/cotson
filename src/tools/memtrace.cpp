@@ -143,8 +143,7 @@ static void bwgraph(const event& e)
         double rbw = MBps(rlines*LINESZ,tdelta); // MB/s
         double wbw = MBps(wlines*LINESZ,tdelta); // MB/s
         double ms = (double)tdcur*tdelta*1e-6;
-        if (rbw > 0 && wbw > 0)
-            gout << ms << " " << rbw << " " << wbw << endl;
+        gout << ms << " " << rbw << " " << wbw << endl;
         tdcur = td;
         rlines = wlines = 0; 
     }
