@@ -13,7 +13,6 @@ $(MCPAT): $(MCPAT).tar.gz
 	$(RM) -rf $(MCPAT); mkdir $(MCPAT); tar --strip=1 -C $(MCPAT) -zxf $(MCPAT).tar.gz
 
 $(MCPAT).tar.gz:
-	ifeq ($(wildcard $MCPAT),)
 	wget http://www.hpl.hp.com/research/mcpat/$(MCPAT).tar.gz
 
 install: mcpat cotson2mcpat
