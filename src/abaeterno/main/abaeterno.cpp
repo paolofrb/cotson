@@ -183,6 +183,7 @@ void AbAeterno::do_compute_metrics() {
 void AbAeterno::prepareToRun()
 {
     LOG("prepareToRun");    
+    cerr << "prepareToRun" << endl;
 	Interleaver::get().initialize();
     Machine& machine=Machine::get();
 
