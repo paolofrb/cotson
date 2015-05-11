@@ -16,7 +16,7 @@
 
 SIMNOW_SUPPORTED_VER="4.6.2pub"
 DEBIAN_SUPPORTED_VERS="lenny | squeeze"
-FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle | SphericalCow | Schrödinger’sCat"
+FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle | SphericalCow | Schrödinger’sCat | Heisenbug | TwentyOne"
 UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise | quantal | raring | trusty"
 
 status_args="$*"
@@ -40,6 +40,18 @@ fi
 if [[ "$CXX" != "" ]]; then
    cxx="$CXX"
 fi
+function usage ()
+{
+   echo "Usage: $0"
+   echo "--simnow_dir simnow_location            set simnow dir"
+   echo "--data_dir data_location                set data dir"
+   echo "--cc c-compiler                         set C compiler"
+   echo "--cxx c++-compiler                      set C++ compiler"
+   echo "--distro release_name (e.g. karmic)     set Linux Distribution"
+   echo "--vnctest N                             test N vnc ports"
+   echo "--force                                ignore simnow version"
+   exit 1
+}
 while [ $# -gt 0 ]
 do
     case $1 in
@@ -49,15 +61,9 @@ do
         --cxx) cxx=$2; shift; shift;;
         --vnctest) vnctest=$2; shift; shift;;
 	--force) force=1; shift;;
-        *) echo "Usage: $0"
-           echo "--simnow_dir simnow_location            set simnow dir"
-           echo "--data_dir data_location                set data dir"
-           echo "--cc c-compiler                         set C compiler"
-           echo "--cxx c++-compiler                      set C++ compiler"
-           echo "--distro release_name (e.g. karmic)     set Linux Distribution"
-           echo "--vnctest N                             test N vnc ports"
-		   echo "--force                                ignore simnow version"
-           exit 1
+        -h) usage;;
+        --help) usage;;
+        *) usage;;
     esac
 done
 
@@ -66,8 +72,10 @@ if [[ "$simnow_dir" == "" ]]; then
     bdir1="${root}"
     bdir2=`dirname $bdir1`
     bdir3=`dirname $bdir2`
+    bdir4=`dirname $bdir3`
     sdir="simnow-linux64-${SIMNOW_SUPPORTED_VER}"
-    # Maek some attempt to automatically locate a simnow instllation
+    # Make some attempt to automatically locate a simnow installation
+    if [[ -d "$bdir4/$sdir" ]]; then simnow_dir="$bdir4/$sdir"; fi
     if [[ -d "$bdir3/$sdir" ]]; then simnow_dir="$bdir3/$sdir"; fi
     if [[ -d "$bdir2/$sdir" ]]; then simnow_dir="$bdir2/$sdir"; fi
     if [[ -d "$bdir1/$sdir" ]]; then simnow_dir="$bdir1/$sdir"; fi
@@ -91,34 +99,42 @@ if [[ ! -d "$simnow_dir" ]]; then
 fi
 
 #info
-echo "SIMNOW_DIR: '$simnow_dir'"
+echo "* Detected SIMNOW_DIR: '$simnow_dir'"
 
-mapcount=`sudo sysctl -n vm.max_map_count`
-goodmapcount=`free -k | awk '/Mem:/{print $2 / 4;}'`
-memgb=`free -m | awk '/Mem:/{print $2;}'`
-minmap=4194304
-
-echo "Your system has $memgb MBs of memory"
-echo "A good max_map_count value is $goodmapcount"
-if [[ $mapcount -lt $minmap ]]; then
-    echo "ERROR: vm.max_map_count = $mapcount is too small"
-	echo "    Your system has $memgb GBs of memory"
-    echo "    Increase vm.max_map_count to $goodmapcount by running"
-    echo "        sudo sysctl -w vm.max_map_count=$goodmapcount"
-    echo ""
-    echo "    To make it permanent, add to /etc/sysctl.conf (and run 'sudo sysctl -p')"
-    echo "        vm.max_map_count = $goodmapcount"
-    exit 1
-elif [[ $mapcount -lt $goodmapcount ]]; then
-	echo "############################################################################"
-    echo "WARNING: VM configuration (vm.max_map_count=$mapcount) is below optimal"
-	echo "     It would be recommended to increase it to $goodmapcount"
-    echo "        sudo sysctl -w vm.max_map_count=$goodmapcount"
-    echo "    To make it permanent, add to /etc/sysctl.conf (and run 'sudo sysctl -p')"
-    echo "        vm.max_map_count = $goodmapcount"
-	echo "############################################################################"
+#############################################################
+# Tune /etc/sysctl.conf values
+echo "* Tuning /etc/sysctl.conf..."
+mapcurrent=`/sbin/sysctl -n vm.max_map_count` # this may not require sudo access
+# calculate an optimal value as totmem/4 (min 4M)
+totmem=`free |awk '/Mem/{printf("%d", ($2+1048575)/1048576)}'` #round to GB
+echo "  totmem     = about $totmem GB"
+mapoptim=`expr $totmem \/ 4`
+mapmin=4194304
+if [ $mapoptim -lt 4 ]; then mapok=$mapmin; else mapok=`expr $mapoptim \* 1048576`; fi
+echo "  mapok      = $mapok"
+mapconfig=`egrep "[ \t]*[^#]*[ \t]*vm.max_map_count" /etc/sysctl.conf| tail -1 |awk -F= '{print $2}'`
+if [ "$mapconfig" = "" ]; then mapconfig="0"; fi
+echo "  mapconfig  = $mapconfig"
+echo "  mapcurrent = $mapcurrent"
+#Tune vm.max_map_count
+if [ $mapcurrent -lt $mapok ]; then
+   echo "Tuning vm.max_map_count : $mapcurrent --> $mapok"
+   #case 1: the sysctl.conf contains a vm.max_map_count line
+   sudo sed -i "s/^[ \t]*[^#]*[ \t]*vm.max_map_count[[:space:]]*=.*/vm.max_map_count=$mapok/" /etc/sysctl.conf
+   #case 2: the sysctl.conf DOES NOT contaiin a vm.max_map_count
+   if [ "$mapconfig" = 0 ]; then 
+      sudo sh -c "echo vm.max_map_count=$mapok >> /etc/sysctl.conf"
+   fi
+   sudo sysctl -p 2>&1 >/dev/null # make it permanent
+# verify settings
+   echo "Verifying settings"
+   mapconfig2=`egrep "[ \t]*[^#]*[ \t]*vm.max_map_count" /etc/sysctl.conf| tail -1 |awk -F= '{print $2}'`
+   mapcurrent2=`/sbin/sysctl -n vm.max_map_count` # this may not require sudo access
+   echo "  mapconfig2 = $mapconfig2"
+   echo "  mapcurrent2= $mapcurrent2"
+   echo "* New VM configuration is: vm.max_map_count = $mapcurrent2"
 else
-    echo "VM configuration is ok: vm.max_map_count = $mapcount"
+   echo "* Detected that VM configuration is ok: vm.max_map_count = $mapcurrent"
 fi
 
 ########################################################################
@@ -143,9 +159,17 @@ if [[ $ec1 != 0 && $ec2 != 0 ]]; then
 fi
 
 dist=`lsb_release -i -s`
+dist1="$dist"
 ver=`lsb_release -c -s`
 vernum=`lsb_release -r -s`
-echo "Distribution '$dist' - Version '$ver'"
+#compatibility patch for CentOS
+if [ "$dist" = "CentOS" ]; then
+   dist="Fedora"
+   dvn1=${vernum%.*}
+   if [ "$dvn1" = "6" ]; then vernum="14"; ver="Laughlin"; fi
+fi
+
+echo "* Detected Distribution '$dist' - Version '$ver'"
 
 ok=0
 shopt -s extglob
@@ -178,7 +202,7 @@ if [[ $ok -eq 0 ]]; then
     exit 1;
 fi
 
-echo "$dist $ver supported"
+echo "* $dist $ver supported"
 ########################################################################
 
 if [[ $dist == "Debian" ||  $dist == "Ubuntu" ]]; then
@@ -199,11 +223,13 @@ liblua5.1-0 liblua5.1-0-dev $ruby $pqxx zlib1g-dev indent xutils-dev libsqlite3-
 sqlite3 libdbd-sqlite3-perl libdbd-pg-perl gnuplot libboost-dev libboost-thread-dev lzma \
 libxcursor1 libxrender1 libsm6 libxi6 libfontconfig1 "
     cmdi="apt-get -q -q"
+    cmdt="dpkg --get-selections"
+    cmdcheckstr="[[:space:]]*install$"
     xvnc="Xvnc4"
     xvncservctrl="vnc4server"
     vncargs1="-ac -SecurityTypes None -br -pn -httpd /usr/share/vnc-java"
     vncargs2="-desktop="
-    llua="llua5.1"
+    llua="lua5.1"
 
 	ruby --version | grep 1.8
 	if [[ $? -ne 0 ]]; then
@@ -220,23 +246,38 @@ elif [[ $dist == "Fedora" ]]; then
     else
         rubystuff="rubygem-sqlite3 rubygem-bigdecimal rubygem-test-unit"
     fi
-    pkgs="gcc gcc-c++ make dpkg bison flex ruby rubygems rxvt xfwm4 zsh sharutils screen \
+    if [ "$dist1" = "Fedora" ]; then # avoid the following pkgs in CentOs
+        extrapkgs="dpkg xfwm4 perl-pgsql_perl5 libstdc++-static"
+    fi
+    if [[ $vernum -ge 20 ]]; then
+        extrapkgs="$extrapkgs compat-lua* mariadb*"
+    fi
+    pkgs="gcc gcc-c++ make bison flex ruby rubygems rxvt zsh sharutils screen \
 gnuplot indent zlib-devel imake xorg-x11-utils ruby-libs openssl ${rubystuff} \
-vnc-server rxvt lua* libpqxx* boost-devel boost-thread sqlite-devel sqlite lzma \
-perl-Class-DBI-SQLite perl-pgsql_perl5 xorg-x11-fonts-100dpi.noarch xorg-x11-fonts-75dpi \
+rxvt flex lua* lua-devel libpqxx* boost-devel boost-thread sqlite-devel sqlite lzma \
+perl-Class-DBI-SQLite xorg-x11-fonts-100dpi.noarch xorg-x11-fonts-75dpi \
 tigervnc tigervnc-server tigervnc-server-module xorg-x11-twm glibc-devel.i686 libstdc++.i686 \
+glibc-static glibc-devel libstdc++ libtool svn flex $extrapkgs\
 "
+
     if [[ `uname -m` == "x86_64" ]]; then 
 	    screen_downgrade="ftp://ftp.pbone.net/mirror/archive.fedoraproject.org/fedora/linux/releases/13/Fedora/x86_64/os/Packages/screen-4.0.3-15.fc12.x86_64.rpm"
     else
 	    screen_downgrade="ftp://ftp.pbone.net/mirror/archive.fedoraproject.org/fedora/linux/releases/13/Fedora/i386/os/Packages/screen-4.0.3-15.fc12.i686.rpm"
     fi
     cmdi="yum -y"
+    #cmdt="yum list install"
+    cmdt="yum list installed"
+    cmdcheckstr=""
     xvnc="Xvnc"
     xvncservctrl="vncserver"
     vncargs1="-ac -SecurityTypes None -br -pn -httpd /usr/share/vnc-java"
     vncargs2="-desktop "
-    llua="llua"
+    if [[ $vernum -ge 20 ]]; then
+        llua="lua-5.1"
+    else
+        llua="lua"
+    fi
 
     #SELinux complains if the SimNow LinuxLibs execute code in the stack
     #The following command clears the stack-execute bit in the SimNow LinuxLibs
@@ -246,7 +287,7 @@ fi
 ########################################################################
 
 simnow_dir=`cd $simnow_dir; pwd`
-echo "Using SimNow in $simnow_dir"
+echo "* Detected SimNow in $simnow_dir"
 lib1="$simnow_dir/linuxlibs/libgcc_s.so.1"
 lib2="$simnow_dir/linuxlibs/libstdc++.so.6"
 if [[ -f $lib1 || -f $lib2 ]]; then
@@ -267,21 +308,49 @@ if [[ $force != 1 ]]; then
 	    exit 1
     fi
 fi
-echo "SimNow version is $simnow_ver"
+echo "* SimNow version is $simnow_ver"
 /bin/rm -f $root/simnow
 ln -fs $simnow_dir $root/simnow
 
 ########################################################################
 
+echo "* Checking if extra packages should be installed ..."
+ret="0"
+echo -n "  "
+pkginst=`$cmdt`
+for p in $pkgs; do
+   echo -n "$p "
+   (echo "$pkginst" |grep -q "$p$cmdcheckstr") >/dev/null 2>/dev/null
+   ec=$?
+   if [ "$ec" != "0" ]; then
+      ret=`expr $ret + 1`;
+      if [ "$ppkgs" = "" ]; then
+         ppkgs="$p"; 
+      else
+         ppkgs="$ppkgs $p";
+      fi
+   fi
+done
 echo ""
-echo "Checking and installing packages ($pkgs)"
-echo "*** NOTE: sudo access required ***"
-echo ""
-sudo $cmdi install $pkgs
+ret1="0"
+if [ "$ret" != "0" ]; then
+   echo ""
+   echo "*** NOTE: for this step (installation of missing packages/dependences: $ppkgs ), either ask your admin or be sure you have sudo access"
+   echo "* Installing missing packages/dependences..."
+   sudo $cmdi install $ppkgs
+   ec="$?"
+   if [ "$ec" != "0" ]; then
+      ret1=`expr $ret1 + 1`;
+   fi
+   echo "* Package installation FINISHED"
+else
+   echo "* ALL needed packages are present"
+fi
 
-if [[ $? -ne 0 ]]; then
-    echo "Could not install one or more of $pkgs"
-     echo "Please check your distribution and edit 'configure' to reflect it"
+if [[ $"ret1" -ne 0 ]]; then
+    echo ""
+    echo "ERROR: Could not install one or more of $pkgs"
+    echo "- Please check your distribution and edit 'configure' to reflect it"
     exit 1
 fi
 
@@ -305,7 +374,6 @@ if [[ $dist == "Fedora" && $vernum == 19 ]]; then
 fi
 # end workaround 
 
-echo "Package installation FINISHED"
 
 ########################################################################
 
@@ -329,13 +397,13 @@ if [[ $v == "" ]]; then
     echo "ERROR: Cannot run $cc"
     exit 1
 fi
-echo "Using $v"
+echo "* GCC: Using $v"
 v=`$cxx --version | head -n 1`
 if [[ $v == "" ]]; then
     echo "ERROR: Cannot run $cxx"
     exit 1
 fi
-echo "Using $v"
+echo "* G++: Using $v"
 
 ##########################################################################
 xfixes=""
@@ -354,6 +422,7 @@ for s in \
         src/network/Makefile \
         src/common/Makefile \
         src/abaeterno/Makefile \
+        src/libluabind/Makefile \
 ; do
         cp $s $s.in
 done
@@ -368,6 +437,7 @@ for s in \
         src/network/Makefile \
         src/common/Makefile \
         src/abaeterno/Makefile \
+        src/libluabind/Makefile \
 ; do
     sed -e "s:@simnow_dir@:$simnow_dir:" \
         -e "s:@data_dir@:$data_dir:" \
@@ -380,14 +450,17 @@ for s in \
                 -e "s:@xvnc@:$xvnc:" \
                 -e "s#@vncargs@#$vncargs#" \
                 -e "s:@vncwm@:$vncwm:" \
-        -e "s:llua5.1:$llua:" \
+        -e "s:llua5.1:l$llua:" \
+        -e "s:\([^l]\)lua5.1:\1$llua:" \
+        -e "s:llua :l$llua :" \
+        -e "s:llua$:l$llua:" \
     $s.in > $s
 done
 
 
 #############################################################
 if [[ $vnctest -gt 0 ]]; then
-    echo "Testing vncserver installation"
+    echo "* Testing vncserver installation... (if your connection drops login again)"
     tmpvnc="/tmp/vnc$$"; /bin/rm -rf $tmpvnc; mkdir -p $tmpvnc
     (cd $tmpvnc; cat << 'EOF' | uudecode -o - | tar xfz - --no-same-owner)
 begin 644 vnc.tgz
@@ -415,8 +488,11 @@ EOF
         exit 1
     fi
     /bin/rm -rf $tmpvnc
+else
+   echo "* Skipping 'vnc test'. Assuming it is ok."
 fi
 
 echo "./configure $status_args" > config.status
 chmod +x config.status
+echo "* For more options, type $0 -h"
 echo "Done"
