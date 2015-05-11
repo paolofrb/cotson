@@ -23,6 +23,7 @@ begin
 #		exit(-1)
 	end
 
+	sleep(0.5) # give some time
 	mc=$here.data("mediator_config")
 	raise "mediator_config has not been produced correctly" if !File.exists?(mc)
 	data=YAML::load_file(mc)
