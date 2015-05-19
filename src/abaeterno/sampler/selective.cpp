@@ -120,8 +120,10 @@ InstructionInQueue Selective::simulation_call_casm(Instruction* inst)
         LOG(__func__,"-- NO DATA FROM FUNCTIONAL MODE");
         return DISCARD;
     } else {
+#ifdef _DEBUG_THIS_
         uint64_t a1 = xdp->arg1;
         uint64_t a2 = xdp->arg2;
+#endif
         uint64_t im = xdp->imm;
         bool     sw = ((~im&0x80)>>7);
         int      zo = im & 0x7F;
