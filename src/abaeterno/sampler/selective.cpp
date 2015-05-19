@@ -128,7 +128,9 @@ InstructionInQueue Selective::simulation_call_casm(Instruction* inst)
         bool     sw = ((~im&0x80)>>7);
         int      zo = im & 0x7F;
         LOG(__func__,"-- SWITCHING SAMPLER zone",zo,"sw",sw);
+#ifdef _DEBUG_THIS_
         LOG(__func__,"a1",a1,"a2",a2,"im",im);
+#endif
         current=lexical_cast<int>(Option::run_function(changer, sw, zo));
         AbAeterno::get().break_sample();
         return DISCARD;

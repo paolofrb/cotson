@@ -36,6 +36,7 @@
 
 #include "instruction.h"
 #include "custom_asm_regtab.h"
+#include "cotson.h" // needed by casm_read_arg1, ...
 
 typedef enum { ONLY_FUNCTIONAL, FUNCTIONAL_AND_TIMING } FunctionalState;
 typedef enum { DISCARD, KEEP } InstructionInQueue;
