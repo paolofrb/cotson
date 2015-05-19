@@ -434,6 +434,7 @@ for s in \
         etc/daemon-start \
         web/etc/local-defaults \
         src/examples/tracer/Makefile \
+        src/examples/atracer/Makefile \
         src/network/Makefile \
         src/common/Makefile \
         src/abaeterno/Makefile \
