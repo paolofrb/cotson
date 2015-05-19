@@ -22,6 +22,7 @@
 #define COTSON_RESERVED_CPUID_EXT        (COTSON_RESERVED_CPUID_BASE+1000)
 #define COTSON_RESERVED_CPUID_SELECTIVE  10
 #define COTSON_RESERVED_ASM_BASE         5000
+#define COTSON_RESERVED_CASM_SELECTIVE	 255
 
 #define IS_COTSON_CPUID(rax) ( \
     ((rax) >= COTSON_RESERVED_CPUID_BASE) && \
@@ -34,6 +35,7 @@
     ((x)-COTSON_RESERVED_CPUID_BASE)
 
 #include "instruction.h"
+#include "custom_asm_regtab.h"
 
 typedef enum { ONLY_FUNCTIONAL, FUNCTIONAL_AND_TIMING } FunctionalState;
 typedef enum { DISCARD, KEEP } InstructionInQueue;
@@ -116,6 +118,47 @@ public:
 		inst->add_xdata(c); // 2 arg1
 		inst->add_xdata(d); // 3 arg2
 	}
+
+    inline static uint64_t casm_read_arg1(uint8_t op)
+    {
+        uint64_t arg=0;
+        #define _CUSTOM_ASM_ARG1(_b,_R1,_R2) case _b: arg=Cotson::X86::_R1(); break
+        switch(op) {
+            _CUSTOM_ASM_REGTAB(_CUSTOM_ASM_ARG1);
+            default:
+//                XERR("### ERROR: unknown arg1 CUSTOM_ASM register 0x%02x\n",op);
+//                throw runtime_error("unknown arg1 CUSTOM_ASM register");
+            break;
+        }
+        return arg;
+    }
+
+    inline static uint64_t casm_read_arg2(uint8_t op)
+    {
+        uint64_t arg=0;
+        #define _CUSTOM_ASM_ARG2(_b,_R1,_R2) case _b: arg=Cotson::X86::_R2(); break
+        switch(op) {
+            _CUSTOM_ASM_REGTAB(_CUSTOM_ASM_ARG2);
+            default:
+//                XERR("### ERROR: unkown CUSTOM_ASM register 0x%02x\n",op);
+//                throw runtime_error("unkown CUSTOM_ASM register");
+            break;
+        }
+        return arg;
+    }
+
+    inline static void casm_write_res(uint8_t op, uint64_t res)
+    {
+        #define _CUSTOM_ASM_RES(_b,_R1,_R2)  case _b: Cotson::X86::_R1(res); break
+        switch(op) {
+            _CUSTOM_ASM_REGTAB(_CUSTOM_ASM_RES);
+            default:
+//                XERR("### ERROR: unkown CUSTOM_ASM register 0x%02x\n",op);
+//                throw runtime_error("unkown CUSTOM_ASM register");
+            break;
+        }
+        Cotson::X86::UpdateRegs();
+    }
 
     static InstructionInQueue simulation(Instruction* inst, uint64_t devid)
     {
