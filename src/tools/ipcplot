@@ -486,7 +486,7 @@ sub update_metric_names
 {
 	my $dbh = shift;
     my $h = $dbh->prepare("select cpu from metric_names where name='cpu0.instcount'");
-	if ($h->execute() && ($h->fetchrow_array())[0] eq 0) {
+	if ($h and $h->execute() and ($h->fetchrow_array())[0] eq 0) {
 	    print "CPU in metric_names already updated\n";
 	}
 	else {
@@ -499,5 +499,5 @@ sub update_metric_names
         $h2->execute() or warn "Cannot update cpu in metric_names\n";
 	    $h2->finish();
 	}
-	$h->finish();
+	$h->finish() if $h;
 }
