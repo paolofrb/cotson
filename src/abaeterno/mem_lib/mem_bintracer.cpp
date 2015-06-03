@@ -24,7 +24,8 @@ namespace Memory {
 registerClass<Interface,MemBinTracer> mem_bintracer_c("mem_bintracer");
 
 MemBinTracer::MemBinTracer(const Parameters& p) :
-	gz(p.get<string>("trace_file", "/tmp/mem_trace.tar.gz"))
+	gz(p.get<string>("trace_file", "/tmp/mem_trace.tar.gz")),
+	linesize_(p.get<uint32_t>("linesize", "64", false)) // no track
 {
 	name=p.get<string>("name");
 	latency=p.get<uint32_t>("latency");

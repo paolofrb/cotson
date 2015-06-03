@@ -205,9 +205,9 @@ int main(int argc, char *argv[])
     int nt = 0;
 	int evx = 0;
     while (!trace.eof())  {
-		trace >> epoch[evx++]; 
+		trace >> epoch[evx++];
 		if (evx >= EPOCHSZ) {
-		    cerr << "ERROR: increase EPOCHSZ" << endl;
+		    cerr << "ERROR: increase EPOCHSZ (evx " << evx << ")" << endl;
 			exit(1);
 		}
         if (epoch[evx-1].is_epoch_marker()) {

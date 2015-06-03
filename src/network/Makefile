@@ -39,7 +39,6 @@ data_packet_processor.o: event_handler.h mpacket.h switch.h net_typedefs.h
 data_packet_processor.o: ../common/mac.h node.h ../common/metric.h
 data_packet_processor.o: net_timing_model.h ../common/timing_message.h stats.h
 data_packet_processor.o: log.h
-med_lua_export.o: ../common/lua.hpp
 mediator.o: ../common/liboptions.h ../common/kill.h ../common/static_set.h
 mediator.o: ../common/lua_register.h ../common/lua.hpp ../common/units.h
 mediator.o: ../common/cast.h ../common/uint64_t_hash.h ../common/parameters.h
@@ -55,7 +54,12 @@ mediator_server.o: ../common/metric.h net_timing_model.h stats.h
 mediator_server.o: packet_acceptor.h control_packet_processor.h
 mediator_server.o: packet_processor.h ../common/timing_message.h
 mediator_server.o: data_packet_processor.h slirp_acceptor.h vde_acceptor.h
-mediator_server.o: scheduler.h
+mediator_server.o: scheduler.h ../common/liboptions.h ../common/kill.h
+mediator_server.o: ../common/static_set.h ../common/lua_register.h
+mediator_server.o: ../common/lua.hpp ../common/units.h ../common/cast.h
+mediator_server.o: ../common/uint64_t_hash.h ../common/parameters.h
+mediator_server.o: ../common/param_factory.h ../common/options.h log.h
+med_lua_export.o: ../common/lua.hpp
 net_constant.o: net_timing_model.h net_typedefs.h ../common/mac.h
 net_constant.o: ../common/metric.h ../common/param_factory.h
 net_constant.o: ../common/parameters.h ../common/cast.h ../common/units.h

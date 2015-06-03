@@ -131,7 +131,7 @@ BOOST_AUTO_TEST_CASE( test_mesi_states_with_bus_2levels_WB_ )
 	pm.set("latency", "100");
 	pm.set("name",    "main_memory");
 	pm.set("type",    "...");
-	l2->setNext(Interface::Shared(new Main(pm)));
+	l2->setNext(Interface::Shared(new Main<Timing::Basic>(pm)));
 
 	StateObserver::transition(SIMULATION);
 
@@ -430,7 +430,7 @@ BOOST_AUTO_TEST_CASE( test_mesi_states_with_bus_2levels_WT_ )
 	pm.set("latency", "100");
 	pm.set("name",    "main_memory");
 	pm.set("type",    "...");
-	l2->setNext(Interface::Shared(new Main(pm)));
+	l2->setNext(Interface::Shared(new Main<Timing::Basic>(pm)));
 
 	StateObserver::transition(SIMULATION);
 

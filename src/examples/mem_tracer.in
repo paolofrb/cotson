@@ -39,7 +39,7 @@ function build()
 		i=i+1
 	end
 
-	mem=Memory{ name="main", latency=150 } 
+	mem=Memory{ name="main", latency=100 } 
 	-- we insert this transparent memory tracer 
 	-- before main memory and we point to to produce
 	-- a trace of all memory accesses into the file 

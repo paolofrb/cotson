@@ -180,7 +180,7 @@ BOOST_AUTO_TEST_CASE( test_no_hit_on_emtpy_w_bus )
 	pm.set("latency", "100");
 	pm.set("name",    "main"+modestr);
 	pm.set("type",    "...");
-	bus->setNext(Interface::Shared(new Main(pm)));
+	bus->setNext(Interface::Shared(new Main<Timing::Basic>(pm)));
 
 	for(int i=0;i<16;i++)
 	{
@@ -211,7 +211,7 @@ for(int mode=0; mode <= 0; ++mode) {
 	pb.set("latency", "100");
 	pb.set("name",    "main"+modestr);
 	pb.set("type",    "...");
-	c.setNext(Interface::Shared(new Main(pb)));
+	c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 
 	for(int i=0;i<16;i++)
 	{
@@ -239,7 +239,7 @@ BOOST_AUTO_TEST_CASE( test_fill_and_check_direct_map )
 	pb.set("latency", "100");
 	pb.set("name",    "main"+modestr);
 	pb.set("type",    "...");
-	c.setNext(Interface::Shared(new Main(pb)));
+	c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 
 	for(int i=0;i<16;i++)
 	{
@@ -277,7 +277,7 @@ BOOST_AUTO_TEST_CASE( test_fill_and_check_2_way )
 	pb.set("latency", "100");
 	pb.set("name",    "main"+modestr);
 	pb.set("type",    "...");
-	c.setNext(Interface::Shared(new Main(pb)));
+	c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 
 	for(int i=0;i<16;i++)
 	{
@@ -315,7 +315,7 @@ BOOST_AUTO_TEST_CASE( test_fill_and_check_assoc )
 	pb.set("latency", "100");
 	pb.set("name",    "main"+modestr);
 	pb.set("type",    "...");
-	c.setNext(Interface::Shared(new Main(pb)));
+	c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 
 	for(int i=0;i<16;i++)
 	{
@@ -353,7 +353,7 @@ BOOST_AUTO_TEST_CASE( test_assoc_pathological_case )
 	pb.set("latency", "100");
 	pb.set("name",    "main"+modestr);
 	pb.set("type",    "...");
-	c.setNext(Interface::Shared(new Main(pb)));
+	c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 	uint time=0;
 	for(int j=0;j<5;j++)
 		for(int i=0;i<17;i++)
@@ -387,7 +387,7 @@ BOOST_AUTO_TEST_CASE( test_fill_and_check_4_way )
 	pb.set("latency", "100");
 	pb.set("name",    "main"+modestr);
 	pb.set("type",    "...");
-	c.setNext(Interface::Shared(new Main(pb)));
+	c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 
 	for(int i=0;i<64;i++)
 	{
@@ -425,7 +425,7 @@ BOOST_AUTO_TEST_CASE( test_4_way_large_tags )
 	pb.set("latency", "100");
 	pb.set("name",    "main"+modestr);
 	pb.set("type",    "...");
-	c.setNext(Interface::Shared(new Main(pb)));
+	c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 
 	for(long long i=0;i<64;i++)
 	{
@@ -474,7 +474,7 @@ BOOST_AUTO_TEST_CASE( test_lru_2_ways )
       // Two ways
       p.set("num_sets",  "2");
       Interface& c = nCacheImpl(p,mode);
-      c.setNext(Interface::Shared(new Main(pb)));
+      c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
       StateObserver::transition(FULL_WARMING);
       StateObserver::transition(SIMULATION);
       // Same pos, 3 different tags
@@ -527,7 +527,7 @@ BOOST_AUTO_TEST_CASE( test_lru_4_ways )
       // Two ways
       p.set("num_sets",  "4");
       Interface& c = nCacheImpl(p,mode);
-      c.setNext(Interface::Shared(new Main(pb)));
+      c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
       StateObserver::transition(FULL_WARMING);
       StateObserver::transition(SIMULATION);
       // Same pos, 3 different tags
@@ -588,7 +588,7 @@ BOOST_AUTO_TEST_CASE( test_full_assoc )
   for(int mode=0; mode <= 2; ++mode) {
 
     Interface& c = nCacheImpl(p,mode);
-    c.setNext(Interface::Shared(new Main(pb)));
+    c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 
     StateObserver::transition(FULL_WARMING);
     StateObserver::transition(SIMULATION);
@@ -640,7 +640,7 @@ BOOST_AUTO_TEST_CASE( test_write_allocate )
     pb.set("type",    "...");
 
     Interface& c = nCacheImpl(p,mode);
-    c.setNext(Interface::Shared(new Main(pb)));
+    c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 
     StateObserver::transition(FULL_WARMING);
     StateObserver::transition(SIMULATION);
@@ -672,7 +672,7 @@ BOOST_AUTO_TEST_CASE( test_write_allocate )
     pb.set("name",    "main");
     pb.set("type",    "...");
     Interface& c = nCacheImpl(p,mode);
-    c.setNext(Interface::Shared(new Main(pb)));
+    c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 
     StateObserver::transition(FULL_WARMING);
     StateObserver::transition(SIMULATION);
@@ -700,7 +700,7 @@ BOOST_AUTO_TEST_CASE( test_write_allocate )
     pb.set("name",    "main");
     pb.set("type",    "...");
     Interface& c = nCacheImpl(p,mode);
-    c.setNext(Interface::Shared(new Main(pb)));
+    c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 
     StateObserver::transition(FULL_WARMING);
     StateObserver::transition(SIMULATION);
@@ -747,7 +747,7 @@ BOOST_AUTO_TEST_CASE( test_l2_timing )
     pb.set("latency", "100");
     pb.set("name",    "name");
     pb.set("type",    "...");
-    c.setNext(Interface::Shared(new Main(pb)));
+    c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
     uint64_t tstamp = 1;
     for(int i=0;i<64;i++)
     {

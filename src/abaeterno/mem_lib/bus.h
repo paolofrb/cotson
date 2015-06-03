@@ -39,7 +39,7 @@ class Bus : public Interface {
 		}
 
 		void beginSimulation() { perform_up_to(~0ULL); }
-		INLINE uint32_t item_size() const { return 64; }
+	    INLINE uint32_t item_size() const { return linesize_; }
 
 	private:
 		Protocol protocol;
@@ -61,6 +61,7 @@ class Bus : public Interface {
 		uint64_t read_;
 		uint64_t readx_;
 		uint64_t write_;
+		const uint64_t linesize_;
 };
 
 
@@ -69,7 +70,8 @@ Bus<Protocol>::Bus(const Parameters& p):
 	protocol(), 
 	infinite_bandwidth(p.get<bool>("infinite_bandwidth","false",false)), // no track
 	bandwidth(p.get<uint32_t>("bandwidth","1",false)), // no track
-	latency(p.get<uint32_t>("latency"))
+	latency(p.get<uint32_t>("latency")),
+	linesize_(p.get<uint32_t>("linesize","64",false)) // no track
 {
 		name = p.get<std::string>("name");
 		add("bw",bw_);

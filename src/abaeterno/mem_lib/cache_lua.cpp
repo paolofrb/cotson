@@ -24,6 +24,7 @@
 
 #include "cache_timing_basic.h"
 #include "cache_timing_l2.h"
+#include "cache_timing_mainmem.h"
 #include "cache_impl.h"
 
 using namespace std;
@@ -55,7 +56,7 @@ Interface::Shared buildCache(Parameters& p)
 	string timing=p.get<string>("timing","basic");
 	if(timing=="basic")
 		return bestCache<Timing::Basic>(p);
-	if(timing=="l2") 
+	if(timing=="l2")
 		return bestCache<Timing::L2>(p);
     if(timing=="mainmem") 
 		return bestCache<Timing::MainMemory>(p);

@@ -44,6 +44,7 @@ option o9("network.timeout", "safety timeout for global time messages ");
 option o10("network.noadvance", "no-advance interval threshold");
 option o11("network.log", "log interval for networking stats");
 option o12("network.asktime", "ask time when out of sync");
+option o13("network.sync_start", "when to start node sync");
 
 scoped_ptr<NetworkTiming> unique_network_timing;
 
@@ -70,7 +71,10 @@ void network_timing_stop() {
 
 void network_timing_prepare() {
     if(unique_network_timing) 
-        unique_network_timing->init(Cotson::nanos());
+        unique_network_timing->init(
+            Cotson::nanos(),
+            Option::get<uint64_t>("network.sync_start",0) 
+        );
 }
 
 run_at_init      f1(&network_timing_init);
@@ -177,7 +181,7 @@ NetworkTiming::NetworkTiming() :
     add("sync_sent",nsync_out_);
 }
 
-void NetworkTiming::init(uint64_t nanos)
+void NetworkTiming::init(uint64_t nanos, uint64_t start)
 {
     if (med_sock_ < 0 || sync_sock_ < 0 || med_quantum_ == 0)
         return;
@@ -186,6 +190,7 @@ void NetworkTiming::init(uint64_t nanos)
         t0_ = nanos;
         med_ok_ = true;
         last_ts_ = 0;
+        if (start) gtime_.init(nanos+start);
         LOG("Starting global time thread at", t0_);
         boost::thread run(boost::bind(&NetworkTiming::global_time, this));
     
@@ -449,5 +454,13 @@ bool NetworkTiming::GT::process(const GlobalTime& gt)
         return true; // advance
     }
     return false; // no advance
+}
+
+void NetworkTiming::GT::init(uint64_t t)
+{
+    boost::mutex::scoped_lock lk(gtmutex);
+    clust_gt = t;
+    clust_lat = 0;
+    new_gt.notify_one();
 }
 

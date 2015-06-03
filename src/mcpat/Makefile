@@ -40,3 +40,4 @@ test3: mcpat cotson2mcpat mcpat_l3.lua
 	../../bin/cotson DBFILE=\"`pwd`/mcpat_l3.db\" mcpat_l3.lua ; \
 	./cotson2mcpat file:mcpat_l3.db 1 mcpat_l3.xml -r -v ; \
 	less mcpat_l3.xml.txt
+# DO NOT DELETE

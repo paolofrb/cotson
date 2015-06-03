@@ -31,7 +31,7 @@ class Hybrid : public Interface
     
     ~Hybrid();
 
-	uint32_t item_size() const { return 64; }
+	uint32_t item_size() const { return linesize_; }
 
     private:
     uint64_t read_;  
@@ -65,6 +65,7 @@ class Hybrid : public Interface
     uint64_t pages_used;
     
     boost::scoped_array<uint32_t> page_accesses;
+	uint32_t linesize_;
 }; 
 
 }

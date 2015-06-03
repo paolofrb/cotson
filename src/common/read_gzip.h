@@ -30,7 +30,7 @@ class ReadGzip
 	ReadGzip& operator>>(T&);
 
 	operator const void*() const { return ok&&data ? this : 0; }
-	bool eof() const { return !data; } 
+	bool eof() const { return !data || gzeof(f); }
 
 	std::string as_text(size_t n)
 	{
@@ -56,7 +56,7 @@ ReadGzip& ReadGzip::operator>>(T& t)
 	if(ok&&data)
 	{
 		int w=gzread(f,&t,sizeof(t));
-		if(w==0 && gzeof(f))
+		if ((w<=0) || gzeof(f))
 			data=false;
 		else if(w!=sizeof(t))
 			ok=false;

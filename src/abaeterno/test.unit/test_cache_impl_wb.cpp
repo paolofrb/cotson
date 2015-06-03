@@ -151,7 +151,7 @@ BOOST_AUTO_TEST_CASE( test_no_hit_on_emtpy_w_bus )
 	pb.set("latency", "110");
 	pb.set("name",    "name");
 	pb.set("type",    "...");
-	c.setNext(Interface::Shared(new Main(pb)));
+	c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 
 	for(int i=0;i<16;i++)
 	{
@@ -182,7 +182,7 @@ for(int mode=0; mode <= 0; ++mode) {
 	pb.set("latency", "100");
 	pb.set("name",    "name");
 	pb.set("type",    "...");
-	c.setNext(Interface::Shared(new Main(pb)));
+	c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 
 	for(int i=0;i<16;i++)
 	{
@@ -210,7 +210,7 @@ BOOST_AUTO_TEST_CASE( test_fill_and_check_direct_map )
 	pb.set("latency", "100");
 	pb.set("name",    "name");
 	pb.set("type",    "...");
-	c.setNext(Interface::Shared(new Main(pb)));
+	c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 
 	for(int i=0;i<16;i++)
 	{
@@ -252,7 +252,7 @@ BOOST_AUTO_TEST_CASE( test_fill_and_check_2_way )
 	pb.set("latency", "100");
 	pb.set("name",    "name");
 	pb.set("type",    "...");
-	c.setNext(Interface::Shared(new Main(pb)));
+	c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 
 	for(int i=0;i<16;i++)
 	{
@@ -294,7 +294,7 @@ BOOST_AUTO_TEST_CASE( test_fill_and_check_assoc )
 	pb.set("latency", "100");
 	pb.set("name",    "name");
 	pb.set("type",    "...");
-	c.setNext(Interface::Shared(new Main(pb)));
+	c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 
 	for(int i=0;i<16;i++)
 	{
@@ -336,7 +336,7 @@ BOOST_AUTO_TEST_CASE( test_assoc_pathological_case )
 	pb.set("latency", "100");
 	pb.set("name",    "name");
 	pb.set("type",    "...");
-	c.setNext(Interface::Shared(new Main(pb)));
+	c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 	uint time=0;
 	for(int j=0;j<5;j++)
 		for(int i=0;i<17;i++)
@@ -372,7 +372,7 @@ BOOST_AUTO_TEST_CASE( test_fill_and_check_4_way )
 	pb.set("latency", "100");
 	pb.set("name",    "name");
 	pb.set("type",    "...");
-	c.setNext(Interface::Shared(new Main(pb)));
+	c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 
 	for(int i=0;i<64;i++)
 	{
@@ -414,7 +414,7 @@ BOOST_AUTO_TEST_CASE( test_4_way_large_tags )
 	pb.set("latency", "100");
 	pb.set("name",    "name");
 	pb.set("type",    "...");
-	c.setNext(Interface::Shared(new Main(pb)));
+	c.setNext(Interface::Shared(new Main<Timing::Basic>(pb)));
 
 	for(long long i=0;i<64;i++)
 	{

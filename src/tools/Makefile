@@ -17,7 +17,7 @@ traceplayer: traceplayer.cpp
 pg_experiment: pg_experiment.cpp
 	$(CXX) $(CXXFLAGS) -I/usr/include/pqxx -o pg_experiment $< -lpqxx
 
-memtrace: memtrace.cpp
+memtrace: memtrace.cpp ../common/read_gzip.h
 	$(CXX) $(CXXFLAGS) -I ../network -o memtrace $< -lz
 
 clean:
@@ -28,3 +28,4 @@ distclean: clean
 # DO NOT DELETE
 
 traceplayer.o: ../common/read_gzip.h ../network/net_typedefs.h ../common/mac.h
+memtrace.o: ../common/read_gzip.h

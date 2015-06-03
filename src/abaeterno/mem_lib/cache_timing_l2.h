@@ -56,46 +56,6 @@ class L2 : public metric
   std::vector<uint64_t> _subbank_latest_access_cycle;
 };
 
-
-class MainMemory : public metric
-{
- public:
-  MainMemory(const Parameters & p);
-  void reset();
-  uint32_t latency(uint64_t tstamp,const Trace& mt,const Access& ma);
-   
- private:
-  
-  const uint32_t _nchannels;
-  const uint32_t _ndimms_per_channel;
-  const uint32_t _ndevices_per_dimm;
-  const uint32_t _nbanks_per_device;
-  const uint32_t _page_sz;  // page size in byte
-  const uint32_t _line_sz;  // cache line size in byte
-
-  const uint32_t _cmd_clk_multiplier;
-  const uint32_t _bank_clk_multiplier;
-
-  std::vector<uint64_t> _channel_latest_access_cycle;
-  std::vector<uint64_t> _device_latest_access_cycle;
-  std::vector<uint64_t> _dimm_latest_access_cycle;
-  std::vector<uint64_t> _bank_latest_access_cycle;
-
-  uint64_t _total_latency;
-  uint32_t _nchannels_log2;
-  uint32_t _ndimms_per_channel_log2;
-  uint32_t _ndevices_per_dimm_log2;
-  uint32_t _nbanks_per_device_log2;
-  uint32_t _page_sz_log2;
-  uint32_t _line_sz_log2;
-
-
-  const uint32_t _t_RC;
-  const uint32_t _t_RAS;
-  const uint32_t _t_data_transfer;
-};
-
-
 }
 }
 #endif

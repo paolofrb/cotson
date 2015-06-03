@@ -15,6 +15,7 @@
 
 
 SIMNOW_SUPPORTED_VER="4.6.2pub"
+#SIMNOW_SUPPORTED_VER="4.7.7nda"
 DEBIAN_SUPPORTED_VERS="lenny | squeeze"
 FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle | SphericalCow | Schrödinger’sCat | Heisenbug | TwentyOne"
 UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise | quantal | raring | trusty"
@@ -286,34 +287,6 @@ glibc-static glibc-devel libstdc++ libtool svn flex $extrapkgs\
 fi
 ########################################################################
 
-simnow_dir=`cd $simnow_dir; pwd`
-echo "* Detected SimNow in $simnow_dir"
-lib1="$simnow_dir/linuxlibs/libgcc_s.so.1"
-lib2="$simnow_dir/linuxlibs/libstdc++.so.6"
-if [[ -f $lib1 || -f $lib2 ]]; then
-    echo "To avoid system conflicts, we remove $lib1 and $lib2"
-    /bin/rm -f $lib1 $lib2
-fi
-if [[ -f $lib1 || -f $lib2 ]]; then
-    echo "ERROR: Something went wrong"
-    echo "       make sure $simnow_dir is writeable or remove $lib1 and $lib2 manually"
-    exit 1
-fi
-
-if [[ $force != 1 ]]; then
-    simnow_ver=`cd $simnow_dir; ./simnow --version | awk '/SimNow version/{print tolower($6);}'|sed 's/[,-]//g'`
-    if [[ $simnow_ver != $SIMNOW_SUPPORTED_VER && "${simnow_ver}pub" != $SIMNOW_SUPPORTED_VER ]]; then
-        echo "ERROR: simnow version is '$simnow_ver'"
-	    echo "       The supported version is $SIMNOW_SUPPORTED_VER"
-	    exit 1
-    fi
-fi
-echo "* SimNow version is $simnow_ver"
-/bin/rm -f $root/simnow
-ln -fs $simnow_dir $root/simnow
-
-########################################################################
-
 echo "* Checking if extra packages should be installed ..."
 ret="0"
 echo -n "  "
@@ -373,6 +346,35 @@ if [[ $dist == "Fedora" && $vernum == 19 ]]; then
 	sudo yum update --enablerepo=updates-testing ruby-2.0.0.247-13.fc19
 fi
 # end workaround 
+
+
+########################################################################
+
+simnow_dir=`cd $simnow_dir; pwd`
+echo "Using SimNow in $simnow_dir"
+lib1="$simnow_dir/linuxlibs/libgcc_s.so.1"
+lib2="$simnow_dir/linuxlibs/libstdc++.so.6"
+if [[ -f $lib1 || -f $lib2 ]]; then
+    echo "To avoid system conflicts, we remove $lib1 and $lib2"
+    /bin/rm -f $lib1 $lib2
+fi
+if [[ -f $lib1 || -f $lib2 ]]; then
+    echo "ERROR: Something went wrong"
+    echo "       make sure $simnow_dir is writeable or remove $lib1 and $lib2 manually"
+    exit 1
+fi
+
+if [[ $force != 1 ]]; then
+    simnow_ver=`cd $simnow_dir; ./simnow --version | awk '/SimNow version/{print tolower($6);}'|sed 's/[,-]//g'`
+    if [[ $simnow_ver != $SIMNOW_SUPPORTED_VER && "${simnow_ver}pub" != $SIMNOW_SUPPORTED_VER ]]; then
+        echo "ERROR: simnow version is '$simnow_ver'"
+	    echo "       The supported version is $SIMNOW_SUPPORTED_VER"
+	    exit 1
+    fi
+fi
+echo "SimNow version is $simnow_ver"
+/bin/rm -f $root/simnow
+ln -fs $simnow_dir $root/simnow
 
 
 ########################################################################

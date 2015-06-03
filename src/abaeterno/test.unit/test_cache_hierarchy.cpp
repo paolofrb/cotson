@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_CASE( test_hierarchy_simple_things_without_bus )
 	pm.set("latency", "100");
 	pm.set("name",    "main_memory");
 	pm.set("type",    "...");
-	l2->setNext(Interface::Shared(new Main(pm)));
+	l2->setNext(Interface::Shared(new Main<Timing::Basic>(pm)));
 
 	StateObserver::transition(SIMULATION);
 
@@ -214,7 +214,7 @@ BOOST_AUTO_TEST_CASE( test_moesi_states_with_bus )
 	pm.set("latency", "100");
 	pm.set("name",    "main_memory");
 	pm.set("type",    "...");
-	l2->setNext(Interface::Shared(new Main(pm)));
+	l2->setNext(Interface::Shared(new Main<Timing::Basic>(pm)));
 
 	StateObserver::transition(SIMULATION);
 
@@ -301,7 +301,7 @@ BOOST_AUTO_TEST_CASE( test_inclusivity )
 	pm.set("latency", "100");
 	pm.set("name",    "main_memory");
 	pm.set("type",    "...");
-	l2->setNext(Interface::Shared(new Main(pm)));
+	l2->setNext(Interface::Shared(new Main<Timing::Basic>(pm)));
 
 	StateObserver::transition(SIMULATION);
 	uint64_t time=0;
@@ -376,7 +376,7 @@ BOOST_AUTO_TEST_CASE( test_write_wb1_wt2 )
 	pm.set("latency", "100");
 	pm.set("name",    "main_memory");
 	pm.set("type",    "...");
-	l2->setNext(Interface::Shared(new Main(pm)));
+	l2->setNext(Interface::Shared(new Main<Timing::Basic>(pm)));
 
 	StateObserver::transition(SIMULATION);
 	uint64_t time=0;
@@ -432,7 +432,7 @@ BOOST_AUTO_TEST_CASE( test_write_wt1_wt2 )
 	pm.set("latency", "100");
 	pm.set("name",    "main_memory");
 	pm.set("type",    "...");
-	l2->setNext(Interface::Shared(new Main(pm)));
+	l2->setNext(Interface::Shared(new Main<Timing::Basic>(pm)));
 
 	StateObserver::transition(SIMULATION);
 	uint64_t time=0;
@@ -488,7 +488,7 @@ BOOST_AUTO_TEST_CASE( test_write_wt1_wb2 )
 	pm.set("latency", "100");
 	pm.set("name",    "main_memory");
 	pm.set("type",    "...");
-	l2->setNext(Interface::Shared(new Main(pm)));
+	l2->setNext(Interface::Shared(new Main<Timing::Basic>(pm)));
 
 	StateObserver::transition(SIMULATION);
 	uint64_t time=0;

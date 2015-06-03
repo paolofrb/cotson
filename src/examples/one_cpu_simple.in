@@ -50,7 +50,7 @@ function build()
 	cpu=get_cpu(0)
 	cpu:timer{ name='cpu0', type="timer0" }
 
-	mem=Memory{ name="main", latency=150  } 
+	mem=Memory{ name="main", latency=150, write_latency=50, slots=8  } 
 
     l2=Cache{ name="l2cache", size="512kB", 
 		line_size=16, latency=20, num_sets=4, next=mem, 

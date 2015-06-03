@@ -31,7 +31,7 @@ public:
 
     NetworkTiming();
     ~NetworkTiming();
-    void init(uint64_t);
+    void init(uint64_t,uint64_t);
     void send_packet_delay();
     uint32_t net_delay() const { return net_delay_; }
     inline void net_delay(uint32_t d) { net_delay_ = d; }
@@ -53,6 +53,7 @@ private:
         inline uint64_t wait_until(uint64_t);
         inline bool terminated() const { return end; }
         inline void terminate();
+        inline void init(uint64_t t);
         bool process(const GlobalTime&);
     private:
         uint64_t clust_gt;

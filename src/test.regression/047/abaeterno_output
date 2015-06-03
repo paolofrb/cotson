@@ -190,7 +190,7 @@ cpu0.timer.dcache.l2cache.lookup_OWNER                      0
 cpu0.timer.dcache.l2cache.lookup_SHARED                     0
 cpu0.timer.dcache.l2cache.mem.access                        2755
 cpu0.timer.dcache.l2cache.mem.read                          2755
-cpu0.timer.dcache.l2cache.mem.timertotal_latency            229293
+cpu0.timer.dcache.l2cache.mem.total_latency                 229293
 cpu0.timer.dcache.l2cache.mem.write                         0
 cpu0.timer.dcache.l2cache.read                              50373
 cpu0.timer.dcache.l2cache.read_half_miss                    20
@@ -240,7 +240,7 @@ cpu0.timer.dtlb.l2tlb.lookup_OWNER                          0
 cpu0.timer.dtlb.l2tlb.lookup_SHARED                         0
 cpu0.timer.dtlb.l2tlb.mem.access                            2755
 cpu0.timer.dtlb.l2tlb.mem.read                              2755
-cpu0.timer.dtlb.l2tlb.mem.timertotal_latency                229293
+cpu0.timer.dtlb.l2tlb.mem.total_latency                     229293
 cpu0.timer.dtlb.l2tlb.mem.write                             0
 cpu0.timer.dtlb.l2tlb.read                                  9474
 cpu0.timer.dtlb.l2tlb.read_half_miss                        0
@@ -288,7 +288,7 @@ cpu0.timer.icache.l2cache.lookup_OWNER                      0
 cpu0.timer.icache.l2cache.lookup_SHARED                     0
 cpu0.timer.icache.l2cache.mem.access                        2755
 cpu0.timer.icache.l2cache.mem.read                          2755
-cpu0.timer.icache.l2cache.mem.timertotal_latency            229293
+cpu0.timer.icache.l2cache.mem.total_latency                 229293
 cpu0.timer.icache.l2cache.mem.write                         0
 cpu0.timer.icache.l2cache.read                              50373
 cpu0.timer.icache.l2cache.read_half_miss                    20
@@ -339,7 +339,7 @@ cpu0.timer.itlb.l2tlb.lookup_OWNER                          0
 cpu0.timer.itlb.l2tlb.lookup_SHARED                         0
 cpu0.timer.itlb.l2tlb.mem.access                            2755
 cpu0.timer.itlb.l2tlb.mem.read                              2755
-cpu0.timer.itlb.l2tlb.mem.timertotal_latency                229293
+cpu0.timer.itlb.l2tlb.mem.total_latency                     229293
 cpu0.timer.itlb.l2tlb.mem.write                             0
 cpu0.timer.itlb.l2tlb.read                                  9474
 cpu0.timer.itlb.l2tlb.read_half_miss                        0

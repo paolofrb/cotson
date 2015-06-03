@@ -27,6 +27,7 @@ Hybrid::Hybrid(Parameters& p)
 	
 	hit_id=0;
 
+	linesize_=p.get<uint32_t>("linesize","64",false);
 	dram_latency=p.get<uint32_t>("latency");
 	dram_size=p.get<uint32_t>("dram_size");
 	

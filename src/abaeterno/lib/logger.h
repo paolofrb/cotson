@@ -192,7 +192,7 @@ namespace Logger
 	}
 }
 
-#define LOG COND_SELECTOR(Logger)
+#define LOG(...) COND_SELECTOR(Logger,__VA_ARGS__)
 
 namespace Setter
 {

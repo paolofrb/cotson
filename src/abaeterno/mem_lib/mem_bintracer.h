@@ -28,7 +28,7 @@ class TraceMem
 		phys =((uint64_t)1)<<63;
 		tstamp = length = nanos = 0;
 	}
-	TraceMem(bool r, uint64_t p, uint64_t t, uint32_t l, uint64_t n) 
+	TraceMem(bool r, uint64_t p, uint64_t t, uint32_t l, uint64_t n)
 	{
 		phys = p | ((r?(uint64_t)1:(uint64_t)0)<<63);
 		tstamp = t;
@@ -55,7 +55,7 @@ class TraceMem
 	{
 		return nanos;
 	}
-	
+
 	uint64_t phys;
 	uint64_t tstamp;
 	uint32_t length;
@@ -64,33 +64,34 @@ class TraceMem
 
 
 class MemBinTracer : public Interface
-{	
+{
 	public:
 	MemBinTracer(const Parameters&);
-	~MemBinTracer(){std::cout << "Tracing ended." << std::endl;	/*tracefile.close();*/} 
-	
+	~MemBinTracer(){std::cout << "Tracing ended." << std::endl;	/*tracefile.close();*/}
+
 	MemState read(const Access&,uint64_t,Trace&,MOESI_state);
 	MemState readx(const Access&,uint64_t,Trace&,MOESI_state);
 	MemState write(const Access&,uint64_t,Trace&,MOESI_state);
-	
+
 	MOESI_state state(const Access&,uint64_t);
 	void invalidate(const Access&,uint64_t,const Trace&,MOESI_state);
 
-	uint32_t item_size() const { return 64; };
-	
+	uint32_t item_size() const { return linesize_; };
+
 	private:
 
 	//std::string filename;
 	//std::ofstream tracefile;
 	DumpGzip gz;
-	
+
 	uint32_t latency;
-	
+
 	bool trace_on;
 
-	uint64_t read_;	
-	uint64_t write_;	
-}; 
+	uint64_t read_;
+	uint64_t write_;
+	uint32_t linesize_;
+};
 }
 
 std::ostream& operator<<(std::ostream&,const Memory::TraceMem&);
