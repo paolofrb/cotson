@@ -45,7 +45,7 @@ begin
   
   #Create a folder and save the lua file
   experiment_dir = "./db/experiments/#{experiment.id}"
-  if File.exists?(experiment_dir)
+  if File.exist?(experiment_dir)
     #TODO: Put a cotson error around it here
     experiment.log("Experiment dir '#{experiment_dir}' already exists")
   else

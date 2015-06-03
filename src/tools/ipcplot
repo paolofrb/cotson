@@ -101,6 +101,10 @@ my %MET2;
 my %NODES1;
 my %NODES2;
 my %TIMES;
+if ($refresh gt 0) {
+    $x11term=1;
+	$droptable=1;
+}
 print "refresh rate is $refresh s\n";
 print "granularity is is $qms ms\n";
 print "ctrl-c to stop\n";

@@ -18,6 +18,7 @@ require 'vnc'
 class Kill
 	def Kill.vnc
 		a=DB['vnc_pid']
+        puts "kill vnc pid #{a}"
 		Execute.kill(DB['vnc_pid'])
 		Kill.display(DB['vnc_pid'],DB['display'])
 		DB['vnc_pid']=nil

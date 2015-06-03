@@ -20,7 +20,7 @@ require 'fileutils'
 begin
 	host=this_host
 	f=$here.daemon('config',"#{host}.pid")
-	raise CotsonError.new(:DaemonStop, :host=>host, :file=>f, :directory => File.dirname(__FILE__)) if !File.exists?(f)
+	raise CotsonError.new(:DaemonStop, :host=>host, :file=>f, :directory => File.dirname(__FILE__)) if !File.exist?(f)
 
 	pid=IO.read(f).chomp.to_i
 	Process.kill("INT", pid ) 

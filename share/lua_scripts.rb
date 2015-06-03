@@ -18,7 +18,7 @@ require 'location'
 class LuaDefinitions
   def LuaDefinitions.check(name='lua')
     file=$here.share(name)
-    raise CotsonError.new(:LuaDefinitionsCheck, :name=>name, :file=>file) if !File.exists?(file) 
+    raise CotsonError.new(:LuaDefinitionsCheck, :name=>name, :file=>file) if !File.exist?(file) 
     if name == 'lua' then  
       #raise "lua not executable" if !File.executable?(file)
       raise CotsonError.new(:LuaDefinitionsCheck, :name=>name, :file=>file) if !File.executable?(file)

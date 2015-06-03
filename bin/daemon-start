@@ -26,7 +26,7 @@ begin
 	host=this_host
 	
 	f=$here.daemon('config',"#{host}.pid")
-	if File.exists?(f) then
+	if File.exist?(f) then
 		pid=IO.read(f).chomp.to_i
   		raise CotsonError.new(:DaemonStart, :host=>host, :port => opts[:daemon_port], :file=>f, :directory => File.dirname(__FILE__), :pid=>pid) 
   	end

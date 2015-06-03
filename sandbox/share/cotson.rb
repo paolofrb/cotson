@@ -14,11 +14,9 @@
 
 require 'location'
 require 'error'
-#require 'config'  #RG  -- conflict with another system 'config' class
 require 'cconfig'  #RG  -- 'config' renamed 'CConfig' for CotsonConfig
 require 'database'
 begin
-#  CF=Config.new($here.data('config'))
   CF=CConfig.new($here.data('config'))
   DB=Database.new($here.data('database'))
 rescue Exception => e
@@ -57,3 +55,4 @@ require 'kill'
 require 'send'
 
 require 'socket'
+

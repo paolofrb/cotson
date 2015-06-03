@@ -67,7 +67,7 @@ class ControlScript
   end
   
   def destroy
-    File.delete(@file) if File.exists?(@file)
+    File.delete(@file) if File.exist?(@file)
   end
   
   

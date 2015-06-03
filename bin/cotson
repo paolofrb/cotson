@@ -15,10 +15,6 @@
 $: << File.expand_path(File.dirname(__FILE__) + '/../share')
 
 require 'cotson'
-require 'daemon_service'
-require 'scheduler'
-require 'control_script'
-#require 'ftools'  #RG+1
 require 'fileutils'
 
 node_sandbox=[]
@@ -27,11 +23,10 @@ clean_sandbox=false
 output=[]
 control_script=nil
 
-#RG+1
 ENV['RUBYOPT']="-W0"
 
 def sbname(opts,t)
-	return File.join(opts[:tmpdir],opts[:runid]+"-#{$$}#{t}")
+  return File.join(opts[:tmpdir],opts[:runid]+"-#{$$}#{t}")
 end
 
 trap("INT") { raise CotsonError.new(:CtrlC); }
@@ -45,6 +40,9 @@ begin
   lua_defs.instance_defaults :NODE => 1
   opts=Options.new(lua_defs, :NODE => 1)
 
+##########################################################################
+### One node only
+##########################################################################
   if(opts.one_node?)
     opts.load :one_node_script, :data_dir, :display,
       :bsd, :bsd_link,
@@ -52,7 +50,7 @@ begin
       :vncviewer, :xterm, :screen, :Xvnc, :Xvnc_args, :Xvncwm,
       :simnow_dir, :simnow_dir_link,
       :abaeterno_so, :abaeterno_so_link,
-	  :clean_sandbox, :screen, 
+      :clean_sandbox, :screen, 
       :copy_files, :copy_files_prefix,
       :subscribe_result, :run_script
     clean_sandbox=opts[:clean_sandbox]
@@ -71,7 +69,13 @@ begin
       :copy_files, :copy_files_prefix
     clean_sandbox=opts[:clean_sandbox]
 
+##########################################################################
+### Multi-node: Using daemon service
+##########################################################################
     if opts.scheduler?
+      require 'daemon_service'
+      require 'scheduler'
+
       scheduler=SchedulerFactory.create_scheduler(lua_defs)
 
       debug "using scheduler #{scheduler.get_policy}"
@@ -91,20 +95,20 @@ begin
         node_sandbox.push x
       end
       
+##########################################################################
+### Multi-node Using local host /scripts
+##########################################################################
     else
-
       debug "using local host"
-
       cluster_nodes=opts[:cluster_nodes].to_i
-
       med_sandbox=Sandbox.new(lua_defs,opts,sbname(opts,"-med"))
       med_sandbox.install :mediator, :abaeterno_in
 
       (1..cluster_nodes).each do |node|
 
-        lua_defs.instance_defaults :NODE => node, :TOTAL => cluster_nodes
-        nopts=Options.new(lua_defs, :NODE => node, :TOTAL => cluster_nodes)
-        nopts.load :data_dir, :display,
+      lua_defs.instance_defaults :NODE => node, :TOTAL => cluster_nodes
+      nopts=Options.new(lua_defs, :NODE => node, :TOTAL => cluster_nodes)
+      nopts.load :data_dir, :display,
           :bsd, :bsd_link,
           :hdd, :hdd_link,
           :vncviewer, :xterm, :screen, :Xvnc, :Xvnc_args, :Xvncwm, 
@@ -113,16 +117,16 @@ begin
           :user_script, :clean_sandbox, :node_config,
           :subscribe_result
 
-        nsb=Sandbox.new(lua_defs,nopts,sbname(opts,"-node-#{node}"))
-        nsb.install :abaeterno_in, :simnow_pre_cluster, :simnow_dir,
+      nsb=Sandbox.new(lua_defs,nopts,sbname(opts,"-node-#{node}"))
+      nsb.install :abaeterno_in, :simnow_pre_cluster, :simnow_dir,
           :abaeterno_so, :user_script, :cluster_sh, :node_config
 
-        node_sandbox.push nsb
+      node_sandbox.push nsb
       end
-
     end
     
     if opts.control_script?
+      require 'control_script'
       opts.load :control_script_file
       debug "Generating control script #{opts[:control_script_file]}"
       control_script=ControlScript.new

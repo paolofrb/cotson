@@ -40,7 +40,7 @@ class Location
 		:type => :all, :filter => '*'})
 		dest=opts[:destination]
 		prefix=opts[:prefix]
-    raise CotsonError.new(:LocationCopyFiles, :destination=>dest, :prefix=>prefix) if !File.exists?(dest)
+    raise CotsonError.new(:LocationCopyFiles, :destination=>dest, :prefix=>prefix) if !File.exist?(dest)
 
 		files=list_files(opts)
 
@@ -60,7 +60,7 @@ class Location
 	private
 	def list_input
 		inf=data('.input_files')
-		File.exists?(inf) ? 
+		File.exist?(inf) ? 
 			IO.readlines(inf).map { |x| x.chomp } : 
 			[]
 	end

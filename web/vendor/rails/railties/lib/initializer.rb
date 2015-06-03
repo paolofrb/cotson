@@ -765,7 +765,7 @@ module Rails
         paths = []
         
         # Add the old mock paths only if the directories exists
-        paths.concat(Dir["#{root_path}/test/mocks/#{environment}"]) if File.exists?("#{root_path}/test/mocks/#{environment}")
+        paths.concat(Dir["#{root_path}/test/mocks/#{environment}"]) if File.exist?("#{root_path}/test/mocks/#{environment}")
 
         # Add the app's controller directory
         paths.concat(Dir["#{root_path}/app/controllers/"])

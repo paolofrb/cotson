@@ -15,12 +15,12 @@
 def compare(real,produced)
 	s=$here.data(real)
 	d=$here.data(produced)
-  raise CotsonError.new(:Compare, :real=>s, :produced=>d) if !File.exists?(d)
+  raise CotsonError.new(:Compare, :real=>s, :produced=>d) if !File.exist?(d)
 
 	sc=IO.readlines(s)
 	dc=IO.readlines(d)
 
-	if File.exists?($here.data('filters')) then
+	if File.exist?($here.data('filters')) then
 		IO.read($here.data('filters')).each_line do |filter|
 			f=Regexp.new(filter.chomp)
 			sc=sc.select { |y| y !~ f }	

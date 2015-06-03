@@ -23,7 +23,7 @@ class LuaDefinitions
 
 	def from_conf(name)
 		jamfile_location=fix_with_exec_dir('Jamfile')
-		if File.exists?(jamfile_location) then
+		if File.exist?(jamfile_location) then
 			IO.foreach(jamfile_location) do |line|
 				if line =~ /^#{name} *= * (.+) * ; *$/
 					return $1	
@@ -31,7 +31,7 @@ class LuaDefinitions
 			end
 		end
 		makeconf_location=fix_with_exec_dir('../Make.conf')
-		if File.exists?(makeconf_location) then
+		if File.exist?(makeconf_location) then
 			IO.foreach(makeconf_location) do |line|
 				if line =~ /^#{name} *= * (.+)$/
 					return $1	
@@ -42,13 +42,13 @@ class LuaDefinitions
 	end
 
 	def read_file(x)
-		if File.exists?(x) then
+		if File.exist?(x) then
 			st=StringIO.new
 			File.open(x).each_line { |y| st << y }
 			st.string
 		else
 			z=fix_with_exec_dir(x)
-			if File.exists?(z) then
+			if File.exist?(z) then
 				st=StringIO.new
 				File.open(z).each_line { |y| st << y }
 				st.string
@@ -72,14 +72,14 @@ class LuaDefinitions
 
 	def default_injector
 		injector_location=fix_with_exec_dir('aaInjector')
-		File.exists?(injector_location) ?
+		File.exist?(injector_location) ?
 			"injector='#{File.expand_path(injector_location)}'\n" :
 			nil
 	end
 
 	def default_mediator
 		mediator_location=fix_with_exec_dir('mediator')
-		File.exists?(mediator_location) ?
+		File.exist?(mediator_location) ?
 			"mediator_file='#{File.expand_path(mediator_location)}'\n":
 			nil
 	end
@@ -97,7 +97,7 @@ class LuaDefinitions
 
 	def default_abaeterno
 		abaeterno_location=fix_with_exec_dir('abaeterno.so')
-		File.exists?(abaeterno_location) ?
+		File.exist?(abaeterno_location) ?
 			"abaeterno_so='#{File.expand_path(abaeterno_location)}'\n" :
 			nil
 	end

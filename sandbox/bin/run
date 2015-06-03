@@ -26,7 +26,10 @@ begin
 
 	Simnow.one_node_extra_input_file
 
-	Simnow.run
+	a=Simnow.run
+	debug2 "vnc pid is #{a[:vnc_pid]}"
+	DB['vnc_pid']=a[:vnc_pid] ## record vnc PID so we can kill it later
+
 rescue Exception => e
 	finish e
 end

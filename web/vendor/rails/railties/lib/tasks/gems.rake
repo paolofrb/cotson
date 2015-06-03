@@ -21,7 +21,7 @@ namespace :gems do
     require 'rails/gem_builder'
     Dir[File.join(RAILS_ROOT, 'vendor', 'gems', '*')].each do |gem_dir|
       spec_file = File.join(gem_dir, '.specification')
-      next unless File.exists?(spec_file)
+      next unless File.exist?(spec_file)
       specification = YAML::load_file(spec_file)
       next unless ENV['GEM'].blank? || ENV['GEM'] == specification.name
       Rails::GemBuilder.new(specification, gem_dir).build_extensions

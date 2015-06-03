@@ -48,7 +48,7 @@ Rails::Initializer.run do |config|
   host=this_host 
   
   db="config/database_#{host}.yml"
-  if !File.exists?(db) then
+  if !File.exist?(db) then
     puts "Creating configuration file: #{db}" 
     db_hash = YAML::load_file("config/daemondb_template.yml")
     db_hash['development']['database'].gsub!(/\[\%.*\%\]/,"#{host}") if db_hash['development'] && db_hash['development']['database']

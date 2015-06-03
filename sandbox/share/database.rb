@@ -12,7 +12,6 @@
 
 # $Id: database.rb 6977 2009-12-09 16:18:35Z frb $
 
-#class Database < Config
 class Database < CConfig
 	def initialize(file)
 		super(file)

@@ -18,8 +18,8 @@ class VNC
   MAX_DISPLAY = 1024
   def VNC.start_vnc
     display=(MIN_DISPLAY..MAX_DISPLAY).detect do |d|
-      !File.exists?(File.join(Dir.tmpdir,".X#{d}-lock")) &&
-      !File.exists?(File.join(Dir.tmpdir,".X11-unix","X#{d}"))
+      !File.exist?(File.join(Dir.tmpdir,".X#{d}-lock")) &&
+      !File.exist?(File.join(Dir.tmpdir,".X11-unix","X#{d}"))
     end
     
     raise CotsonNew(:StartVNC, :sandbox=>$here, :display=>display, :wait=>0, :timeout=>VNC::TIMEOUT, :program=>CF[:Xvnc], :min_display=>MIN_DISPLAY, :max_display=>MAX_DISPLAY) if !display
@@ -30,14 +30,13 @@ class VNC
     # we wait for the server to appear
     beg=Time.new 
     while(true) do
-      break if File.exists? File.join(Dir.tmpdir,".X11-unix","X#{display}")
+      break if File.exist? File.join(Dir.tmpdir,".X11-unix","X#{display}")
       Kernel.select(nil,nil,nil,0.1)
       now=Time.new
       raise CotsonError.new(:StartVNC, :sandbox=>$here, :command => cmd, :display=>display, :vnc_pid=>vnc_pid, :wait=>now-beg, :timeout=>TIMEOUT, :program=>CF[:Xvnc], :vnc_pid=>vnc_pid) if now - beg > VNC::TIMEOUT #Time out if over 30 seconds
     end
     # Fire up the window manager in the background (will die with vnc)
     cmd2 = "#{CF[:Xvncwm]}:#{display}"
-#    a2=Execute.run_background(cmd2,$here.data('vncwm.log'))   # RG -- reduce warnings
     Execute.run_background(cmd2,$here.data('vncwm.log'))
     [vnc_pid, display]
   end

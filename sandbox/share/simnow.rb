@@ -35,7 +35,7 @@ class Simnow
 			debug2 ' using abaeterno.in'
 			ai=$here.data('abaeterno.in')
 			aei=$here.data('abaeterno.extra.in')
-			if File.exists?(aei)
+			if File.exist?(aei)
 				debug2 ' using abaeterno.extra.in'
 				ai="'#{ai} #{aei}'"
 			end

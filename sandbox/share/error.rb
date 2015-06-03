@@ -176,11 +176,11 @@ class CotsonError < StandardError
         #Check if it was a problem with mediator file or a crash during execution
         mediator_file = @info[:location]+"/share/mediator"
         @info[:mediator_original] = File.readlink(mediator_file) if File.symlink?(mediator_file)
-        return :MediatorNotFound if !File.exists?(mediator_file)
-        return :MediatorBadLink if File.symlink?(mediator_file) && !File.exists?(@info[:mediator_original])
+        return :MediatorNotFound if !File.exist?(mediator_file)
+        return :MediatorBadLink if File.symlink?(mediator_file) && !File.exist?(@info[:mediator_original])
         return :MediatorNotExecutable if !File.executable?(mediator_file)
         medlog=@info[:location]+"/data/mediator.log"
-        if File.exists?(medlog)
+        if File.exist?(medlog)
           @info[:mediator_output] = File.readlines(medlog).map {|l| l.rstrip} 
           return :MediatorFinished
         end
@@ -190,7 +190,7 @@ class CotsonError < StandardError
 
     case @location
       when :Compare
-        return :CompareWithoutProduced if !File.exists?(@info[:produced])
+        return :CompareWithoutProduced if !File.exist?(@info[:produced])
         if @info[:real_content].join != @info[:produced_content] .join then
           #can even do a diff here
           @info.delete(:real_content)
@@ -221,7 +221,7 @@ class CotsonError < StandardError
         return :MediatorNotRunning if @info[:running] != nil && @info[:running] == false
         
       when :LuaDefinitionsCheck
-        return :FileNotFound if !File.exists?(@info[:file])
+        return :FileNotFound if !File.exist?(@info[:file])
         return :LuaNotExecutable if !File.executable?(@info[:file]) && @info[:name]=="lua"
         
       when :OptionsLoad

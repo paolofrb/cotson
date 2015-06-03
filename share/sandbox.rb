@@ -25,7 +25,7 @@ class Sandbox < Location
     debug2 "  from #{sandbox_src}"
     debug2 "  into #{@root}"
 
-    raise CotsonError.new(:SandboxCreate, :sandbox => $here, :source => sandbox_src, :destination=>@root.to_str ) if !File.exists?(sandbox_src) || File.exists?(@root)
+    raise CotsonError.new(:SandboxCreate, :sandbox => $here, :source => sandbox_src, :destination=>@root.to_str ) if !File.exist?(sandbox_src) || File.exist?(@root)
     
     FileUtils.mkdir_p File.dirname(@root)
     FileUtils.cp_r sandbox_src, @root, :preserve => true
@@ -131,7 +131,7 @@ class Sandbox < Location
     debug2 " using #{link ? 'link' : 'copy'}"
     %w{ simnow productfile linuxlibs analyzers libs Images icons }.each do |x|
       y=File.join simnow_dir, x
-      if !File.exists?(y)
+      if !File.exist?(y)
         raise CotsonError.new(:SandboxInstallSimNowDir, :simnow_location=>simnow_dir, :component=>x, :link =>link, :sandbox=>$here)
       end
       link ? FileUtils.ln_sf(y,share) : FileUtils.cp_r(y,share)
@@ -142,7 +142,7 @@ class Sandbox < Location
     f=File.expand_path(@opts[:abaeterno_so])
     aaso = share('abaeterno.so')
     link=@opts[:abaeterno_so_link]
-    raise CotsonError.new(:SandboxInstallAbaeterno, :source=>f, :link=>link, :destination=>aaso, :sandbox=>"#{$here}") if !File.exists?(f)
+    raise CotsonError.new(:SandboxInstallAbaeterno, :source=>f, :link=>link, :destination=>aaso, :sandbox=>"#{$here}") if !File.exist?(f)
     debug2 "installing abaeterno.so"
     debug2 " from #{f}"
     debug2 " using #{link ? 'link' : 'copy'}"
@@ -226,7 +226,7 @@ class Sandbox < Location
   def run(*args)
     command_name=args.shift
     command=bin(command_name)
-    raise CotsonError.new(:SandboxRun,:sandbox=>$here, :command=>command_name, :script_location=>command, :arguments => "#{args.join(' ')}") if !File.exists?(command)
+    raise CotsonError.new(:SandboxRun,:sandbox=>$here, :command=>command_name, :script_location=>command, :arguments => "#{args.join(' ')}") if !File.exist?(command)
     debug2 "running #{command} #{args.join(' ')} (and printing)"
     Execute.run_and_print("#{command} #{args.join(' ')}") 
     debug2 "running #{command} ended"
@@ -235,7 +235,7 @@ class Sandbox < Location
   def run_output(*args)
     command_name=args.shift
     command=bin(command_name)
-    raise CotsonError.new(:SandboxRunOutput,:sandbox => $here, :command=>command_name, :script_location=>command, :arguments => "#{args.join(' ')}") if !File.exists?(command)
+    raise CotsonError.new(:SandboxRunOutput,:sandbox => $here, :command=>command_name, :script_location=>command, :arguments => "#{args.join(' ')}") if !File.exist?(command)
     debug2 "running #{command} #{args.join(' ')}"
     a=Execute.run("#{command} #{args.join(' ')}")
     debug2 "running #{command} ended" 
@@ -245,7 +245,7 @@ class Sandbox < Location
   def run_detached(*args)
     command_name=args.shift
     command=bin(command_name)
-    raise CotsonError.new(:SandboxRunOutput,:sandbox => $here, :command=>command_name, :script_location=>command, :arguments => "#{args.join(' ')}") if !File.exists?(command)
+    raise CotsonError.new(:SandboxRunOutput,:sandbox => $here, :command=>command_name, :script_location=>command, :arguments => "#{args.join(' ')}") if !File.exist?(command)
     debug2 "running detached #{command} #{args.join(' ')}"
     a=Execute.run("#{command} #{args.join(' ')}", :mode => 'detach')
     debug2 "running detached #{command} ended" 
@@ -255,22 +255,22 @@ class Sandbox < Location
   def kill
     begin 
       i,o=run_output("kill")
-      o = o   # RG -- reduce warnings
+      debug2 "sandbox kill: #{o}"
       return i==0
-#    rescue Exception=> e   # RG -- reduce warnings
-    rescue Exception
-      return false
+
+      rescue Exception
+        return false
     end
   end
 
   def status
     begin 
       i,o=run_output("status")
-      o = o   # RG -- reduce warnings
+      debug2 "sandbox status: #{o}"
       return i==0
-#    rescue Exception=> e   # RG -- reduce warnings
-    rescue Exception
-      return false
+
+      rescue Exception
+        return false
     end
   end
   
