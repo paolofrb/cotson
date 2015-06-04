@@ -1,5 +1,5 @@
 Loading module abaeterno.so.
-Using image path: "/home/frb/TERAFLUX/COTSON/data"
+Using image path: "/home/paolof/cotson/data"
 Known Device: Deerhound RevB QuadCore Socket L1
 Known Device: Intel(R) Pro/1000 MT/PT Desktop Network Adapter
 Known Device: USB JumpDrive
@@ -33,8 +33,8 @@ Known Device: Matrox(R) MGA-G4x0 Graphics Adapter
 Known Device: Unnamed Group
 Using library path: "./libs"
 
-1 exec> open /home/frb/TERAFLUX/COTSON/data/4p.bsd
-Opening "/home/frb/TERAFLUX/COTSON/data/4p.bsd"
+1 exec> open /home/paolof/cotson/data/4p.bsd
+Opening "/home/paolof/cotson/data/4p.bsd"
 created device Machine
 Instructions per Microsecond: 3000
 CPU Model Name: Opteron
@@ -51,7 +51,7 @@ info: creating device #0 "AMD 8th Generation Integrated Northbridge"
 info: creating device #1 "Dimm Bank"
 Dimmdevice: Bank 0, Simulated Size 8000000
 info: creating device #2 "AMD-8111 I/O Hub"
-ATA: Image [/home/frb/TERAFLUX/COTSON/data/karmic64.img] does not have an ID field.
+ATA: Image [/home/paolof/cotson/data/karmic64.img] does not have an ID field.
 info: creating device #3 "Memory Device"
 info: creating device #4 "Winbond W83627HF SIO"
 info: creating device #5 "SMB Hub Device"
@@ -74,9 +74,9 @@ info: creating device #19 "AweSim Processor"
 info: creating device #20 "Intel(R) Pro/1000 MT/PT Desktop Network Adapter"
 BSD Load completed!
 
-1 exec> ide:0.image master /home/frb/TERAFLUX/COTSON/data/karmic64.img
-ATA: Image [/home/frb/TERAFLUX/COTSON/data/karmic64.img] does not have an ID field.
-MASTER drive Image file is now /home/frb/TERAFLUX/COTSON/data/karmic64.img
+1 exec> ide:0.image master /home/paolof/cotson/data/karmic64.img
+ATA: Image [/home/paolof/cotson/data/karmic64.img] does not have an ID field.
+MASTER drive Image file is now /home/paolof/cotson/data/karmic64.img
 
 1 exec> ide:0.journal master on
 Journaling was already enabled
@@ -137,6 +137,7 @@ Journaling was already enabled
 
 1 exec> go
 Fast forward from 20000000000 ns to 20100000000 ns
+COTSON STARTED
 Fast forward ended at 20100000000 ns
 TIME=0.033333 ms IPC ( 0.0808442 1 1 0.0819848 )
 MAX SAMPLES: 1

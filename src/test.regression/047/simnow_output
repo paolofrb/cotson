@@ -141,6 +141,7 @@ Journaling was already enabled
 1 exec> keyboard.key 1C 9C
 
 1 exec> go
+COTSON STARTED
 TIME=0.03125 ms IPC ( 0.288681 )
 TIME=0.0625 ms IPC ( 0.439992 )
 TIME=0.09375 ms IPC ( 0.543107 )

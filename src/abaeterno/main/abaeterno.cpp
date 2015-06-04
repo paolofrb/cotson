@@ -210,6 +210,7 @@ void AbAeterno::prepareToRun()
             cout << fmt % i->first % i->second << endl;
         cout << "[missing values may be requested later!!]" << endl << endl;
     }
+    cerr << "COTSON STARTED" << endl;
 }
 
 void AbAeterno::end()
