@@ -41,7 +41,7 @@ class Cpu : public metric, public SimpleStateObserver
 	bool execute(uint32_t);
 
 	double cpi() const;
-	void cpi(double);
+	// void cpi(double);
 
 	inline uint64_t id() const { return devid; }
 	inline const std::string& name() const { return devname; }

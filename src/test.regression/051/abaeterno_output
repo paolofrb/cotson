@@ -147,7 +147,7 @@ cpu0.hb_CR3_equal                                           0
 cpu0.hb_ev_Exception                                        0
 cpu0.hb_ev_HW_interrupt                                     0
 cpu0.hb_ev_SW_interrupt                                     0
-cpu0.idlecount                                              2984466
+cpu0.idlecount                                              2984464
 cpu0.instcount                                              54197
 cpu0.invalid_translation_bytes                              0
 cpu0.iocount                                                5625
@@ -353,7 +353,7 @@ cpu0.timer.twolev.misses                                    418
 cpu0.timer.twolev.reset                                     0
 cpu0.timer.twolev.update                                    4204
 cpu0.trace_cache_size                                       0
-cpu0.valid_translation_bytes                                18446744073705297718
+cpu0.valid_translation_bytes                                18446744073705298094
 cpu0.write_mmios                                            0
 cpu0.write_pios                                             11
 cycles                                                      3200000

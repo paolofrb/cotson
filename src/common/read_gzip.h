@@ -19,11 +19,13 @@
 class ReadGzip 
 {
 	public: 
-	ReadGzip(std::string gzName): ok(true),data(true)
+	ReadGzip(std::string gzName, size_t bufsz=0): ok(true),data(true)
 	{
 		f=gzopen(gzName.c_str(),"rb");
 		if(f==NULL)
 			ok=false;
+		if (bufsz)
+	        gzbuffer(f,bufsz);
 	}
 	~ReadGzip() { if(ok) gzclose(f); }
 	template<typename T>

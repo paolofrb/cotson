@@ -139,7 +139,7 @@ void Cpu::do_compute_metrics()
 		{
 		    uint64_t t_cycles = (*timing)["cycles"];
 		    cpi_=static_cast<double>(t_cycles)/t_instrs;
-	        LOG("simulated CPI",cpi_);
+	        LOG("cycles", t_cycles, "instrs", t_instrs, "simulated CPI",cpi_);
 	        if (sample_idle) // adjust for idle fraction
 	        {
 	            double id_frac = static_cast<double>(sample_idle) /
@@ -158,19 +158,16 @@ void Cpu::setIPC()
 	{
 	    cpi_ = predictor->predict(cpi_);
 	    LOG("predicted CPI",cpi_);
+	    uint64_t insts = 1000;
+	    uint64_t cycles = static_cast<uint64_t>(cpi_*insts);
+
+	    LOG("setIPC (cpu", devid, "):", insts, "/", cycles);
+	    ERROR_IF(insts==0 || cycles==0,"Illegal IPC values");
+	    Cotson::Cpu::set_ipc(devid,insts,cycles);
 	}
-	// sanity clipping
-	cpi_ = cpi_ < 0.01 ? 0.01 : cpi_;
-
-	uint64_t insts = 1000;
-	uint64_t cycles = static_cast<uint64_t>(cpi_*insts);
-
-	LOG("setIPC (cpu", devid, "):", insts, "/", cycles);
-	ERROR_IF(insts==0 || cycles==0,"Illegal IPC values");
-	Cotson::Cpu::set_ipc(devid,insts,cycles);
 }
 
-void Cpu::cpi(double x) { cpi_=x; }
+// void Cpu::cpi(double x) { cpi_=x; }
 double Cpu::cpi() const { return cpi_; }
 
 void Cpu::beginFunctional()    { setIPC(); reset_sample(); }

@@ -11,6 +11,7 @@
 
 // $Id$
 
+
 #include "abaeterno_config.h"
 #include "abaeterno.h"
 #include "callme.h"
@@ -53,6 +54,8 @@ option  o30("init_wait",                "1M", "Wait for simnow initialization");
 option  o35("fastforward",               "0", "length of fastforwarding phase (nanos)");
 
 option  o36("time_feedback",          "true", "should we send time feedback to Simnow"); 
+option  o37("min_cpi_feedback",       "0.01", "minimum CPI value (for time feedback)");
+option  o38("max_cpi_feedback",        "100", "minimum CPI value (for time feedback)");
 
 option  o39("cr3_tracing",           "false", "only trace user application with COTSONtracer"); 
 
@@ -68,6 +71,8 @@ option  o50("print_stats",                    "print statistics on stdout");
 option  o51("network_cpuid",                  "send cpuid commands to all nodes in the cluster");
 option  o52("custom_asm",                     "extend custom asm to prefetchnta");
 option  o53("network_terminate",              "terminate execution on network terminate command");
+
+
 }
 
 namespace {
@@ -272,11 +277,13 @@ void AbAeterno::callme(uint64_t duration)
     if(next_sample==0)
         next_sample=now+duration;
 
-//  cout << "called me at " << now
-//      << " next_sample: " << next_sample
-//      << " dur: " << duration
-//      << " state: " << SimStateNames[sim_state]
-//      << endl;
+#if 0
+cout << "called me at " << now
+<< " next_sample: " << next_sample
+<< " dur: " << duration
+<< " state: " << SimStateNames[sim_state]
+<< endl;
+#endif
 
     if(next_sample == now)
     {

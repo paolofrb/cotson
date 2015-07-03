@@ -115,6 +115,8 @@ struct Proxy : public CMonitorConsumer
     bool regs_valid;
     bool fregs_valid;
     bool time_feedback;
+	double min_cpi_feedback;
+	double max_cpi_feedback;
     bool regvalue;
 
     inline void set_injector(CCodeInjector* inj,CODETRANSLATESTRUCT* t=0)
@@ -246,6 +248,8 @@ Proxy::Proxy() :
     regs_valid(false),
     fregs_valid(false),
     time_feedback(false),
+	min_cpi_feedback(0.01),
+	max_cpi_feedback(100),
     regvalue(false)
 {
 }
@@ -476,7 +480,9 @@ void Proxy::LoadOptions()
 {
     sync_quantum_f = Option::get<uint64_t>("mp_sync_quantum");
     sync_quantum_s = Option::get<uint64_t>("mp_sync_quantum_sim",sync_quantum_f);
-    time_feedback=Option::get<bool>("time_feedback");
+    time_feedback = Option::get<bool>("time_feedback");
+	min_cpi_feedback = Option::get<double>("min_cpi_feedback",0.01);
+	max_cpi_feedback = Option::get<double>("max_cpi_feedback",100.0);
 }
 
 bool Proxy::UpdateDev(uint64_t devid ,uint64_t key,uint64_t val)
@@ -496,6 +502,15 @@ void Proxy::SetIPC(uint64_t devid,uint64_t insts,uint64_t cycles)
 {
     if (!time_feedback)
         return;
+	double cpi = static_cast<double>(cycles)/static_cast<double>(insts);
+	if (cpi < min_cpi_feedback) {
+		cerr << "WARNING: cpu " << devid << " low cpi " << cpi << endl;
+	    cycles = static_cast<uint64_t>(insts*min_cpi_feedback);
+	}
+	if (cpi > max_cpi_feedback) {
+		cerr << "WARNING: cpu " << devid << " high cpi " << cpi << endl;
+	    cycles = static_cast<uint64_t>(insts*max_cpi_feedback);
+	}
     if(!SetProcessorIPC(machineID,devid,insts,cycles))
         ERROR("SetProcessorIPC failed");
 }
@@ -716,14 +731,14 @@ uint64_t Cotson::Cpu::statistic(uint64_t devid,const string& s)
     if(awe.piID != PIDAweSim) 
         ERROR("piID should be AWESIM");
 
-    if(s=="trace_cache_size") 
-        return static_cast<uint64_t>(awe.nTraceCacheSize);
-    if(s=="valid_translation_bytes") 
-        return static_cast<uint64_t>(awe.nValidTranslationBytes);
-    if(s=="invalid_translation_bytes") 
+    if(s=="trace_cache_size") // int, avoid sign extend
+        return static_cast<uint32_t>(awe.nTraceCacheSize);
+    if(s=="valid_translation_bytes") // int, avoid sign extend
+        return static_cast<uint32_t>(awe.nValidTranslationBytes);
+    if(s=="invalid_translation_bytes") // int, avoid sign extend
         return static_cast<uint64_t>(awe.nInvalidTranslationBytes);
-    if(s=="metadata_bytes") 
-        return static_cast<uint64_t>(awe.nMetaDataBytes);
+    if(s=="metadata_bytes") // int, avoid sign extend
+        return static_cast<uint32_t>(awe.nMetaDataBytes);
     if(s=="plain_invalidations") 
         return awe.nPlainInvalidations;
     if(s=="range_invalidations") 

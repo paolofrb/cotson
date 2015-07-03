@@ -47,7 +47,7 @@ protected:
         uint32_t dev;
 	    Order order_by;
         EmitFunction emit;
-        uint64_t* pcycles;
+        const uint64_t* pcycles;
         uint64_t initial_cycles;
         uint64_t order;
         uint64_t order_rate; 

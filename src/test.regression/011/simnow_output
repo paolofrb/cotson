@@ -1,5 +1,5 @@
 Loading module abaeterno.so.
-Using image path: "/home/paolof/cotson/data"
+Using image path: "/home/paolof/cotson-pub/data"
 Known Device: Deerhound RevB QuadCore Socket L1
 Known Device: Intel(R) Pro/1000 MT/PT Desktop Network Adapter
 Known Device: USB JumpDrive
@@ -33,8 +33,8 @@ Known Device: Matrox(R) MGA-G4x0 Graphics Adapter
 Known Device: Unnamed Group
 Using library path: "./libs"
 
-1 exec> open /home/paolof/cotson/data/1p.bsd
-Opening "/home/paolof/cotson/data/1p.bsd"
+1 exec> open /home/paolof/cotson-pub/data/1p.bsd
+Opening "/home/paolof/cotson-pub/data/1p.bsd"
 created device Machine
 Instructions per Microsecond: 3200
 CPU Model Name: Opteron
@@ -51,7 +51,7 @@ info: creating device #0 "AMD 8th Generation Integrated Northbridge"
 info: creating device #1 "Dimm Bank"
 Dimmdevice: Bank 0, Simulated Size 10000000
 info: creating device #2 "AMD-8111 I/O Hub"
-ATA: Image [/home/paolof/cotson/data/karmic64.img] does not have an ID field.
+ATA: Image [/home/paolof/cotson-pub/data/karmic64.img] does not have an ID field.
 info: creating device #3 "Memory Device"
 info: creating device #4 "Winbond W83627HF SIO"
 info: creating device #5 "SMB Hub Device"
@@ -69,9 +69,9 @@ Could allocate map memory
 info: creating device #16 "Intel(R) Pro/1000 MT/PT Desktop Network Adapter"
 BSD Load completed!
 
-1 exec> ide:0.image master /home/paolof/cotson/data/karmic64.img
-ATA: Image [/home/paolof/cotson/data/karmic64.img] does not have an ID field.
-MASTER drive Image file is now /home/paolof/cotson/data/karmic64.img
+1 exec> ide:0.image master /home/paolof/cotson-pub/data/karmic64.img
+ATA: Image [/home/paolof/cotson-pub/data/karmic64.img] does not have an ID field.
+MASTER drive Image file is now /home/paolof/cotson-pub/data/karmic64.img
 
 1 exec> ide:0.journal master on
 Journaling was already enabled
@@ -143,11 +143,11 @@ Journaling was already enabled
 1 exec> go
 COTSON STARTED
 TIME=0.000664 ms IPC ( 1 )
-TIME=0.220764 ms IPC ( 0.481606 )
-TIME=0.406021 ms IPC ( 0.842137 )
-TIME=0.868936 ms IPC ( 0.376576 )
-TIME=0.967442 ms IPC ( 1.55414 )
-TIME=1.04991 ms IPC ( 0.877776 )
+TIME=0.220764 ms IPC ( 0.481135 )
+TIME=0.406021 ms IPC ( 0.84921 )
+TIME=0.868936 ms IPC ( 0.38167 )
+TIME=0.967442 ms IPC ( 1.49095 )
+TIME=1.04991 ms IPC ( 0.874557 )
 TIME=2.01946 ms IPC ( 1 )
 TIME=2.05969 ms IPC ( 1 )
 TIME=2.27817 ms IPC ( 1 )
