@@ -24,15 +24,26 @@ class ReadGzip
 		f=gzopen(gzName.c_str(),"rb");
 		if(f==NULL)
 			ok=false;
+// The following is not supported in e.g. ZLIB_VERNUM 0x1234 (i.e. Ubuntu 11.10,12.04)
+// We restrict the use of gzbuffer only to ZLIB_VERNUM >= 0x1280
+#if (ZLIB_VERNUM >= 0x1280)
 		if (bufsz)
 	        gzbuffer(f,bufsz);
+#endif
 	}
 	~ReadGzip() { if(ok) gzclose(f); }
 	template<typename T>
 	ReadGzip& operator>>(T&);
 
 	operator const void*() const { return ok&&data ? this : 0; }
+// The following seems a reasonable bug fix. However, it's messing up regression tests
+// on Ubuntu 11.10,12.04 (at least). So we revert to the older version (as in revisions < 721)
+// in order to continue supporting 11.10 and 12.04 (at least).
+#if (ZLIB_VERNUM >= 0x1280)
 	bool eof() const { return !data || gzeof(f); }
+#else
+        bool eof() const { return !data; }
+#endif
 
 	std::string as_text(size_t n)
 	{
@@ -58,7 +69,14 @@ ReadGzip& ReadGzip::operator>>(T& t)
 	if(ok&&data)
 	{
 		int w=gzread(f,&t,sizeof(t));
+// The following seems a reasonable bug fix. However, it's messing up regression tests
+// on Ubuntu 11.10,12.04 (at least). So we revert to the older version (as in revisions < 721)
+// in order to continue supporting 11.10 and 12.04 (at least).
+#if (ZLIB_VERNUM >= 0x1280)
 		if ((w<=0) || gzeof(f))
+#else
+                if(w==0 && gzeof(f))
+#endif
 			data=false;
 		else if(w!=sizeof(t))
 			ok=false;
