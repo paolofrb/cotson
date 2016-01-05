@@ -12,7 +12,7 @@ if [ $NODE -eq 1 ] ; then
       i=`expr $i + 1`
       ping -i 0.2 -c 3 n$i | tee /tmp/ping.log
    done
-   cotson_tracer 100 200 300 ## Example cpuid sent across the network 
+   ./cotson_tracer 100 200 300 ## Example cpuid sent across the network 
    ping -i 0.2 -c 3 n$2 | tee -a /tmp/ping.log
 else
 ################# NODE 2..N ##################

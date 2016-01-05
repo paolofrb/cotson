@@ -33,7 +33,7 @@ class VNC
       break if File.exist? File.join(Dir.tmpdir,".X11-unix","X#{display}")
       Kernel.select(nil,nil,nil,0.1)
       now=Time.new
-      raise CotsonError.new(:StartVNC, :sandbox=>$here, :command => cmd, :display=>display, :vnc_pid=>vnc_pid, :wait=>now-beg, :timeout=>TIMEOUT, :program=>CF[:Xvnc], :vnc_pid=>vnc_pid) if now - beg > VNC::TIMEOUT #Time out if over 30 seconds
+      raise CotsonError.new(:StartVNC, :sandbox=>$here, :command => cmd, :display=>display, :vnc_pid=>vnc_pid, :wait=>now-beg, :timeout=>TIMEOUT, :program=>CF[:Xvnc]) if now - beg > VNC::TIMEOUT #Time out if over 30 seconds
     end
     # Fire up the window manager in the background (will die with vnc)
     cmd2 = "#{CF[:Xvncwm]}:#{display}"

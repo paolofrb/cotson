@@ -44,7 +44,7 @@ private:
     inline void dump(uint64_t, uint64_t, uint64_t, uint64_t, bool);
 
     typedef Memory::Storage::Many Cache;
-    shared_ptr<Cache> cache;
+    boost::shared_ptr<Cache> cache;
     const string tracefile;
     uint64_t cycles;
     uint64_t instructions;
@@ -56,14 +56,14 @@ private:
     bool shared;
     bool binary;
     bool code;
-    static shared_ptr<Cache> shared_cache;
+    static boost::shared_ptr<Cache> shared_cache;
     static scoped_ptr<DumpGzip> trace;
 };
 
 registerClass<CpuTimer,MemoryTracer> memtracer_c("memtracer");
 
 // static members
-shared_ptr<MemoryTracer::Cache> MemoryTracer::shared_cache;
+boost::shared_ptr<MemoryTracer::Cache> MemoryTracer::shared_cache;
 scoped_ptr<DumpGzip> MemoryTracer::trace;
 uint64_t MemoryTracer::timestamp = 0;
 

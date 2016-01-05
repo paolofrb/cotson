@@ -36,6 +36,7 @@ class Sandbox < Location
     File.open(data('abaeterno.in'),"w") do |f|
       f << "root='#{$here}'\n"
       f << "cotson_pid=#{$$}\n"
+      f << "control_script_file='sandbox-'..cotson_pid..'-ctrl'\n"
       f << @lua_defs.to_str
     end
   end
@@ -193,7 +194,7 @@ class Sandbox < Location
       'injector_output*',
       'simnow_output',
       'disasm',
-      'simpoint_profile.gz',
+      'simpoint_profile',
       'disksim_*',
       'atlas10k.*',
       'statdefs',

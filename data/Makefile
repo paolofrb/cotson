@@ -41,11 +41,13 @@ lzma: $(HDD)
 	    $(CP) tf.rom $(SIMNOW_DIR)/Images; \
 	fi; \
 	if [ -z "${RAM}" ] ; then \
-		./initbsd $(SIMNOW_DIR) $* $(HDD) ; \
+		./initbsd $(SIMNOW_DIR) $* $(HDD)  2>&1 |tee initbsd.out; \
 	else \
-		./initbsd $(SIMNOW_DIR) $*  $(HDD) $(RAM); \
+		./initbsd $(SIMNOW_DIR) $*  $(HDD) $(RAM) 2>&1 |tee initbsd.out; \
 	fi;
-	echo "#### Note: don't worry if you see a 'segmentation fault' just above"
+	@echo "#### Note: don't worry if you see a 'segmentation fault' just above"
+	a=`tail -1 /home/giorgi/C5test1/cotson-726/trunk/data/initbsd.out| grep -i 'segmentation fault'`; \
+	if [ "$$a" != "" ]; then exit 0; fi
 
 mount:
 	@echo "##### MOUNT disk to tmp"; \

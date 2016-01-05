@@ -58,6 +58,7 @@ run_twonodes:
 	@echo "Running a cluster of 2 nodes pinging each other"; \
 	echo "Simulation runs in background -- be patient (a few minutes)"; \
 	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
+	isoinfo -x '/COTSON_G.TGZ;1' -i ../../data/cotson-guest-tools.iso|tar xzf - usr/bin/cotson_tracer -O >/tmp/cotson_tracer; \
 	/bin/rm -f run_twonodes.log /tmp/twonodes.db; \
 	( (sleep 10; if [ -s ./twonodes-ctrl ]; then echo "Firing console view"; ./twonodes-ctrl view; fi) &); \
 	../../bin/cotson twonodes.in > run_twonodes.log 2>&1 ; \
@@ -75,6 +76,7 @@ run_twonodes_novnc:
 	@echo "Running a cluster of 2 nodes pinging each other (NO VNC)"; \
 	echo "Simulation runs in background -- be patient (a few minutes)"; \
 	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
+	isoinfo -x '/COTSON_G.TGZ;1' -i ../../data/cotson-guest-tools.iso|tar xzf - usr/bin/cotson_tracer -O >/tmp/cotson_tracer; \
 	/bin/rm -f run_twonodes_novnc.log /tmp/twonodes_novnc.db; \
 	( (sleep 10; if [ -s ./twonodes_novnc-ctrl ]; then echo "Firing console view"; ./twonodes_novnc-ctrl;  fi) &); \
 	../../bin/cotson twonodes_novnc.in > run_twonodes_novnc.log 2>&1 ; \
@@ -92,6 +94,7 @@ run_twonodes_noscreen:
 	@echo "Running a cluster of 2 nodes pinging each other (NO SCREEN)"; \
 	echo "Simulation runs in background -- be patient (a few minutes)"; \
 	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
+	isoinfo -x '/COTSON_G.TGZ;1' -i ../../data/cotson-guest-tools.iso|tar xzf - usr/bin/cotson_tracer -O >/tmp/cotson_tracer; \
 	/bin/rm -f run_twonodes_noscreen.log /tmp/twonodes_noscreen.db; \
 	( (sleep 10; if [ -s ./twonodes_noscreen-ctrl ]; then echo "Firing console view"; ./twonodes_noscreen-ctrl;  fi) &); \
 	../../bin/cotson twonodes_noscreen.in > run_twonodes_noscreen.log 2>&1 ; \
@@ -109,6 +112,7 @@ run_twohet:
 	@echo "Running a cluster of 2 heterogeneous nodes pinging each other"; \
 	echo "Simulation runs in background -- be patient (a few minutes)"; \
 	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
+	isoinfo -x '/COTSON_G.TGZ;1' -i ../../data/cotson-guest-tools.iso|tar xzf - usr/bin/cotson_tracer -O >/tmp/cotson_tracer; \
 	/bin/rm -f run_twohet.log /tmp/twohet.db; \
 	( (sleep 10; echo "Firing console view"; ./twohet-ctrl view) &); \
 	../../bin/cotson twohet.in > run_twohet.log 2>&1 
@@ -124,6 +128,7 @@ run_twonodes_interact:
 	@echo "Running a cluster of 2 nodes (INTERACTIVE)"; \
 	echo "Simulation runs in background -- be patient (a few minutes)"; \
 	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
+	isoinfo -x '/COTSON_G.TGZ;1' -i ../../data/cotson-guest-tools.iso|tar xzf - usr/bin/cotson_tracer -O >/tmp/cotson_tracer; \
 	/bin/rm -f run_twonodes_interact.log /tmp/twonodes_interact.db; \
 	../../bin/cotson twonodes_interact.in > run_twonodes_interact.log 2>&1 ;
 

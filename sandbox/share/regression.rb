@@ -34,7 +34,7 @@ end
 def dst_name(src_name)
 	a=src_name.
 		gsub(/^(.+)_output/,'\1.out').
-		gsub(/simpoint_profile.gz/,'sp_log.gz').
+		gsub(/simpoint_profile/,'sp_log').
 		gsub(/disasm/,'disasm_output').
 		gsub(/disksim/,'disksim_output').
 		gsub(/disktrace/,'disktrace_output')

@@ -22,7 +22,7 @@ begin
 		'abaeterno_output*',
 		'simnow_output',
 		'injector_output',
-		'simpoint_profile.gz',
+		'simpoint_profile',
 		'disasm',
 		'disksim_?',
 		'disktrace_?',

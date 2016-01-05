@@ -7,7 +7,7 @@ extern "C" {
 
 #define SLIRP_START_ADDR 10 // keep in sync with bootp.c
 
-void slirp_init(int restrict, const char *special_ip);
+void slirp_init(int restrict1, const char *special_ip);
 
 void slirp_select_fill(int *pnfds,
                        fd_set *readfds, fd_set *writefds, fd_set *xfds);

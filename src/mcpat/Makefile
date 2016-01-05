@@ -13,7 +13,9 @@ $(MCPAT): $(MCPAT).tar.gz
 	$(RM) -rf $(MCPAT); mkdir $(MCPAT); tar --strip=1 -C $(MCPAT) -zxf $(MCPAT).tar.gz
 
 $(MCPAT).tar.gz:
-	wget http://www.hpl.hp.com/research/mcpat/$(MCPAT).tar.gz
+	if [ ! -s "mcpat0.8_r274.tar.gz" ]; then \
+	wget http://www.hpl.hp.com/research/mcpat/$(MCPAT).tar.gz; \
+	fi
 
 install: mcpat cotson2mcpat
 	$(INSTALL) mcpat $(PREFIX)/sbin

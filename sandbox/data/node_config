@@ -80,6 +80,7 @@ echo "" > /etc/resolv.conf
  
 log "  baptize nic"
 /sbin/ifconfig eth0 hw ether $(mac $NODE)
+/sbin/ifconfig eth0 $(ip $NODE)
 # /sbin/ifconfig eth0 txqueuelen 20000
 # /sbin/ifconfig eth0 mtu 9000
 

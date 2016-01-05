@@ -2,7 +2,7 @@ Input values:
 
 allow_unknown                                               true
 cpu0.interval_size                                          1M
-cpu0.logfile                                                ../data/sp_log.gz
+cpu0.logfile                                                ../data/sp_log
 cpu0.type                                                   simpoint_profile
 dcache.latency                                              0
 dcache.line_size                                            16

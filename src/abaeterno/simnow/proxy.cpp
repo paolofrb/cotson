@@ -941,7 +941,7 @@ void Cotson::Inject::register_token(const char* reg)
 }
 
 const Cotson::Inject::info_instruction&
-Cotson::Inject::current_opcode(function<uint8_t*(int)> malloc_func) 
+Cotson::Inject::current_opcode(boost::function<uint8_t*(int)> malloc_func) 
 {
     const INSTRUCTIONINFO& info = proxy->build_info();
     static info_instruction ii; // we only need one at a time

@@ -415,7 +415,7 @@ void Waiting::add(const Instruction* inst)
 		lines_=1;
 	else if((q.back().get<1>()!=line) || (q.back().get<2>()>addr))
 		lines_++;
-	q.push_back(make_tuple(inst,line,addr));
+	q.push_back(boost::make_tuple(inst,line,addr));
 	LOG("new",hex,inst->PC().phys,line,dec,lines_);//,q.size());
 }
 

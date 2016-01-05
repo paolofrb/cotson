@@ -27,7 +27,7 @@ OPTS = -fPIC -Wall -O3 -march=opteron -fno-stack-protector -fomit-frame-pointer 
 endif
 
 CFLAGS = $(OPTS) $(INCLUDE)
-CXXFLAGS = $(OPTS) $(INCLUDE)
+CXXFLAGS = $(OPTS) $(INCLUDE) $(XXOPTS)
 
 .PHONY: clean distclean dep install always
 

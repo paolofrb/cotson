@@ -12,7 +12,7 @@ my %FILES = (
     "disktrace_output_%d"    => "disktrace_%d",
     "abaeterno.out_hb.%d"    => "abaeterno_output_hb.%d",
     "disasm_output"          => "disasm",
-    "sp_log.gz"              => "simpoint_profile.gz",
+    "sp_log"              => "simpoint_profile",
 );
 
 while (<>) {

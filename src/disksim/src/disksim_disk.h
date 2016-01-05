@@ -587,7 +587,7 @@ void disk_interferestats(disk *currdisk, ioreq_event *curr);
  * externalized disksim_disk*.c functions (should be here?) 
  */
 
-INLINE struct disk *getdisk (int diskno);
+struct disk *getdisk (int diskno);
 struct disk *getdiskbyname(char *name);
 
 void    disk_set_syncset (int setstart, int setend);
@@ -602,7 +602,7 @@ void    disk_cleanstats(void);
 int     disk_set_depth(int diskno, int inbusno, int depth, int slotno);
 int     disk_get_depth(int diskno);
 int     disk_get_inbus(int diskno);
-INLINE int     disk_get_busno(ioreq_event *curr);
+int     disk_get_busno(ioreq_event *curr);
 int     disk_get_slotno(int diskno);
 
 

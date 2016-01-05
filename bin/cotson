@@ -1,4 +1,4 @@
-#!/usr/bin/ruby -w
+#!/usr/bin/ruby
 # (C) Copyright 2009 Hewlett-Packard Development Company, L.P.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
@@ -55,6 +55,8 @@ begin
       :subscribe_result, :run_script
     clean_sandbox=opts[:clean_sandbox]
 
+    opts.load :control_script_file #publish the cotson_pid
+debug "Empty control script #{opts[:control_script_file]}"
     sb=Sandbox.new(lua_defs,opts,sbname(opts,''))
     node_sandbox.push sb
     sb.install :abaeterno_in, :simnow_pre, :simnow_dir,

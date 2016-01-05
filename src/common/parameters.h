@@ -33,7 +33,7 @@ public:
 	void erase(const std::string& i) { map_.erase(i); }
 
 	template<typename T> T get(const std::string&) const;
-	template<typename T> T get(const std::string&,const std::string&,bool) const;
+	template<typename T> T get(const std::string&,const std::string&,bool trk=true) const;
 	template<typename T> std::vector<T> getV(const std::string&) const;
 	void set(const std::string& i,const std::string& v) { map_[i].push_back(v); }
 	void track();
@@ -67,7 +67,7 @@ T Parameters::get(const std::string& index) const
 }
 
 template<typename T>
-T Parameters::get(const std::string& index,const std::string& def_value,bool trk=true) const
+T Parameters::get(const std::string& index,const std::string& def_value,bool trk) const
 {
 	std::string name="unknown";
 	if (trk) 

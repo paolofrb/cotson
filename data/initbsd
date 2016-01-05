@@ -250,7 +250,7 @@ run_1s $bootscript
 echo "shell.save $bsd" >> $bootscript
 echo "quit" >> $bootscript
 
-( cd $simnow_dir; ./simnow $df -d -i $datadir -e $bootscript )
+( cd $simnow_dir; ./simnow -c $df -d -i $datadir -e $bootscript )
 
 
 exit 0

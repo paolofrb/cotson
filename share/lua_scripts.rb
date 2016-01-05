@@ -30,6 +30,7 @@ class LuaDefinitions
     LuaDefinitions.check script
     tmpf=Tempfile.new("cotson-lua")
     tmpf << "root='#{$here}'\ncotson_pid=#{$$}\n"
+    tmpf << "control_script_file='sandbox-'..cotson_pid..'-ctrl'\n"
     args.each { |x| tmpf << x.to_str }
     tmpf.close
     a=Execute.run("#{$here.share('lua')} #{$here.share(script)} #{tmpf.path}")

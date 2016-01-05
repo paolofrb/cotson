@@ -13,6 +13,7 @@
 # $Id: config.rb 6977 2009-12-09 16:18:35Z frb $
 
 require 'yaml'
+ require 'regression_test'
 
 class CConfig
 	def initialize(file)

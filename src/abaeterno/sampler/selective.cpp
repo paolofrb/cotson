@@ -120,15 +120,13 @@ InstructionInQueue Selective::simulation_call_casm(Instruction* inst)
         LOG(__func__,"-- NO DATA FROM FUNCTIONAL MODE");
         return DISCARD;
     } else {
-#ifdef _DEBUG_THIS_
-        uint64_t a1 = xdp->arg1;
-        uint64_t a2 = xdp->arg2;
-#endif
         uint64_t im = xdp->imm;
         bool     sw = ((~im&0x80)>>7);
         int      zo = im & 0x7F;
         LOG(__func__,"-- SWITCHING SAMPLER zone",zo,"sw",sw);
 #ifdef _DEBUG_THIS_
+        uint64_t a1 = xdp->arg1;
+        uint64_t a2 = xdp->arg2;
         LOG(__func__,"a1",a1,"a2",a2,"im",im);
 #endif
         current=lexical_cast<int>(Option::run_function(changer, sw, zo));
@@ -159,7 +157,7 @@ Selective::Selective(Parameters&p) :
 		required_sam += "type";
 		Parameters o=Option::from_lua_table(luatable,required_sam,"Sampler");
 		o.track();
-		shared_ptr<Sampler> sp(Factory<Sampler>::create(o));
+		boost::shared_ptr<Sampler> sp(Factory<Sampler>::create(o));
 		ERROR_IF(!sp,"error creating sampler number ", i);
 		samplers.push_back(sp);
 	}

@@ -4,6 +4,13 @@ DEPINC = -I. -I../common
 INCLUDE = $(DEPINC) -I../libluabind -I/usr/include/lua5.1
 DEFS = 
 
+GCCVERS480CHECK = $(shell expr `gcc -dumpversion | cut -f1-2 -d.` \>= 4.8)
+ifeq "$(GCCVERS480CHECK)" "1"  #RG small patch to compile
+	XOPTS = -Werror -Wno-error=unused-but-set-variable -Wno-deprecated-declarations
+	XXOPTS = -std=c++11
+endif
+
+
 all: mediator
 
 include ../Make.conf

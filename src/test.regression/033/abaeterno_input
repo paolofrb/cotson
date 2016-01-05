@@ -33,7 +33,7 @@ function build()
 	end
 
 	cpu=get_cpu(0)
-	cpu:timer{ name='cpu0', type="simpoint_profile", logfile=TMP_DIR.."/sp_log.gz" }
+	cpu:timer{ name='cpu0', type="simpoint_profile", logfile=TMP_DIR.."/sp_log" }
 
 	mem=Memory{ name="main", latency=150  } 
 
