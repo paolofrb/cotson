@@ -18,7 +18,7 @@ SIMNOW_SUPPORTED_VER="4.6.2pub"
 #SIMNOW_SUPPORTED_VER="4.7.7nda"
 DEBIAN_SUPPORTED_VERS="lenny | squeeze | wheezy | jessie"
 FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle | SphericalCow | Schrödinger’sCat | Heisenbug | TwentyOne | TwentyTwo | TwentyThree"
-UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise | quantal | raring | trusty | utopic"
+UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise | quantal | raring | trusty | utopic | wily"
 
 status_args="$*"
 simnow_dir=""
@@ -207,10 +207,15 @@ echo "* $dist $ver supported"
 ########################################################################
 
 if [[ $dist == "Debian" ||  $dist == "Ubuntu" ]]; then
-	pqxx=libpqxx-dev 
-	ruby="ruby ruby1.8 rubygems libopenssl-ruby libsqlite3-ruby "
+    pqxx=libpqxx-dev 
+    ruby="ruby ruby1.8 rubygems libopenssl-ruby libsqlite3-ruby "
 
-	if [[ $ver == "precise" || $ver == "quantal" || $ver == "raring" ]]; then \
+    if [ "$ver" == "wily" ]; then
+        sudo apt-add-repository universe
+        sudo apt-get -y update
+        ruby=""
+    fi
+    if [[ $ver == "precise" || $ver == "quantal" || $ver == "raring" ]]; then \
 	    pqxx=libpqxx3-dev
 	fi
 	if [[ $ver == "trusty" || $ver == "utopic" || $ver == "jessie" || $ver == "wheezy" ]]; then \
@@ -233,14 +238,14 @@ libxcursor1 libxrender1 libsm6 libxi6 libfontconfig1 "
     vncargs2="-desktop="
     llua="lua5.1"
 
-    if [ "$ver" != "utopic" ]; then
+    if [ "$ver" != "utopic" -a "$ver" != "wily" ]; then
 	ruby --version | grep 1.8
 	if [[ $? -ne 0 ]]; then
-		echo "### Installing ruby1.8"
-		sudo apt-get install ruby1.8 -y
-	    ruby18=`update-alternatives --list ruby | grep 1.8`
-	    sudo update-alternatives --set ruby $ruby18
-    fi
+            echo "### Installing ruby1.8"
+            sudo apt-get install ruby1.8 -y
+            ruby18=`update-alternatives --list ruby | grep 1.8`
+            sudo update-alternatives --set ruby $ruby18
+        fi
     fi
 
 ###################################################################################
