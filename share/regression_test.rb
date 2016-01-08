@@ -39,7 +39,7 @@ class RegressionTest
 	end
 
 	def RegressionTest.all_in_a_dir(dir)
-		if !File.exists?(dir)
+		if !File.exist?(dir)
       raise CotsonError.new(:RegressionTestAllInADir, :dir=>dir)
 		end
 		tests=[]

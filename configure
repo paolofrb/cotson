@@ -213,7 +213,7 @@ if [[ $dist == "Debian" ||  $dist == "Ubuntu" ]]; then
     if [ "$ver" == "wily" ]; then
         sudo apt-add-repository universe
         sudo apt-get -y update
-        ruby=""
+        ruby="ruby"
     fi
     if [[ $ver == "precise" || $ver == "quantal" || $ver == "raring" ]]; then \
 	    pqxx=libpqxx3-dev

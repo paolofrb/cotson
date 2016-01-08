@@ -43,3 +43,6 @@ src/Make.conf: src/Make.conf.in
 	else \
 		touch src/Make.conf; \
 	fi
+
+regression:
+	cd src; make regression
