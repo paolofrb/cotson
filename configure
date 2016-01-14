@@ -220,7 +220,7 @@ if [[ $dist == "Debian" ||  $dist == "Ubuntu" ]]; then
 	fi
 	if [[ $ver == "trusty" || $ver == "utopic" || $ver == "jessie" || $ver == "wheezy" ]]; then \
 	    pqxx=libpqxx3-dev
-	    if [ "$ver" = "utopic" ]; then ruby=""; else ruby="ruby1.8"; fi
+	    if [ "$ver" = "utopic" -o "$ver" = "trusty" ]; then ruby=""; else ruby="ruby1.8"; fi
 	fi
 
     pkgs="g++ g++-multilib subversion genisoimage bison flex vnc4server  \
@@ -238,7 +238,7 @@ libxcursor1 libxrender1 libsm6 libxi6 libfontconfig1 "
     vncargs2="-desktop="
     llua="lua5.1"
 
-    if [ "$ver" != "utopic" -a "$ver" != "wily" ]; then
+    if [ "$ver" != "utopic" -a "$ver" != "wily" -a "$ver" != "trusty" ]; then
 	ruby --version | grep 1.8
 	if [[ $? -ne 0 ]]; then
             echo "### Installing ruby1.8"
