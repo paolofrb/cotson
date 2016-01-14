@@ -46,7 +46,7 @@ lzma: $(HDD)
 		./initbsd $(SIMNOW_DIR) $*  $(HDD) $(RAM) 2>&1 |tee initbsd.out; \
 	fi;
 	@echo "#### Note: don't worry if you see a 'segmentation fault' just above"
-	a=`tail -1 /home/giorgi/C5test1/cotson-726/trunk/data/initbsd.out| grep -i 'segmentation fault'`; \
+	a=`tail -1 initbsd.out| grep -i 'segmentation fault'`; \
 	if [ "$$a" != "" ]; then exit 0; fi
 
 mount:
