@@ -220,7 +220,8 @@ if [[ $dist == "Debian" ||  $dist == "Ubuntu" ]]; then
 	fi
 	if [[ $ver == "trusty" || $ver == "utopic" || $ver == "jessie" || $ver == "wheezy" ]]; then \
 	    pqxx=libpqxx3-dev
-	    if [ "$ver" = "utopic" -o "$ver" = "trusty" ]; then ruby=""; else ruby="ruby1.8"; fi
+	    if [ "$ver" = "utopic" ]; then ruby=""; else ruby="ruby1.8"; fi
+	    if [ "$ver" = "trusty" ]; then ruby="ruby"; fi
 	fi
 
     pkgs="g++ g++-multilib subversion genisoimage bison flex vnc4server  \
