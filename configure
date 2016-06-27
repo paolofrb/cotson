@@ -42,7 +42,7 @@ function check_bootstrap_status()
 }
 
 check_bootstrap_status
-echo "* bootstrap.sh check: "$BOOTSTRAP
+echo "* checking bootstrap.sh: $BOOTSTRAP"
 
 if [[ "$SIMNOW_DIR" != "" ]]; then
 	simnow_dir=$SIMNOW_DIR
@@ -123,7 +123,7 @@ fi
 echo "* Detected SIMNOW_DIR: '$simnow_dir'"
 
 simnow_dir=`cd $simnow_dir; pwd`
-echo "* Using SimNow in $simnow_dir"
+echo "* Using SimNow from $simnow_dir"
 lib1="$simnow_dir/linuxlibs/libgcc_s.so.1"
 lib2="$simnow_dir/linuxlibs/libstdc++.so.6"
 if [[ -f $lib1 || -f $lib2 ]]; then
@@ -176,25 +176,6 @@ echo "* G++: Using $v"
 
 #########################################
 #./get-images.sh -d $DIST_IMAGE
-echo "* Check here the images and bsds in /opt/cotson/* and if present connect it... <<<<"
-echo "* Check BSD for $DIST_IMAGE image..."
-list_bsds=$(ls /opt/cotson/bsds | grep $DIST_IMAGE)
-#echo "-----> list_bsds: $list_bsds"
-if [ "$list_bsds" = "" ]; then
-	echo "* BSDS of $DIST_IMAGE not found."
-	echo "* Need to run bootstrap.sh as administrator."
-	echo "* Or continue and generate it at the end of COTSon compilation"
-else
-	echo "* BSDS are present connect all to COTSOn..."
-	ln -s /opt/cotson/bsds/* data/. 2>/dev/null
-	ln -s /opt/cotson/images/* data/. 2>/dev/null
-fi
-echo "* Fix images.mk variable"
-#echo "---> NEED TO CHECK IF IMAGE NAME IS VALID ACCORDING WITH images.list??? <---"
-sed -i "s/DIST=.*/DIST=$DIST_IMAGE/g" data/images.mk
-sed -i "s/HDD=.*/HDD=$DIST_IMAGE.img/g" data/images.mk
-#echo "---> NEED TO GET SECONDS FROM images.list <---"
-
 index=0
 for elem in "${!A_IMAGES[@]}";
 do
@@ -206,6 +187,26 @@ do
 done
 G_MENU_CHOISE=${A_IMAGES[$index]}
 #echo "--------------------------> $G_MENU_CHOISE"
+
+echo "* Checking images and bsds in $(_get_lpath "$G_MENU_CHOISE")/*"
+echo "* Selected $DIST_IMAGE image"
+list_bsds=$(ls $(_get_lpath "$G_MENU_CHOISE")/bsds | grep $DIST_IMAGE)
+#echo "-----> list_bsds: $list_bsds"
+if [ "$list_bsds" = "" ]; then
+	echo "* BSDS of $DIST_IMAGE not found."
+	echo "* Need to run bootstrap.sh as administrator."
+	echo "* Or continue and generate it at the end of COTSon compilation"
+else
+	echo "* linking BSDS ./data"
+	ln -s $(_get_lpath "$G_MENU_CHOISE")/bsds/* data/. 2>/dev/null
+	ln -s $(_get_lpath "$G_MENU_CHOISE")/images/* data/. 2>/dev/null
+fi
+echo "* Updating image defaults ( file: ./data/images.mk )"
+#echo "---> NEED TO CHECK IF IMAGE NAME IS VALID ACCORDING WITH images.list??? <---"
+sed -i "s/DIST=.*/DIST=$DIST_IMAGE/g" data/images.mk
+sed -i "s/HDD=.*/HDD=$DIST_IMAGE.img/g" data/images.mk
+#echo "---> NEED TO GET SECONDS FROM images.list <---"
+
 sed -i "s/secs=.*/secs=$(_get_time "$G_MENU_CHOISE")/g" data/images.mk
 
 ##########################################################################
@@ -316,4 +317,5 @@ fi
 echo "./configure $status_args" > config.status
 chmod +x config.status
 echo "* For more options, type $0 -h"
-echo "Done"
+echo "* Done"
+echo "  Now you can run: make release"

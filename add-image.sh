@@ -509,7 +509,7 @@ function _main()
 
 function lib_mode()
 {
-	echo_i "Started add-images in lib mode"
+	echo_d "Started add-images in lib mode"
 	images_list_parser
 	for elem in "${!A_IMAGES[@]}";
 	do
@@ -521,7 +521,7 @@ function lib_mode()
 		echo_e "PARM: $parm WRONG"
 		exit 1
 	fi
-	echo_i "Parser images.list: OK"
+	echo_i "Parsing ./images.list: OK"
 	return 0
 }
 
@@ -543,5 +543,4 @@ if [ $LIB_MODE = 0 ]; then
 	_main $parms
 fi
 
-echo ""
 # END SCRIPT
