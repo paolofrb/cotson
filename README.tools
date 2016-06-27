@@ -6,7 +6,7 @@
 
 Prepare the system with all needed packages. Need root permission for execute. 
 
-How to do in details:
+What it does in detail:
 - install all packages needed for building and running COTSon 
 - configure some system parameters
 - parsing the file repository image.list and generate the right directory in your system
