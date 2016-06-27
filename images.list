@@ -1,0 +1,4 @@
+# NAME VERSION TIME_TO_SHELL URL LOCAL_PATH MD5SUM OTHER
+
+karmic64 9.04 18 https://download.axiom-project.eu/ /opt/cotson/ 59f844d9c84c02806a9a5964db98a558 NIL
+trusty-axmv3 14.04 20 https://download.axiom-project.eu/ /opt/cotson/ 926dcafb6c74210e377605a064c8aa08 NIL 
