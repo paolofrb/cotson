@@ -14,13 +14,14 @@ include ../src/Make.conf
 #RAM=8G
 #RAM=16G
 
-DIST=karmic
-HDD=$(DIST)64.img
+include images.mk
 
 RBSDS=$(shell ls *-reset.bsd)
-BSDS=$(patsubst %-reset.bsd,%.bsd,$(RBSDS))
+BSDS=$(patsubst %-$(DIST)-reset.bsd,%-$(DIST).bsd,$(RBSDS))
 
 build: $(BSDS) $(HDD)
+	@echo '------------------'
+	@echo $(BSDS)
 
 clean:
 	$(RM) $(BSDS) *-boot
@@ -41,13 +42,17 @@ lzma: $(HDD)
 	    $(CP) tf.rom $(SIMNOW_DIR)/Images; \
 	fi; \
 	if [ -z "${RAM}" ] ; then \
+		echo ">>>>"; \
+		echo "$*"; \
 		./initbsd $(SIMNOW_DIR) $* $(HDD)  2>&1 |tee initbsd.out; \
 	else \
-		./initbsd $(SIMNOW_DIR) $*  $(HDD) $(RAM) 2>&1 |tee initbsd.out; \
+		echo ">>>>"; \
+		echo "$*"; \
+		./initbsd $(SIMNOW_DIR) $* $(HDD) $(RAM) 2>&1 |tee initbsd.out; \
 	fi;
-	@echo "#### Note: don't worry if you see a 'segmentation fault' just above"
+	-@echo "#### Note: don't worry if you see a 'segmentation fault' just above" \
 	a=`tail -1 initbsd.out| grep -i 'segmentation fault'`; \
-	if [ "$$a" != "" ]; then exit 0; fi
+	if [ "$$a" != "" ]; then exit 0; fi;
 
 mount:
 	@echo "##### MOUNT disk to tmp"; \

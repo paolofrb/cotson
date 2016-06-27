@@ -1,5 +1,5 @@
 Loading module abaeterno.so.
-Using image path: "/home/paolof/cotson/data"
+Using image path: "/home/giorgi2/COTSON/cotson-734/trunk/data"
 Known Device: Deerhound RevB QuadCore Socket L1
 Known Device: Intel(R) Pro/1000 MT/PT Desktop Network Adapter
 Known Device: USB JumpDrive
@@ -33,8 +33,8 @@ Known Device: Matrox(R) MGA-G4x0 Graphics Adapter
 Known Device: Unnamed Group
 Using library path: "./libs"
 
-1 exec> open /home/paolof/cotson/data/1p.bsd
-Opening "/home/paolof/cotson/data/1p.bsd"
+1 exec> open /home/giorgi2/COTSON/cotson-734/trunk/data/1p.bsd
+Opening "/home/giorgi2/COTSON/cotson-734/trunk/data/1p.bsd"
 created device Machine
 Instructions per Microsecond: 3200
 CPU Model Name: Opteron
@@ -51,7 +51,7 @@ info: creating device #0 "AMD 8th Generation Integrated Northbridge"
 info: creating device #1 "Dimm Bank"
 Dimmdevice: Bank 0, Simulated Size 10000000
 info: creating device #2 "AMD-8111 I/O Hub"
-ATA: Image [/home/paolof/cotson/data/karmic64.img] does not have an ID field.
+ATA: Image [/home/giorgi2/COTSON/cotson-734/trunk/data/karmic64.img] does not have an ID field.
 info: creating device #3 "Memory Device"
 info: creating device #4 "Winbond W83627HF SIO"
 info: creating device #5 "SMB Hub Device"
@@ -69,9 +69,9 @@ Could allocate map memory
 info: creating device #16 "Intel(R) Pro/1000 MT/PT Desktop Network Adapter"
 BSD Load completed!
 
-1 exec> ide:0.image master /home/paolof/cotson/data/karmic64.img
-ATA: Image [/home/paolof/cotson/data/karmic64.img] does not have an ID field.
-MASTER drive Image file is now /home/paolof/cotson/data/karmic64.img
+1 exec> ide:0.image master /home/giorgi2/COTSON/cotson-734/trunk/data/karmic64.img
+ATA: Image [/home/giorgi2/COTSON/cotson-734/trunk/data/karmic64.img] does not have an ID field.
+MASTER drive Image file is now /home/giorgi2/COTSON/cotson-734/trunk/data/karmic64.img
 
 1 exec> ide:0.journal master on
 Journaling was already enabled
@@ -142,36 +142,36 @@ Journaling was already enabled
 
 1 exec> go
 COTSON STARTED
-TIME=0.03125 ms IPC ( 0.157903 )
-TIME=0.0625 ms IPC ( 0.625901 )
-TIME=0.09375 ms IPC ( 0.423692 )
-TIME=0.125 ms IPC ( 0.654358 )
-TIME=0.15625 ms IPC ( 0.564496 )
-TIME=0.1875 ms IPC ( 0.543305 )
-TIME=0.21875 ms IPC ( 0.683687 )
-TIME=0.25 ms IPC ( 0.585308 )
-TIME=0.28125 ms IPC ( 0.545444 )
-TIME=0.3125 ms IPC ( 0.704339 )
-TIME=0.34375 ms IPC ( 0.58886 )
-TIME=0.375 ms IPC ( 0.384493 )
-TIME=0.40625 ms IPC ( 0.47134 )
-TIME=0.4375 ms IPC ( 0.738507 )
-TIME=0.46875 ms IPC ( 0.597029 )
-TIME=0.5 ms IPC ( 0.700701 )
-TIME=0.53125 ms IPC ( 0.601253 )
-TIME=0.5625 ms IPC ( 0.72021 )
-TIME=0.59375 ms IPC ( 0.606592 )
-TIME=0.625 ms IPC ( 0.714295 )
-TIME=0.65625 ms IPC ( 0.60603 )
-TIME=0.6875 ms IPC ( 0.715299 )
-TIME=0.71875 ms IPC ( 0.627567 )
-TIME=0.75 ms IPC ( 0.707453 )
-TIME=0.78125 ms IPC ( 0.77059 )
-TIME=0.8125 ms IPC ( 0.751956 )
-TIME=0.84375 ms IPC ( 0.762536 )
-TIME=0.875 ms IPC ( 0.749938 )
-TIME=0.90625 ms IPC ( 0.749636 )
-TIME=0.9375 ms IPC ( 0.750837 )
-TIME=0.96875 ms IPC ( 0.738546 )
-TIME=1 ms IPC ( 0.80069 )
+TIME=0.03125 ms IPC ( 0.157976 )
+TIME=0.0625 ms IPC ( 0.633493 )
+TIME=0.09375 ms IPC ( 0.426488 )
+TIME=0.125 ms IPC ( 0.654851 )
+TIME=0.15625 ms IPC ( 0.570396 )
+TIME=0.1875 ms IPC ( 0.5463 )
+TIME=0.21875 ms IPC ( 0.703349 )
+TIME=0.25 ms IPC ( 0.549508 )
+TIME=0.28125 ms IPC ( 0.547259 )
+TIME=0.3125 ms IPC ( 0.719868 )
+TIME=0.34375 ms IPC ( 0.59048 )
+TIME=0.375 ms IPC ( 0.632003 )
+TIME=0.40625 ms IPC ( 0.641183 )
+TIME=0.4375 ms IPC ( 0.568827 )
+TIME=0.46875 ms IPC ( 0.700532 )
+TIME=0.5 ms IPC ( 0.61273 )
+TIME=0.53125 ms IPC ( 0.715573 )
+TIME=0.5625 ms IPC ( 0.603025 )
+TIME=0.59375 ms IPC ( 0.732855 )
+TIME=0.625 ms IPC ( 0.384042 )
+TIME=0.65625 ms IPC ( 0.743043 )
+TIME=0.6875 ms IPC ( 0.594208 )
+TIME=0.71875 ms IPC ( 0.735528 )
+TIME=0.75 ms IPC ( 0.726022 )
+TIME=0.78125 ms IPC ( 0.75796 )
+TIME=0.8125 ms IPC ( 0.749256 )
+TIME=0.84375 ms IPC ( 0.747199 )
+TIME=0.875 ms IPC ( 0.78239 )
+TIME=0.90625 ms IPC ( 0.75469 )
+TIME=0.9375 ms IPC ( 0.764312 )
+TIME=0.96875 ms IPC ( 0.742915 )
+TIME=1 ms IPC ( 0.747191 )
 MAX NANOS: 1000000

@@ -15,7 +15,7 @@ options = {
 
 simnow.commands=function()
 	-- for a longer example, see test.regression/001/abaeterno_input 
-	use_bsd('1p.bsd')
+	use_bsd('1p-karmic64.bsd')
 	use_hdd('karmic64.img')
 	set_journal()
 	send_keyboard('cd /home/user;./176.gcc.test.sh')

@@ -1,5 +1,5 @@
 Loading module abaeterno.so.
-Using image path: "/home/paolof/cotson/data"
+Using image path: "/home/giorgi2/COTSON/cotson-734/trunk/data"
 Known Device: Deerhound RevB QuadCore Socket L1
 Known Device: Intel(R) Pro/1000 MT/PT Desktop Network Adapter
 Known Device: USB JumpDrive
@@ -33,8 +33,8 @@ Known Device: Matrox(R) MGA-G4x0 Graphics Adapter
 Known Device: Unnamed Group
 Using library path: "./libs"
 
-1 exec> open /home/paolof/cotson/data/1p.bsd
-Opening "/home/paolof/cotson/data/1p.bsd"
+1 exec> open /home/giorgi2/COTSON/cotson-734/trunk/data/1p.bsd
+Opening "/home/giorgi2/COTSON/cotson-734/trunk/data/1p.bsd"
 created device Machine
 Instructions per Microsecond: 3200
 CPU Model Name: Opteron
@@ -51,7 +51,7 @@ info: creating device #0 "AMD 8th Generation Integrated Northbridge"
 info: creating device #1 "Dimm Bank"
 Dimmdevice: Bank 0, Simulated Size 10000000
 info: creating device #2 "AMD-8111 I/O Hub"
-ATA: Image [/home/paolof/cotson/data/karmic64.img] does not have an ID field.
+ATA: Image [/home/giorgi2/COTSON/cotson-734/trunk/data/karmic64.img] does not have an ID field.
 info: creating device #3 "Memory Device"
 info: creating device #4 "Winbond W83627HF SIO"
 info: creating device #5 "SMB Hub Device"
@@ -69,9 +69,9 @@ Could allocate map memory
 info: creating device #16 "Intel(R) Pro/1000 MT/PT Desktop Network Adapter"
 BSD Load completed!
 
-1 exec> ide:0.image master /home/paolof/cotson/data/karmic64.img
-ATA: Image [/home/paolof/cotson/data/karmic64.img] does not have an ID field.
-MASTER drive Image file is now /home/paolof/cotson/data/karmic64.img
+1 exec> ide:0.image master /home/giorgi2/COTSON/cotson-734/trunk/data/karmic64.img
+ATA: Image [/home/giorgi2/COTSON/cotson-734/trunk/data/karmic64.img] does not have an ID field.
+MASTER drive Image file is now /home/giorgi2/COTSON/cotson-734/trunk/data/karmic64.img
 
 1 exec> ide:0.journal master on
 Journaling was already enabled
@@ -143,36 +143,36 @@ Journaling was already enabled
 1 exec> go
 Hybrid flash map with ReadFirst strategy.
 COTSON STARTED
-TIME=0.017813 ms IPC ( 0.0740536 )
-TIME=0.049064 ms IPC ( 0.163987 )
-TIME=0.080315 ms IPC ( 0.772754 )
-TIME=0.111566 ms IPC ( 0.213152 )
-TIME=0.142817 ms IPC ( 0.458592 )
-TIME=0.174068 ms IPC ( 0.524796 )
-TIME=0.205319 ms IPC ( 0.336534 )
-TIME=0.23657 ms IPC ( 0.581133 )
-TIME=0.267821 ms IPC ( 0.648368 )
-TIME=0.299072 ms IPC ( 0.570846 )
-TIME=0.330323 ms IPC ( 0.340095 )
-TIME=0.361574 ms IPC ( 0.504461 )
-TIME=0.392825 ms IPC ( 0.37196 )
-TIME=0.424076 ms IPC ( 0.546152 )
-TIME=0.455327 ms IPC ( 0.494337 )
-TIME=0.486578 ms IPC ( 0.301302 )
-TIME=0.517829 ms IPC ( 0.495509 )
-TIME=0.54908 ms IPC ( 0.480494 )
-TIME=0.580331 ms IPC ( 0.282152 )
-TIME=0.611582 ms IPC ( 0.542241 )
-TIME=0.642833 ms IPC ( 0.483464 )
-TIME=0.674084 ms IPC ( 0.330568 )
-TIME=0.705335 ms IPC ( 0.485341 )
-TIME=0.736586 ms IPC ( 0.618324 )
-TIME=0.767837 ms IPC ( 0.690506 )
-TIME=0.799088 ms IPC ( 0.7411 )
-TIME=0.830339 ms IPC ( 0.765388 )
-TIME=0.86159 ms IPC ( 0.762376 )
-TIME=0.892841 ms IPC ( 0.731691 )
-TIME=0.924092 ms IPC ( 0.754689 )
-TIME=0.955343 ms IPC ( 0.768599 )
-TIME=0.986594 ms IPC ( 0.747854 )
+TIME=0.017813 ms IPC ( 0.0739806 )
+TIME=0.049064 ms IPC ( 0.165236 )
+TIME=0.080315 ms IPC ( 0.772847 )
+TIME=0.111566 ms IPC ( 0.218725 )
+TIME=0.142817 ms IPC ( 0.430542 )
+TIME=0.174068 ms IPC ( 0.60773 )
+TIME=0.205319 ms IPC ( 0.401997 )
+TIME=0.23657 ms IPC ( 0.599361 )
+TIME=0.267821 ms IPC ( 0.375726 )
+TIME=0.299072 ms IPC ( 0.597921 )
+TIME=0.330323 ms IPC ( 0.517641 )
+TIME=0.361574 ms IPC ( 0.622338 )
+TIME=0.392825 ms IPC ( 0.413987 )
+TIME=0.424076 ms IPC ( 0.618779 )
+TIME=0.455327 ms IPC ( 0.462607 )
+TIME=0.486578 ms IPC ( 0.651127 )
+TIME=0.517829 ms IPC ( 0.587427 )
+TIME=0.54908 ms IPC ( 0.572919 )
+TIME=0.580331 ms IPC ( 0.643121 )
+TIME=0.611582 ms IPC ( 0.324348 )
+TIME=0.642833 ms IPC ( 0.599619 )
+TIME=0.674084 ms IPC ( 0.385106 )
+TIME=0.705335 ms IPC ( 0.597145 )
+TIME=0.736586 ms IPC ( 0.464005 )
+TIME=0.767837 ms IPC ( 0.677762 )
+TIME=0.799088 ms IPC ( 0.751892 )
+TIME=0.830339 ms IPC ( 0.774272 )
+TIME=0.86159 ms IPC ( 0.77033 )
+TIME=0.892841 ms IPC ( 0.778097 )
+TIME=0.924092 ms IPC ( 0.780103 )
+TIME=0.955343 ms IPC ( 0.773045 )
+TIME=0.986594 ms IPC ( 0.776728 )
 MAX NANOS: 1000032

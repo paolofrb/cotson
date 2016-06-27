@@ -5,7 +5,7 @@ options = {
 }
 
 simnow.commands=function()
-	use_bsd('1p.bsd')
+	use_bsd('1p-karmic64.bsd')
 	use_hdd('karmic64.img')
 	set_journal()
 	send_keyboard('cd /home/user;./176.gcc.test.sh')

@@ -8,7 +8,7 @@ simnow.commands=function()
 	-- by default it checks for existance of bsd, hdd, ... 
 	-- use this next function if you do not want this to happen
 	-- do_not_check_for_existance()
-	use_bsd('1p.bsd')
+	use_bsd('1p-karmic64.bsd')
 	use_hdd('karmic64.img')
 	set_journal()
 	send_keyboard('cd /home/user; ./176.gcc.test.sh')

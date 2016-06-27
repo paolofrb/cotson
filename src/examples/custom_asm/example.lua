@@ -18,7 +18,7 @@ display=os.getenv("DISPLAY")
 copy_files_prefix=runid.."."
 
 simnow.commands=function()
-	use_bsd('1p.bsd')
+	use_bsd('1p-karmic64.bsd')
 	use_hdd('karmic64.img')
 	set_journal()
 	execute('run.sh')

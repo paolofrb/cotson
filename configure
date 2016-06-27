@@ -12,13 +12,11 @@
 # We have not tested linux distributions other than Debian or Ubuntu, 
 # although it should be possible to find the equivalent packages 
 # that install the required libraries
-
-
+source add-image.sh --lib
 SIMNOW_SUPPORTED_VER="4.6.2pub"
 #SIMNOW_SUPPORTED_VER="4.7.7nda"
-DEBIAN_SUPPORTED_VERS="lenny | squeeze | wheezy | jessie"
-FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle | SphericalCow | Schrödinger’sCat | Heisenbug | TwentyOne | TwentyTwo | TwentyThree"
-UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise | quantal | raring | trusty | utopic | wily"
+
+DIST_IMAGE="karmic64"
 
 status_args="$*"
 simnow_dir=""
@@ -29,402 +27,212 @@ cc="gcc"
 cxx="g++"
 vnctest=0  # default to 0 since on some Ubuntu machines the vnc test closes the connection !
 force=0
+llua="lua5.1"
+
+#shopt -s extglob
+
+function check_bootstrap_status()
+{
+	if [[ -e /opt/cotson/log/bootstrap.status ]]; then
+		source /opt/cotson/log/bootstrap.status
+	else
+		echo "ERROR Run before bootstrap.sh"
+		exit 1
+	fi
+}
+
+check_bootstrap_status
+echo "* bootstrap.sh check: "$BOOTSTRAP
+
 if [[ "$SIMNOW_DIR" != "" ]]; then
-    simnow_dir=$SIMNOW_DIR
+	simnow_dir=$SIMNOW_DIR
 fi
 if [[ "$DATA_DIR" != "" ]]; then
-    data_dir=$DATA_DIR
+	data_dir=$DATA_DIR
 fi
 if [[ "$CC" != "" ]]; then
-   cc="$CC"
+	cc="$CC"
 fi
 if [[ "$CXX" != "" ]]; then
-   cxx="$CXX"
+	cxx="$CXX"
 fi
+
 function usage ()
 {
-   echo "Usage: $0"
-   echo "--simnow_dir simnow_location            set simnow dir"
-   echo "--data_dir data_location                set data dir"
-   echo "--cc c-compiler                         set C compiler"
-   echo "--cxx c++-compiler                      set C++ compiler"
-   echo "--distro release_name (e.g. karmic)     set Linux Distribution"
-   echo "--vnctest N                             test N vnc ports"
-   echo "--force                                ignore simnow version"
-   exit 1
+	echo "Usage: $0"
+	echo "--simnow_dir simnow_location            set simnow dir"
+	echo "--data_dir data_location                set data dir"
+	echo "--cc c-compiler                         set C compiler"
+	echo "--cxx c++-compiler                      set C++ compiler"
+#	echo "--distro release_name (e.g. karmic)     set Linux Distribution"
+	echo "--vnctest N                             test N vnc ports"
+	echo "--force                                 ignore simnow version"
+	echo "--image                                 select your HDD image"
+	exit 1
 }
+
 while [ $# -gt 0 ]
 do
-    case $1 in
-        --simnow_dir) simnow_dir=$2; shift; shift;;
-        --data_dir) data_dir=$2; shift; shift;;
-        --cc) cc=$2; shift; shift;;
-        --cxx) cxx=$2; shift; shift;;
-        --vnctest) vnctest=$2; shift; shift;;
-	--force) force=1; shift;;
-        -h) usage;;
-        --help) usage;;
-        *) usage;;
-    esac
+	case $1 in
+		--simnow_dir) simnow_dir=$2; shift; shift;;
+		--data_dir) data_dir=$2; shift; shift;;
+		--cc) cc=$2; shift; shift;;
+		--cxx) cxx=$2; shift; shift;;
+		--vnctest) vnctest=$2; shift; shift;;
+		--force) force=1; shift;;
+		--image) DIST_IMAGE=$2; shift; shift;;
+		-h) usage;;
+		--help) usage;;
+		*) usage;;
+	esac
 done
 
 ########################################################################
 if [[ "$simnow_dir" == "" ]]; then
-    bdir1="${root}"
-    bdir2=`dirname $bdir1`
-    bdir3=`dirname $bdir2`
-    bdir4=`dirname $bdir3`
-    sdir="simnow-linux64-${SIMNOW_SUPPORTED_VER}"
-    # Make some attempt to automatically locate a simnow installation
-    if [[ -d "$bdir4/$sdir" ]]; then simnow_dir="$bdir4/$sdir"; fi
-    if [[ -d "$bdir3/$sdir" ]]; then simnow_dir="$bdir3/$sdir"; fi
-    if [[ -d "$bdir2/$sdir" ]]; then simnow_dir="$bdir2/$sdir"; fi
-    if [[ -d "$bdir1/$sdir" ]]; then simnow_dir="$bdir1/$sdir"; fi
+	bdir1="${root}"
+	bdir2=`dirname $bdir1`
+	bdir3=`dirname $bdir2`
+	bdir4=`dirname $bdir3`
+	sdir="simnow-linux64-${SIMNOW_SUPPORTED_VER}"
+	# Make some attempt to automatically locate a simnow installation
+	if [[ -d "$bdir4/$sdir" ]]; then simnow_dir="$bdir4/$sdir"; fi
+	if [[ -d "$bdir3/$sdir" ]]; then simnow_dir="$bdir3/$sdir"; fi
+
+	if [[ -d "$bdir2/$sdir" ]]; then simnow_dir="$bdir2/$sdir"; fi
+	if [[ -d "$bdir1/$sdir" ]]; then simnow_dir="$bdir1/$sdir"; fi
 fi
 
 if [[ "$simnow_dir" == "" ]]; then
-    echo ""
-    echo "ERROR: Cannot find SimNow"
-    echo "       You have to define the SIMNOW_DIR env variable"
-    echo "       or pass '--simnow_dir <simnow_directory>' to $0"
-    echo ""
-    echo "       To download a free copy of simnow, please visit"
-    echo "       http://developer.amd.com/cpu/simnow"
-    echo ""
-    exit 1
+	echo ""
+	echo "ERROR: Cannot find SimNow"
+	echo "       You have to define the SIMNOW_DIR env variable"
+	echo "       or pass '--simnow_dir <simnow_directory>' to $0"
+	echo ""
+	echo "       To download a free copy of simnow, please visit"
+	echo "       http://developer.amd.com/cpu/simnow"
+	echo ""
+	exit 1
 fi
 
 if [[ ! -d "$simnow_dir" ]]; then
-    echo "ERROR: Directory '$simnow_dir' not found..."
-    exit 1
+	echo "ERROR: Directory '$simnow_dir' not found..."
+	exit 1
 fi
 
 #info
 echo "* Detected SIMNOW_DIR: '$simnow_dir'"
 
-#############################################################
-# Tune /etc/sysctl.conf values
-echo "* Tuning /etc/sysctl.conf..."
-mapcurrent=`/sbin/sysctl -n vm.max_map_count` # this may not require sudo access
-# calculate an optimal value as totmem/4 (min 4M)
-totmem=`free |awk '/Mem/{printf("%d", ($2+1048575)/1048576)}'` #round to GB
-echo "  totmem     = about $totmem GB"
-mapoptim=`expr $totmem \/ 4`
-mapmin=4194304
-if [ $mapoptim -lt 4 ]; then mapok=$mapmin; else mapok=`expr $mapoptim \* 1048576`; fi
-echo "  mapok      = $mapok"
-mapconfig=`egrep "[ \t]*[^#]*[ \t]*vm.max_map_count" /etc/sysctl.conf| tail -1 |awk -F= '{print $2}'`
-if [ "$mapconfig" = "" ]; then mapconfig="0"; fi
-echo "  mapconfig  = $mapconfig"
-echo "  mapcurrent = $mapcurrent"
-#Tune vm.max_map_count
-if [ $mapcurrent -lt $mapok ]; then
-   echo "Tuning vm.max_map_count : $mapcurrent --> $mapok"
-   #case 1: the sysctl.conf contains a vm.max_map_count line
-   sudo sed -i "s/^[ \t]*[^#]*[ \t]*vm.max_map_count[[:space:]]*=.*/vm.max_map_count=$mapok/" /etc/sysctl.conf
-   #case 2: the sysctl.conf DOES NOT contaiin a vm.max_map_count
-   if [ "$mapconfig" = 0 ]; then 
-      sudo sh -c "echo vm.max_map_count=$mapok >> /etc/sysctl.conf"
-   fi
-   sudo sysctl -p 2>&1 >/dev/null # make it permanent
-# verify settings
-   echo "Verifying settings"
-   mapconfig2=`egrep "[ \t]*[^#]*[ \t]*vm.max_map_count" /etc/sysctl.conf| tail -1 |awk -F= '{print $2}'`
-   mapcurrent2=`/sbin/sysctl -n vm.max_map_count` # this may not require sudo access
-   echo "  mapconfig2 = $mapconfig2"
-   echo "  mapcurrent2= $mapcurrent2"
-   echo "* New VM configuration is: vm.max_map_count = $mapcurrent2"
-else
-   echo "* Detected that VM configuration is ok: vm.max_map_count = $mapcurrent"
-fi
-
-########################################################################
-ich0=`which lsb_release 2>&1`
-ich1=`echo "$ich0"|grep "not found"`
-ich2=`echo "$ich0"|grep "no lsb_release"`
-ec1=0
-ec2=0
-if [[ "$ich1" != "" || "$ich2" != "" ]]; then
-   #fon't know yet which distro
-   #try
-   sudo yum -y install redhat-lsb 2>/dev/null
-   ec1=$?
-   #try
-   apt-get -q -q install lsb 2>/dev/null
-   ec2=$?
-fi
-
-if [[ $ec1 != 0 && $ec2 != 0 ]]; then
-   echo "Couldn't find 'lsb_release'command"
-   exit 1
-fi
-
-dist=`lsb_release -i -s`
-dist1="$dist"
-ver=`lsb_release -c -s`
-vernum=`lsb_release -r -s`
-#compatibility patch for CentOS
-if [ "$dist" = "CentOS" ]; then
-   dist="Fedora"
-   dvn1=${vernum%.*}
-   if [ "$dvn1" = "6" ]; then vernum="14"; ver="Laughlin"; fi
-fi
-
-echo "* Detected Distribution '$dist' - Version '$ver'"
-
-ok=0
-shopt -s extglob
-case $dist in
-    Ubuntu)
-        case "$ver" in
-            @(${UBUNTU_SUPPORTED_VERS// /}) ) ok=1 ;;
-        esac
-        ;;
-    Debian)
-        case "$ver" in
-            @(${DEBIAN_SUPPORTED_VERS// /}) ) ok=1 ;;
-        esac
-        ;;
-    Fedora)
-        case "$ver" in
-            @(${FEDORA_SUPPORTED_VERS// /}) ) ok=1 ;;
-        esac
-        ;;
-esac
-
-if [[ $ok -eq 0 ]]; then
-    echo ""
-    echo "Sorry: $dist $ver not supported"
-    echo "Supported versions are:"
-    echo "   UBUNTU: $UBUNTU_SUPPORTED_VERS"
-    echo "   DEBIAN: $DEBIAN_SUPPORTED_VERS"
-    echo "   FEDORA: $FEDORA_SUPPORTED_VERS"
-    echo ""
-    exit 1;
-fi
-
-echo "* $dist $ver supported"
-########################################################################
-
-if [[ $dist == "Debian" ||  $dist == "Ubuntu" ]]; then
-    pqxx=libpqxx-dev 
-    ruby="ruby ruby1.8 rubygems libopenssl-ruby libsqlite3-ruby "
-
-    if [ "$ver" == "wily" ]; then
-        sudo apt-add-repository universe
-        sudo apt-get -y update
-        ruby="ruby"
-    fi
-    if [[ $ver == "precise" || $ver == "quantal" || $ver == "raring" ]]; then \
-	    pqxx=libpqxx3-dev
-	fi
-	if [[ $ver == "trusty" || $ver == "utopic" || $ver == "jessie" || $ver == "wheezy" ]]; then \
-	    pqxx=libpqxx3-dev
-	    if [ "$ver" = "utopic" ]; then ruby=""; else ruby="ruby1.8"; fi
-	    if [ "$ver" = "trusty" ]; then ruby="ruby"; fi
-	fi
-
-    pkgs="g++ g++-multilib subversion genisoimage bison flex vnc4server  \
-rxvt xfwm4 xfonts-100dpi xfonts-75dpi zsh sharutils build-essential xvnc4viewer screen \
-liblua5.1-0 liblua5.1-0-dev $ruby $pqxx zlib1g-dev indent xutils-dev libsqlite3-dev \
-sqlite3 libdbd-sqlite3-perl libdbd-pg-perl gnuplot libboost-dev libboost-thread-dev lzma \
-libxcursor1 libxrender1 libsm6 libxi6 libfontconfig1 "
-    cmdi="apt-get -q -q"
-    cmdt1=""
-    cmdt2="dpkg -s"
-    cmdcheckstr="^Status.*installed$"
-    xvnc="Xvnc4"
-    xvncservctrl="vnc4server"
-    vncargs1="-ac -SecurityTypes None -br -pn -httpd /usr/share/"
-    vncargs2="-desktop="
-    llua="lua5.1"
-
-    if [ "$ver" != "utopic" -a "$ver" != "wily" -a "$ver" != "trusty" ]; then
-	ruby --version | grep 1.8
-	if [[ $? -ne 0 ]]; then
-            echo "### Installing ruby1.8"
-            sudo apt-get install ruby1.8 -y
-            ruby18=`update-alternatives --list ruby | grep 1.8`
-            sudo update-alternatives --set ruby $ruby18
-        fi
-    fi
-
-###################################################################################
-elif [[ $dist == "Fedora" ]]; then
-    if [[ $vernum -lt 17 ]]; then
-        rubystuff="ruby-sqlite3 rubygem-test-unit"
-    else
-        rubystuff="rubygem-sqlite3 rubygem-bigdecimal rubygem-test-unit"
-    fi
-    if [ "$dist1" = "Fedora" ]; then # avoid the following pkgs in CentOs
-        extrapkgs="dpkg xfwm4 perl-pgsql_perl5 libstdc++-static"
-    fi
-    if [[ $vernum -ge 20 ]]; then
-        extrapkgs="$extrapkgs compat-lua* mariadb"
-    fi
-    pkgs="gcc gcc-c++ make subversion genisoimage bison flex ruby rubygems rxvt zsh sharutils screen \
-gnuplot indent zlib-devel imake xorg-x11-utils ruby-libs openssl ${rubystuff} \
-rxvt flex lua* lua-devel libpqxx* boost-devel boost-thread sqlite-devel sqlite lzma \
-perl-Class-DBI-SQLite xorg-x11-fonts-100dpi.noarch xorg-x11-fonts-75dpi \
-tigervnc tigervnc-server tigervnc-server-module xorg-x11-twm glibc-devel.i686 libstdc++.i686 \
-glibc-static glibc-devel libstdc++ libtool svn flex $extrapkgs\
-"
-
-    if [[ `uname -m` == "x86_64" ]]; then 
-	    screen_downgrade="ftp://ftp.pbone.net/mirror/archive.fedoraproject.org/fedora/linux/releases/13/Fedora/x86_64/os/Packages/screen-4.0.3-15.fc12.x86_64.rpm"
-    else
-	    screen_downgrade="ftp://ftp.pbone.net/mirror/archive.fedoraproject.org/fedora/linux/releases/13/Fedora/i386/os/Packages/screen-4.0.3-15.fc12.i686.rpm"
-    fi
-    cmdi="yum -y"
-    #cmdt1="yum list install"
-    cmdt1="yum list installed"
-    cmdt2=""
-    cmdcheckstr=""
-    xvnc="Xvnc"
-    xvncservctrl="vncserver"
-    vncargs1="-ac -SecurityTypes None -br -pn -httpd /usr/share/"
-    vncargs2="-desktop "
-    if [[ $vernum -ge 20 ]]; then
-        llua="lua-5.1"
-    else
-        llua="lua"
-    fi
-
-    #SELinux complains if the SimNow LinuxLibs execute code in the stack
-    #The following command clears the stack-execute bit in the SimNow LinuxLibs
-    #(alternatively, SELinux can be disabled)
-    execstack -c $simnow_dir/linuxlibs/lib*.so.*
-fi
-########################################################################
-
-echo "* Checking if extra packages should be installed ..."
-ret="0"
-echo -n "  "
-[ -z "$cmdt1" ] || pkginst=`$cmdt1`
-for p in $pkgs; do
-   echo -n "$p "
-   [ -z "$cmdt2" ] && cmdcheckstr="$p$cmdcheckstr" || pkginst=`$cmdt2 $p 2>/dev/null`
-   (echo "$pkginst" |grep -q "$cmdcheckstr") >/dev/null 2>/dev/null
-   ec=$?
-   if [ "$ec" != "0" ]; then
-      ret=`expr $ret + 1`;
-      if [ "$ppkgs" = "" ]; then
-         ppkgs="$p"; 
-      else
-         ppkgs="$ppkgs $p";
-      fi
-   fi
-done
-echo ""
-ret1="0"
-if [ "$ret" != "0" ]; then
-   echo ""
-   echo "*** NOTE: for this step (installation of missing packages/dependences: $ppkgs ), either ask your admin or be sure you have sudo access"
-   echo "* Installing missing packages/dependences..."
-   sudo $cmdi install $ppkgs
-   ec="$?"
-   if [ "$ec" != "0" ]; then
-      ret1=`expr $ret1 + 1`;
-   fi
-   echo "* Package installation FINISHED"
-else
-   echo "* ALL needed packages are present"
-fi
-
-if [[ $"ret1" -ne 0 ]]; then
-    echo ""
-    echo "ERROR: Could not install one or more of $pkgs"
-    echo "- Please check your distribution and edit 'configure' to reflect it"
-    exit 1
-fi
-
-# Workaround for screen 4.1 bug
-if [[ $dist == "Fedora" && `screen -v | awk  '$3 != "4.00.03"'` ]]; then
-	echo ""
-	echo "Downgrade of package ($screen_downgrade)"
-	echo "*** NOTE: sudo access required ***"
-	echo ""
-	sudo $cmdi downgrade $screen_downgrade
-	grep screen /etc/yum.conf
-	if [[ $? -ne 0 ]]; then
-	        echo "Add screen to exclude entry in yum.conf"	
-		sudo sh -c "echo 'exclude=screen' >> /etc/yum.conf" 
-	fi
-fi
-# end workaround 
-# Workaround for rubygems-psych bug
-if [[ $dist == "Fedora" && $vernum == 19 ]]; then
-	sudo yum update --enablerepo=updates-testing ruby-2.0.0.247-13.fc19
-fi
-# end workaround 
-
-
-########################################################################
-
 simnow_dir=`cd $simnow_dir; pwd`
-echo "Using SimNow in $simnow_dir"
+echo "* Using SimNow in $simnow_dir"
 lib1="$simnow_dir/linuxlibs/libgcc_s.so.1"
 lib2="$simnow_dir/linuxlibs/libstdc++.so.6"
 if [[ -f $lib1 || -f $lib2 ]]; then
-    echo "To avoid system conflicts, we remove $lib1 and $lib2"
-    /bin/rm -f $lib1 $lib2
+	echo "* To avoid system conflicts, we remove $lib1 and $lib2"
+	/bin/rm -f $lib1 $lib2
 fi
 if [[ -f $lib1 || -f $lib2 ]]; then
-    echo "ERROR: Something went wrong"
-    echo "       make sure $simnow_dir is writeable or remove $lib1 and $lib2 manually"
-    exit 1
+	echo "ERROR: Something went wrong"
+	echo "       make sure $simnow_dir is writeable or remove $lib1 and $lib2 manually"
+	exit 1
 fi
 
 if [[ $force != 1 ]]; then
-    simnow_ver=`cd $simnow_dir; ./simnow --version | awk '/SimNow version/{print tolower($6);}'|sed 's/[,-]//g'`
-    if [[ $simnow_ver != $SIMNOW_SUPPORTED_VER && "${simnow_ver}pub" != $SIMNOW_SUPPORTED_VER ]]; then
-        echo "ERROR: simnow version is '$simnow_ver'"
-	    echo "       The supported version is $SIMNOW_SUPPORTED_VER"
-	    exit 1
-    fi
+	simnow_ver=`cd $simnow_dir; ./simnow --version | awk '/SimNow version/{print tolower($6);}'|sed 's/[,-]//g'`
+	if [[ $simnow_ver != $SIMNOW_SUPPORTED_VER && "${simnow_ver}pub" != $SIMNOW_SUPPORTED_VER ]]; then
+		echo "ERROR: simnow version is '$simnow_ver'"
+		echo "       The supported version is $SIMNOW_SUPPORTED_VER"
+		exit 1
+	fi
 fi
-echo "SimNow version is $simnow_ver"
+echo "* SimNow version is $simnow_ver"
 /bin/rm -f $root/simnow
 ln -fs $simnow_dir $root/simnow
 
 
 ########################################################################
 
-# Fix missing rgb.txt if needed
-if [[ ! -f /etc/X11/rgb.txt ]]; then
-    sudo cp etc/rgb.txt /etc/X11/rgb.txt
-fi
-
 thread_lib="-lboost_thread -lpthread"
 /sbin/ldconfig -p | grep -q boost_thread-mt
 if [[ $? -eq 0 ]]; then
-    thread_lib="-lboost_thread-mt -lpthread"
+	thread_lib="-lboost_thread-mt -lpthread"
 fi
 /sbin/ldconfig -p | grep -q libboost_system
 if [[ $? -eq 0 ]]; then
-    thread_lib="-lboost_system $thread_lib"
+	thread_lib="-lboost_system $thread_lib"
 fi
 
 v=`$cc --version | head -n 1`
 if [[ $v == "" ]]; then
-    echo "ERROR: Cannot run $cc"
-    exit 1
+	echo "ERROR: Cannot run $cc"
+	exit 1
 fi
 echo "* GCC: Using $v"
 v=`$cxx --version | head -n 1`
 if [[ $v == "" ]]; then
-    echo "ERROR: Cannot run $cxx"
-    exit 1
+	echo "ERROR: Cannot run $cxx"
+	exit 1
 fi
 echo "* G++: Using $v"
 
+#########################################
+#./get-images.sh -d $DIST_IMAGE
+echo "* Check here the images and bsds in /opt/cotson/* and if present connect it... <<<<"
+echo "* Check BSD for $DIST_IMAGE image..."
+list_bsds=$(ls /opt/cotson/bsds | grep $DIST_IMAGE)
+#echo "-----> list_bsds: $list_bsds"
+if [ "$list_bsds" = "" ]; then
+	echo "* BSDS of $DIST_IMAGE not found."
+	echo "* Need to run bootstrap.sh as administrator."
+	echo "* Or continue and generate it at the end of COTSon compilation"
+else
+	echo "* BSDS are present connect all to COTSOn..."
+	ln -s /opt/cotson/bsds/* data/. 2>/dev/null
+	ln -s /opt/cotson/images/* data/. 2>/dev/null
+fi
+echo "* Fix images.mk variable"
+#echo "---> NEED TO CHECK IF IMAGE NAME IS VALID ACCORDING WITH images.list??? <---"
+sed -i "s/DIST=.*/DIST=$DIST_IMAGE/g" data/images.mk
+sed -i "s/HDD=.*/HDD=$DIST_IMAGE.img/g" data/images.mk
+#echo "---> NEED TO GET SECONDS FROM images.list <---"
+
+index=0
+for elem in "${!A_IMAGES[@]}";
+do
+	name=$(_get_name ${A_IMAGES[$elem]})
+	if [ "$DIST_IMAGE" = "$name" ]; then
+		break
+	fi
+	index=$(( $index + 1 ))
+done
+G_MENU_CHOISE=${A_IMAGES[$index]}
+#echo "--------------------------> $G_MENU_CHOISE"
+sed -i "s/secs=.*/secs=$(_get_time "$G_MENU_CHOISE")/g" data/images.mk
+
 ##########################################################################
 xfixes=""
+xvncservctrl="vnc4server"
+xvnc="Xvnc4"
+xvncservctrl="vnc4server"
+vncargs1="-ac -SecurityTypes None -br -pn -httpd /usr/share/"
+vncargs2="-desktop="
+
+if [[ "$DIST" == "Debian" ||  "$DIST" == "Ubuntu" ]]; then
+  llua="lua5.1"
+elif [[ "$DIST" == "Fedora" ]]; then
+	if [[ $VERNUM -ge 20 ]]; then
+		llua="lua-5.1"
+	else
+		llua="lua"
+	fi
+fi
+
 grep -q XFIXES `which $xvncservctrl`
+
 if [[ $? -eq 0 ]]; then
-    xfixes="-extension XFIXES"
+	xfixes="-extension XFIXES"
 	echo "Adding '$xfixes' to vnc args"
 fi
+
 vncargs="$vncargs1 $xfixes $vncargs2"
 vncwm="xfwm4 --display="
 aa_so="$src_dir/abaeterno/abaeterno.so"
@@ -437,7 +245,7 @@ for s in \
         src/abaeterno/Makefile \
         src/libluabind/Makefile \
 ; do
-        cp $s $s.in
+	cp $s $s.in
 done
 
 for s in \
@@ -471,12 +279,11 @@ for s in \
     $s.in > $s
 done
 
-
 #############################################################
 if [[ $vnctest -gt 0 ]]; then
-    echo "* Testing vncserver installation... (if your connection drops login again)"
-    tmpvnc="/tmp/vnc$$"; /bin/rm -rf $tmpvnc; mkdir -p $tmpvnc
-    (cd $tmpvnc; cat << 'EOF' | uudecode -o - | tar xfz - --no-same-owner)
+	echo "* Testing vncserver installation... (if your connection drops login again)"
+	tmpvnc="/tmp/vnc$$"; /bin/rm -rf $tmpvnc; mkdir -p $tmpvnc
+	(cd $tmpvnc; cat << 'EOF' | uudecode -o - | tar xfz - --no-same-owner)
 begin 644 vnc.tgz
 M'XL(`+5^Q$H``^W3S0G",!B`X=Q<(PO8]HM-LXE7J57!BY2F_BSB!&[A=#;1
 MBX(4A-3+^UQ"2B`?>6EV.C2Y2JL8.&O#*LY*W$M9QO5%B9A*"N=,^"Y%*4YI

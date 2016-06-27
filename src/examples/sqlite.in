@@ -32,7 +32,7 @@ one_node_script="run_interactive"
 display=os.getenv("DISPLAY")
 
 simnow.commands=function()
-	use_bsd('1p.bsd')
+	use_bsd('1p-karmic64.bsd')
 	use_hdd('karmic64.img')
 	set_journal()
 	send_keyboard('gcc -S -o - -O3 -c -w /home/user/test.i')
