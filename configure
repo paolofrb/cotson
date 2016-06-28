@@ -213,18 +213,25 @@ sed -i "s/secs=.*/secs=$(_get_time "$G_MENU_CHOISE")/g" data/images.mk
 xfixes=""
 xvncservctrl="vnc4server"
 xvnc="Xvnc4"
-xvncservctrl="vnc4server"
 vncargs1="-ac -SecurityTypes None -br -pn -httpd /usr/share/"
 vncargs2="-desktop="
 
 if [[ "$DIST" == "Debian" ||  "$DIST" == "Ubuntu" ]]; then
   llua="lua5.1"
+	xvnc="Xvnc4"
+	xvncservctrl="vnc4server"
+	vncargs1="-ac -SecurityTypes None -br -pn -httpd /usr/share/vnc-java"
+	vncargs2="-desktop="
 elif [[ "$DIST" == "Fedora" ]]; then
 	if [[ $VERNUM -ge 20 ]]; then
 		llua="lua-5.1"
 	else
 		llua="lua"
 	fi
+	xvnc="Xvnc"
+	xvncservctrl="vncserver"
+	vncargs1="-ac -SecurityTypes None -br -pn -httpd /usr/share/vnc-java"
+	vncargs2="-desktop "
 fi
 
 grep -q XFIXES `which $xvncservctrl`
