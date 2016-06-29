@@ -193,7 +193,7 @@ function prepare_image()
 	local index=0
 	animation_progress_pattern=("-" "\\" "|" "/")
 	while [ 1 ]; do
-		echo -ne "\rUncompressing image [${animation_progress_pattern[$index]}]"
+		echo -ne "\r* Uncompressing image [${animation_progress_pattern[$index]}]"
 		if [ -e "ok_" ]; then
 			rm "ok_"
 			echo -ne "\r"
@@ -307,10 +307,10 @@ function _check_exist_images()
 		return 1
 		#kill -s TERM $TOP_PID
 	else
-		echo_i "IMAGES PATH NOT EXIST!"
-		echo_i ">>> $G_MENU_CHOISE"
-		echo_i "Get information of Local path from the images.list: $local_path"
-		echo_i "Need download image from repository"
+		echo_i "Image: $(_get_name "$G_MENU_CHOISE") not found in local directory: $(_get_lpath "$G_MENU_CHOISE")"
+		echo_d ">>> $G_MENU_CHOISE"
+		echo_d "Get information of Local path from the images.list: $local_path"
+		echo_i "Need download image from repository: $(_get_url "$G_MENU_CHOISE")"
 		return 4
 	fi
 	return 5
@@ -322,7 +322,7 @@ function check_cotson_dir_structure()
 		-e "$COTSON_IMAGES_PATH/$COTSON_DIST_DIR_NAME" &&
 		-e "$COTSON_IMAGES_PATH/$COTSON_IMAGES_DIR_NAME" &&
 		-e "$COTSON_IMAGES_PATH/$COTSON_BSDS_DIR_NAME" ]]; then
-		echo_i "Destination dir /opt/cotson OK"
+		echo_i "Destination dir $(_get_lpath "$G_MENU_CHOISE") OK"
 		return 0
 	else
 		echo_e "Destination dir not found. Need to run bootstrap.sh script."
@@ -343,7 +343,7 @@ function list_images()
 	echo ""
 	echo_i "Image list already downloaded:"
 	local installed_images
-	installed_images=$(ls -1 /opt/cotson/images)
+	installed_images=$(ls -1 $(_get_lpath "$G_MENU_CHOISE")/images)
 	index=0
 	for elem in $installed_images;
 	do
@@ -352,9 +352,9 @@ function list_images()
 	done
 	
 	echo ""
-	echo_i "BSD ready:"
+	echo_i "BSDs ready:"
 	local installed_bsds
-	installed_bsds=$(ls /opt/cotson/bsds)
+	installed_bsds=$(ls $(_get_lpath "$G_MENU_CHOISE")/bsds)
 	index=0
 	for elem in $installed_bsds;
 	do
@@ -367,42 +367,42 @@ function list_images()
 
 function check_reset_bsds()
 {
-	echo_i "Checking reset BSD for $(_get_name "$G_MENU_CHOISE") image..."
+	echo_i "Checking reset BSDs for $(_get_name "$G_MENU_CHOISE") image..."
 	local list_bsds
-	list_bsds=$(ls /opt/cotson/bsds | grep $(_get_name "$G_MENU_CHOISE") | grep "reset")
+	list_bsds=$(ls $(_get_lpath "$G_MENU_CHOISE")/bsds | grep $(_get_name "$G_MENU_CHOISE") | grep "reset")
 	if [ "$list_bsds" = "" ]; then
-		echo_i "RESET BSDS of $(_get_name "$G_MENU_CHOISE") not found."
+		echo_i "Reset BSDs of $(_get_name "$G_MENU_CHOISE") not found."
 		return 1
 	fi
-	echo_i "RESET BSDS already present..."
+	echo_i "Reset BSDs already present..."
 	return 0
 }
 
 function check_bsds()
 {
-	echo_i "Checking BSD for $(_get_name "$G_MENU_CHOISE") image..."
+	echo_i "Checking BSDs for $(_get_name "$G_MENU_CHOISE") image..."
 	local list_bsds
-	list_bsds=$(ls /opt/cotson/bsds | grep $(_get_name "$G_MENU_CHOISE") | grep -v "reset")
+	list_bsds=$(ls $(_get_lpath "$G_MENU_CHOISE")/bsds | grep $(_get_name "$G_MENU_CHOISE") | grep -v "reset" | grep -v "boot")
 	echo_d "OUTPUT: list_bsds=$list_bsds"
 	if [ "$list_bsds" = "" ]; then
-		echo_i "BSDS of $(_get_name "$G_MENU_CHOISE") not found."
+		echo_i "BSDs of $(_get_name "$G_MENU_CHOISE") not found."
 		return 1
 	fi
-	echo_i "BSDS already present..."
+	echo_i "BSDs already present..."
 	return 0
 }
 
 function generate_bsds()
 {
 	echo_d "Before to start make, connect image to cotson"
-	ln -s /opt/cotson/images/$(_get_name "$G_MENU_CHOISE").img $COTSON_DATA_PATH
+	ln -sf $(_get_lpath "$G_MENU_CHOISE")/images/$(_get_name "$G_MENU_CHOISE").img $COTSON_DATA_PATH 
 	echo_d "Connect reset.bsd to cotson"
-	ln -s /opt/cotson/bsds/*p-$(_get_name "$G_MENU_CHOISE")-reset.bsd $COTSON_DATA_PATH
+	ln -sf $(_get_lpath "$G_MENU_CHOISE")/bsds/*p-$(_get_name "$G_MENU_CHOISE")-reset.bsd $COTSON_DATA_PATH
 	echo_d "Fix images.mk variable"
 	sed -i "s/DIST=.*/DIST=$(_get_name "$G_MENU_CHOISE")/g" $COTSON_DATA_PATH/images.mk
 	sed -i "s/HDD=.*/HDD=$(_get_name "$G_MENU_CHOISE").img/g" $COTSON_DATA_PATH/images.mk
 	sed -i "s/secs=.*/secs=$(_get_time "$G_MENU_CHOISE")/g" $COTSON_DATA_PATH/images.mk
-	source /opt/cotson/log/bootstrap.status
+	source $(_get_lpath "$G_MENU_CHOISE")/log/bootstrap.status
 	cd data
 
 	echo_d "SIMNOW: $g_simnow_dir"
@@ -417,7 +417,28 @@ function generate_bsds()
 	for elem in $bsd_reset_present
 	do
 		 machine_id=`echo "$elem" | cut -d "-" -f 1`
-		./initbsd $g_simnow_dir $machine_id-$(_get_name "$G_MENU_CHOISE") $(_get_name "$G_MENU_CHOISE").img 
+		#./initbsd $g_simnow_dir $machine_id-$(_get_name "$G_MENU_CHOISE") $(_get_name "$G_MENU_CHOISE").img
+		
+		####################################################################
+		$(./initbsd "$g_simnow_dir" "$machine_id"-"$(_get_name "$G_MENU_CHOISE")" "$(_get_name "$G_MENU_CHOISE")".img > add-image_"$machine_id"-"$(_get_name "$G_MENU_CHOISE")".log 2>&1; touch ok_ ) &
+		local index=0
+		animation_progress_pattern=("-" "\\" "|" "/")
+		while [ 1 ]; do
+			echo -ne "\r* Generating BSDs: $machine_id-$(_get_name "$G_MENU_CHOISE") [${animation_progress_pattern[$index]}]"
+			if [ -e "ok_" ]; then
+				rm "ok_"
+				echo -ne "\r"
+				echo "* BSD: $machine_id-$(_get_name "$G_MENU_CHOISE") completed.    "
+				break
+			fi
+			sleep 0.2
+			index=$(( $index+1 ))
+			if [ $index -gt 3 ]; then
+				index=0
+			fi
+		done
+		###########################################
+		# add the error code check
 	done
 }
 
@@ -477,19 +498,24 @@ function _main()
 		if [ $ret = 1 ]; then
 			echo_d "check_bsds returned 1 call generate_bsds"
 			generate_bsds
-			ls -l *p-$(_get_name "$G_MENU_CHOISE").bsd
-			if [ "$(id -u)" != "0" ]; then
-				echo_e "Need root permission for copy bsds on /opt/cotson/bsds"
+			check_bsds_creation=$(ls -l *p-$(_get_name "$G_MENU_CHOISE").bsd 2>/dev/null)
+			if [ "$check_bsds_creation" = "" ]; then
+				echo_e "ATTENTION: BSDs haven't been generated!"
 				exit 1
 			else
-				echo_i "Copy bsds to /opt/cotson/bsds..."
-				pwd
-				mv *p-$(_get_name "$G_MENU_CHOISE").bsd /opt/cotson/bsds
-				mv *p-$(_get_name "$G_MENU_CHOISE")-boot /opt/cotson/bsds
+				echo_i "Creation of the BSDs: OK"
+			fi
+			if [ "$(id -u)" != "0" ]; then
+				echo_e "Need root permission for copy bsds on $(_get_lpath "$G_MENU_CHOISE")/bsds"
+				exit 1
+			else
+				echo_i "Copy bsds to $(_get_lpath "$G_MENU_CHOISE")/bsds..."
+				mv *p-$(_get_name "$G_MENU_CHOISE").bsd $(_get_lpath "$G_MENU_CHOISE")/bsds
+				mv *p-$(_get_name "$G_MENU_CHOISE")-boot $(_get_lpath "$G_MENU_CHOISE")/bsds
 			fi
 		fi
-		echo_i "All is ok ... exit"
-		exit 1
+		echo_ok "Everything is ok ... exit"
+		exit 0
 	fi
 	local local_path=$(_get_lpath "$G_MENU_CHOISE")
 	local_path=`eval echo $local_path`
@@ -498,12 +524,12 @@ function _main()
 	generate_bsds
 	ls -l data/*p-$(_get_name "$G_MENU_CHOISE").bsd
 	if [ "$(id -u)" != "0" ]; then
-		echo_e "Need root permission for copy bsds on /opt/cotson/bsds"
+		echo_e "Need root permission for copy bsds on $(_get_lpath "$G_MENU_CHOISE")/bsds"
 		exit 1
 	else
-		echo_i "Copy bsds to /opt/cotson/bsds..."
-		mv *p-$(_get_name "$G_MENU_CHOISE").bsd /opt/cotson/bsds
-		mv *p-$(_get_name "$G_MENU_CHOISE")-boot /opt/cotson/bsds
+		echo_i "Copy bsds to $(_get_lpath "$G_MENU_CHOISE")/bsds..."
+		mv *p-$(_get_name "$G_MENU_CHOISE").bsd $(_get_lpath "$G_MENU_CHOISE")/bsds
+		mv *p-$(_get_name "$G_MENU_CHOISE")-boot $(_get_lpath "$G_MENU_CHOISE")/bsds
 	fi
 }
 

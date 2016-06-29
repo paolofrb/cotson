@@ -42,7 +42,7 @@ DEBIAN_BASED_PKGS="g++ g++-multilib subversion genisoimage bison flex vnc4server
 rxvt xfwm4 xfonts-100dpi xfonts-75dpi zsh sharutils build-essential xvnc4viewer screen \
 liblua5.1-0 liblua5.1-0-dev zlib1g-dev indent xutils-dev libsqlite3-dev \
 sqlite3 libdbd-sqlite3-perl libdbd-pg-perl gnuplot libboost-dev libboost-thread-dev lzma \
-libxcursor1 libxrender1 libsm6 libxi6 libfontconfig1 "
+libxcursor1 libxrender1 libsm6 libxi6 libfontconfig1 gnuplot-x11 "
 
 FEDORA_BASED_PKGS="gcc gcc-c++ make subversion genisoimage bison flex ruby rubygems rxvt zsh sharutils screen \
 gnuplot indent zlib-devel imake xorg-x11-utils ruby-libs openssl \
@@ -61,10 +61,30 @@ COTSON_IMAGES_DIR_NAME="images"
 COTSON_BSDS_DIR_NAME="bsds"
 COTSON_STATUS_PATH="log"	#put inside the bootstrap.status file
 
-OUT_FILE="$COTSON_IMAGES_PATH/$COTSON_STATUS_PATH/bootstrap.status"
+FEDORA_INSTALLER="yum"
+FEDORA_INSTALLER_CONF="yum.conf"
+
+
+
 ### ############################ ###
 
+### include add-image.sh lib ###
+source add-image.sh --lib
+index=0
+for elem in "${!A_IMAGES[@]}";
+do
+	name=$(_get_name ${A_IMAGES[$elem]})
+	if [ "$DIST_IMAGE" = "$name" ]; then
+		break
+	fi
+	index=$(( $index + 1 ))
+done
+G_MENU_CHOISE=${A_IMAGES[$index]}
+
+COTSON_IMAGES_PATH=$(_get_lpath "$G_MENU_CHOISE")
 ### FUNCTION ###
+
+OUT_FILE="$(_get_lpath "$G_MENU_CHOISE")/log/bootstrap.status"
 
 function sv_exit()
 {
@@ -204,6 +224,10 @@ function _detect_os()
 		echo_w "lsb_release not found... try to install"
 		yum -y install redhat-lsb 2>/dev/null
 		ec1=$?
+		if [ $ec1 != 0 ]; then
+			dnf -y install redhat-lsb 2>/dev/null
+			ec1=$?
+		fi
 		#try
 		apt-get -q -q install lsb 2>/dev/null
 		ec2=$?
@@ -330,6 +354,15 @@ function make_dependencies()
 			fi
 		fi
 	elif [[ $DIST == "Fedora" ]]; then
+		# Add here the check of yum or dnf
+		ret_command=`which dnf 2>&1`
+		check_status_yum1=`echo "$ret_command"|grep "not found"`
+		check_status_yum2=`echo "$ret_command"|grep "no yum"`
+		if [[ "$check_status_yum1" = "" || "$check_status_yum2" = "" ]]; then
+			echo_i "dnf found... Configuring dnf"
+			FEDORA_INSTALLER="dnf"
+			FEDORA_INSTALLER_CONF="dnf/dnf.conf"
+		fi
 		if [[ $VERNUM -lt 17 ]]; then
 			rubystuff="ruby-sqlite3 rubygem-test-unit"
 		else
@@ -350,9 +383,9 @@ function make_dependencies()
 		else
 			screen_downgrade="ftp://ftp.pbone.net/mirror/archive.fedoraproject.org/fedora/linux/releases/13/Fedora/i386/os/Packages/screen-4.0.3-15.fc12.i686.rpm"
 		fi
-		cmdi="yum -y"
+		cmdi="$FEDORA_INSTALLER -y"
 		#cmdt1="yum list install"
-		cmdt1="yum list installed"
+		cmdt1="$FEDORA_INSTALLER list installed"
 		cmdt2=""
 		cmdcheckstr=""
 		xvnc="Xvnc"
@@ -372,7 +405,7 @@ function make_dependencies()
 	fi
 	########################################################################
 
-	echo_i "* Checking if extra packages should be installed ..."
+	echo_i "Checking if extra packages should be installed ..."
 	ret="0"
 	echo -n "  "
 	[ -z "$cmdt1" ] || pkginst=`$cmdt1`
@@ -404,7 +437,10 @@ function make_dependencies()
 		if [ "$ec" != "0" ]; then
 			ret1=`expr $ret1 + 1`;
 		fi
-		echo_i "* Package installation FINISHED"
+		#@@@
+		echo_i "Installing rubygems test-unit"
+		gem install test-unit
+		echo_i "Packages installation FINISHED"
 	else
 		echo_i "ALL needed packages are present"
 	fi
@@ -424,16 +460,18 @@ function make_dependencies()
 		echo "*** NOTE: sudo access required ***"
 		echo ""
 		$cmdi downgrade $screen_downgrade
-		grep screen /etc/yum.conf
+		grep screen /etc/$FEDORA_INSTALLER_CONF
+		#grep screen /etc/dnf/dnf.conf
 		if [[ $? -ne 0 ]]; then
-		        echo "Add screen to exclude entry in yum.conf"	
-			sh -c "echo 'exclude=screen' >> /etc/yum.conf" 
+			echo "Add screen to exclude entry in $FEDORA_INSTALLER_CONF"	
+			sh -c "echo 'exclude=screen' >> /etc/$FEDORA_INSTALLER_CONF" 
+			#sh -c "echo 'exclude=screen' >> /etc/dnf/dnf.conf" 
 		fi
 	fi
 	# end workaround 
 	# Workaround for rubygems-psych bug
 	if [[ $dist == "Fedora" && $vernum == 19 ]]; then
-		yum update --enablerepo=updates-testing ruby-2.0.0.247-13.fc19
+		$FEDORA_INSTALLER update --enablerepo=updates-testing ruby-2.0.0.247-13.fc19
 	fi
 	# end workaround 
 	echo "make_dependencies=\"OK\"" >> $OUT_FILE
@@ -481,7 +519,7 @@ function cotson_images_dirs()
 		echo_d "mkdir -p $COTSON_IMAGES_PATH/$COTSON_STATUS_PATH"
 		mkdir -p $COTSON_IMAGES_PATH/$COTSON_STATUS_PATH
 		chmod o+w $COTSON_IMAGES_PATH/$COTSON_STATUS_PATH
-		ls -l /opt/cotson/
+		ls -l $COTSON_IMAGES_PATH
 		exit 1
 	fi
 }
@@ -504,7 +542,6 @@ function usage()
 function check_simnow()
 {
 	echo_d "PARMS: $@"
-	echo_i "TO BE TEST"
 	if [[ "$SIMNOW_DIR" != "" ]]; then
 		g_simnow_dir=$SIMNOW_DIR
 	fi
@@ -575,3 +612,4 @@ echo_i "System is ready for COTSon installation."
 echo_i "Download default image: $DIST_IMAGE"
 #./get-images.sh -d $DIST_IMAGE
 ./add-image.sh $DIST_IMAGE
+echo_ok "Now you can run: ./configure"

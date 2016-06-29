@@ -31,19 +31,6 @@ llua="lua5.1"
 
 #shopt -s extglob
 
-function check_bootstrap_status()
-{
-	if [[ -e /opt/cotson/log/bootstrap.status ]]; then
-		source /opt/cotson/log/bootstrap.status
-	else
-		echo "ERROR Run before bootstrap.sh"
-		exit 1
-	fi
-}
-
-check_bootstrap_status
-echo "* checking bootstrap.sh: $BOOTSTRAP"
-
 if [[ "$SIMNOW_DIR" != "" ]]; then
 	simnow_dir=$SIMNOW_DIR
 fi
@@ -88,6 +75,36 @@ do
 done
 
 ########################################################################
+index=0
+for elem in "${!A_IMAGES[@]}";
+do
+	name=$(_get_name ${A_IMAGES[$elem]})
+	if [ "$DIST_IMAGE" = "$name" ]; then
+		break
+	fi
+	index=$(( $index + 1 ))
+done
+G_MENU_CHOISE=${A_IMAGES[$index]}
+#echo "--------------------------> $G_MENU_CHOISE"
+
+function check_bootstrap_status()
+{
+	if [[ -e $(_get_lpath "$G_MENU_CHOISE")/log/bootstrap.status ]]; then
+		source $(_get_lpath "$G_MENU_CHOISE")/log/bootstrap.status
+	else
+		echo "ERROR: Run before bootstrap.sh"
+		exit 1
+	fi
+}
+
+check_bootstrap_status
+if [ "$BOOTSTRAP" = "KO" ]; then
+	echo -e "\e[31m* ERROR: bootstrap.sh KO\e[39m"
+	exit 1
+else
+	echo "* Checking bootstrap.sh: $BOOTSTRAP"
+fi
+
 if [[ "$simnow_dir" == "" ]]; then
 	bdir1="${root}"
 	bdir2=`dirname $bdir1`
@@ -176,28 +193,17 @@ echo "* G++: Using $v"
 
 #########################################
 #./get-images.sh -d $DIST_IMAGE
-index=0
-for elem in "${!A_IMAGES[@]}";
-do
-	name=$(_get_name ${A_IMAGES[$elem]})
-	if [ "$DIST_IMAGE" = "$name" ]; then
-		break
-	fi
-	index=$(( $index + 1 ))
-done
-G_MENU_CHOISE=${A_IMAGES[$index]}
-#echo "--------------------------> $G_MENU_CHOISE"
 
-echo "* Checking images and bsds in $(_get_lpath "$G_MENU_CHOISE")/*"
-echo "* Selected $DIST_IMAGE image"
+echo "* Checking images and BSDs in $(_get_lpath "$G_MENU_CHOISE")/*"
+echo "* Selected \"$DIST_IMAGE\" image"
 list_bsds=$(ls $(_get_lpath "$G_MENU_CHOISE")/bsds | grep $DIST_IMAGE)
 #echo "-----> list_bsds: $list_bsds"
 if [ "$list_bsds" = "" ]; then
-	echo "* BSDS of $DIST_IMAGE not found."
+	echo "* BSDs of $DIST_IMAGE not found."
 	echo "* Need to run bootstrap.sh as administrator."
 	echo "* Or continue and generate it at the end of COTSon compilation"
 else
-	echo "* linking BSDS ./data"
+	echo "* Linking BSDs ./data"
 	ln -s $(_get_lpath "$G_MENU_CHOISE")/bsds/* data/. 2>/dev/null
 	ln -s $(_get_lpath "$G_MENU_CHOISE")/images/* data/. 2>/dev/null
 fi
@@ -215,6 +221,26 @@ xvncservctrl="vnc4server"
 xvnc="Xvnc4"
 vncargs1="-ac -SecurityTypes None -br -pn -httpd /usr/share/"
 vncargs2="-desktop="
+
+ret_command=`which lsb_release 2>&1`
+check_status1=`echo "$ret_command"|grep "not found"`
+check_status2=`echo "$ret_command"|grep "no lsb_release"`
+
+if [[ "$check_status1" != "" || "$check_status2" != "" ]]; then
+	str="* lsb_release not found... run bootstrap.sh as Administrator"
+	echo -e "\e[31m$str\e[39m"
+	exit 1
+fi
+
+DIST_UP=`lsb_release -i -s`
+VERNUM_UP=`lsb_release -r -s`
+if [[ "$DIST_UP" != "$DIST" || "$VERNUM_UP" != "$VERNUM" ]]; then
+	str="* Your distribution is changed from $VERNUM to $VERNUM_UP"
+	echo -e "\e[31m$str\e[39m"
+	str="* Run bootstrap.sh as Administrator for fix the problem"
+	echo -e "\e[31m$str\e[39m"
+	exit 1
+fi
 
 if [[ "$DIST" == "Debian" ||  "$DIST" == "Ubuntu" ]]; then
   llua="lua5.1"
@@ -324,5 +350,7 @@ fi
 echo "./configure $status_args" > config.status
 chmod +x config.status
 echo "* For more options, type $0 -h"
-echo "* Done"
-echo "  Now you can run: make release"
+str="* Done"
+echo -e "\e[32m$str\e[39m"
+str="* Now you can run: make release"
+echo -e "\e[32m$str\e[39m"

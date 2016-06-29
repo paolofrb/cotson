@@ -44,5 +44,5 @@ src/Make.conf: src/Make.conf.in
 		touch src/Make.conf; \
 	fi
 
-regression:
-	cd src; make regression
+regression: build
+	make -C src regression
