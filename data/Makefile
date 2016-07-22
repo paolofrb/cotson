@@ -50,7 +50,7 @@ lzma: $(HDD)
 		echo "$*"; \
 		./initbsd $(SIMNOW_DIR) $* $(HDD) $(RAM) 2>&1 |tee initbsd.out; \
 	fi;
-	-@echo "#### Note: don't worry if you see a 'segmentation fault' just above" \
+	-@echo "#### Note: don't worry if you see a 'segmentation fault' just above"; \
 	a=`tail -1 initbsd.out| grep -i 'segmentation fault'`; \
 	if [ "$$a" != "" ]; then exit 0; fi;
 
@@ -63,4 +63,3 @@ mount:
 	echo "##### EXIT THE SHELL AND UMOUNT"; \
 	sudo umount tmp; \
 	rmdir tmp
-

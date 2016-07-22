@@ -3,7 +3,7 @@
 # AUTHOR:	: SV (viola@dii.unisi.it)
 # TITLE		: add-images
 # LICENSE	: MIT
-# VERSION	: 0.0.1
+# VERSION	: 0.0.4
 # DATE		: 20160509
 # NOTES		: NULL
 #
@@ -12,11 +12,12 @@
 ### GLOBAL DEFINITIONS ###
 RUN_USERNAME=$(logname)
 PNAME="add-images"
-PVERSION="0.0.3"
+PVERSION="0.0.4"
 LPATH_IMAGES="/opt/cotson"
-DIST_DIR="dists"
+DIST_DIR="dist"
 IMAGES_DIR="images"
 BSDS_DIR="bsds"
+ROMS_DIR="roms"
 
 IMAGES_LIST_DEFAULT_PATH="images.list"
 G_MENU_CHOISE=""
@@ -27,13 +28,23 @@ IMG_LZMA_EXT=$IMAGE_LZMA_COMPRESSION_EXTENSION
 IMAGE_DECOMPRESSED_EXTENSION=".img"
 IMG_EXT=$IMAGE_DECOMPRESSED_EXTENSION
 
+BASEPATH_STATUS_FILE="/var/lib"
+DIR_NAME_STATUS_FILE="cotson"
+STATUS_FILE_PATH="$BASEPATH_STATUS_FILE/$DIR_NAME_STATUS_FILE"
+
 # ToDo: decidere da dove prendere il path di cotson
 COTSON_DATA_PATH="data/"
+
+TEMPORARY_DIR="$HOME/add-image_tmp_dir"
+
+SIMNOW_SUPPORTED_VER="4.6.2pub"
+G_SIMNOW_DIR=""
 
 DEBUG=0
 VERBOSE=0
 INTERACTIVE=0
 LIB_MODE=0
+CALL_LIST_IMAGE=0
 
 declare -a A_IMAGES
 
@@ -104,10 +115,14 @@ function usage()
 	echo_d "$PNAME $PVERSION"
 	echo -e "
   \n  COTSon $PNAME utiliy\n
-  example: sudo .$PNAME.sh [OPTIONS]
+  example: sudo ./$PNAME.sh [OPTIONS] IMAGE-NAME
   OPTIONS:
-  \t-h, --help: show this message
-  \t-d, --debug: run in debug mode\n"
+  \t-h,  --help: show this message
+  \t-d, --debug: run in debug mode
+  \t-l,  --list: list of IMAGE-NAME available\n
+  EXAMPLE:
+  \t./add-image.sh karmic64
+  \t./add-image.sh --debug karmic64\n"
 	exit 1
 }
 
@@ -189,7 +204,7 @@ function prepare_image()
 	local_path=`eval echo $local_path`
 	echo_d "Checking compression type: to be implement.."
 	local compression_type=`file $image_path`
-	$(lzma -dc -S .lzma $image_path > $local_path/images/$(_get_name "$G_MENU_CHOISE").img; touch ok_ ) &
+	$(lzma -dc -S .lzma $image_path > $TEMPORARY_DIR/$(_get_name "$G_MENU_CHOISE").img; touch ok_ ) &
 	local index=0
 	animation_progress_pattern=("-" "\\" "|" "/")
 	while [ 1 ]; do
@@ -197,7 +212,9 @@ function prepare_image()
 		if [ -e "ok_" ]; then
 			rm "ok_"
 			echo -ne "\r"
-			echo "   Compression end END!"
+			echo_i "   Uncompression end END!"
+			echo_i "Copy uncompressed image to $local_path/images/"
+			sudo cp $TEMPORARY_DIR/$(_get_name "$G_MENU_CHOISE").img $local_path/images/
 			return
 		fi
 		sleep 0.2
@@ -225,19 +242,21 @@ function _download_image()
 	fi
 	if [ ! -e $destination ]; then
 		# for save with same name use -O -J
-		curl --insecure --progress-bar $url > $destination
+		curl --insecure --progress-bar $url > "$TEMPORARY_DIR/$(_get_name "$G_MENU_CHOISE").img.lzma"
 	else
 		echo_i "The image is present in local path: $destination"
 	fi
 	echo_i "Checking the MD5SUM..."
 	echo_d "Get md5sum from downloaded image"
-	local local_md5sum=`md5sum $destination | awk {'print $1'}`
+	local local_md5sum=`md5sum $TEMPORARY_DIR/$(_get_name "$G_MENU_CHOISE").img.lzma | awk {'print $1'}`
 	echo_d "Get md5sum from images.list"
 	local original_md5sum=$(_get_md5sum "$G_MENU_CHOISE")
 	echo_d "   local_md5sum = $local_md5sum"
 	echo_d "original_md5sum = $original_md5sum"
 	if [ $local_md5sum = $original_md5sum ]; then
 		echo_i "MD5SUM OK"
+		echo_i "Copy image to destination dir: $destination"
+		sudo cp $TEMPORARY_DIR/$(_get_name "$G_MENU_CHOISE").img.lzma $destination
 	else
 		echo_e "MD5SUM ERROR!"
 	fi
@@ -245,10 +264,11 @@ function _download_image()
 
 function _download_reset_bsds()
 {
-	
 	distro=$2
+	#echo_w "Create a GLOBAL VAR with repository path"
 	url_repo="$1/cotson_os_images/bsd_reset"
 	destination_path=$3
+	echo_d "Assume only 1 2 4 8 16 32 reset.bsd"
 	bsds_version="1 2 4 8 16 32"
 	check_reset_bsds
 	ret=$?
@@ -256,6 +276,7 @@ function _download_reset_bsds()
 		echo_i "BSD Reset for $distro already present... exit"
 		return 1
 	fi
+	echo_w "In the next routine maybe have permission problems for download reset.bsd"
 	for elem in $bsds_version;
 	do
 		echo_d "Try with $elem..."
@@ -263,9 +284,9 @@ function _download_reset_bsds()
 		echo_d "RETURN: $ret"
 		if [ "$ret" != "" ]; then
 			echo_i "Try to download: ${elem}p-$distro-reset.bsd"
-			curl --insecure --progress-bar $url_repo/${elem}p-$distro-reset.bsd > $destination_path/bsds/${elem}p-$distro-reset.bsd
+			curl --insecure --progress-bar $url_repo/${elem}p-$distro-reset.bsd > $TEMPORARY_DIR/${elem}p-$distro-reset.bsd
+			sudo cp $TEMPORARY_DIR/${elem}p-$distro-reset.bsd $destination_path/bsds/${elem}p-$distro-reset.bsd
 		fi
-		
 	done
 	#curl -f -I --insecure --progress-bar $url_repo
 	echo_d "START function _download_reset_bsds"
@@ -296,13 +317,13 @@ function _check_exist_images()
 		kill -s TERM $TOP_PID
 	elif [ -e "data/$(_get_name "$G_MENU_CHOISE").img" ]; then
 		echo_ok "Image already exist in data/ path"
-		cp data/$(_get_name "$G_MENU_CHOISE").img $local_path/images/
+		sudo cp data/$(_get_name "$G_MENU_CHOISE").img $local_path/images/
 		rm data/$(_get_name "$G_MENU_CHOISE").img
 		return 2
 	fi
 	if [ -e "data/$(_get_name "$G_MENU_CHOISE").img.lzma" ]; then
 		echo_ok "Image lzma already exist in data/ path"
-		cp data/$(_get_name "$G_MENU_CHOISE").img.lzma $local_path/dists
+		sudo cp data/$(_get_name "$G_MENU_CHOISE").img.lzma $local_path/dist
 		rm data/$(_get_name "$G_MENU_CHOISE").img.lzma
 		return 1
 		#kill -s TERM $TOP_PID
@@ -332,14 +353,17 @@ function check_cotson_dir_structure()
 
 function list_images()
 {
+	DIST_IMAGE="karmic64"
 	images_list_parser
 	local index=0
-	echo_i "Image list in repository:"
+	echo_i "Image list available in repository:"
 	for elem in "${!A_IMAGES[@]}";
 	do
 		echo "    $index. $(_get_name ${A_IMAGES[$elem]})"
 		index=$(( $index + 1 ))
 	done
+	G_MENU_CHOISE=${A_IMAGES[1]} # force to first record of repository list
+	echo_d "G_MENU_CHOISE=$G_MENU_CHOISE"
 	echo ""
 	echo_i "Image list already downloaded:"
 	local installed_images
@@ -392,6 +416,55 @@ function check_bsds()
 	return 0
 }
 
+function check_simnow()
+{
+	echo_d "PARMS: $@"
+	if [[ "$SIMNOW_DIR" != "" ]]; then
+		G_SIMNOW_DIR=$SIMNOW_DIR
+	fi
+	if [[ "$G_SIMNOW_DIR" == "" ]]; then
+		bdir1=$(pwd)
+		bdir2=`dirname $bdir1`
+		bdir3=`dirname $bdir2`
+		bdir4=`dirname $bdir3`
+		echo_d "bdir1=$bdir1"
+		echo_d "bdir2=$bdir2"
+		echo_d "bdir3=$bdir3"
+		echo_d "bdir4=$bdir4"
+		sdir="simnow-linux64-${SIMNOW_SUPPORTED_VER}"
+		# Make some attempt to automatically locate a simnow installation
+		echo_d " 1: $bdir4/$sdir"
+		echo_d " 1: $bdir3/$sdir"
+		echo_d " 1: $bdir2/$sdir"
+		echo_d " 1: $bdir1/$sdir"
+		
+		if [[ -d "$bdir4/$sdir" ]]; then G_SIMNOW_DIR="$bdir4/$sdir"; fi
+		if [[ -d "$bdir3/$sdir" ]]; then G_SIMNOW_DIR="$bdir3/$sdir"; fi
+		if [[ -d "$bdir2/$sdir" ]]; then G_SIMNOW_DIR="$bdir2/$sdir"; fi
+		if [[ -d "$bdir1/$sdir" ]]; then G_SIMNOW_DIR="$bdir1/$sdir"; fi
+	fi
+
+	if [[ "$G_SIMNOW_DIR" == "" ]]; then
+		echo ""
+		echo "ERROR: Cannot find SimNow"
+		echo "       You have to define the SIMNOW_DIR env variable"
+		echo "       or pass '--simnow_dir <simnow_directory>' to $0"
+		echo ""
+		echo "       To download a free copy of simnow, please visit"
+		echo "       http://developer.amd.com/cpu/simnow"
+		echo ""
+		exit 1
+	fi
+	if [[ ! -d "$G_SIMNOW_DIR" ]]; then
+		echo_e "ERROR: Directory '$G_SIMNOW_DIR' not found..."
+		exit 1
+	fi
+
+	#info
+	echo_i "Detected SIMNOW_DIR: '$G_SIMNOW_DIR'"
+	return 0
+}
+
 function generate_bsds()
 {
 	echo_d "Before to start make, connect image to cotson"
@@ -402,10 +475,8 @@ function generate_bsds()
 	sed -i "s/DIST=.*/DIST=$(_get_name "$G_MENU_CHOISE")/g" $COTSON_DATA_PATH/images.mk
 	sed -i "s/HDD=.*/HDD=$(_get_name "$G_MENU_CHOISE").img/g" $COTSON_DATA_PATH/images.mk
 	sed -i "s/secs=.*/secs=$(_get_time "$G_MENU_CHOISE")/g" $COTSON_DATA_PATH/images.mk
-	source $(_get_lpath "$G_MENU_CHOISE")/log/bootstrap.status
 	cd data
-
-	echo_d "SIMNOW: $g_simnow_dir"
+	echo_d "SIMNOW: $G_SIMNOW_DIR"
 	local bsd_reset_present
 	bsd_reset_present=$(ls *p-$(_get_name "$G_MENU_CHOISE")-reset.bsd)
 	if [ "$bsd_reset_present" = "" ]; then
@@ -417,25 +488,34 @@ function generate_bsds()
 	for elem in $bsd_reset_present
 	do
 		 machine_id=`echo "$elem" | cut -d "-" -f 1`
-		#./initbsd $g_simnow_dir $machine_id-$(_get_name "$G_MENU_CHOISE") $(_get_name "$G_MENU_CHOISE").img
-		
+		#./initbsd $G_SIMNOW_DIR $machine_id-$(_get_name "$G_MENU_CHOISE") $(_get_name "$G_MENU_CHOISE").img
+		# Try to run in parallel the BSD generation
 		####################################################################
-		$(./initbsd "$g_simnow_dir" "$machine_id"-"$(_get_name "$G_MENU_CHOISE")" "$(_get_name "$G_MENU_CHOISE")".img > add-image_"$machine_id"-"$(_get_name "$G_MENU_CHOISE")".log 2>&1; touch ok_ ) &
+		$(./initbsd "$G_SIMNOW_DIR" "$machine_id"-"$(_get_name "$G_MENU_CHOISE")" "$(_get_name "$G_MENU_CHOISE")".img > add-image_"$machine_id"-"$(_get_name "$G_MENU_CHOISE")".log 2>&1; touch ok_ ) &
 		local index=0
+		local s_index=0
+		local seconds=0
 		animation_progress_pattern=("-" "\\" "|" "/")
 		while [ 1 ]; do
-			echo -ne "\r* Generating BSDs: $machine_id-$(_get_name "$G_MENU_CHOISE") [${animation_progress_pattern[$index]}]"
+			echo -ne "\r* Generating BSDs: $machine_id-$(_get_name "$G_MENU_CHOISE") [${animation_progress_pattern[$index]}] TIME: ${seconds}s"
 			if [ -e "ok_" ]; then
 				rm "ok_"
+				echo ""
 				echo -ne "\r"
-				echo "* BSD: $machine_id-$(_get_name "$G_MENU_CHOISE") completed.    "
+				echo_i "BSD: $machine_id-$(_get_name "$G_MENU_CHOISE") completed.                                 "
 				break
 			fi
 			sleep 0.2
 			index=$(( $index+1 ))
+			s_index=$(( $s_index+1 ))
 			if [ $index -gt 3 ]; then
 				index=0
 			fi
+			if [ $s_index -gt 4 ]; then
+				seconds=$(( $seconds+1 ))
+				s_index=0
+			fi
+				
 		done
 		###########################################
 		# add the error code check
@@ -445,15 +525,21 @@ function generate_bsds()
 function _main()
 {
 	if [ $# -lt 1 ]; then
-		echo "ERROR PARAMETERS!!!"
+		echo_e "ERROR PARAMETERS!"
+		usage
 		exit 1
 	fi
 	for last; do true; done
 	#echo $last
 	
-	if [[ "$last" = "-d" || "$last" = "-h" || "$last" = "--help" ]]; then
-		echo "error"
+	if [[ "$last" = "-d" || "$last" = "-h" || "$last" = "--help" || "$last" = "-v" ]]; then
+		echo_e "Not found IMAGE-NAME in parameters"
+		usage
 		exit 0
+	fi
+	if [ ! -e "$IMAGES_LIST_DEFAULT_PATH" ]; then
+		echo_e "Repository file: images.list not found."
+		exit 1
 	fi
 	images_list_parser
 	local parm=$last
@@ -475,13 +561,29 @@ function _main()
 		index=$(( $index + 1 ))
 	done
 	if [ "$find" = "ko" ]; then
-		echo_e "PARM: $parm WRONG"
+		echo_e "IMAGE-NAME: \"$parm\" not found in images.list"
 		exit 1
 	fi
 	G_MENU_CHOISE="${A_IMAGES[$index]}"
 
-	if [ -e $(_get_lpath "$G_MENU_CHOISE")/log/bootstrap.status ]; then
-		echo_i "Checking bootstrap.status: OK"
+	if [ -e $STATUS_FILE_PATH/bootstrap.status ]; then
+		source "$STATUS_FILE_PATH/bootstrap.status"
+		echo_d "$STATUS_FILE_PATH/bootstrap.status information:"
+		echo_d "   DIST=$DIST"
+		echo_d "   DIST1=$DIST1"
+		echo_d "   VER=$VER"
+		echo_d "   VERNUM=$VERNUM"
+		echo_d "   _detect_os=$_detect_os"
+		echo_d "   make_dependencies=$make_dependencies"
+		echo_d "   BOOTSTRAP=$BOOTSTRAP"
+		if [[ "$BOOTSTRAP" = "" || "$BOOTSTRAP" = "KO" ]]; then
+			echo_w "problems detected in bootstrap.status"
+			echo_i "Run again bootstrap.sh"
+			exit 100
+		else
+			echo_i "Checking bootstrap.status: OK"
+			#echo_w "Need to add the check on SO version and name!"
+		fi
 	else
 		echo_i "Checking bootstrap.status: not found"
 		echo_e "Need to run bootstrap.sh"
@@ -498,6 +600,7 @@ function _main()
 		if [ $ret = 1 ]; then
 			echo_d "check_bsds returned 1 call generate_bsds"
 			generate_bsds
+			# check the precise number of bsd
 			check_bsds_creation=$(ls -l *p-$(_get_name "$G_MENU_CHOISE").bsd 2>/dev/null)
 			if [ "$check_bsds_creation" = "" ]; then
 				echo_e "ATTENTION: BSDs haven't been generated!"
@@ -505,32 +608,22 @@ function _main()
 			else
 				echo_i "Creation of the BSDs: OK"
 			fi
-			if [ "$(id -u)" != "0" ]; then
-				echo_e "Need root permission for copy bsds on $(_get_lpath "$G_MENU_CHOISE")/bsds"
-				exit 1
-			else
-				echo_i "Copy bsds to $(_get_lpath "$G_MENU_CHOISE")/bsds..."
-				mv *p-$(_get_name "$G_MENU_CHOISE").bsd $(_get_lpath "$G_MENU_CHOISE")/bsds
-				mv *p-$(_get_name "$G_MENU_CHOISE")-boot $(_get_lpath "$G_MENU_CHOISE")/bsds
-			fi
+			echo_i "Copy bsds to $(_get_lpath "$G_MENU_CHOISE")/bsds..."
+			sudo cp *p-$(_get_name "$G_MENU_CHOISE").bsd $(_get_lpath "$G_MENU_CHOISE")/bsds
+			sudo cp *p-$(_get_name "$G_MENU_CHOISE")-boot $(_get_lpath "$G_MENU_CHOISE")/bsds
 		fi
 		echo_ok "Everything is ok ... exit"
 		exit 0
 	fi
 	local local_path=$(_get_lpath "$G_MENU_CHOISE")
 	local_path=`eval echo $local_path`
-	_download_image $(_get_url "$G_MENU_CHOISE") "$local_path/dists/$(_get_name "$G_MENU_CHOISE").img.lzma"
-	prepare_image "$local_path/dists/$(_get_name "$G_MENU_CHOISE").img.lzma"
+	_download_image $(_get_url "$G_MENU_CHOISE") "$local_path/dist/$(_get_name "$G_MENU_CHOISE").img.lzma"
+	prepare_image "$local_path/dist/$(_get_name "$G_MENU_CHOISE").img.lzma"
 	generate_bsds
 	ls -l data/*p-$(_get_name "$G_MENU_CHOISE").bsd
-	if [ "$(id -u)" != "0" ]; then
-		echo_e "Need root permission for copy bsds on $(_get_lpath "$G_MENU_CHOISE")/bsds"
-		exit 1
-	else
-		echo_i "Copy bsds to $(_get_lpath "$G_MENU_CHOISE")/bsds..."
-		mv *p-$(_get_name "$G_MENU_CHOISE").bsd $(_get_lpath "$G_MENU_CHOISE")/bsds
-		mv *p-$(_get_name "$G_MENU_CHOISE")-boot $(_get_lpath "$G_MENU_CHOISE")/bsds
-	fi
+	echo_i "Copy bsds to $(_get_lpath "$G_MENU_CHOISE")/bsds..."
+	sudo cp *p-$(_get_name "$G_MENU_CHOISE").bsd $(_get_lpath "$G_MENU_CHOISE")/bsds
+	sudo cp *p-$(_get_name "$G_MENU_CHOISE")-boot $(_get_lpath "$G_MENU_CHOISE")/bsds
 }
 
 function lib_mode()
@@ -552,21 +645,41 @@ function lib_mode()
 }
 
 ######################################################################## MAIN ##
+
 parms=$@
 while [ $# -gt 0 ]
 do
 	case $1 in
+			--simnow_dir) G_SIMNOW_DIR=$2; shift;;
+			-l|--list) CALL_LIST_IMAGE=1; shift;;
 			-d|--debug) DEBUG=1; shift;;
 			-v|--verbose) VERBOSE=1; shift;;
 			--help|-h) usage;;
-			-l|--list) list_images;;
 			--lib) LIB_MODE=1; lib_mode; shift;; 
 			*) shift;;
 	esac
 done
 
+check_simnow "NULL"
+
+echo_d "SIMNOW_DIR=$G_SIMNOW_DIR"
+echo_d "CALL_LIST_IMAGE=$CALL_LIST_IMAGE"
+if [ $CALL_LIST_IMAGE = 1 ]; then echo_d "Calling: list_images"; list_images; fi
+
 if [ $LIB_MODE = 0 ]; then
+	echo_i "Creating Temporary directory: $TEMPORARY_DIR"
+	mkdir -p $TEMPORARY_DIR
 	_main $parms
 fi
+echo_i "Cleaning temporary directory: $TEMPORARY_DIR"
+rm -rf $TEMPORARY_DIR
+echo_d "Unset the common name functions"
+unset -f echo_d
+unset -f echo_e
+unset -f echo_i
+unset -f echo_w
+unset -f echo_ok
+unset -f usage
+
 
 # END SCRIPT

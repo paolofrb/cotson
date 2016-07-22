@@ -6,9 +6,7 @@ machine_id=`echo "$2" | cut -d "-" -f 1`
 distro=`echo "$2" | cut -d "-" -f 2-`
 iso_image="$3"
 ram_dimension="$4"
-echo "PARM 2: $2"
-echo "MACHINE ID: $machine_id"
-echo "DISTRO: $distro"
+
 
 if [[ ! -f "$simnow_dir/simnow" ]]; then
     echo "Usage: $0 /path/to/simnow/dir machine"
@@ -19,7 +17,6 @@ datadir=`pwd`
 
 bsd="$datadir/$bsd_parm.bsd"
 bsd0="$datadir/$machine_id-$distro-reset.bsd"
-echo "RESET SELECTED: $bsd0"
 if [[ ! -f "$bsd0" ]]; then
     echo "Cannot find $bsd0"
     exit 1
@@ -261,7 +258,6 @@ echo "shell.save $bsd" >> $bootscript
 echo "quit" >> $bootscript
 
 ( cd $simnow_dir; ./simnow -c $df -d -i $datadir -e $bootscript )
-#( cd $simnow_dir; ./simnow -d -i $datadir -e $bootscript )
 
 
 exit 0

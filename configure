@@ -29,6 +29,10 @@ vnctest=0  # default to 0 since on some Ubuntu machines the vnc test closes the 
 force=0
 llua="lua5.1"
 
+BASEPATH_STATUS_FILE="/var/lib"
+DIR_NAME_STATUS_FILE="cotson"
+STATUS_FILE_PATH="$BASEPATH_STATUS_FILE/$DIR_NAME_STATUS_FILE"
+
 #shopt -s extglob
 
 if [[ "$SIMNOW_DIR" != "" ]]; then
@@ -89,8 +93,8 @@ G_MENU_CHOISE=${A_IMAGES[$index]}
 
 function check_bootstrap_status()
 {
-	if [[ -e $(_get_lpath "$G_MENU_CHOISE")/log/bootstrap.status ]]; then
-		source $(_get_lpath "$G_MENU_CHOISE")/log/bootstrap.status
+	if [[ -e $STATUS_FILE_PATH/bootstrap.status ]]; then
+		source $STATUS_FILE_PATH/bootstrap.status
 	else
 		echo "ERROR: Run before bootstrap.sh"
 		exit 1
@@ -234,6 +238,21 @@ fi
 
 DIST_UP=`lsb_release -i -s`
 VERNUM_UP=`lsb_release -r -s`
+#patch to use CentOS
+dist=`lsb_release -i -s|cut -d " " -f 1`
+dvernum=`lsb_release -r -s`
+dvn1=${dvernum%.*}
+distorig=""
+dvernumorig=""
+if [ "$dist" = "CentOS" -o "$dist" = "RedHatEnterpriseServer" ]; then
+	distorig="$dist"
+	dvernumorig="$dvernum"
+	dist="Fedora"
+	if [ "$dvn1" = "6" ]; then dvernum="14"; fi
+	DIST_UP="$dist"
+	VERNUM_UP="$dvernum"
+fi
+
 if [[ "$DIST_UP" != "$DIST" || "$VERNUM_UP" != "$VERNUM" ]]; then
 	str="* Your distribution is changed from $VERNUM to $VERNUM_UP"
 	echo -e "\e[31m$str\e[39m"
