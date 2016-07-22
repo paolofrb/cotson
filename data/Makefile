@@ -41,6 +41,9 @@ lzma: $(HDD)
 	if [ -f tf.rom ]  && [! -f $(SIMNOW_DIR)/Images/tf.rom ]; then \
 	    $(CP) tf.rom $(SIMNOW_DIR)/Images; \
 	fi; \
+	if [ -f tfx1.rom ]  && [! -f $(SIMNOW_DIR)/Images/tfx1.rom ]; then \
+	    $(CP) tfx1.rom $(SIMNOW_DIR)/Images; \
+	fi; \
 	if [ -z "${RAM}" ] ; then \
 		echo ">>>>"; \
 		echo "$*"; \

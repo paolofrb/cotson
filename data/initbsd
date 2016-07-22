@@ -35,6 +35,9 @@ case $machine_id in
     secs="28" 
 	;;
 esac
+if [ -e "$simnow_dir/Images/tfx1.rom" ]; then
+  drive="slave"
+fi
 
 
 ## Do we have a display?
@@ -222,11 +225,11 @@ function send_root {
 bootscript="$datadir/$machine_id-$distro-boot"
 
 echo "################ CREATING $bsd ############"
-
+# here we use ../data instade of $datadir to avoid absolute paths inside the bsd
 cat > $bootscript << EOF
 open $bsd0
 SetLogConsoleEnabled 1
-ide:0.image $drive $datadir/$iso_image
+ide:0.image $drive ../data/$iso_image
 ide:0.journal $drive on
 e1000.linkconnect down
 e1000.setmediatorhost off
@@ -258,6 +261,6 @@ echo "shell.save $bsd" >> $bootscript
 echo "quit" >> $bootscript
 
 ( cd $simnow_dir; ./simnow -c $df -d -i $datadir -e $bootscript )
-
+#( cd $simnow_dir; ./simnow -d -i $datadir -e $bootscript )
 
 exit 0
