@@ -17,7 +17,9 @@ control_script_file='twonodes-ctrl'
 clean_sandbox=false
 -- node_config="config.sh"
 
-DBFILE="/tmp/twonodes.db"
+-- DBFILE: defined in Makefile
+--DBFILE="/tmp/twonodes.db"
+
 DESC="Two nodes example"
 EXP=10
 

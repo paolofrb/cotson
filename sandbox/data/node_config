@@ -7,6 +7,9 @@ MASK="255.255.0.0"
 SUBNET="$NET.10"
 GW="$SUBNET.2"
 
+# Workaround for last version of Linux kernel
+INTF=`ifconfig -a | sed 's/[ \t].*//;/^$/d' | grep -m1 "^e"`
+
 DEBUG=1
 
 name() { echo "n$1"; }
@@ -39,7 +42,7 @@ log "  stopping all network commands"
 #     /etc/init.d/xcgd stop
 # fi
 $netscript stop > /dev/null 2>&1
-/sbin/ifconfig eth0 down
+/sbin/ifconfig $INTF down
 pkill -9 dhclient3  ## just in case
 
 # modprobe -r e1000
@@ -51,8 +54,8 @@ cat > /etc/network/interfaces<<EOF
 auto lo
 iface lo inet loopback
 
-auto eth0
-iface eth0 inet static
+auto $INTF
+iface $INTF inet static
 	address $(ip $NODE)
 	netmask $MASK
 	network $NET
@@ -79,8 +82,8 @@ echo "" > /etc/resolv.conf
 ## sysctl -q -w net.ipv4.no_metrics_save="1"
  
 log "  baptize nic"
-/sbin/ifconfig eth0 hw ether $(mac $NODE)
-/sbin/ifconfig eth0 $(ip $NODE)
+/sbin/ifconfig $INTF hw ether $(mac $NODE)
+/sbin/ifconfig $INTF $(ip $NODE)
 # /sbin/ifconfig eth0 txqueuelen 20000
 # /sbin/ifconfig eth0 mtu 9000
 

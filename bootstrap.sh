@@ -268,17 +268,18 @@ function _detect_os()
 	VER=$ver
 	vernum=`lsb_release -r -s`
 	VERNUM=$vernum
+
+	#compatibility patch for CentOS
+	if [ "$DIST" = "CentOS" ]; then
+		dist="Fedora"
+		dvn1=${vernum%.*}
+		if [ "$dvn1" = "6" ]; then vernum="14"; ver="Laughlin"; fi
+	fi
+	# Keep attention, if you have a CentOS system, will save in status file "Fedora"
 	write_status_file "DIST=$DIST"
 	write_status_file "DIST1=$DIST1"
 	write_status_file "VER=$VER"
 	write_status_file "VERNUM=$VERNUM"
-
-	#compatibility patch for CentOS
-	if [ "$DIST" = "CentOS" ]; then
-	   dist="Fedora"
-	   dvn1=${vernum%.*}
-	   if [ "$dvn1" = "6" ]; then vernum="14"; ver="Laughlin"; fi
-	fi
 
 	echo_i "Detected Distribution '$dist' - Version '$ver'"
 	ok=0
@@ -312,13 +313,11 @@ function _detect_os()
 		echo "   FEDORA: $FEDORA_SUPPORTED_VERS"
 		echo ""
 		write_status_file "BOOTSTRAP=\"KO\""
-		# echo "BOOTSTRAP=\"KO\"" > $OUT_FILE # Old system
 		exit 1;
 	fi
 
 	echo_i "$dist $ver supported"
 	write_status_file "_detect_os=\"OK\""
-	# echo "_detect_os=\"OK\"" >> $OUT_FILE # old system
 }
 
 function make_dependencies()
@@ -333,7 +332,7 @@ function make_dependencies()
 			ret=`echo "$check_repo"|grep "distribution component is already enabled"`
 			echo_d "UNIVERSE: $ret"
 			if [ "$ret" = "" ]; then
-				sudo apt-get -y update
+				sudo apt-get -q -q -y update
 			fi
 			ruby="ruby"
 		fi
@@ -364,7 +363,7 @@ function make_dependencies()
 			ruby --version | grep 1.8
 			if [[ $? -ne 0 ]]; then
 				echo "### Installing ruby1.8"
-				sudo apt-get install ruby1.8 -y
+				sudo apt-get -q -q install ruby1.8 -y
 				ruby18=`update-alternatives --list ruby | grep 1.8`
 				sudo update-alternatives --set ruby $ruby18
 			fi
@@ -528,7 +527,7 @@ function cotson_images_dirs()
 		echo_d "mkdir -p $COTSON_IMAGES_PATH/$COTSON_ROM_DIR_NAME"
 		sudo mkdir -p $COTSON_IMAGES_PATH/$COTSON_ROM_DIR_NAME
 		ls -l $COTSON_IMAGES_PATH
-		exit 1
+		#exit 1
 	fi
 }
 
@@ -660,9 +659,10 @@ if [ "$FORCE" = 0 ]; then
 	if [ -e "$OUT_FILE" ]; then
 		echo_i "bootstrap.status is present"
 		#echo_w "need to check also the version of distribution inside the file and on the system"
-		local_dist="$DIST"
+		
+		local_dist=`lsb_release -i -s`
 		local_ver="$VER"
-		local_vernum="$VERNUM"
+		local_vernum=`lsb_release -r -s`
 		echo_d "LOCAL DIST=$local_dist"
 		echo_d "LOCAL VER=$local_ver"
 		echo_d "LOCAL VERNUM=$local_vernum"
@@ -678,9 +678,15 @@ if [ "$FORCE" = 0 ]; then
 		if [[ "$BOOTSTRAP" = "" || "$BOOTSTRAP" = "KO" ]]; then
 			echo_w "problems detected in bootstrap.status"
 			echo_i "Run again bootstrap.sh"
+		elif [[ "$local_dist" != "$DIST" || "$local_vernum" != "$VERNUM" ]]; then
+			echo_e "Your distribution is changed from $VERNUM to $VERNUM_UP"
+			echo_e "I try to fix the problem"
+			echo_d "Reset bootstrap.status file"
+			reset_status_file
 		else
 			echo_i "Checking bootstrap.status: OK"
-			exit 100
+			echo_w "bootstrap.sh is already been launched"
+			exit 0
 		fi
 	else
 		echo_i "bootstrap.status isn't present"

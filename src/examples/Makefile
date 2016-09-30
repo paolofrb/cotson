@@ -61,7 +61,8 @@ run_twonodes:
 	isoinfo -x '/COTSON_G.TGZ;1' -i ../../data/cotson-guest-tools.iso|tar xzf - usr/bin/cotson_tracer -O >/tmp/cotson_tracer; \
 	/bin/rm -f run_twonodes.log /tmp/twonodes.db; \
 	( (sleep 10; if [ -s ./twonodes-ctrl ]; then echo "Firing console view"; ./twonodes-ctrl view; fi) &); \
-	../../bin/cotson twonodes.in > run_twonodes.log 2>&1 ; \
+	TMP_DB_NAME=`mktemp -u /tmp/database_twonodes_XXXXXXXXXX.db`; \
+	../../bin/cotson DBFILE=\"$$TMP_DB_NAME\" twonodes.in > run_twonodes.log 2>&1 ; \
 	if [ -s /tmp/net-trace.gz ]; then echo "Dumping the network trace"; \
 	../tools/traceplayer /tmp/net-trace.gz 0 1; fi
 
@@ -157,16 +158,17 @@ cleanup_netperf:
         echo "...done."
 
 run_sqlite:
-	echo "Running 3 times an experiment (different samplers) writing to sqlite DB"; \
+	@echo "Running 3 times an experiment (different samplers) writing to sqlite DB"; \
 	echo "At the end, the IPC is plotted"; \
 	echo "Type <return> to start or <ctrl-c> to abort"; read a; \
-	/bin/rm -f /tmp/test.db; \
-	(( ../../bin/cotson EXP=1 sqlite.in; \
-	  ../tools/ipcplot file:/tmp/test.db 1 -g 0.01 -r 0 ) & );  \
-	(( ../../bin/cotson EXP=2 sqlite.in; \
-	  ../tools/ipcplot file:/tmp/test.db 2 -g 0.01 -r 0 ) & ); \
-	(( ../../bin/cotson EXP=3 sqlite.in; \
-	  ../tools/ipcplot file:/tmp/test.db 3 -g 0.01 -r 0 ) & ); \
+	/bin/rm -f /tmp/test.db 2> /dev/null;  \
+	TMP_DB_NAME=`mktemp -u /tmp/database_XXXXXXXXXX.db`; \
+	(( ../../bin/cotson DBFILE=\"$$TMP_DB_NAME\" EXP=1 sqlite.in; \
+	  ../tools/ipcplot file:$$TMP_DB_NAME 1 -g 0.01 -r 0 -x11 ) & );  \
+	(( ../../bin/cotson DBFILE=\"$$TMP_DB_NAME\" EXP=2 sqlite.in; \
+	  ../tools/ipcplot file:$$TMP_DB_NAME 2 -g 0.01 -r 0 -x11 ) & ); \
+	(( ../../bin/cotson DBFILE=\"$$TMP_DB_NAME\" EXP=3 sqlite.in; \
+	  ../tools/ipcplot file:$$TMP_DB_NAME 3 -g 0.01 -r 0 -x11 ) & ); \
 	  wait
 
 cleanup_sqlite:

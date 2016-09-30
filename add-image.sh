@@ -293,7 +293,7 @@ function _download_reset_bsds()
 	echo_d "1. Compose the URL from url_repo: $url_repo "
 	echo_d "2. Get distro name: $distro"
 	echo_d "3. Get destination path: $destination_path"
-	echo_d "4. Download the reset.bsd"
+	echo_d "4. Download the *reset.bsd"
 }
 
 #
@@ -491,6 +491,7 @@ function generate_bsds()
 		#./initbsd $G_SIMNOW_DIR $machine_id-$(_get_name "$G_MENU_CHOISE") $(_get_name "$G_MENU_CHOISE").img
 		# Try to run in parallel the BSD generation
 		####################################################################
+		echo_d "COMMAND: ./initbsd "$G_SIMNOW_DIR" "$machine_id"-"$(_get_name "$G_MENU_CHOISE")" "$(_get_name "$G_MENU_CHOISE")".img"
 		$(./initbsd "$G_SIMNOW_DIR" "$machine_id"-"$(_get_name "$G_MENU_CHOISE")" "$(_get_name "$G_MENU_CHOISE")".img > add-image_"$machine_id"-"$(_get_name "$G_MENU_CHOISE")".log 2>&1; touch ok_ ) &
 		local index=0
 		local s_index=0
@@ -619,11 +620,30 @@ function _main()
 	local_path=`eval echo $local_path`
 	_download_image $(_get_url "$G_MENU_CHOISE") "$local_path/dist/$(_get_name "$G_MENU_CHOISE").img.lzma"
 	prepare_image "$local_path/dist/$(_get_name "$G_MENU_CHOISE").img.lzma"
-	generate_bsds
-	ls -l data/*p-$(_get_name "$G_MENU_CHOISE").bsd
+	generate_bsds # this function change directory to data/ (cd data/)
+	ls -l *p-$(_get_name "$G_MENU_CHOISE").bsd
 	echo_i "Copy bsds to $(_get_lpath "$G_MENU_CHOISE")/bsds..."
 	sudo cp *p-$(_get_name "$G_MENU_CHOISE").bsd $(_get_lpath "$G_MENU_CHOISE")/bsds
+	ret=$?
+	if [ $ret = 0 ]; then
+		echo_i "BSDs copy: DONE"
+		echo_d "Removing local files"
+		rm *p-$(_get_name "$G_MENU_CHOISE").bsd
+	else
+		echo_e "Something is gone wrong during the copy in: $(_get_lpath "$G_MENU_CHOISE")/bsds"
+		echo_d "COMMAND: sudo cp *p-$(_get_name "$G_MENU_CHOISE").bsd $(_get_lpath "$G_MENU_CHOISE")/bsds"
+	fi
 	sudo cp *p-$(_get_name "$G_MENU_CHOISE")-boot $(_get_lpath "$G_MENU_CHOISE")/bsds
+	ret=$?
+	if [ $ret = 0 ]; then
+		echo_i "BSDs copy: DONE"
+		echo_d "Removing local files"
+		rm *p-$(_get_name "$G_MENU_CHOISE")-boot
+	else
+		echo_e "Something is gone wrong during the copy in: $(_get_lpath "$G_MENU_CHOISE")/bsds"
+		echo_d "COMMAND: sudo cp *p-$(_get_name "$G_MENU_CHOISE")-boot $(_get_lpath "$G_MENU_CHOISE")/bsds"
+	fi
+	echo_i "Remember: for connect new images or bsds generated, need to re-run ./configure"
 }
 
 function lib_mode()

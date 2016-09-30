@@ -3,7 +3,7 @@ options = {
 	time_feedback = true,
 	heartbeat = {
 	    type="sqlite", 
-		dbfile="/tmp/test.db", 
+		dbfile=DBFILE, 
 		experiment_id=EXP, 
 		experiment_description="test run #"..EXP 
     },
