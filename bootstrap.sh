@@ -201,7 +201,7 @@ function sysctl_tuning()
 		local tmp_file_name
 		tmp_file_name=`mktemp tmp.XXXXXXXXXX`
 		cp /etc/sysctl.conf $tmp_file_name
-		cp $tmp_file_name /etc/sysctl.conf
+		sudo cp $tmp_file_name /etc/sysctl.conf
 		echo_d "Removing the temporary file: $tmp_file_name"
 		rm $tmp_file_name
 		#case 2: the sysctl.conf DOES NOT contaiin a vm.max_map_count
@@ -210,7 +210,7 @@ function sysctl_tuning()
 			tmp_file_name=`mktemp tmp.XXXXXXXXXX`
 			cp /etc/sysctl.conf $tmp_file_name
 			sed -i "\$avm.max_map_count=$mapok" $tmp_file_name
-			cp $tmp_file_name /etc/sysctl.conf
+			sudo cp $tmp_file_name /etc/sysctl.conf
 			echo_d "Removing here the temporary file: $tmp_file_name"
 			rm $tmp_file_name
 		fi
@@ -359,7 +359,7 @@ function make_dependencies()
 		vncargs2="-desktop="
 		llua="lua5.1"
 
-		if [ "$VER" != "utopic" -a "$VER" != "wily" -a "$VER" != "trusty" ]; then
+		if [ "$VER" != "utopic" -a "$VER" != "wily" -a "$VER" != "trusty" -a "$VER" != "xenial" ]; then
 			ruby --version | grep 1.8
 			if [[ $? -ne 0 ]]; then
 				echo "### Installing ruby1.8"
@@ -713,4 +713,9 @@ echo_i "System is ready for COTSon installation."
 echo_i "Download default image: $DIST_IMAGE"
 echo_d "Now RUN add-images"
 ./add-image.sh --simnow_dir $g_simnow_dir $DIST_IMAGE
+ret=$?
+if [ $ret != 0 ]; then
+	echo_e "Error in add-image.sh: code = $ret"
+	exit 1
+fi
 echo_ok "Now you can run: ./configure"

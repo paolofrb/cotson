@@ -243,12 +243,14 @@ function _download_image()
 	if [ ! -e $destination ]; then
 		# for save with same name use -O -J
 		curl --insecure --progress-bar $url > "$TEMPORARY_DIR/$(_get_name "$G_MENU_CHOISE").img.lzma"
+		echo_d "Get md5sum from downloaded image"
+		local local_md5sum=`md5sum $TEMPORARY_DIR/$(_get_name "$G_MENU_CHOISE").img.lzma | awk {'print $1'}`
 	else
 		echo_i "The image is present in local path: $destination"
+		echo_d "Get md5sum from local path image: $destination"
+		local local_md5sum=`md5sum $destination | awk {'print $1'}`
 	fi
 	echo_i "Checking the MD5SUM..."
-	echo_d "Get md5sum from downloaded image"
-	local local_md5sum=`md5sum $TEMPORARY_DIR/$(_get_name "$G_MENU_CHOISE").img.lzma | awk {'print $1'}`
 	echo_d "Get md5sum from images.list"
 	local original_md5sum=$(_get_md5sum "$G_MENU_CHOISE")
 	echo_d "   local_md5sum = $local_md5sum"
@@ -258,7 +260,8 @@ function _download_image()
 		echo_i "Copy image to destination dir: $destination"
 		sudo cp $TEMPORARY_DIR/$(_get_name "$G_MENU_CHOISE").img.lzma $destination
 	else
-		echo_e "MD5SUM ERROR!"
+		echo_e "MD5SUM ERROR: Calculated: $local_md5sum - expected: $original_md5sum"
+		exit 1
 	fi
 }
 
