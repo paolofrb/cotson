@@ -236,7 +236,7 @@ double SimpleDisk::disk_seek_latency(uint64_t block_start)
     if (curr_cyl != last_cylinder)
     	seek = avg_seek_lat;
 		
-	return seek;
+    return seek;
 }
 
 double SimpleDisk::disk_transfer_latency(uint64_t block_start, uint64_t block_count)

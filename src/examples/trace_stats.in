@@ -1,5 +1,5 @@
 TRACE_OUT=function(i)
-    return "/tmp/trace_stats."..i..".txt.gz"
+    return OUTFILEPREF.."."..i..".txt.gz"
 end
 
 options = {

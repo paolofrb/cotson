@@ -32,7 +32,7 @@
         );\
 }
 #else
-#define COTSON_INTERNAL(k,x) \
+#define COTSON_INTERNAL(k,v,w) \
 { \
         asm volatile (   \
 				"push %%eax   ;\n\t" \

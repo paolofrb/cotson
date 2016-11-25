@@ -8,9 +8,9 @@ options = {
 	heartbeat={ type="file_last", logfile="cotson_tracer.log" }, 
 		-- one result file in cotson_tracer.log
 }
-display="auto"
 one_node_script="run_interactive"
-display=os.getenv("DISPLAY")
+display="auto"
+--display=os.getenv("DISPLAY")
 
 -- the function that decides what timer to use
 function sampler_constructor(i)

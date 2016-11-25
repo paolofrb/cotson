@@ -1,5 +1,3 @@
-TRACE_OUT='/tmp/mem_tracer.txt.gz'
-
 -- Uncomment to see the simnow window on current display
 -- one_node_script="run_interactive"
 -- display=os.getenv("DISPLAY")
@@ -44,7 +42,7 @@ function build()
 	-- before main memory and we point to to produce
 	-- a trace of all memory accesses into the file 
 	-- mem_tracer.txt
-	trace=Tracer{ name="trace", trace_file=TRACE_OUT, next=mem } 
+	trace=Tracer{ name="trace", trace_file=OUTFILE, next=mem } 
 	bus=Bus{ name="bus", protocol='MOESI', latency=25, bandwidth=4, next=trace } 
 	busT=Bus{ name="tlb_bus", protocol='MOESI', latency=25, bandwidth=4, next=mem }
 

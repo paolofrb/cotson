@@ -45,4 +45,10 @@ src/Make.conf: src/Make.conf.in
 	fi
 
 regression: build
-	make -C src regression
+	cd src && make regression
+
+run_examples: build
+	cd src/examples && make run
+
+run_example_regression: build
+	cd src/examples && ./example-regression.sh

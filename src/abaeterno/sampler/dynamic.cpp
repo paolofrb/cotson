@@ -201,8 +201,8 @@ double Dynamic::MetInfo::diffnormUpdate(double sigma)
 	double dt = now - tlast; // differential time
 	tlast = now; // update last value
 	if (dt==0) { // First time around
-        for (uint32_t i = 0; i < metrics.size(); ++i)
-            vlast[i] = static_cast<double>(*(metrics[i])); // current value
+            for (uint32_t i = 0; i < metrics.size(); ++i)
+                vlast[i] = static_cast<double>(*(metrics[i])); // current value
 	    return 0;
 	}
     for (uint32_t i = 0; i < metrics.size(); ++i) 

@@ -58,23 +58,33 @@ class Sandbox < Location
   def install_node_config
     if @opts[:node_config]!=""
         debug2 "installing user node configuration"
-        FileUtils.cp_r(@opts[:node_config],data('node_config'))
+        uscript=@opts[:node_config]
+        uscript1,uscript2=uscript.split(/\s/,2)
+        debug2 "uscript1 #{uscript1}   uscript2 #{uscript2}"
+        FileUtils.cp_r(uscript1,data('node_config'))
     end
   end
 
   def install_user_script
     debug2 "installing user script"
-    FileUtils.cp_r(@opts[:user_script], data('user_script'))
+    uscript=@opts[:user_script]
+    uscript1,uscript2=uscript.split(/\s/,2)
+    debug2 "uscript1 #{uscript1}   uscript2 #{uscript2}"
+    FileUtils.cp_r(uscript1, data('user_script'))
   end
 
   def install_run_sh
    if @opts[:run_script]!=""
-    FileUtils.cp_r(@opts[:run_script], data('run_script'))
+    debug2 "installing run script"
+    uscript=@opts[:run_script]
+    uscript1,uscript2=uscript.split(/\s/,2)
+    debug2 "uscript1 #{uscript1}   uscript2 #{uscript2}"
+    FileUtils.cp_r(uscript1, data('run_script'))
     debug2 "installing run.sh"
     File.open(data('run.sh'),"w") do |f|
       f.puts "xget ../data/run_script run_script"
       f.puts "chmod +x run_script"
-      f.puts "./run_script 2>&1 | tee stdout.log"
+      f.puts "./run_script #{uscript2} 2>&1 | tee stdout.log"
       f.puts "xput stdout.log #{@root}/data/stdout.log"
       f.puts "touch l; xput l terminate"
       s_id=0
@@ -96,16 +106,22 @@ class Sandbox < Location
 
   def install_cluster_sh
     debug2 "installing cluster.sh"
+    uscript=@opts[:user_script]
+    uscript1,uscript2=uscript.split(/\s/,2)
+    debug2 "uscript1 #{uscript1}   uscript2 #{uscript2}"
+    uscript=@opts[:node_config]
+    uscript3,uscript4=uscript.split(/\s/,2)
+    debug2 "uscript3 #{uscript3}   uscript4 #{uscript4}"
     
     File.open(data('cluster.sh'),"w") do |f|
       f.puts "xget ../data/node_config node_config"
       f.puts "xget ../data/user_script user_script"
       f.puts "chmod +x node_config user_script"
 
-      f.puts "sudo ./node_config #{@opts[:NODE]} #{@opts[:TOTAL]} 2>&1 | tee node_config.log"
+      f.puts "sudo ./node_config #{@opts[:NODE]} #{@opts[:TOTAL]} #{uscript4} 2>&1 | tee node_config.log"
       f.puts "xput node_config.log #{@root}/data/node_config.log"
 
-      f.puts "./user_script #{@opts[:NODE]} #{@opts[:TOTAL]} 2>&1 | tee stdout.log"
+      f.puts "./user_script #{@opts[:NODE]} #{@opts[:TOTAL]} #{uscript2} 2>&1 | tee stdout.log"
       f.puts "xput stdout.log #{@root}/data/stdout.log"
       s_id=0
       a = @opts[:subscribe_result]

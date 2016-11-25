@@ -15,7 +15,7 @@ traceplayer: traceplayer.cpp
 	$(CXX) $(CXXFLAGS) -I ../network -o traceplayer $< -lz
 
 pg_experiment: pg_experiment.cpp
-	$(CXX) $(CXXFLAGS) -I/usr/include/pqxx -o pg_experiment $< -lpqxx
+	$(CXX) $(CXXFLAGS) -o pg_experiment $< -lpqxx
 
 memtrace: memtrace.cpp ../common/read_gzip.h
 	$(CXX) $(CXXFLAGS) -I ../network -o memtrace $< -lz

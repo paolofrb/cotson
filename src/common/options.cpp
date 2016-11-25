@@ -13,12 +13,13 @@
 
 #include "options.h"
 #include "fileutil.h"
+#include "static_set.h"
 
 #include <boost/tokenizer.hpp>
 #include <boost/format.hpp>
 
-using namespace std;
 using namespace boost;
+using namespace std;
 
 lua_State *Option::globalL;
 vector<string> Option::command_line_;
@@ -239,7 +240,7 @@ void Option::processInit(const string& base)
 			throw invalid_argument(lua_tostring(globalL,-1));
 	}
 
-	typedef StaticSet<shared_ptr<Option> > Opts;
+	typedef StaticSet< boost::shared_ptr<Option> > Opts;
 	for(Opts::iterator i=Opts::begin();i!=Opts::end(); ++i)
 		options_[(*i)->Name()]=i->get();
 
@@ -438,8 +439,8 @@ option::option(const char* name,const char* def,const char* description)
 {
     try
     {
-        shared_ptr<Option> opt(new Option(name,def,description));
-        registerSetParam<shared_ptr<Option> > a(opt);
+        boost::shared_ptr<Option> opt(new Option(name,def,description));
+        registerSetParam<boost::shared_ptr<Option> > a(opt);
     }
     catch(invalid_argument& arg)
     {
@@ -454,8 +455,8 @@ option::option(const char* name,const char* description)
 {
     try
     {
-        shared_ptr<Option> opt(new Option(name,description));
-        registerSetParam<shared_ptr<Option> > a(opt);
+        boost::shared_ptr<Option> opt(new Option(name,description));
+        registerSetParam<boost::shared_ptr<Option> > a(opt);
     }
     catch(invalid_argument& arg)
     {
@@ -470,9 +471,9 @@ options::options(const char* name,const char* description)
 {
     try
     {
-        shared_ptr<Option> opt(new Option(name,description));
+        boost::shared_ptr<Option> opt(new Option(name,description));
         opt->has_many();
-        registerSetParam<shared_ptr<Option> > a(opt);
+        registerSetParam<boost::shared_ptr<Option> > a(opt);
     }
     catch(invalid_argument& arg)
     {
@@ -487,9 +488,9 @@ optionR::optionR(const char* name,const char* description)
 {
     try
     {
-        shared_ptr<Option> opt(new Option(name,description));
+        boost::shared_ptr<Option> opt(new Option(name,description));
         opt->is_raw();
-        registerSetParam<shared_ptr<Option> > a(opt);
+        registerSetParam<boost::shared_ptr<Option> > a(opt);
     }
     catch(invalid_argument& arg)
     {

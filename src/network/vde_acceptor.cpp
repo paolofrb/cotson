@@ -55,7 +55,7 @@ VDEAcceptor::open_acceptor(const string &unix_socket, int pid)
     if (handle_ >= 0)
         return -1;  // Endpoint already opened.
 
-	sockaddr_un sa;
+    sockaddr_un sa;
     sa.sun_family = AF_UNIX;
     ::snprintf(sa.sun_path, sizeof(sa.sun_path), "%s", unix_socket.c_str());
 

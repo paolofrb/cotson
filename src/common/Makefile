@@ -2,7 +2,11 @@ SRCS = $(wildcard *.cpp)
 OBJS = $(SRCS:.cpp=.o)
 INCLUDE = -I. -I/usr/include/lua5.1 -I../libluabind
 DEPINC = -I.
-XOPTS = -Werror
+XOPTS = -Werror -Wno-deprecated-declarations -Wno-error=unused-variable
+GCCVERS610CHECK = $(shell expr `gcc -dumpversion | cut -f1-2 -d.` \>= 6.1)
+ifeq "$(GCCVERS610CHECK)" "1"  #RG small patch to compile
+    XOPTS = -Werror -Wno-deprecated-declarations -Wno-error=unused-variable -Wno-error=frame-address
+endif
 
 all: libaacommon.a test
 

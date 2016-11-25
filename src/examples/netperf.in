@@ -17,7 +17,7 @@ cluster_nodes=2
 options = {
 	sampler={ type="interval", functional="20M",warming="100k",simulation="100k" },
 	-- sampler={ type="no_timing", quantum="10M" },
-	heartbeat={type="sqlite", dbfile="/tmp/netperf.db",experiment_id=1,experiment_description="netperf"},
+	heartbeat={type="sqlite", dbfile=DBFILE,experiment_id=1,experiment_description="netperf"},
 }
 
 -- Poor man's multicast disambiguation (pid-based)
@@ -35,7 +35,7 @@ simnow.commands=function()
 	use_hdd('karmic64.img')
 	set_journal()
 	set_network()
-	execute('netperf.sh')
+	execute("netperf.sh "..NPDIR)
 	subscribe_result('/tmp/np.log')
 end
 

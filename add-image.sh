@@ -697,11 +697,11 @@ fi
 echo_i "Cleaning temporary directory: $TEMPORARY_DIR"
 rm -rf $TEMPORARY_DIR
 echo_d "Unset the common name functions"
-unset -f echo_d
-unset -f echo_e
-unset -f echo_i
-unset -f echo_w
-unset -f echo_ok
+#unset -f echo_d
+#unset -f echo_e
+#unset -f echo_i
+#unset -f echo_w
+#unset -f echo_ok
 unset -f usage
 
 

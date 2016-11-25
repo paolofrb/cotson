@@ -119,7 +119,7 @@ public:
 // options defines a particular option which is composing, i.e. may appear
 // several times in the command line
 
-#include "static_set.h"
+//#include "static_set.h"
 struct option
 {
 	option(const char*,const char*,const char*);

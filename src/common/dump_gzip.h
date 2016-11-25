@@ -19,21 +19,20 @@
 class DumpGzip
 {
 	public: 
-	DumpGzip(std::string gzName, const char* mode="wb") : ok(true)
+	DumpGzip(std::string gzName, const char* mode="wb") : ok(true),itsopen(false)
 	{
 		f=gzopen(gzName.c_str(),mode);
-		if(f==NULL)
-			ok=false;
+		if(f==NULL) ok=false; else itsopen=true;
 	}
-	~DumpGzip() { flush(); if(ok) gzclose(f); }
+	~DumpGzip() { flush(); if(itsopen) gzclose(f); }
 	
-	void flush() { if(ok) gzflush(f,Z_SYNC_FLUSH); } 
+	void flush() { if(itsopen) gzflush(f,Z_SYNC_FLUSH); } 
 
 	template<typename T>
 	DumpGzip& operator<<(T);
 	void as_text(const std::string& s)
 	{
-		if(ok)
+		if(ok && itsopen)
 		{
 			size_t size=static_cast<size_t>(s.size());
 			size_t w=gzwrite(f,s.c_str(),size);
@@ -45,13 +44,14 @@ class DumpGzip
 	operator const void*() const { return ok ? this : 0; }
 	private:
 	bool ok;
+	bool itsopen;
 	gzFile f;
 };
 
 template<typename T>
 DumpGzip& DumpGzip::operator<<(T t)
 {
-	if(ok)
+	if(ok && itsopen)
 	{
 		int w=gzwrite(f,&t,sizeof(t));
 		if(w!=sizeof(t))

@@ -37,7 +37,7 @@ int main(int argc,char*argv[])
     const string self(argv[0]);
     if(argc<3)
         return usage(self);
-	string host(*argv[1]=='0' ? "" : "host="+string(argv[1]));
+    string host(*argv[1]=='0' ? "" : "host="+string(argv[1]));
     string command(argv[2]);
     string dbconn(host+" dbname=cotson user=cotson");
     if(command=="new") {

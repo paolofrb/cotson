@@ -1,30 +1,57 @@
+curdir=os.getenv("PWD")
+DBF1=curdir..'/'..DBFILE
+clean_sandbox=false
+if EXP == 1  then
+    stq="500k"
+    expdesc="test run SIMPLE TIMING QUANTUM="..stq
+elseif EXP == 2 then
+    smfun="400k"
+    smwrm="50k"
+    smsim="50k"
+    expdesc="test run SMARTS SAMPLING FUN="..smfun.." WRM="..smwrm.." SIM="..smsim
+elseif EXP == 3 then
+    dsfun1="100"
+    dswrm1="100"
+    dssim1="50"
+    dsq1=dsfun1+dswrm1+dssim1
+    dsfun=dsfun1.."k"
+    dswrm=dswrm1.."k"
+    dssim=dssim1.."k"
+    dsq=dsq1.."k"
+    dssen="300"
+    dsmxi="10"
+    dsstr="I/O-"..dssen.."-"..dsq.."-"..dsmxi
+    expdesc="test run DYNAMIC SAMPLING FUN="..dsfun.." WRM="..dswrm.." SIM="..dssim.." -- "..dsstr
+else
+    expdesc="test run #"..EXP
+end
 options = {
-	fastforward="100M",
-	time_feedback = true,
-	heartbeat = {
-	    type="sqlite", 
-		dbfile=DBFILE, 
-		experiment_id=EXP, 
-		experiment_description="test run #"..EXP 
+    fastforward="100M",
+    time_feedback = true,
+    heartbeat = {
+        type="sqlite",
+        dbfile=DBFILE,
+        experiment_id=EXP,
+        experiment_description=expdesc,
     },
 }
 
 if EXP == 1  then
-	-- ### Always-on simulation ###
+     -- ### Always-on simulation ###
     options.sampler={ type="simple", quantum="500k" }
-    options.max_nanos="10M"
+    options.max_nanos="250M"
 elseif EXP == 2 then
-	-- ### Sampled (interval) simulation ###
-	options.max_nanos="100M"
-	options.sampler = { type="interval", functional="2M", warming="100k", simulation="100k" }
+    -- ### Sampled (interval) simulation ###
+    options.max_nanos="250M"
+    options.sampler = { type="interval", functional="400k", warming="50k", simulation="50k" }
 elseif EXP == 3 then
-	-- ### Sampled (dynamic) simulation ###
-	options.max_nanos="500M"
-	options.sampler={ type="dynamic", functional="500k", warming="100k", simulation="100k", 
-              maxfunctional=1000, sensitivity="500",
-	          variable={"cpu.*.other_exceptions", "cpu.*.iocount"}}
+    -- ### Sampled (dynamic) simulation ###
+    options.max_nanos="250M"
+    options.sampler={ type="dynamic", functional="100k", warming="100k", simulation="50k",
+    maxfunctional=10, sensitivity="300",
+        variable={"cpu.*.other_exceptions", "cpu.*.iocount"}}
 else
-	io.stderr:write("#### ERROR: EXP must be 1,2 or 3")
+    io.stderr:write("#### ERROR: EXP must be 1,2 or 3")
     os.exit(1)
 end
 

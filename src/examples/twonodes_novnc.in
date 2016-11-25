@@ -14,12 +14,12 @@ debug=true
 display=os.getenv("DISPLAY")
 
 control_script_file='twonodes_novnc-ctrl'
--- clean_sandbox=false
+ clean_sandbox=false
 -- node_config="config.sh"
 --one_node_script="run_interactive"
 
 
-DBFILE="/tmp/twonodes_novnc.db"
+-- DBFILE="/tmp/twonodes_novnc.db"
 DESC="Two nodes example (NO VNC)"
 EXP=10
 
@@ -42,7 +42,7 @@ mediator = {
 	heartbeat={ type="file_last" },
 	heartbeat1={ type="sqlite", dbfile=DBFILE, experiment_id=EXP },
 	timer={ type="simple", max_bandwidth=1000, latency=12, cfactor=10 },
-	tracefile="/tmp/net-trace.gz", -- dump a trace
+	tracefile=NTFILE, -- dump a trace
 	slirp=false, -- don't NAT with the external world
 }
 

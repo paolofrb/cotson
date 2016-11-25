@@ -19,9 +19,9 @@ The corresponding assembly code is:
 For the selection of this small trace is sufficent to write
 (the '1' in parenthisis means we refer to 'zone 1'):
 
-    xzonestart(1);
+    azonestart(1);
     res = a + b;
-    xzonestop(1);
+    azonestop(1);
 
 The output statistics are:
     cpu0.timer.instructions	4

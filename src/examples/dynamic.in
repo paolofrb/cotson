@@ -7,8 +7,8 @@ options = {
 		-- their respective interval lengths until reaching 1M nanos
 	heartbeat={ type="file", logfile="dynamic.log" }, 
 		-- one result file per simulation sample 
-		-- with prefix dyn_sampler.log
-		-- and one at the end with all together with that name
+		-- with prefix node.x.dynamic.log (x is the node number)
+		-- and default suffix '_hb.y' (y is the sample number)
 }
 
 -- change this to point to your bsd and hdd

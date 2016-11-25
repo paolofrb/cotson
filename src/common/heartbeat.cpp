@@ -27,7 +27,7 @@ optionR o6("heartbeat6",  "6th nested heartbeat driver");
 optionR o7("heartbeat7",  "7th nested heartbeat driver");
 }
 
-vector< shared_ptr<HeartBeat> > HeartBeat::hearts;
+vector< boost::shared_ptr<HeartBeat> > HeartBeat::hearts;
 
 void HeartBeat::new_heartbeat(const string& hbs)
 {
@@ -36,7 +36,7 @@ void HeartBeat::new_heartbeat(const string& hbs)
 	Parameters p=Option::from_named_option(hbs,required,"HeartBeat");
 	p.set("name", hbs);
 	p.track();
-	shared_ptr<HeartBeat> hb(Factory<HeartBeat>::create(p));
+	boost::shared_ptr<HeartBeat> hb(Factory<HeartBeat>::create(p));
 	hearts.push_back(hb);
 }
 
@@ -77,7 +77,7 @@ void HeartBeat::add_aggregable(metric& m)
 
 	for(size_t i=0; i<hearts.size(); ++i) 
 	{
-		shared_ptr<Aggregator> a(Factory<Aggregator>::create(p));
+		boost::shared_ptr<Aggregator> a(Factory<Aggregator>::create(p));
 		a->init(&m);
 		hearts[i]->aggr.push_back(a);
 	}

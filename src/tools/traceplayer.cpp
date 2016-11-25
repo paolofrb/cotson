@@ -145,7 +145,9 @@ int main(int argc, char *argv[])
     uint64_t tcur = 0;
     uint64_t tpackets = 0;
     uint64_t tbytes = 0;
-    while (trace && !trace.eof()) {
+    while (trace) {
+
+        if (trace.eof()) break; //avoid to call eof if trace is 0
         // IMPORTANT: keep in sync with Switch.cpp
         uint64_t tstamp;
         MacAddress src;
@@ -155,6 +157,7 @@ int main(int argc, char *argv[])
         double q;
 
         trace >> tstamp;
+        if (trace.eof()) break; //avoid to print garbage
         trace >> src;
         trace >> dst;
         trace >> len;

@@ -20,18 +20,20 @@
 int main(int argc, char *argv[])
 {
     char* sbuf = (char *)malloc(20);
+	uint64_t magic_id=0;
 	uint64_t a=0;
 	uint64_t b=0;
-	uint64_t cp=0;
+	uint64_t cp_withb=0;
 
-	a=atoll(argv[1]);
-	b=atoll(argv[2]);
-    sprintf(sbuf,"hello world %s",argv[3]); cp=(uint64_t)sbuf;
+	magic_id=atoll(argv[1]);
+	a=atoll(argv[2]);
+	b=atoll(argv[3]);
+    sprintf(sbuf,"hello world %ld",b); cp_withb=(uint64_t)sbuf;
 
 // Pass two argc parameters by value and the third as a pointer
 // to some simulated memory (a string buf in this example)
-    printf("%s called with %ld %ld %ld\n", argv[0],a,b,cp);
-	COTSON_INTERNAL(a,b,cp);
+    printf("%s called with %ld %ld 0x%lx\n", argv[0],magic_id,a,cp_withb);
+	COTSON_INTERNAL(magic_id,a,cp_withb);
 
 	free(sbuf);
 	return 0;

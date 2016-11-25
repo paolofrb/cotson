@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# AUTHOR:       : SV (viola@dii.unisi.it)
+# AUTHORS:      : SV (viola@dii.unisi.it), RG (giorgi@dii.unisi.it)
 # TITLE         : bootstrap.sh
 # LICENSE       : MIT
 # VERSION       : 0.0.2
@@ -33,6 +33,7 @@ SIMNOW_DIR="" # ENV VARIABLE NEED elimina
 g_simnow_dir=""
 root=$(pwd)
 VERBOSE=0
+ALL_MODE=0
 
 
 BASEPATH_STATUS_FILE="/var/lib"
@@ -48,18 +49,20 @@ DEBIAN_BASED_PKGS="g++ g++-multilib subversion genisoimage bison flex vnc4server
 rxvt xfwm4 xfonts-100dpi xfonts-75dpi zsh sharutils build-essential xvnc4viewer screen \
 liblua5.1-0 liblua5.1-0-dev zlib1g-dev indent xutils-dev libsqlite3-dev \
 sqlite3 libdbd-sqlite3-perl libdbd-pg-perl gnuplot libboost-dev libboost-thread-dev lzma \
-libxcursor1 libxrender1 libsm6 libxi6 libfontconfig1 gnuplot-x11 subversion procmail rpcbind genisoimage gawk "
+libxcursor1 libxrender1 libsm6 libxi6 libfontconfig1 gnuplot-x11 subversion procmail rpcbind genisoimage gawk \
+gedit mc quota"
 
 FEDORA_BASED_PKGS="gcc gcc-c++ make subversion genisoimage bison flex ruby rubygems rxvt zsh sharutils screen \
 gnuplot indent zlib-devel imake xorg-x11-utils ruby-libs openssl \
 rxvt flex lua* lua-devel libpqxx* boost-devel boost-thread sqlite-devel sqlite lzma \
 perl-Class-DBI-SQLite xorg-x11-fonts-100dpi.noarch xorg-x11-fonts-75dpi \
 tigervnc tigervnc-server tigervnc-server-module xorg-x11-twm glibc-devel.i686 libstdc++.i686 \
-glibc-static glibc-devel libstdc++ libtool subversion flex procmail gawk rpcbind genisoimage "
+glibc-static glibc-devel libstdc++ libtool subversion flex procmail gawk rpcbind genisoimage \
+execstack qpdfview gedit mc quota"
 
 DEBIAN_SUPPORTED_VERS="lenny | squeeze | wheezy | jessie"
-FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle | SphericalCow | Schrödinger’sCat | Heisenbug | TwentyOne | TwentyTwo | TwentyThree"
-UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise | quantal | raring | trusty | utopic | wily | xenial"
+FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle | SphericalCow | Schrödinger’sCat | Heisenbug | TwentyOne | TwentyTwo | TwentyThree | TwentyFour | TwentyFive"
+UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise | quantal | raring | trusty | utopic | wily | xenial | yakkety"
 
 COTSON_IMAGES_BASE_PATH="/opt"
 COTSON_IMAGES_PATH="${COTSON_IMAGES_BASE_PATH}/cotson"
@@ -74,84 +77,172 @@ FEDORA_INSTALLER="yum"
 FEDORA_INSTALLER_CONF="yum.conf"
 
 ### ############################ ###
+function echo_d()
+{
+        if [ $VERBOSE = 1 ]; then
+                verbose_str="[`date +"%T"` - ${FUNCNAME[1]}:${BASH_LINENO[$FUNCNAME[1]]} - D ]: "
+        else
+                verbose_str="* "
+        fi
+        if [ $DEBUG = 1 ]; then
+                echo -e "\e[33m$verbose_str$1\e[39m"
+        else
+                return
+        fi
+}
+
+function echo_w()
+{
+        if [ $VERBOSE = 1 ]; then
+                verbose_str="[`date +"%T"` - ${FUNCNAME[1]}:${BASH_LINENO[$FUNCNAME[1]]} - W ]: "
+        else
+                verbose_str="* WARNING: "
+        fi
+        echo -e "\e[33m$verbose_str$1\e[39m"
+}
+
+function echo_e()
+{
+        if [ $VERBOSE = 1 ]; then
+                verbose_str="[`date +"%T"` - ${FUNCNAME[1]}:${BASH_LINENO[$FUNCNAME[1]]} - E ]: "
+        else
+                verbose_str="* "
+        fi
+        echo -e "\e[31m$verbose_str$1\e[39m"
+}
+
+function echo_ok()
+{
+        if [ $VERBOSE = 1 ]; then
+                verbose_str="[`date +"%T"` - OK]: "
+        else
+                verbose_str="* "
+        fi
+        echo -e "\e[32m$verbose_str$1\e[39m"
+}
+
+function echo_i()
+{
+        local verbose_str=""
+        if [ $VERBOSE = 1 ]; then
+                verbose_str="[`date +"%T"` - I ]: "
+        else
+                verbose_str="* "
+        fi
+        echo -e "$verbose_str$1"
+}
+
+
 
 ### include add-image.sh lib ###
-source add-image.sh --lib
-index=0
-for elem in "${!A_IMAGES[@]}";
-do
-	name=$(_get_name ${A_IMAGES[$elem]})
-	if [ "$DIST_IMAGE" = "$name" ]; then
-		break
+if [ "$ALL_MODE" = 1 ]; then
+	if [ -s add-image.sh ]; then
+		source add-image.sh --lib
+
+		# Choose the default image to be used
+		index=0
+		for elem in "${!A_IMAGES[@]}";
+		do
+			name=$(_get_name ${A_IMAGES[$elem]})
+			if [ "$DIST_IMAGE" = "$name" ]; then
+				break
+			fi
+			index=$(( $index + 1 ))
+		done
+		G_MENU_CHOISE=${A_IMAGES[$index]}
+		COTSON_IMAGES_PATH=$(_get_lpath "$G_MENU_CHOISE")
+	else
+		echo_w "add-image.sh not found (maybe it is not necessary)"
 	fi
-	index=$(( $index + 1 ))
-done
-G_MENU_CHOISE=${A_IMAGES[$index]}
+fi
 
-COTSON_IMAGES_PATH=$(_get_lpath "$G_MENU_CHOISE")
-### FUNCTION ###
-
+#
 OUT_FILE="${STATUS_FILE_PATH}/bootstrap.status"
+
+function checkconnection
+{
+	local myservice="$1"
+	local myhost="$2"
+	local rc="1"
+	local d
+	local c
+	local r
+	local rpm
+	if [ "$myhost" != "" -a "$myservice" != "" ]; then
+		echo_d "Checking '$myservice' service..."
+		case $myservice in 
+			web)
+				wget --spider --timeout=5 --tries=3 ${myhost}/ >/dev/null 2>/dev/null
+				rc=$?
+				if [ "$rc" = "0" ]; then
+					echo_d "$myhost has web service active."
+					return 0
+				else
+					echo_e "$myhost has web service not active."
+					return 1
+				fi
+			;;
+			nfs)
+				rpcinfo=`which rpcinfo 2>/dev/null`
+				if [ "$rpcinfo" = "" ]; then
+					if [ ! -x /usr/sbin/rpcinfo ]; then
+						echo_w "Cannot find 'rpcinfo'" 1>&2
+					else
+						rpcinfo="/usr/sbin/rpcinfo"
+					fi
+				fi
+				d=`echo "send escape"|nc -vw 5 $myhost $nfsport 2>&1|$grep succeeded |$awk '{print $7}'`
+				c=`echo "send escape"|nc -vw 5 $myhost $portmapperport 2>&1|$grep succeeded |$awk '{print $7}'`
+				if [ "$verbose" != "0" ]; then
+					if [ "$c" != "" ]; then  
+						echo "       Machine $myhost has PORTMAPPER port $portmapperport open.";
+					else 
+						echo "Machine $myhost has PORTMAPPER port ($portmapperport) CLOSED."; 
+					fi
+					if [ "$d" != "" ]; then
+						echo "       Machine $myhost has NFS port $nfsport open.";
+					else echo "Machine $myhost has NFS port $nfsport CLOSED."; 
+					fi
+				fi
+				rpm=""
+				if [ "$d" = "succeeded!" -a "$c" = "succeeded!" ]; then
+					if [ "$rpcinfo" != "" ]; then
+						r=`${rpcinfo} -p $myhost 2>/dev/null`
+						rpm=`echo "$r"|$grep $nfsport|$awk '{print $4}'|$tail -1`
+						if [ "$verbose" != "0" ]; then
+							if [ "$rpm" != "" ]; then
+								echo "       Machine $myhost has NFS server OK.";
+							else
+								echo "Machine $myhost has no NFS service running."; 
+							fi
+						fi
+					else # rpcinfo not accessible: assume that NFS is not available
+						echo_w "assuming NFS is not avialable" 1>&2
+					fi
+				fi
+				if [ "$d" = "succeeded!" -a "$c" = "succeeded!" -a "$rpm" != "" ]; then # portcheck
+					rc="0"
+				fi
+			;;
+			*)
+				### sometime ping is filtered out and doesn't work ('web' check may be better)
+				ping -c 2 -W 3 $myhost >/dev/null 2>/dev/null
+				rc=$?
+				if [ "$verbose" != "0" ]; then
+					if [ "$rc" = "0" ]; then
+						echo "       Machine $myhost responded to ping."; fi
+					fi
+			;;
+		esac
+	fi
+	if [ "$rc" = "0" ]; then noconnection="0"; else noconnection="1"; fi
+}
 
 function sv_exit()
 {
 	kill -s TERM $TOP_PID
 }
 
-function echo_d()
-{
-	if [ $VERBOSE = 1 ]; then
-		verbose_str="[`date +"%T"` - ${FUNCNAME[1]}:${BASH_LINENO[$FUNCNAME[1]]} - D ]: "
-	else
-		verbose_str="* "
-	fi
-	if [ $DEBUG = 1 ]; then
-		echo -e "\e[33m$verbose_str$1\e[39m"
-	else
-		return
-	fi
-}
-
-function echo_w()
-{
-	if [ $VERBOSE = 1 ]; then
-		verbose_str="[`date +"%T"` - ${FUNCNAME[1]}:${BASH_LINENO[$FUNCNAME[1]]} - W ]: "
-	else
-		verbose_str="* WARNING: "
-	fi
-	echo -e "\e[33m$verbose_str$1\e[39m"
-}
-
-function echo_e()
-{
-	if [ $VERBOSE = 1 ]; then
-		verbose_str="[`date +"%T"` - ${FUNCNAME[1]}:${BASH_LINENO[$FUNCNAME[1]]} - E ]: "
-	else
-		verbose_str="* "
-	fi
-	echo -e "\e[31m$verbose_str$1\e[39m"
-}
-
-function echo_ok()
-{
-	if [ $VERBOSE = 1 ]; then
-		verbose_str="[`date +"%T"` - OK]: "
-	else
-		verbose_str="* "
-	fi
-	echo -e "\e[32m$verbose_str$1\e[39m"
-}
-
-function echo_i()
-{
-	local verbose_str=""
-	if [ $VERBOSE = 1 ]; then
-		verbose_str="[`date +"%T"` - I ]: "
-	else
-		verbose_str="* "
-	fi
-	echo -e "$verbose_str$1"
-}
 
 # FUNCTION: sysctl_tuning()
 # Configure the system parameters with the correct values for running COTSon
@@ -327,15 +418,20 @@ function make_dependencies()
 		pqxx=libpqxx-dev 
 		ruby="ruby ruby1.8 rubygems libopenssl-ruby libsqlite3-ruby "
 
-		if [[ "$VER" == "wily" || "$VER" == "xenial" ]]; then
+		if [[ $VER == "trusty" || $VER == "utopic" || $VER == "jessie" || $VER == "wheezy" || "$VER" == "wily" || "$VER" == "xenial" || "$VER" == "yakkety" ]]; then
+			pkgs+=" qpdfview exfat-fuse"
+		fi
+		if [[ "$VER" == "wily" || "$VER" == "xenial" || "$VER" == "yakkety" ]]; then
 			check_repo=`sudo apt-add-repository universe`
 			ret=`echo "$check_repo"|grep "distribution component is already enabled"`
 			echo_d "UNIVERSE: $ret"
-			if [ "$ret" = "" ]; then
-				sudo apt-get -q -q -y update
-			fi
 			ruby="ruby"
 		fi
+
+		# Let's make sure that we refresh the package db
+		sudo apt-get -q -q -y update
+
+		#
 		if [[ $VER == "precise" || $VER == "quantal" || $VER == "raring" ]]; then 
 			pqxx=libpqxx3-dev
 		fi
@@ -344,12 +440,12 @@ function make_dependencies()
 			if [ "$VER" = "utopic" ]; then ruby=""; else ruby="ruby1.8"; fi
 			if [ "$VER" = "trusty" ]; then ruby="ruby"; fi
 		fi
-		pkgs=$DEBIAN_BASED_PKGS
-		pkgs+="$pqxx "
-		pkgs+="$ruby "
+		pkgs="$DEBIAN_BASED_PKGS"
+		pkgs+=" $pqxx"
+		pkgs+=" $ruby"
 		echo_d "$pkgs"
 
-		cmdi="apt-get -q -q"
+		cmdi="apt-get -q -q --fix-missing"
 		cmdt1=""
 		cmdt2="dpkg -s"
 		cmdcheckstr="^Status.*installed$"
@@ -359,7 +455,7 @@ function make_dependencies()
 		vncargs2="-desktop="
 		llua="lua5.1"
 
-		if [ "$VER" != "utopic" -a "$VER" != "wily" -a "$VER" != "trusty" -a "$VER" != "xenial" ]; then
+		if [ "$VER" != "utopic" -a "$VER" != "wily" -a "$VER" != "trusty" -a "$VER" != "xenial" -a "$VER" != "yakkety" ]; then
 			ruby --version | grep 1.8
 			if [[ $? -ne 0 ]]; then
 				echo "### Installing ruby1.8"
@@ -388,9 +484,12 @@ function make_dependencies()
 		if [[ $VERNUM -ge 20 ]]; then
 			extrapkgs="$extrapkgs compat-lua* mariadb"
 		fi
-		pkgs=$FEDORA_BASED_PKGS
-		pkgs+="${rubystuff} "
-		pkgs+="$extrapkgs "
+		if [[ $VERNUM -ge 24 ]]; then
+			pkgs+=" fuse-exfat"
+		fi
+		pkgs="$FEDORA_BASED_PKGS"
+		pkgs+=" ${rubystuff}"
+		pkgs+=" $extrapkgs"
 
 		if [[ `uname -m` == "x86_64" ]]; then 
 			screen_downgrade="ftp://ftp.pbone.net/mirror/archive.fedoraproject.org/fedora/linux/releases/13/Fedora/x86_64/os/Packages/screen-4.0.3-15.fc12.x86_64.rpm"
@@ -445,19 +544,41 @@ function make_dependencies()
 		echo "*** NOTE: for this step (installation of missing packages/dependencies: $ppkgs ), either ask your admin or be sure you have sudo access"
 		echo "* Installing missing packages/dependencies..."
 		echo_d "cmdi= $cmdi - ppkgs= $ppkgs"
-		sudo $cmdi install $ppkgs
-		ec="$?"
+		# If there is an error: try to install a second time (sometimes solves problems)
+		ec="1"; instcount="0"; maxinsttry="2"
+		while [ "$ec" != "0" -a "$instcount" -lt "$maxinsttry" ]; do
+			sudo DEBIAN_FRONTEND=noninteractive $cmdi install $ppkgs
+			ec="$?"
+			instcount=`expr $instcount + 1`
+		done
 		echo_d "ec=$ec"
 		if [ "$ec" != "0" ]; then
 			ret1=`expr $ret1 + 1`;
 		fi
-		#@@@
-		echo_i "Installing rubygems test-unit"
-		sudo gem install test-unit
 		echo_i "Packages installation FINISHED"
 	else
 		echo_i "ALL needed packages are present"
 	fi
+	
+	#@@@@@@@@@@@@@@@@@@@@
+	echo_i "Checking ruby gems"
+	if [[ `sudo gem list | grep test-unit` ]]; then 
+		echo_i "Gem \"test-unit\" already installed"
+	else
+		echo_i "Installing missing gems"
+		echo_i "Checking connection befor to install ruby test-unit"
+		checkconnection "web" "google.com"
+		if [[ $? -ne 0 ]]; then
+			echo_e "Internet connection not available"
+			exit 1
+		else
+			echo_ok "Connection OK"
+		fi
+		echo_i "Installing rubygems test-unit"
+		sudo gem install test-unit
+		echo_i "Gems installation FINISHED"
+	fi
+	#@@@@@@@@@@@@@@@@@@@@
 
 	if [[ "$ret1" -ne 0 ]]; then
 		echo ""
@@ -540,7 +661,8 @@ function usage()
   OPTIONS:
   \t-h, --help: show this message
   \t    --simnow_dir simnow_location: set simnow dir
-  \t-d, --debug: run in debug mode\n
+  \t-a, --all install packages, download image and generate bsds
+  \t-d, --debug: run in debug mode
   \t-v, --verbose: run in verbose mode\n"
 	exit 1
 }
@@ -605,10 +727,12 @@ function check_root_permission()
 
 function reset_status_file()
 {
-	echo_d "Reset bootstrap.status"
-	echo "" > bootstrap.status
-	sudo cp bootstrap.status $STATUS_FILE_PATH
-	rm bootstrap.status
+        if [ -s $STATUS_FILE_PATH/bootstrap.status ]; then
+		echo_d "* Reset bootstrap.status"
+		echo "" > bootstrap.status
+		sudo cp bootstrap.status $STATUS_FILE_PATH
+		rm bootstrap.status
+        fi
 }
 
 function write_status_file()
@@ -616,9 +740,10 @@ function write_status_file()
 	local message
 	message="$1"
 	echo_d "Start function: write_status_file: message = $message"
-	echo_d "If the file not exist in $STATUS_FILE_PATH try to create"
+	echo_d "If the file does not exist in $STATUS_FILE_PATH try to create"
 	if [ ! -e "$STATUS_FILE_PATH/bootstrap.status" ]; then
-		echo_d "Status file bootstrap.status not exist."
+		echo_i "* Creating $STATUS_FILE_PATH/bootstrap.status"
+		echo_d "Status file bootstrap.status does not exist."
 		echo "" > bootstrap.status
 		sudo cp bootstrap.status $STATUS_FILE_PATH
 		rm bootstrap.status
@@ -636,9 +761,12 @@ function write_status_file()
 
 function prepare_status_file_destination()
 {
-	echo_d "STATUS_FILE_PATH=$STATUS_FILE_PATH"
-	echo_i "Need super user permission for create bootstrap.status file in: $STATUS_FILE_PATH"
-	sudo mkdir $STATUS_FILE_PATH
+        if [ ! -d $STATUS_FILE_PATH ]; then
+		echo_i "* Creating directory '$STATUS_FILE_PATH'"
+		echo_d "STATUS_FILE_PATH=$STATUS_FILE_PATH"
+		echo_d "Superuser permissions are needed for creating $STATUS_FILE_PATH"
+		sudo mkdir $STATUS_FILE_PATH 2>/dev/null
+	fi
 	write_status_file "#INIT"
 }
 
@@ -650,6 +778,7 @@ do
 			-d|--debug) DEBUG=1; shift;;
 			-v|--verbose) VERBOSE=1; shift;;
 			-f|--force) FORCE=1; shift;;
+			-a|--all) ALL_MODE=1; shift;;
 			--help|-h) usage;;
 			*) shift;;
 	esac
@@ -698,24 +827,39 @@ else
 fi
 prepare_status_file_destination
 cotson_images_dirs
-write_status_file "# bootatrap.sh status file"
-check_simnow "NULL"
+write_status_file "# bootstrap.sh status file"
 sysctl_tuning
 make_dependencies
 write_status_file "BOOTSTRAP=\"OK\""
 
 ########################################################################
-# Fix missing rgb.txt if needed
-if [[ ! -f /etc/X11/rgb.txt ]]; then
-	cp etc/rgb.txt /etc/X11/rgb.txt
+if [ -s ./configure ]; then
+	# Fix missing rgb.txt if needed
+	if [[ ! -f /etc/X11/rgb.txt ]]; then
+		cp etc/rgb.txt /etc/X11/rgb.txt
+	fi
 fi
 echo_i "System is ready for COTSon installation."
-echo_i "Download default image: $DIST_IMAGE"
-echo_d "Now RUN add-images"
-./add-image.sh --simnow_dir $g_simnow_dir $DIST_IMAGE
-ret=$?
-if [ $ret != 0 ]; then
-	echo_e "Error in add-image.sh: code = $ret"
-	exit 1
+
+if [ "$ALL_MODE" = 1 ]; then
+	if [ ! -s add-image.sh ]; then
+        	echo_e "ERROR: add-image.sh not found (it is necessary!)"
+		exit 1
+        else
+		check_simnow "NULL"
+		echo_i "Download default image: $DIST_IMAGE"
+		echo_d "Now RUN add-images"
+		./add-image.sh --simnow_dir $g_simnow_dir $DIST_IMAGE
+		ret=$?
+		if [ $ret != 0 ]; then
+			echo_e "Error in add-image.sh: code = $ret"
+			exit 1
+		fi
+	fi
 fi
-echo_ok "Now you can run: ./configure"
+
+if [ -s ./configure ]; then
+   echo_ok "Now you can run: ./configure"
+else
+   echo "Goodbye."
+fi

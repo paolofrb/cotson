@@ -17,7 +17,7 @@ control_script_file='twonodes-ctrl'
 clean_sandbox=false
 -- node_config="config.sh"
 
--- DBFILE: defined in Makefile
+--DBFILE: defined in Makefile
 --DBFILE="/tmp/twonodes.db"
 
 DESC="Two nodes example"
@@ -42,7 +42,7 @@ mediator = {
 	heartbeat={ type="file_last" },
 	heartbeat1={ type="sqlite", dbfile=DBFILE, experiment_id=EXP },
 	timer={ type="simple", max_bandwidth=1000, latency=12, cfactor=10 },
-	tracefile="/tmp/net-trace.gz", -- dump a trace
+	tracefile=NTFILE, -- dump a trace
 	slirp=false, -- don't NAT with the external world
 }
 

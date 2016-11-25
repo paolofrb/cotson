@@ -592,7 +592,7 @@ void Switch::send_terminate()
     if (tmsg.sendto(sync_socket_,&sync_addr_) != tmsg.len())
         cout << "(SYNC) WARNING: Cannot send terminate message: " << strerror(errno) << endl;
     if (dump_) 
-       dump_->flush();
+       { dump_->flush(); delete dump_; }
 }
 
 void Switch::send_cpuid(uint64_t x,uint16_t y,uint16_t z)

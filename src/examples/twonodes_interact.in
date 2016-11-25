@@ -21,7 +21,7 @@ control_script_file='twonodes_interact-ctrl'
 -- node_config="config.sh"
 
 
-DBFILE="/tmp/twonodes_interact.db"
+-- DBFILE="/tmp/twonodes_interact.db"
 DESC="Two nodes example (NO VNC)"
 EXP=10
 
@@ -44,10 +44,10 @@ mediator = {
     heartbeat={ type="file_last" },
     heartbeat1={ type="sqlite", dbfile=DBFILE, experiment_id=EXP },
     timer={ type="simple", max_bandwidth=1000, latency=12, cfactor=10 },
-    tracefile="/tmp/net-trace.gz", -- dump a trace
+    tracefile=NTFILE, -- dump a trace
     slirp=true, -- NAT with the external world
     slirp_network="192.168.10.0", -- Base network for nodes
-    redirect_port="11:22:2222",   -- Redirect port 22 of n1 (192.168.10.11) to host port 2222
+    redirect_port="11:22:2222",   -- Redirect port 22 of n12 (192.168.10.11) to host port 2221
 }
 
 simnow.commands=function()

@@ -14,7 +14,7 @@
 # that install the required libraries
 source add-image.sh --lib
 SIMNOW_SUPPORTED_VER="4.6.2pub"
-#SIMNOW_SUPPORTED_VER="4.7.7nda"
+#SIMNOW_SUPPORTED_VER="4.6.2pub"
 
 DIST_IMAGE="karmic64"
 
@@ -101,6 +101,10 @@ function check_bootstrap_status()
 	fi
 }
 
+# Tentatively execute the bootstrap.sh
+./bootstrap.sh --all # --all --> eventually re-generate also BSDs etc
+
+#
 check_bootstrap_status
 if [ "$BOOTSTRAP" = "KO" ]; then
 	echo -e "\e[31m* ERROR: bootstrap.sh KO\e[39m"
@@ -159,7 +163,7 @@ fi
 
 if [[ $force != 1 ]]; then
 	simnow_ver=`cd $simnow_dir; ./simnow --version | awk '/SimNow version/{print tolower($6);}'|sed 's/[,-]//g'`
-	if [[ $simnow_ver != $SIMNOW_SUPPORTED_VER && "${simnow_ver}pub" != $SIMNOW_SUPPORTED_VER ]]; then
+	if [[ $simnow_ver != $SIMNOW_SUPPORTED_VER && "${simnow_ver}pub" != $SIMNOW_SUPPORTED_VER && "${simnow_ver}nda" != $SIMNOW_SUPPORTED_VER ]]; then
 		echo "ERROR: simnow version is '$simnow_ver'"
 		echo "       The supported version is $SIMNOW_SUPPORTED_VER"
 		exit 1
@@ -249,8 +253,8 @@ if [ "$dist" = "CentOS" -o "$dist" = "RedHatEnterpriseServer" ]; then
 	dvernumorig="$dvernum"
 	dist="Fedora"
 	if [ "$dvn1" = "6" ]; then dvernum="14"; fi
-	DIST_UP="$dist"
-	VERNUM_UP="$dvernum"
+	DIST_UP="$distorig"
+	VERNUM_UP="$dvernumorig"
 fi
 
 if [[ "$DIST_UP" != "$DIST" || "$VERNUM_UP" != "$VERNUM" ]]; then
@@ -261,14 +265,14 @@ if [[ "$DIST_UP" != "$DIST" || "$VERNUM_UP" != "$VERNUM" ]]; then
 	exit 1
 fi
 
-if [[ "$DIST" == "Debian" ||  "$DIST" == "Ubuntu" ]]; then
+if [[ "$DIST_UP" == "Debian" ||  "$DIST" == "Ubuntu" ]]; then
   llua="lua5.1"
 	xvnc="Xvnc4"
 	xvncservctrl="vnc4server"
 	vncargs1="-ac -SecurityTypes None -br -pn -httpd /usr/share/vnc-java"
 	vncargs2="-desktop="
-elif [[ "$DIST" == "Fedora" ]]; then
-	if [[ $VERNUM -ge 20 ]]; then
+elif [[ "$DIST_UP" == "Fedora" || "$DIST_UP" == "CentOS" ]]; then
+	if [[ $dvernum -ge 20 ]]; then
 		llua="lua-5.1"
 	else
 		llua="lua"
@@ -293,6 +297,7 @@ med_exe="$src_dir/network/mediator"
 
 for s in \
         src/examples/tracer/Makefile \
+        src/examples/atracer/Makefile \
         src/network/Makefile \
         src/common/Makefile \
         src/abaeterno/Makefile \

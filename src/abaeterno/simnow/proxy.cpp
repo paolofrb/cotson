@@ -502,15 +502,15 @@ void Proxy::SetIPC(uint64_t devid,uint64_t insts,uint64_t cycles)
 {
     if (!time_feedback)
         return;
-	double cpi = static_cast<double>(cycles)/static_cast<double>(insts);
-	if (cpi < min_cpi_feedback) {
-		cerr << "WARNING: cpu " << devid << " low cpi " << cpi << endl;
-	    cycles = static_cast<uint64_t>(insts*min_cpi_feedback);
-	}
-	if (cpi > max_cpi_feedback) {
-		cerr << "WARNING: cpu " << devid << " high cpi " << cpi << endl;
-	    cycles = static_cast<uint64_t>(insts*max_cpi_feedback);
-	}
+    double cpi = static_cast<double>(cycles)/static_cast<double>(insts);
+    if (cpi < min_cpi_feedback) {
+	cerr << "WARNING: cpu " << devid << " low cpi " << cpi << endl;
+        cycles = static_cast<uint64_t>(insts*min_cpi_feedback);
+    }
+    if (cpi > max_cpi_feedback) {
+        cerr << "WARNING: cpu " << devid << " high cpi " << cpi << endl;
+        cycles = static_cast<uint64_t>(insts*max_cpi_feedback);
+    }
     if(!SetProcessorIPC(machineID,devid,insts,cycles))
         ERROR("SetProcessorIPC failed");
 }

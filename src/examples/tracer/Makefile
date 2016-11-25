@@ -37,4 +37,6 @@ abaeterno-tracer.so: tracer_example.o $(ROOT)/abaeterno/abaeterno.a
 
 clean:
 	$(RM) abaeterno-tracer.so tracer_example.o cotson_tracer.o tracer_app *.log cotson_tracer run.sh
+
+cleanup: clean
 # DO NOT DELETE

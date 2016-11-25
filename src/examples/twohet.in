@@ -5,7 +5,7 @@ debug=2
 control_script_file='twohet-ctrl'
 clean_sandbox=false
 
-DBFILE="/tmp/twohet.db"
+-- DBFILE="/tmp/twohet.db"
 DESC="Two nodes (heterogeneous) example"
 EXP=10
 
@@ -28,6 +28,7 @@ mediator = {
 	heartbeat={ type="file_last" },
 	heartbeat1={ type="sqlite", dbfile=DBFILE, experiment_id=EXP },
 	timer={ type="simple", max_bandwidth=1000, latency=12, cfactor=10 },
+        tracefile=NTFILE, -- dump a trace
 	slirp=false, -- don't NAT with the external world
 }
 

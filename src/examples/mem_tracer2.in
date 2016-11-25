@@ -1,4 +1,3 @@
-TRACE_OUT='/tmp/mem_tracer2.txt.gz'
 one_node_script="run_interactive"
 display=os.getenv("DISPLAY")
 
@@ -6,7 +5,7 @@ options = {
 	-- fastforward="200M",
 	max_samples="50",
 	sampler={ type="interval", functional="9700k", warming="100k", simulation="200k" },
-	heartbeat={ type="file_last", logfile="tracer2.log" }, 
+	heartbeat={ type="file_last", logfile="mem_tracer2.log" }, 
 }
 
 simnow.commands=function()
@@ -35,7 +34,7 @@ function build()
 	while i < cpus() do
 		cpu=get_cpu(i)
 		cpu:timer{name='cpu'..i, type="memtracer",
-		    tracefile=TRACE_OUT,
+		    tracefile=OUTFILE,
 		    shared="false",
 			binary="false",
 			size="16MB",line_size=64,num_sets=8 }

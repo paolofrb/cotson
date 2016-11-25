@@ -1,7 +1,7 @@
 ROOT=$(shell cd ../..; pwd)
 
 all: custom_asm.so asm_example
-	echo "xget $(PWD)/asm_example asm_example; chmod +x asm_example; ./asm_example" > run.sh; \
+	echo "xget $(ROOT)/examples/custom_asm/asm_example asm_example; chmod +x asm_example; ./asm_example" > run.sh; \
 	$(ROOT)/../bin/cotson example.lua; \
 	cat node.1.stdout.log
 
@@ -39,5 +39,7 @@ custom_asm.so: custom_asm.o $(ROOT)/abaeterno/abaeterno.a
 
 clean:
 	$(RM) custom_asm.o custom_asm.so asm_example.o asm_example *.log run.sh
+
+cleanup: clean
 
 # DO NOT DELETE
