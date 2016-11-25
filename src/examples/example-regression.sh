@@ -19,7 +19,7 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 #
-#  $Id: xrt.cpp 13 2015-05-22 08:55:25Z giorgi $
+#  $Id: robgiorgi $
 
 
 thr="5" # 5% of tolerance
