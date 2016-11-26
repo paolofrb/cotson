@@ -9,6 +9,21 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
 =============================================================================
+QUICKSTART INSTRUCTIONS FOR LINUX
+=============================================================================
+1. Check that you are running one supported Linux release (e.g. Ubuntu 16.04)
+
+2. Download AMD SimNow (e.g., simnow-linux64-4.6.2pub.tar.gz ) from here:
+   http://developer.amd.com/tools-and-sdks/cpu-development/simnow-simulator/
+
+3. Build COTSon
+   ./configure && make release && make regression
+
+4. You are now ready to use COTSon: you can jump to point
+   "HOW TO GET MORE FAMILIAR WITH COTSon" below or
+   (if anythng above goes wrong) read the detailed instructions below
+
+=============================================================================
 To build COTSon
 =============================================================================
 
@@ -51,7 +66,7 @@ To build COTSon
    then run
        make install           ## Install binaries in default dir
 
-5. Run the regression test:
+4. Run the regression test:
        make regression
 
    If everything is OK you should see a line which says that all tests
@@ -67,19 +82,19 @@ To build COTSon
        make update-regression ## updates the tests with the local output
        make regression        ## the 2nd time around you should get no errors
 
-6. (Optionally) You may also run 10 examples in non-interactive mode
+5. (Optionally) You may also run 10 examples in non-interactive mode
    in order to check that the installation was done properly and your machine
    supports their execution:
        make run_example_regression
 
 ============================================================================
-HOW TO GET MORE FAMILIAR WITH COTSON
+HOW TO GET MORE FAMILIAR WITH COTSon
 ============================================================================
-1. Have a look at the "COTSON USER GUIDE" in the doc directory.
+1. Have a look at the "COTSon USER GUIDE" in the doc directory.
    You can follow the examples in the src directory that are illustrated
    in the User Guide and also study the .in COTSon configuration files.
 
-2. Once you have studied a but the guide, try also to run yourself 
+2. Once you have studied a bit the guide, try also to run yourself 
    the examples:
 
        cd src/examples && make  or simply: make run_examples
