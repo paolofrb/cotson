@@ -1,4 +1,4 @@
-.PHONY: build cleanup distclean
+.PHONY: build cleanup distclean veryclean killpsall
 
 all: build
 
@@ -14,7 +14,11 @@ NOINT=0
 
 run: $(addprefix run_, $(EXAMPLES))
 cleanup: $(addprefix cleanup_, $(EXAMPLESALL))
+veryclean: killpsall $(addprefix cleanup_, $(EXAMPLESALL))
 
+killpsall:
+	ps axuc |awk '/vnc|screen|simnow/{print $$2}'| xargs --no-run-if-empty kill -9; 
+	
 run_functional:
 	@echo "Simple example how to use COTSon for interactive simulation."; \
 	echo "Try running some simnow commands and then 'quit' to exit simulation"; \
@@ -77,7 +81,6 @@ run_twonodes:
 cleanup_twonodes:
 	@echo "Cleanup twonodes example..."; \
 	/bin/rm -rf twonodes-* twonodes.me* twonodes.no* run_twonodes.log err.med.*log err.node.*log twonodes.*log /tmp/twonodes.db /tmp/net-trace.gz /tmp/vnc* /tmp/cotson_twonodes1_* /tmp/X* /tmp/.X* 2>/dev/null; \
-	ps axuc |awk '/vnc|screen|simnow/{print $$2}'| xargs --no-run-if-empty kill -9; \
         echo "...done."
 
 run_twonodes_novnc:
@@ -97,7 +100,6 @@ run_twonodes_novnc:
 cleanup_twonodes_novnc:
 	@echo "Cleanup twonodes_novnc example..."; \
 	/bin/rm -rf twonodes_novnc_* twonodes_novnc-* twonodes_novnc.me* twonodes_novnc.no* run_twonodes_novnc.log err.med.*log err.node.*log twonodes_novnc.*log /tmp/twonodes_novnc.db /tmp/net-trace.gz /tmp/vnc* /tmp/cotson_twonodes_novnc* /tmp/X* /tmp/.X* 2>/dev/null; \
-	ps axuc |awk '/vnc|screen|simnow/{print $$2}'| xargs --no-run-if-empty kill -9; \
         echo "...done."
 
 run_twonodes_noscreen:
@@ -117,7 +119,6 @@ run_twonodes_noscreen:
 cleanup_twonodes_noscreen:
 	@echo "Cleanup twonodes_noscreen example..."; \
 	/bin/rm -rf twonodes_noscreen_* twonodes_noscreen-* twonodes_noscreen.me* twonodes_noscreen.no* run_twonodes_noscreen.log err.med.*log err.node.*log twonodes_noscreen.*log /tmp/twonodes_noscreen.db /tmp/net-trace.gz /tmp/vnc* /tmp/cotson_twonodes_noscreen* /tmp/X* /tmp/.X* 2>/dev/null; \
-	ps axuc |awk '/vnc|screen|simnow/{print $$2}'| xargs --no-run-if-empty kill -9; \
         echo "...done."
 
 run_twohet:
@@ -137,7 +138,6 @@ run_twohet:
 cleanup_twohet:
 	@echo "Cleanup twohet example..."; \
 	/bin/rm -rf twohet-* run_twohet.log err.med.*log err.node.*log twohet.*log /tmp/twohet.db /tmp/net-trace.gz /tmp/vnc* /tmp/cotson_twohet* /tmp/X* /tmp/.X* 2>/dev/null; \
-	ps axuc |awk '/vnc|screen|simnow/{print $$2}'| xargs --no-run-if-empty kill -9; \
         echo "...done."
 
 run_twonodes_interact:
@@ -157,7 +157,6 @@ run_twonodes_interact:
 cleanup_twonodes_interact:
 	@echo "Cleanup twonodes_interact example..."; \
 	/bin/rm -rf twonodes_interact-* twonodes_interact-me* twonodes_interact-no* run_twonodes_interact.log err.med.*log err.node.*log twonodes_interact.*log /tmp/cotson_twonodes_interact.db /tmp/cotson_twonodes_interact-trace.gz /tmp/vnc* /tmp/X* /tmp/.X*  2>/dev/null; \
-	ps axuc |awk '/vnc|screen|simnow/{print $$2}'| xargs --no-run-if-empty kill -9; \
         echo "...done."
 
 
@@ -177,7 +176,6 @@ run_netperf:
 cleanup_netperf:
 	@echo "Cleanup netperf example..."; \
 	/bin/rm -rf np-* np-me* np-no* run_np.log err.med.*log err.node.*log np.*log /tmp/np.db /tmp/net-trace.gz /tmp/vnc* /tmp/cotson_netperf* /tmp/X* /tmp/.X* 2>/dev/null; \
-	ps axuc |awk '/vnc|screen|simnow/{print $$2}'| xargs --no-run-if-empty kill -9; \
         echo "...done."
 
 run_sqlite:
