@@ -34,11 +34,10 @@ g_simnow_dir=""
 root=$(pwd)
 VERBOSE=0
 ALL_MODE=0
+SUDO="sudo -n"
 
 
-# BASEPATH_STATUS_FILE="/var/lib"
-BASEPATH_STATUS_FILE="$root/data"
-STATUS_FILE_PATH="$BASEPATH_STATUS_FILE"
+STATUS_FILE_PATH="$root/data"
 
 ###
 trap "exit 1" TERM
@@ -292,7 +291,7 @@ function sysctl_tuning()
 		local tmp_file_name
 		tmp_file_name=`mktemp tmp.XXXXXXXXXX`
 		cp /etc/sysctl.conf $tmp_file_name
-		sudo cp $tmp_file_name /etc/sysctl.conf
+		$SUDO cp $tmp_file_name /etc/sysctl.conf
 		echo_d "Removing the temporary file: $tmp_file_name"
 		rm $tmp_file_name
 		#case 2: the sysctl.conf DOES NOT contaiin a vm.max_map_count
@@ -301,11 +300,11 @@ function sysctl_tuning()
 			tmp_file_name=`mktemp tmp.XXXXXXXXXX`
 			cp /etc/sysctl.conf $tmp_file_name
 			sed -i "\$avm.max_map_count=$mapok" $tmp_file_name
-			sudo cp $tmp_file_name /etc/sysctl.conf
+			$SUDO cp $tmp_file_name /etc/sysctl.conf
 			echo_d "Removing here the temporary file: $tmp_file_name"
 			rm $tmp_file_name
 		fi
-		sudo /sbin/sysctl -p 2>&1 >/dev/null # make it permanent
+		$SUDO /sbin/sysctl -p 2>&1 >/dev/null # make it permanent
 		# verify settings
 		echo_i "Verifying settings"
 		mapconfig2=`egrep "[ \t]*[^#]*[ \t]*vm.max_map_count" /etc/sysctl.conf| tail -1 |awk -F= '{print $2}'`
@@ -332,14 +331,14 @@ function _detect_os()
 		#don't know yet which distro
 		#try
 		echo_w "lsb_release not found... try to install"
-		sudo yum -y install redhat-lsb 2>/dev/null
+		$SUDO yum -y install redhat-lsb 2>/dev/null
 		ec1=$?
 		if [ $ec1 != 0 ]; then
-			sudo dnf -y install redhat-lsb 2>/dev/null
+			$SUDO dnf -y install redhat-lsb 2>/dev/null
 			ec1=$?
 		fi
 		#try
-		sudo apt-get -q -q install lsb 2>/dev/null
+		$SUDO apt-get -q -q install lsb 2>/dev/null
 		ec2=$?
 	fi
 
@@ -422,14 +421,14 @@ function make_dependencies()
 			pkgs+=" qpdfview exfat-fuse"
 		fi
 		if [[ "$VER" == "wily" || "$VER" == "xenial" || "$VER" == "yakkety"  || "$VER" == "eoan" || "$VER" == "focal" ]]; then
-			check_repo=`sudo apt-add-repository universe`
+			check_repo=`$SUDO apt-add-repository universe`
 			ret=`echo "$check_repo"|grep "distribution component is already enabled"`
 			echo_d "UNIVERSE: $ret"
 			ruby="ruby"
 		fi
 
 		# Let's make sure that we refresh the package db
-		sudo apt-get -q -q -y update
+		$SUDO apt-get -q -q -y update
 
 		#
 		if [[ $VER == "precise" || $VER == "quantal" || $VER == "raring" ]]; then 
@@ -459,9 +458,9 @@ function make_dependencies()
 			ruby --version | grep 1.8
 			if [[ $? -ne 0 ]]; then
 				echo "### Installing ruby1.8"
-				sudo apt-get -q -q install ruby1.8 -y
+				$SUDO apt-get -q -q install ruby1.8 -y
 				ruby18=`update-alternatives --list ruby | grep 1.8`
-				sudo update-alternatives --set ruby $ruby18
+				$SUDO update-alternatives --set ruby $ruby18
 			fi
 		fi
 	elif [[ $DIST == "Fedora" ]]; then
@@ -547,7 +546,7 @@ function make_dependencies()
 		# If there is an error: try to install a second time (sometimes solves problems)
 		ec="1"; instcount="0"; maxinsttry="2"
 		while [ "$ec" != "0" -a "$instcount" -lt "$maxinsttry" ]; do
-			sudo DEBIAN_FRONTEND=noninteractive $cmdi install $ppkgs
+			$SUDO DEBIAN_FRONTEND=noninteractive $cmdi install $ppkgs
 			ec="$?"
 			instcount=`expr $instcount + 1`
 		done
@@ -562,7 +561,7 @@ function make_dependencies()
 	
 	#@@@@@@@@@@@@@@@@@@@@
 	echo_i "Checking ruby gems"
-	if [[ `sudo gem list | grep test-unit` ]]; then 
+	if [[ `$SUDO gem list | grep test-unit` ]]; then 
 		echo_i "Gem \"test-unit\" already installed"
 	else
 		echo_i "Installing missing gems"
@@ -575,7 +574,7 @@ function make_dependencies()
 			echo_ok "Connection OK"
 		fi
 		echo_i "Installing rubygems test-unit"
-		sudo gem install test-unit
+		$SUDO gem install test-unit
 		echo_i "Gems installation FINISHED"
 	fi
 	#@@@@@@@@@@@@@@@@@@@@
@@ -594,18 +593,18 @@ function make_dependencies()
 		echo "Downgrade of package ($screen_downgrade)"
 		echo "*** NOTE: sudo access required ***"
 		echo ""
-		sudo $cmdi downgrade $screen_downgrade
+		$SUDO $cmdi downgrade $screen_downgrade
 		grep screen /etc/$FEDORA_INSTALLER_CONF
 		#grep screen /etc/dnf/dnf.conf
 		if [[ $? -ne 0 ]]; then
 			echo "Add screen to exclude entry in $FEDORA_INSTALLER_CONF"
-			sudo sh -c "echo 'exclude=screen' >> /etc/$FEDORA_INSTALLER_CONF" 
+			$SUDO sh -c "echo 'exclude=screen' >> /etc/$FEDORA_INSTALLER_CONF" 
 		fi
 	fi
 	# end workaround 
 	# Workaround for rubygems-psych bug
 	if [[ $dist == "Fedora" && $vernum == 19 ]]; then
-		sudo $FEDORA_INSTALLER update --enablerepo=updates-testing ruby-2.0.0.247-13.fc19
+		$SUDO $FEDORA_INSTALLER update --enablerepo=updates-testing ruby-2.0.0.247-13.fc19
 	fi
 	# end workaround 
 	write_status_file "make_dependencies=\"OK\""
@@ -618,15 +617,15 @@ function cotson_images_dirs()
 		echo_i "Cotson directory structure not exist"
 		echo_i "Try to create them..."
 		echo_d "mkdir $COTSON_IMAGES_PATH"
-		sudo mkdir -p $COTSON_IMAGES_PATH
+		$SUDO mkdir -p $COTSON_IMAGES_PATH
 		echo_d "mkdir -p $COTSON_IMAGES_PATH/$COTSON_DIST_DIR_NAME"
-		sudo mkdir -p $COTSON_IMAGES_PATH/$COTSON_DIST_DIR_NAME
+		$SUDO mkdir -p $COTSON_IMAGES_PATH/$COTSON_DIST_DIR_NAME
 		echo_d "mkdir -p $COTSON_IMAGES_PATH/$COTSON_IMAGES_DIR_NAME"
-		sudo mkdir -p $COTSON_IMAGES_PATH/$COTSON_IMAGES_DIR_NAME
+		$SUDO mkdir -p $COTSON_IMAGES_PATH/$COTSON_IMAGES_DIR_NAME
 		echo_d "mkdir -p $COTSON_IMAGES_PATH/$COTSON_BSDS_DIR_NAME"
-		sudo mkdir -p $COTSON_IMAGES_PATH/$COTSON_BSDS_DIR_NAME
+		$SUDO mkdir -p $COTSON_IMAGES_PATH/$COTSON_BSDS_DIR_NAME
 		echo_d "mkdir -p $COTSON_IMAGES_PATH/$COTSON_ROM_DIR_NAME"
-		sudo mkdir -p $COTSON_IMAGES_PATH/$COTSON_ROM_DIR_NAME
+		$SUDO mkdir -p $COTSON_IMAGES_PATH/$COTSON_ROM_DIR_NAME
 		# need to check ??
 
 	elif [[ -e $COTSON_IMAGES_PATH/$COTSON_DIST_DIR_NAME && 
@@ -638,15 +637,15 @@ function cotson_images_dirs()
 		echo_e "ERROR in COTSon directory structure"
 		echo_i "try to recreate the directory structure"
 		echo_d "mkdir $COTSON_IMAGES_PATH"
-		sudo mkdir $COTSON_IMAGES_PATH
+		$SUDO mkdir $COTSON_IMAGES_PATH
 		echo_d "mkdir -p $COTSON_IMAGES_PATH/$COTSON_DIST_DIR_NAME"
-		sudo mkdir -p $COTSON_IMAGES_PATH/$COTSON_DIST_DIR_NAME
+		$SUDO mkdir -p $COTSON_IMAGES_PATH/$COTSON_DIST_DIR_NAME
 		echo_d "mkdir -p $COTSON_IMAGES_PATH/$COTSON_IMAGES_DIR_NAME"
-		sudo mkdir -p $COTSON_IMAGES_PATH/$COTSON_IMAGES_DIR_NAME
+		$SUDO mkdir -p $COTSON_IMAGES_PATH/$COTSON_IMAGES_DIR_NAME
 		echo_d "mkdir -p $COTSON_IMAGES_PATH/$COTSON_BSDS_DIR_NAME"
-		sudo mkdir -p $COTSON_IMAGES_PATH/$COTSON_BSDS_DIR_NAME
+		$SUDO mkdir -p $COTSON_IMAGES_PATH/$COTSON_BSDS_DIR_NAME
 		echo_d "mkdir -p $COTSON_IMAGES_PATH/$COTSON_ROM_DIR_NAME"
-		sudo mkdir -p $COTSON_IMAGES_PATH/$COTSON_ROM_DIR_NAME
+		$SUDO mkdir -p $COTSON_IMAGES_PATH/$COTSON_ROM_DIR_NAME
 		ls -l $COTSON_IMAGES_PATH
 		#exit 1
 	fi
@@ -730,7 +729,7 @@ function reset_status_file()
         if [ -s $STATUS_FILE_PATH/bootstrap.status ]; then
 		echo_d "* Reset bootstrap.status"
 		echo "" > bootstrap.status
-		sudo cp bootstrap.status $STATUS_FILE_PATH
+		$SUDO cp bootstrap.status $STATUS_FILE_PATH
 		rm bootstrap.status
         fi
 }
@@ -745,7 +744,7 @@ function write_status_file()
 		echo_i "* Creating $STATUS_FILE_PATH/bootstrap.status"
 		echo_d "Status file bootstrap.status does not exist."
 		echo "" > bootstrap.status
-		sudo cp bootstrap.status $STATUS_FILE_PATH
+		$SUDO cp bootstrap.status $STATUS_FILE_PATH
 		rm bootstrap.status
 	fi
 	local tmp_status_file_name
@@ -754,7 +753,7 @@ function write_status_file()
 	echo_d "Temporary name of status file: $tmp_status_filename"
 	echo "$message" >> $tmp_status_filename
 	echo_d "Copy $tmp_status_filename to $STATUS_FILE_PATH/bootstrap.status"
-	sudo cp $tmp_status_filename $STATUS_FILE_PATH/bootstrap.status
+	$SUDO cp $tmp_status_filename $STATUS_FILE_PATH/bootstrap.status
 	echo_d "Delete temporary file: $tmp_status_filename"
 	rm $tmp_status_filename
 }
@@ -765,7 +764,7 @@ function prepare_status_file_destination()
 		echo_i "* Creating directory '$STATUS_FILE_PATH'"
 		echo_d "STATUS_FILE_PATH=$STATUS_FILE_PATH"
 		echo_d "Superuser permissions are needed for creating $STATUS_FILE_PATH"
-		sudo mkdir $STATUS_FILE_PATH 2>/dev/null
+		$SUDO mkdir $STATUS_FILE_PATH 2>/dev/null
 	fi
 	write_status_file "#INIT"
 }
@@ -814,7 +813,7 @@ if [ "$FORCE" = 0 ]; then
 			reset_status_file
 		else
 			echo_i "Checking bootstrap.status: OK"
-			echo_w "bootstrap.sh is already been launched"
+			echo_w "bootstrap.sh has already been launched"
 			exit 0
 		fi
 	else

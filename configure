@@ -19,8 +19,8 @@ SIMNOW_SUPPORTED_VER="4.6.2pub"
 DIST_IMAGE="karmic64"
 
 status_args="$*"
-simnow_dir=""
 root=`pwd`
+simnow_dir="$root/simnow-linux64-4.6.2pub"
 data_dir="$root/data"
 src_dir="$root/src"
 cc="gcc"
@@ -29,9 +29,7 @@ vnctest=0  # default to 0 since on some Ubuntu machines the vnc test closes the 
 force=0
 llua="lua5.1"
 
-BASEPATH_STATUS_FILE="/var/lib"
-DIR_NAME_STATUS_FILE="cotson"
-STATUS_FILE_PATH="$BASEPATH_STATUS_FILE/$DIR_NAME_STATUS_FILE"
+STATUS_FILE_PATH="$root/data"
 
 #shopt -s extglob
 
