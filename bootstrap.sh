@@ -62,7 +62,7 @@ execstack qpdfview gedit mc quota"
 
 DEBIAN_SUPPORTED_VERS="lenny | squeeze | wheezy | jessie"
 FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle | SphericalCow | Schrödinger’sCat | Heisenbug | TwentyOne | TwentyTwo | TwentyThree | TwentyFour | TwentyFive"
-UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise | quantal | raring | trusty | utopic | wily | xenial | yakkety | focal"
+UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise | quantal | raring | trusty | utopic | wily | xenial | yakkety | eoan | focal"
 
 COTSON_IMAGES_BASE_PATH="/opt"
 COTSON_IMAGES_PATH="${COTSON_IMAGES_BASE_PATH}/cotson"
@@ -418,10 +418,10 @@ function make_dependencies()
 		pqxx=libpqxx-dev 
 		ruby="ruby ruby1.8 rubygems libopenssl-ruby libsqlite3-ruby "
 
-		if [[ $VER == "trusty" || $VER == "utopic" || $VER == "jessie" || $VER == "wheezy" || "$VER" == "wily" || "$VER" == "xenial" || "$VER" == "yakkety" || "$VER" == "focal" ]]; then
+		if [[ $VER == "trusty" || $VER == "utopic" || $VER == "jessie" || $VER == "wheezy" || "$VER" == "wily" || "$VER" == "xenial" || "$VER" == "yakkety" || "$VER" == "eoan" || "$VER" == "focal" ]]; then
 			pkgs+=" qpdfview exfat-fuse"
 		fi
-		if [[ "$VER" == "wily" || "$VER" == "xenial" || "$VER" == "yakkety"  || "$VER" == "focal" ]]; then
+		if [[ "$VER" == "wily" || "$VER" == "xenial" || "$VER" == "yakkety"  || "$VER" == "eoan" || "$VER" == "focal" ]]; then
 			check_repo=`sudo apt-add-repository universe`
 			ret=`echo "$check_repo"|grep "distribution component is already enabled"`
 			echo_d "UNIVERSE: $ret"
@@ -455,7 +455,7 @@ function make_dependencies()
 		vncargs2="-desktop="
 		llua="lua5.1"
 
-		if [ "$VER" != "utopic" -a "$VER" != "wily" -a "$VER" != "trusty" -a "$VER" != "xenial" -a "$VER" != "yakkety" -a "$VER" != "focal" ]; then
+		if [ "$VER" != "utopic" -a "$VER" != "wily" -a "$VER" != "trusty" -a "$VER" != "xenial" -a "$VER" != "yakkety" -a "$VER" != "eoan" -a "$VER" != "focal" ]; then
 			ruby --version | grep 1.8
 			if [[ $? -ne 0 ]]; then
 				echo "### Installing ruby1.8"
