@@ -54,7 +54,7 @@ class Options
     args.each do |x|
       begin
         val=@lua_defs.send x
-        rescue Exception => e # CotsonError => e 
+      rescue Exception => e # CotsonError => e 
         raise CotsonError.new(:OptionsLoad, :variable=>x, :exception=>e)
       end
       if val=="true" then val=true end

@@ -274,9 +274,8 @@ class Sandbox < Location
       i,o=run_output("kill")
       debug2 "sandbox kill: #{o}"
       return i==0
-
-      rescue Exception
-        return false
+    rescue Exception
+      return false
     end
   end
 
@@ -285,9 +284,8 @@ class Sandbox < Location
       i,o=run_output("status")
       debug2 "sandbox status: #{o}"
       return i==0
-
-      rescue Exception
-        return false
+    rescue Exception
+      return false
     end
   end
   

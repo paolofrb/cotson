@@ -38,7 +38,8 @@ namespace luabind { namespace detail {
 
     registration::~registration()
     {
-        delete m_next;
+        // delete m_next;
+	m_next.reset();
     }
 
     } // namespace detail
@@ -48,8 +49,8 @@ namespace luabind { namespace detail {
     {
     }
     
-    scope::scope(std::auto_ptr<detail::registration> reg)
-        : m_chain(reg.release())
+    scope::scope(std::shared_ptr<detail::registration> reg)
+        : m_chain(reg)
     {
     }
 
@@ -61,7 +62,8 @@ namespace luabind { namespace detail {
 
     scope::~scope()
     {
-        delete m_chain;
+        // delete m_chain;
+	m_chain.reset();
     }
     
     scope& scope::operator,(scope s)
@@ -73,7 +75,7 @@ namespace luabind { namespace detail {
             return *this;
         }
         
-        for (detail::registration* c = m_chain;; c = c->m_next)
+        for (std::shared_ptr<detail::registration> c = m_chain;; c = c->m_next)
         {
             if (!c->m_next)
             {
@@ -88,7 +90,7 @@ namespace luabind { namespace detail {
 
     void scope::register_(lua_State* L) const
     {
-        for (detail::registration* r = m_chain; r != 0; r = r->m_next)
+        for (std::shared_ptr<detail::registration> r = m_chain; r != 0; r = r->m_next)
         {
 			LUABIND_CHECK_STACK(L);
             r->register_(L);
@@ -186,7 +188,7 @@ namespace luabind {
     };
 
     namespace_::namespace_(char const* name)
-        : scope(std::auto_ptr<detail::registration>(
+        : scope(std::unique_ptr<detail::registration>(
               m_registration = new registration_(name)))
     {
     }

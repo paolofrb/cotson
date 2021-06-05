@@ -344,7 +344,7 @@ CommandSocket::Keyboard::Keyboard(uint32_t sd):
     };
 
 	// Initialize keyboard scancode data
-    ::memset(keymap,0,256);
+    ::memset(keymap,0,256*sizeof(const char*));
     const keys_t *pk = keys;
     while (pk->s) {
         keymap[static_cast<uint8_t>(pk->c)] = pk->s;

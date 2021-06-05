@@ -288,7 +288,7 @@ namespace luabind { namespace detail
 				else
 				{
 					assert(LUABIND_TYPE_INFO_EQUAL(LUABIND_TYPEID(T), crep->type()));
-					std::auto_ptr<T> obj(new T(ref));
+					std::unique_ptr<T> obj(new T(ref));
 					crep->construct_holder()(held, obj.get());
 					object_ptr = held;
 					obj.release();

@@ -45,8 +45,8 @@ trap "exit 1" TERM
 export TOP_PID=$$
 ###
 
-DEBIAN_BASED_PKGS="g++ g++-multilib subversion genisoimage bison flex vnc4server  \
-rxvt xfwm4 xfonts-100dpi xfonts-75dpi zsh sharutils build-essential xvnc4viewer screen \
+DEBIAN_BASED_PKGS="g++ g++-multilib subversion genisoimage bison flex tightvncserver  \
+rxvt xfwm4 xfonts-100dpi xfonts-75dpi zsh sharutils build-essential xtightvncviewer screen \
 liblua5.1-0 liblua5.1-0-dev zlib1g-dev indent xutils-dev libsqlite3-dev \
 sqlite3 libdbd-sqlite3-perl libdbd-pg-perl gnuplot libboost-dev libboost-thread-dev lzma \
 libxcursor1 libxrender1 libsm6 libxi6 libfontconfig1 gnuplot-x11 subversion procmail rpcbind genisoimage gawk \
@@ -62,7 +62,7 @@ execstack qpdfview gedit mc quota"
 
 DEBIAN_SUPPORTED_VERS="lenny | squeeze | wheezy | jessie"
 FEDORA_SUPPORTED_VERS="Werewolf | Leonidas | Goddard | Laughlin | Lovelock | Verne | BeefyMiracle | SphericalCow | Schrödinger’sCat | Heisenbug | TwentyOne | TwentyTwo | TwentyThree | TwentyFour | TwentyFive"
-UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise | quantal | raring | trusty | utopic | wily | xenial | yakkety"
+UBUNTU_SUPPORTED_VERS="intrepid | jaunty | karmic | lucid | maverick | natty | oneiric | precise | quantal | raring | trusty | utopic | wily | xenial | yakkety | focal"
 
 COTSON_IMAGES_BASE_PATH="/opt"
 COTSON_IMAGES_PATH="${COTSON_IMAGES_BASE_PATH}/cotson"
@@ -418,10 +418,10 @@ function make_dependencies()
 		pqxx=libpqxx-dev 
 		ruby="ruby ruby1.8 rubygems libopenssl-ruby libsqlite3-ruby "
 
-		if [[ $VER == "trusty" || $VER == "utopic" || $VER == "jessie" || $VER == "wheezy" || "$VER" == "wily" || "$VER" == "xenial" || "$VER" == "yakkety" ]]; then
+		if [[ $VER == "trusty" || $VER == "utopic" || $VER == "jessie" || $VER == "wheezy" || "$VER" == "wily" || "$VER" == "xenial" || "$VER" == "yakkety" || "$VER" == "focal" ]]; then
 			pkgs+=" qpdfview exfat-fuse"
 		fi
-		if [[ "$VER" == "wily" || "$VER" == "xenial" || "$VER" == "yakkety" ]]; then
+		if [[ "$VER" == "wily" || "$VER" == "xenial" || "$VER" == "yakkety"  || "$VER" == "focal" ]]; then
 			check_repo=`sudo apt-add-repository universe`
 			ret=`echo "$check_repo"|grep "distribution component is already enabled"`
 			echo_d "UNIVERSE: $ret"
@@ -449,13 +449,13 @@ function make_dependencies()
 		cmdt1=""
 		cmdt2="dpkg -s"
 		cmdcheckstr="^Status.*installed$"
-		xvnc="Xvnc4"
-		xvncservctrl="vnc4server"
+		xvnc="Xvnc"
+		xvncservctrl="vncserver"
 		vncargs1="-ac -SecurityTypes None -br -pn -httpd /usr/share/"
 		vncargs2="-desktop="
 		llua="lua5.1"
 
-		if [ "$VER" != "utopic" -a "$VER" != "wily" -a "$VER" != "trusty" -a "$VER" != "xenial" -a "$VER" != "yakkety" ]; then
+		if [ "$VER" != "utopic" -a "$VER" != "wily" -a "$VER" != "trusty" -a "$VER" != "xenial" -a "$VER" != "yakkety" -a "$VER" != "focal" ]; then
 			ruby --version | grep 1.8
 			if [[ $? -ne 0 ]]; then
 				echo "### Installing ruby1.8"

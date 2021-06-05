@@ -13,30 +13,31 @@
 # $Id: config.rb 6977 2009-12-09 16:18:35Z frb $
 
 require 'yaml'
- require 'regression_test'
+require 'regression_test'
 
 class CConfig
-	def initialize(file)
-		@file=file
-		@data=Hash.new
-		load
-	end
+  def initialize(file)
+    @file=file
+    @data=Hash.new
+    load
+  end
 
-	def load
-		begin
-			@data = YAML::load_file(@file)
-	  rescue Exception => e
+  def load
+    begin
+      @data = YAML::load_file(@file)
+
+    rescue Exception => e
       raise CotsonError.new(:ConfigLoad, :file=>@file, :exception=>e)
-		end
-	end
+    end
+  end
 
-	public
-	def [](k)
-		raise CotsonError.new(:ConfigGetValue, :file=>@file, :key=>k) if !@data.has_key?(k)
-		@data[k]
-	end
+  public
+  def [](k)
+    raise CotsonError.new(:ConfigGetValue, :file=>@file, :key=>k) if !@data.has_key?(k)
+    @data[k]
+  end
 
-	def force(vals={})
-		vals.each { |x,y| @data[x.to_sym]=y }
-	end
+  def force(vals={})
+    vals.each { |x,y| @data[x.to_sym]=y }
+  end
 end

@@ -46,7 +46,7 @@ namespace luabind { namespace detail {
 
     private:
         friend struct ::luabind::scope;
-        registration* m_next;
+	std::shared_ptr<registration> m_next;
     };
 
 }} // namespace luabind::detail
@@ -56,7 +56,7 @@ namespace luabind {
     struct LUABIND_API scope
     {
         scope();
-        explicit scope(std::auto_ptr<detail::registration> reg);
+        explicit scope(std::shared_ptr<detail::registration> reg);
         scope(scope const& other_);
         ~scope();
 
@@ -65,7 +65,7 @@ namespace luabind {
         void register_(lua_State* L) const;
 
     private:
-        detail::registration* m_chain;
+	std::shared_ptr<detail::registration> m_chain;
     };
 
     class LUABIND_API namespace_ : public scope

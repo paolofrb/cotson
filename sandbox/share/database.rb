@@ -13,44 +13,45 @@
 # $Id: database.rb 6977 2009-12-09 16:18:35Z frb $
 
 class Database < CConfig
-	def initialize(file)
-		super(file)
-	end
+  def initialize(file)
+    super(file)
+  end
 
-	def store
-		begin
-			File.open(@file,'w' ) do |out|
-				YAML.dump( @data, out )
-			end
-	  rescue Exception => e
+  def store
+    begin
+      File.open(@file,'w' ) do |out|
+        YAML.dump( @data, out )
+      end
+
+    rescue Exception => e
       raise CotsonError.new(:DatabaseStore, :file=>@file, :error=>e)
-		end
-	end
+    end
+  end
 
-	public
-	def [](k)
-		load
-		@data[k]
-	end
+  public
+  def [](k)
+    load
+    @data[k]
+  end
 
-	def need(k)
-		load
+  def need(k)
+    load
     raise CotsonError.new(:DatabaseNeed, :key=>k, :file=>@file) if !@data.has_key?(k)
-		@data[k]
-	end
+    @data[k]
+  end
 
-	def []=(k,v)
-		load
-		if(v)	
-			@data[k]=v
-		else
-			@data.delete(k)
-		end
-		store
-	end
+  def []=(k,v)
+    load
+    if(v) 
+      @data[k]=v
+    else
+      @data.delete(k)
+    end
+    store
+  end
 
-	def clear
-		@data=Hash.new
-		store
-	end
+  def clear
+    @data=Hash.new
+    store
+  end
 end
