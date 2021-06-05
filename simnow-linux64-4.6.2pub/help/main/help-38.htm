@@ -1,0 +1,44 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="423">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-37.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-39.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P3766_206925"></a><b><font face="Arial" size="+1"><i>7.26 Plug and Play Monitor Device</i></font></b></h2>
+
+  <p><font face="Times New Roman">The Plug and Play Monitor device (PnP Monitor<a name="P3767_207003"></a>) conforms to the VESA Plug and Play Monitor specification and therefore supports the DDC2B standard. DDC<a name="P3767_207108"></a> (<b>D</b>isplay <b>D</b>ata <b>C</b>hannel) is the Plug and Play standard for monitors. DDC monitors are designed to meet the VESA<a name="P3767_207218"></a> (<b>V</b>ideo <b>E</b>lectronic <b>S</b>tandards <b>A</b>ssociation) standard that defines the DDC implementation. If the video card also supports the DDC standard it gets from the PnP monitor device all the information about its features and makes consequently an automatic configuration for the best refresh values depending on the selected resolution.</font></p>
+
+  <p><font face="Times New Roman">The Plug and Play monitor device supports the DDC1 and DDC2B standards. DDC1 is primitive and a point to point interface. The monitor is always put at transmit-only mode (DDC1). The monitor will continuously transmit data until the monitor will be turned off or switched to the bi-directional mode (DDC2). In DDC2 mode the I<sup>2</sup>C protocol is being used for data transfers. </font></p>
+
+  <p><font face="Times New Roman"><b>Interface</b></font></p>
+
+  <p><font face="Times New Roman">The Plug and Play Monitor device model has a VGA and DVI interface connection. Connections can be only made to the VGA or DVI interface. It can be connected to the VGA or DVI connection of a video card device.</font></p>
+
+  <p><font face="Times New Roman"><b>Contents of a BSD</b></font></p>
+
+  <p><font face="Times New Roman">The current state of all internal registers and any internal state variables are saved in the BSD.</font></p>
+
+  <p><font face="Times New Roman"><b>Initialization and Reset State</b></font></p>
+
+  <p><font face="Times New Roman">When first initialized or reset the Plug and Play Monitors DDC registers are set to their default state. After initialization the monitor device will operate in DDC1 mode. The device will remain in the DDC1 mode until there is a valid HIGH to LOW transition on the SCL pin, when it will switch to DDC2B mode.</font></p>
+
+  <p><font face="Times New Roman"><b>Differences from Real Hardware</b></font></p>
+
+  <p><font face="Times New Roman">The model attempts to match the functionality of the physical devices from a programmer's perspective. Upon power-up, a &#8220;real&#8221; Plug and Play monitor will output valid data only after it has been initialized. During initialization, data will not be available until after the first nine clock cycles are sent to the device. This Plug and Play monitor device model does not simulate this behaviour. It will always output valid data. </font></p>
+
+  <p><font face="Times New Roman">The <i>Page Write</i>, <i>Acknowedge Polling</i>, and the <i>Write Protection</i> feature are currently not supported.</font></p>
+
+  <p><font face="Times New Roman"><b>Configuration Options</b></font></p>
+
+  <p><font face="Times New Roman">The Plug and Play Monitor device gives you the opportunity to choose from different Plug and Play Monitor device models, as shown in <a href="#P3790_209313">Figure 7-38</a>.</font></p>
+
+  <p align="center"><img src="images/help-143.gif" border="0" width="575" height="448"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P3790_209313"></a>Figure 7-38: Plug and Play Monitor Device Configuration</b></font></p></ul><p align="left"><a href="help-37.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-39.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

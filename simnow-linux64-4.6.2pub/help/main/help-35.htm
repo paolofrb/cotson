@@ -1,0 +1,1192 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="420">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-34.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-36.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P2932_158142"></a><font face="Arial" size="+1"><b><i>7.23 XTR Device</i></b></font></h2>
+
+  <p><font face="Times New Roman">XTR<a name="P2933_158160"></a> is a trace record and playback mechanism that is instrumental for applications that are not dependent on the specific version of the CPU. An XTR trace contains the interaction of the processor with the rest of the system in an XML based log file. The XTR trace file can be played back and could be used to simulate behavior of one or more devices within a system, which in turn may be used to analyze the CPU's performance or to perform conformance analysis between various revs and models of the CPU. XTR may also be used in studies where the behavior of some devices needed but the use of an actual device or its software model is either difficult of impossible due to various constraints.</font></p>
+
+  <p><font face="Times New Roman">XTR has two files, a binary file which has the memory dump of the system and an XML based text file which contains the log of the events or messages that go in and out a non-coherent port of the Northbridge, including the DMA signals from devices on the (host&#8217;s) secondary bus to the DIMM. XTR playback mechanism essentially replaces all the devices including the Northbridge and downwards and feeds the processor with the data present in the XTR XML file. The structure of both binary file and XML file is discussed below.</font></p>
+
+  <p><font face="Times New Roman">XTR can be used both in uni-processor (XTR-UP) and multi-processor (XTR-MP) configurations. However, currently only XTR-UP is supported while XTR-MP is under development.</font></p>
+
+  <p><font face="Times New Roman">There are two modes of XTR, XTR Record and XTR Playback. The simulator supports both modes and one mode does not necessitate the other. The simulator could be used to record XTR traces only or playback XTR traces generated from other sources as far as the XTR specification is followed correctly (see Section <a href="#P3252_173939">7.23.4</a>, &#8220;<a href="#P3252_173939"><i>Limitations</i></a>&#8221;, on page <a href="#P3252_173939">121</a>).</font></p>
+
+  <p><font face="Times New Roman">An XTR XML file contains Initialization Data, Events and Instructions. XTR Initialization data stores the state of CPU just before XTR recording is initiated. This data is used to initialize the CPU and memory parameters during Playback (the memory itself is initialized from the contents of the binary file). Any register that does not have corresponding initialization data in XTR XML file will be initialized with zero. XTR events fall into two categories: </font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; Dormant Events, which record an event occurrence but do not trigger an event during playback.</font></p>
+
+    <p><font face="Times New Roman">&#8226; Active events that are recorded in XTR file and are actively triggered during playback. </font></p>
+
+  </ul><p><font face="Times New Roman">IOR, IOW, MEMR, MEMW, RDMSR are examples of dormant events and INTR, APIC, DMAW, EOT are examples of Active events. XTR Instructions are commands that are injected in the XTR trace to give special instructions during XTR playback. FJMP (Force Jump) is an XTR Instruction.</font></p>
+
+  <h3><a name="P2947_160816"></a><font face="Arial" size="+1"><b>7.23.1 Using XTR</b></font></h3>
+
+  <p><font face="Times New Roman">No special setup for XTR Record is required; XTR can be recorded by using the appropriate automation commands as described in Section <a href="help-59.htm#P10922_432640">A.7.28</a>, &#8220;<a href="help-59.htm#P10922_432640"><i>XTR</i></a>&#8221;, on page <a href="help-59.htm#P10922_432640">251</a>. </font></p>
+
+  <p><font face="Times New Roman">The XTR XML file can easily exceed five Gbytes in size. Please make sure you have enough physical storage before you start XTR Record. </font></p>
+
+  <h4><a name="P2951_161133"></a><font face="Arial" size="+0"><b>7.23.1.1 Recoding XTR Trace</b></font></h4>
+
+  <p><font face="Times New Roman">To record XTR, please enter the following commands in the simulator&#8217;s console window:</font></p>
+
+  <p><font face="Courier New">1 simnow&gt; xtrsvc.xtrfile &lt;filename.xml&gt;</font></p>
+
+  <p><font face="Courier New">1 simnow&gt; xtrsvc.xtrenable 1</font></p>
+
+  <p><font face="Courier New">1 simnow&gt; go [or hit Run on the shell]</font></p>
+
+  <h4><a name="P2957_161352"></a><font face="Arial" size="+0"><b>7.23.1.2 Stop XTR Record</b></font></h4>
+
+  <p><font face="Times New Roman">To stop XTR<a name="P2958_161387"></a> record, please enter the following commands in the simulator&#8217;s console window:</font></p>
+
+  <p><font face="Courier New">1 simnow&gt; stop [Stop the simulation]</font></p>
+
+  <p><font face="Courier New">1 simnow&gt; xtrsvc.xtrenable 0</font></p>
+
+  <h4><a name="P2962_161532"></a><font face="Arial" size="+0"><b>7.23.1.3 XTR Playback</b></font></h4>
+
+  <p><font face="Times New Roman">For XTR Playback, XTR Northbridge (XTRNB) replaces all the devices including any other Northbridge in the system. Hence for UP-XTR Playback, only AweSim and XTRNB are required. Please refer to Section <a href="#P2962_161532">7.23.1.3</a>, &#8220;<a href="#P2962_161532"><i>XTR Playback</i></a>&#8221;, on page <a href="#P2962_161532">115</a>, on how to connect AweSim and the XTRNB device. It is recommended to also include the Debugger device for debugging or logging needs.</font></p>
+
+  <p><font face="Times New Roman">To playback XTR<a name="P2965_161944"></a>, please enter the following commands in the simulator&#8217;s console window:</font></p>
+
+  <p><font face="Courier New">new</font></p>
+
+  <p><font face="Courier New">adddevice &quot;Debugger&quot;</font></p>
+
+  <p><font face="Courier New">adddevice &quot;Awesim Processor&quot;</font></p>
+
+  <p><font face="Courier New">cpu.type K8</font></p>
+
+  <p><font face="Courier New">cpu.setname Athlon64</font></p>
+
+  <p><font face="Courier New">cpu.setnumcores 1</font></p>
+
+  <p><font face="Courier New">cpu.forcefinegrainedevents 1</font></p>
+
+  <p><font face="Courier New">cpu.SetStartUpFID 12</font></p>
+
+  <p><font face="Courier New">adddevice xtrnb</font></p>
+
+  <p><font face="Courier New">connect &quot;Awesim Processor #0&quot; &quot;CPU Bus 0&quot; &quot;xtrnb #2&quot; &quot;CPU Bus 0&quot;</font></p>
+
+  <p><font face="Courier New">connect &quot;Awesim Processor #0&quot; &quot;Interrupt / IOAPIC Bus&quot; &quot;xtrnb #2&quot; &quot;Interrupt / IOAPIC Bus&quot;</font></p>
+
+  <p><font face="Courier New">cpu.type K8</font></p>
+
+  <p><font face="Courier New">modifyregistry &quot;System Bus Frequency&quot; &quot;100&quot;</font></p>
+
+  <p><font face="Courier New">xtrnb.xtrfile &lt;filename.xml&gt;</font></p>
+
+  <p><font face="Courier New">xtrnb.debug 1</font></p>
+
+  <p><font face="Courier New">xtrnb.xtrlogfile &lt;filename-playback.log&gt;</font></p>
+
+  <p><font face="Courier New">SetLogFile &lt;filename.log&gt;</font></p>
+
+  <p><font face="Courier New">SetLogFileEnabled 1</font></p>
+
+  <p><font face="Courier New">SetErrorLogFile &lt;filename.errlog&gt;</font></p>
+
+  <p><font face="Courier New">SetErrorLogFileEnabled 1</font></p>
+
+  <p><font face="Courier New">go [or hit Run on the shell]</font></p>
+
+  <h4><a name="P2988_162598"></a><font face="Arial" size="+0"><b>7.23.1.4 Stop XTR Playback</b></font></h4>
+
+  <p><font face="Times New Roman">XTR Playback will stop automatically when <b><u>E</u></b>nd <b><u>O</u></b>f <b><u>T</u></b>race (EOT<a name="P2989_162683"></a>) event is reached. It could also be stopped prematurely by clicking on the <i>stop</i> button or by executing the stop automation command.</font></p>
+
+  <p><font face="Times New Roman"><b>Initialization and Reset State</b></font></p>
+
+  <p><font face="Times New Roman">XTR Record does not have any special Initialization or Reset state. </font></p>
+
+  <p><font face="Times New Roman"><b>Init from BSD</b></font></p>
+
+  <p><font face="Times New Roman">The BSD contents of XTRNB are loaded. The XTR XML file is skipped the number of lines to the last event read and the system prepares itself for playback.</font></p>
+
+  <p><font face="Times New Roman"><b>Init from Automation Script</b></font></p>
+
+  <p><font face="Times New Roman">The CPU is initialized from the initialization data in XML and the system prepares itself for playback. This method does not support persistent storage of XTR state to be replayed later.</font></p>
+
+  <p><font face="Times New Roman"><b>Reset</b></font></p>
+
+  <p><font face="Times New Roman">The XTR file handle is closed. All the queued events are flushed. Simulated DIMM memory is flushed and unallocated.</font></p>
+
+  <p><font face="Times New Roman"><b>Contents of a BSD</b></font></p>
+
+  <p><font face="Times New Roman">XTR Record contains <i>xtrsvc</i>, which is described below, in addition to modules in the simulation. For XTR Playback, the BSD is composed of following modules:</font></p>
+
+  <p><font face="Times New Roman">shell:0  : The shell under which a simulation is executed.</font></p>
+
+  <p><font face="Times New Roman">xtrsvc:0 : XTR service which facilitates execution of XTR Playback.</font></p>
+
+  <p><font face="Times New Roman">Debug:0 : The SimNow Debugger.</font></p>
+
+  <p><font face="Times New Roman">Cpu:0  : AweSim CPU Module. There might be more CPUs for XTR-MP.</font></p>
+
+  <p><font face="Times New Roman">xtrnb:0  : XTR Northbridge.</font></p>
+
+  <p><font face="Times New Roman">In persisted BSD, XTRNB, which is only used during XTR Playback, saves and restores events that have been queued but not triggered yet, DIMM image and internal states of the XTRNB. Complete XTR Playback setup also includes AweSim and optionally the AMD Debugger. Please refer to the documentation of AweSim and AMD Debugger for their respective contents in the BSD file.</font></p>
+
+  <p><font face="Times New Roman">XTR Record does not store any contents in the persistent BSD file.</font></p>
+
+  <p><font face="Times New Roman"><b>Log Messages</b></font></p>
+
+  <p><font face="Times New Roman">Messages are logged only by XTRNB, which is only used during XTR Playback. Some of the following may only be logged when <i>xtrnb.debug</i> is set to enable. Some of the Log messages are:</font></p>
+
+  <p><font face="Arial"><b>XTRNB: Attempting to allocate large buffer of size 1074503680</b></font></p>
+
+  <p><font face="Times New Roman">Logged during XTR initialization phase just before XTR tries to allocate memory to simulate DIMM.</font></p>
+
+  <p><font face="Arial"><b>XTRNB: Sending APIC initialization data to CPU0</b></font></p>
+
+  <p><font face="Times New Roman">Logged during XTR initialization phase just before APIC memory is initialized.</font></p>
+
+  <p><font face="Arial"><b>XTRNB: Write to TSC ignored. Please use M00000010 for writes to TSC</b></font></p>
+
+  <p><font face="Times New Roman">Logged during XTR initialization phase. </font></p>
+
+  <p><font face="Arial"><b>XTRNB: CPU0 rejected Initialization SREG XXXXXXXXXX with zeros</b></font></p>
+
+  <p><font face="Times New Roman">Logged during XTR initialization phase and displayed if the initialization data is invalid for the SREG. This may or may not be an error in the initialization data.</font></p>
+
+  <p><font face="Arial"><b>XTRNB: CPU0 rejected Initialization of SREG XXXXXXXXX with specific value</b></font></p>
+
+  <p><font face="Times New Roman">Logged during XTR initialization phase</font></p>
+
+  <p><font face="Arial"><b>XTRNB: Skipping write to &#956;Code patch MSR C0010020</b></font></p>
+
+  <p><font face="Times New Roman">Logged during XTR initialization phase</font></p>
+
+  <p><font face="Arial"><b>XTRNB: Processing GETMEMPTR request for XXXXXXXXXXX:...Denied</b></font></p>
+
+  <p><font face="Times New Roman">Logged during XTR execution phase where XXXXXX is the physical address of page requested. The request may be denied if it is requested for a MMIO region.</font></p>
+
+  <p><font face="Arial"><b>** DEVMC_READMEM [800000007F1CAD00/296]: 55 8B EC 51 56 8B 75 0C </b></font></p>
+
+  <p><b><font face="Arial">** DEVMC_WRITEMEM [400000007F294FD4/523]: A9 17 53 80 </font></b></p>
+
+  <p><font face="Times New Roman">Logged during XTR execution phase. 800000007F1CAD00 is the address 296 is the instruction count. The data following the &quot;:&quot; is the data that returned and received to and from the CPU. This message is logged for a READ/WRITE MEMORY request but no record is present in XTR XML file for this read. The data is hence served and written from and to backing store (whose contents were originally initialized from the XTR binary file)</font></p>
+
+  <p><font face="Arial"><b>XTRNB: Ir A03E w/event time = 326, Consume time = 597, CPU ICount = 99:  01 00</b></font></p>
+
+  <p><b><font face="Arial">XTRNB: Iw A03E w/event time = 345, Consume time = 616, CPU ICount = 118:  00 00</font></b></p>
+
+  <p><b><font face="Arial">XTRNB: Ia D1 w/event time = 326462, Consume time = 326462, CPU ICount = 326235</font></b></p>
+
+  <p><font face="Times New Roman">Logged during XTR execution phase when IOR/IOW message is received by XTRNB. A03E is the address of IOR/IOW and the data after the &quot;:&quot; is the data that is returned and received to and from the CPU. &#8216;Ia&#8217; is for Interrupt Acknowledgement and D1 is the vector.</font></p>
+
+  <p><font face="Arial"><b>XTRNB: Time Resync - Adjusting time by -271...</b></font></p>
+
+  <p><font face="Times New Roman">Logged during execution when there is a timing discrepancy detected between an event in XTR XML and that received from the CPU. XTRNB adjusts to this discrepancy. In ideal environment this should not occur.</font></p>
+
+  <p><font face="Arial"><b>XTRNB: Queuing event CPU0[DMAW] for time 8403</b></font></p>
+
+  <p><font face="Times New Roman">Logged during execution when a DMAW event is queued so that it could be triggered at a later point. 8403 is the time when this event should be triggered.</font></p>
+
+  <p><font face="Arial"><b>XTRNB: Setting event trigger delay for CPU0[DMAW] to 1205</b></font></p>
+
+  <p><font face="Times New Roman">Logged during execution. DMAW event is setup to be triggered at a later point. 1205 is the difference between NOW and event time.</font></p>
+
+  <p><font face="Arial"><b>XTRNB: Processing queued event CPU0[DMAW] ICount=8403 ShellICount=8403.</b></font></p>
+
+  <p><font face="Times New Roman">Logged during execution. Trigger for event setup earlier is invoked. CPU0 and DMAW could have different values depending on which CPU it is (MP-XTR only) and which event is processed.</font></p>
+
+  <p><font face="Times New Roman"><b>Interfaces</b></font></p>
+
+  <p><a name="P3062_167421"></a><!-- TRANSIT - PREVIOUS ELEMENT Body Text --><!-- .a href=""..img src="images/gtabprv.gif" border="0"../a. --><a href="#P3089_169355"><img src="images/gtabnxt.gif" border="0"></a><font face="Times New Roman">XTRNB has eight CPU interfaces and an IO Interrupt / APIC interface to connect to the AweSim&#8217;s CPU Bus and IO Interrupt / APIC interface respectively. For XTR-UP, only one CPU interface may be used. </font><!-- TRANSIT - PREVIOUS ELEMENT Body Text --><!-- .a href=""..img src="images/gtabprv.gif" border="0"../a. --><a href="#P3089_169355"><img src="images/gtabnxt.gif" border="0"></a></p>
+
+  <h3><a name="P3063_167622"></a><font face="Arial" size="+1"><b>7.23.2 XTR Structure</b></font></h3>
+
+  <h4><a name="P3064_167642"></a><b><font face="Arial" size="+0">7.23.2.1 XML Structure</font></b></h4>
+
+  <p><font face="Times New Roman">XTR is a text file that contains XML elements for initialization elements, events and instructions. The XML schema or DTD is not formally defined. XTR XML contains an Initialization section followed by events and instruction sections. Last event in the XML must be an EOT event indicating the end of trace. Some XTR elements are explained below. Please refer to Section <a href="#P3260_174507">7.23.5</a>, &#8220;<a href="#P3260_174507"><i>Example XTR XML File</i></a>&#8221;, on page <a href="#P3260_174507">121</a>, or the exact and complete structure of the XTR XML. </font></p>
+
+  <p><font face="Times New Roman">All values in the XML are in hexadecimal except for <i>ICount</i> and <i>Length</i> values which are always in decimal. Exceptions will be stated as necessary.</font></p>
+
+  <p><font face="Arial"><b>&lt;Init Device=&quot;DIMM&quot; Type=&quot;MEMI&quot; Size=&quot;536870912&quot; /&gt;</b></font></p>
+
+  <p><font face="Times New Roman">Memory initialization (MEMI) information from and for the DIMM device. The value for &quot;Size&quot; attribute the size of DIMM in bytes in decimal (base 10). Note that this does not require that XTR playback to have a DIMM device</font></p>
+
+  <p><font face="Arial"><b>&lt;Init Device=&quot;MEM&quot; Type=&quot;MEMI&quot; File=&quot;c:\simnow\xtr\DivergenceAt324303\test_snapshot_3dmarkwof_0.bin&quot; /&gt;</b></font></p>
+
+  <p><font face="Times New Roman">Memory initialization file. File path may be relative to the current path.</font></p>
+
+  <p><font face="Arial"><b>&lt;Init Device=&quot;CPU0&quot; Type=&quot;CPU&quot; Item=&quot;ICount&quot; Data=&quot;227&quot;/&gt;</b></font></p>
+
+  <p><font face="Times New Roman">Initial instruction count in decimal. Different CPUs can have different initial ICounts.</font></p>
+
+  <p><font face="Arial"><b>&lt;Init Device=&quot;CPU0&quot; Type=&quot;CPU&quot; Item=&quot;ModeFlags&quot; Data=&quot;00000001&quot;/&gt;</b></font></p>
+
+  <p><font face="Times New Roman">The upper 32 bit of <i>ModeFlags</i> must contain Execution Control flags. Please refer to Section <a href="#P3137_171952">7.23.3</a>, &#8220;<i><a href="#P3137_171952">ModeFlags</a></i>&#8221;, on page <a href="#P3137_171952">120</a> for more information.</font></p>
+
+  <p><font face="Arial"><b>&lt;Init Device=&quot;CPU0&quot; Type=&quot;SREG&quot; Item=&quot;TSC&quot; Data=&quot;0000000000000000&quot;/&gt;</b></font></p>
+
+  <p><font face="Times New Roman">The initialization information for MSRs. Note that initialization information for TSC will be ignored. Please use M00000010 for writes to TSC</font></p>
+
+  <p><font face="Arial"><b>&lt;Init Device=&quot;CPU0&quot; Type=&quot;APIC&quot; Length=&quot;1024&quot; &gt;</b></font></p>
+
+  <p align="center"><b><font face="Arial">.</font></b></p>
+
+  <p align="center"><b><font face="Arial">.</font></b></p>
+
+  <p align="center"><b><font face="Arial">.</font></b></p>
+
+  <p><b><font face="Arial">&lt;/Init&gt;</font></b></p>
+
+  <p><a name="P3089_169355"></a><a href="#P3062_167421"><img src="images/gtabprv.gif" border="0"></a><!-- TRANSIT - NEXT ELEMENT Body Text --><!-- .a href=""..img src="images/gtabnxt.gif" border="0"../a. --><font face="Times New Roman">APIC initialization information.</font><a href="#P3062_167421"><img src="images/gtabprv.gif" border="0"></a><!-- TRANSIT - NEXT ELEMENT Body Text --><!-- .a href=""..img src="images/gtabnxt.gif" border="0"../a. --></p>
+
+  <p><font face="Arial"><b>&lt;INSTR Device=&quot;CPU0&quot; Type=&quot;FJMP&quot; ICount=&quot;6778&quot; JMP=&quot;1&quot; RIP=&quot;f86b0619&quot; /&gt;</b></font></p>
+
+  <p><font face="Times New Roman">An FJMP Instruction. RIP is optional and is only used to double check whether if the FJMP is taken at the correct instruction. JMP attribute can have the following values:</font></p>
+
+  <p><font face="Times New Roman">JMP=0: Force Do-not-take-jump for this instruction</font></p>
+
+  <p><font face="Times New Roman">JMP=1: Force Take-jump for this instruction</font></p>
+
+  <p><font face="Arial"><b>&lt;Event Device=&quot;CPU0&quot; Type=&quot;IOW&quot; ICount=&quot;6817&quot; Address=&quot;a038&quot; Size=&quot;2&quot;&gt;</b></font></p>
+
+  <p><b><font face="Arial">&lt;Data Length=&quot;2&quot; Value=&quot;40af&quot; /&gt;</font></b></p>
+
+  <p><b><font face="Arial">&lt;/Event&gt;</font></b></p>
+
+  <p><font face="Times New Roman">Defines an IOR or IOW dormant event.</font></p>
+
+  <p><font face="Arial"><b>&lt;Event Device=&quot;CPU0&quot; Type=&quot;DMAW&quot; ICount=&quot;8403&quot; Address=&quot;000000000c254340&quot; Length=&quot;64&quot;&gt;</b></font></p>
+
+  <p><b><font face="Arial">&lt;Data Length=&quot;64&quot; Value=&quot;6d00005f5e5bc3909ac04600b7c04600d4c04600eec0460008c1460022c146003cc146002fc2460067c2460085c24600a3c24600909090909090909090909090&quot; /&gt;</font></b></p>
+
+  <p><b><font face="Arial">&lt;/Event&gt;</font></b></p>
+
+  <p><font face="Times New Roman">Defines a DMAW event. </font></p>
+
+  <p><font face="Arial"><b>&lt;Event Device=&quot;CPU0&quot; Type=&quot;PIN&quot; ICount=&quot;325496&quot; Name=&quot;INTR&quot; Level=&quot;A&quot; /&gt;</b></font></p>
+
+  <p><font face="Times New Roman">Defines an INTR PIN event. Level=&quot;A&quot; for <i>Asserted</i> or &quot;D&quot; for <i>Deasserted</i>. Name could be INTR, RESET, A20M, NMI, PAUSE, SMI, and &lt;Unknown&gt;.</font></p>
+
+  <p><font face="Arial"><b>&lt;Event Device=&quot;TO_DO_IN_NB&quot; Type=&quot;APIC&quot; ICount=&quot;325496&quot; Name=&quot;EXTINT&quot; DestinationMode=&quot;F&quot; DeliveryMode=&quot;07&quot; Level=&quot;F&quot; TriggerMode=&quot;F&quot; Vector=&quot;00&quot; Destination=&quot;00&quot; /&gt;</b></font></p>
+
+  <p><font face="Times New Roman">Defines an APIC Event. Name could be EOI, INIT, STARTUP, SMI, NMI, INTR, REMOTE READ, EXTINT, LPARB, and Unknown. Device can be the name of the device that issues the interrupt. Current XTR implementation ignores the name of the device.</font></p>
+
+  <p><font face="Arial"><b>&lt;Event Device=&quot;CPU0&quot; Type=&quot;INTACK&quot; ICount=&quot;325496&quot; Vector=&quot;00000000000000d1&quot; /&gt;</b></font></p>
+
+  <p><font face="Times New Roman">Defines an INTACK cycle event.</font></p>
+
+  <p><font face="Arial"><b>&lt;Event Device=&quot;XTR&quot; Type=&quot;EOT&quot; ICount=&quot;400001&quot; /&gt;</b></font></p>
+
+  <p><font face="Arial">Defines an End of Trace (EOT) event.</font></p>
+
+  <p><font face="Arial"><b>&lt;Event Device=&quot;CPU0&quot; Type=&quot;RDMSR&quot; ICount=&quot;1404861740&quot; Address=&quot;00000010&quot; Data=&quot;0000000053BC7D2C&quot; /&gt;</b></font></p>
+
+  <p><b><font face="Arial">Defines a RDMSR event.</font></b></p>
+
+  <p><b><font face="Arial">&lt;Event Device=&quot;CPU0&quot; Type=&quot;MEMR&quot; ICount=&quot;3133971257&quot; Address=&quot;00000000000A88B2&quot; Size=&quot;1&quot;&gt;</font></b></p>
+
+  <p><b><font face="Arial">&lt;Data Length=&quot;1&quot; Value=&quot;FF&quot; /&gt;</font></b></p>
+
+  <p><b><font face="Arial">&lt;/Event&gt;</font></b></p>
+
+  <p><b><font face="Arial">&lt;Event Device=&quot;CPU0&quot; Type=&quot;MEMW&quot; ICount=&quot;3133971259&quot; Address=&quot;00000000000A88B2&quot; Size=&quot;1&quot;&gt;</font></b></p>
+
+  <p><b><font face="Arial">&lt;Data Length=&quot;1&quot; Value=&quot;01&quot; /&gt;</font></b></p>
+
+  <p><b><font face="Arial">&lt;/Event&gt;</font></b></p>
+
+  <p><font face="Times New Roman">Defines a Memory Read or Memory Write event. MEMR and MEMW are recorded for MMIO ranges.</font></p>
+
+  <h4><a name="P3129_171409"></a><font face="Arial" size="+0"><b>7.23.2.2 XTR Binary File Contents</b></font></h4>
+
+  <p><font face="Times New Roman">XTR Binary file contains the memory image of the system just before the XTR Record started. The binary file contains multiple records where each record contains has the following structure:</font></p>
+
+  <p><font face="Courier New">Physical Address Of the Page: 8 bytes</font></p>
+
+  <p><font face="Courier New">Count of Bytes in this Page: 4 Bytes</font></p>
+
+  <p><font face="Courier New">Data Of the Page: Count of Bytes earlier</font></p>
+
+  <p><font face="Times New Roman">Currently XTR only supports page size of 4096 bytes. Both the DIMM and MMIO may be present in the XTR Binary file. The last record in the binary file must have a count of zero to indicate end of memory image.</font></p>
+
+  <h3><a name="P3137_171952"></a><font face="Arial" size="+1"><b>7.23.3 ModeFlags</b></font></h3>
+
+  <p><font face="Times New Roman"><i>ModeFlags</i> defines some of the states of the CPU that are important for execution. The upper 32 bits store the Execution Control flags e.g. HLT and &lt;ignore interrupts for 1 instruction when we change stack segment&gt;. The lower 32 bits is redundant from other initialization values in the XTR initialization but is there to maintain code consistency.</font></p>
+
+<p><font face="Times New Roman"><a href="#P3183_172773">Table 7-7</a> shows the Execution Control Flags (upper 32 bit):</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e6e6e6" valign="top" width="154"><p align="center"><font face="Times New Roman"><b>Execution Control Flag</b></font></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="89"><p align="center"><b><font face="Times New Roman">Value</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="193"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="154"><p><font face="Times New Roman">BIUI_LOCK</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00000001</font></p>
+</td>
+<td valign="top" width="193"><p><font face="Times New Roman">Bus is locked</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="154"><p><font face="Times New Roman">BIUI_RESET</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00000002</font></p>
+</td>
+<td valign="top" width="193"><p><font face="Times New Roman">Processor RESET pin.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="154"><p><font face="Times New Roman">BIUI_INIT</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00000004</font></p>
+</td>
+<td valign="top" width="193"><p><font face="Times New Roman">INIT pin</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="154"><p><font face="Times New Roman">BIUI_INTR</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00000008</font></p>
+</td>
+<td valign="top" width="193"><p><font face="Times New Roman">Interrupt</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="154"><p><font face="Times New Roman">BIUI_NMI</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00000010</font></p>
+</td>
+<td valign="top" width="193"><p><font face="Times New Roman">NMI</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="154"><p><font face="Times New Roman">BIUI_SMI</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00000020</font></p>
+</td>
+<td valign="top" width="193"><p><font face="Times New Roman">SMI</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="154"><p><font face="Times New Roman">BIUI_IGNNE</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00000040</font></p>
+</td>
+<td valign="top" width="193"><p><font face="Times New Roman">Floating point IGNNE</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="154"><p><font face="Times New Roman">BIUI_A20M</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00000080</font></p>
+</td>
+<td valign="top" width="193"><p><font face="Times New Roman">A20Mask</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="154"><p><font face="Times New Roman">BIUI_PAUSE</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00000100</font></p>
+</td>
+<td valign="top" width="193"><p><font face="Times New Roman">PAUSE</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="154"><p><font face="Times New Roman">BIUI_HOLD</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00000200</font></p>
+</td>
+<td valign="top" width="193"><p><font face="Times New Roman">HOLD</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="154"><p><font face="Times New Roman">BIUI_UNUSED</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00000400</font></p>
+</td>
+<td valign="top" width="193"><p><font face="Times New Roman">Unused</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="154"><p><font face="Times New Roman">BIUI_STOP</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00000800</font></p>
+</td>
+<td valign="top" width="193"><p><font face="Times New Roman">Pseudo pin that stops simulation</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P3183_172773"></a>Table 7-7: Execution Control Flags</b></font></p>
+
+<p><font face="Times New Roman"><a href="#P3251_173896">Table 7-8</a> shows other internal execution control flags. Some flags may be AweSim specific.</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e6e6e6" valign="top" width="163"><p align="center"><font face="Times New Roman"><b>Execution Control Flag</b></font></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="89"><p align="center"><b><font face="Times New Roman">Value</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="308"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_SMCRESTART</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00001000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">SMC detected in current translation (restart required).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_GENEXCEPTION</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00002000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">SVM virtual interrupt pending</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_VINTR</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00004000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">INIT pin</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_UNUSED</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00008000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">Unused</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_HALT</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00010000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">We are in a HALT</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_SHUTDOWN</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00020000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">We are in a SHUTDOWN</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_FPUHANG</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00040000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">FPU freeze</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_APICHOLD</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00080000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">APIC freeze</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_IGNOREINTR</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00100000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">Ignore INTR for one instruction</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_TRAP</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00200000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">EFlags.TF bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_EXECBP</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00400000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">User execution breakpoints exist</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_LATCHEDSMI</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x00800000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">A latched SMI was seen</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_STACKEDSMI</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x01000000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">A latched SMI from within an SMI</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_LATCHEDNMI</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x02000000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">A latched NMI was seen</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_SMIEDGE</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x04000000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">An SMI edge has been detected</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_NMIEDGE</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x08000000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">An NMI edge has been detected</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_APICMSGPENDING</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x10000000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">An APIC message is waiting to be handled</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_APICACTPENDING</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x20000000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">Any other APIC activity is pending</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_DR7CODEBREAKS</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x40000000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">DR7 has code breakpoints enabled</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="163"><p><font face="Times New Roman">ECF_LASTWASIO</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">0x80000000</font></p>
+</td>
+<td valign="top" width="308"><p><font face="Times New Roman">Set if previous. instruction did I/O</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P3251_173896"></a>Table 7-8: Internal Execution Control Flags</b></font></p>
+
+  <h3><a name="P3252_173939"></a><b><font face="Arial" size="+1">7.23.4 Limitations</font></b></h3>
+
+    <ul><p><font face="Times New Roman">&#8226; Any line in XTR XML file cannot be greater than 255 characters.</font></p>
+
+    <p><font face="Times New Roman">&#8226; Comment start tag &quot;&lt;!--&quot; should start on a new line and end tag &quot;--&gt;&quot; should be last characters on a line.</font></p>
+
+    <p><font face="Times New Roman">&#8226; The XML attributes are case sensitive but the values are not.</font></p>
+
+    <p><font face="Times New Roman">&#8226; XTR cannot be used to playback BIOS bring-ups.</font></p>
+
+    <p><font face="Times New Roman">&#8226; Currently XTR does not support AMD-V&#8482; platform.</font></p>
+
+    <p><font face="Times New Roman">&#8226; Currently XTR traces recorded off SimNow cannot be played back in other XTR playback environments.</font></p>
+
+    <p><font face="Times New Roman">&#8226; Although not needed, XTR traces recorded by SimNow might contain data written by the CPU, e.g. IOW.</font></p>
+
+  </ul><h3><a name="P3260_174507"></a><font face="Arial" size="+1"><b>7.23.5 Example XTR XML File</b></font></h3>
+
+  <p><font face="Verdana" size="-1">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;AmdEventTrace version=&quot;<b>1.0</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>DIMM</b>&quot; Type=&quot;<b>MEMI</b>&quot; Size=&quot;<b>536870912</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>MEM</b>&quot; Type=&quot;<b>MEMI</b>&quot; File=&quot;<b>xtr1.bin</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>ICount</b>&quot; Data=&quot;<b>227</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>RIP</b>&quot; Data=&quot;<b>0000000082D6A8E4</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>RAX</b>&quot; Data=&quot;<b>0000000000628E01</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>RBX</b>&quot; Data=&quot;<b>000000000B0BE41C</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>RCX</b>&quot; Data=&quot;<b>000000000B080E20</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>RDX</b>&quot; Data=&quot;<b>0000000000000080</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>RSI</b>&quot; Data=&quot;<b>0000000000C8FA38</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>RDI</b>&quot; Data=&quot;<b>000000000B09A6B8</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>RBP</b>&quot; Data=&quot;<b>000000000B0BEFE0</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>RSP</b>&quot; Data=&quot;<b>00000000B043ADCC</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>R8</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>R9</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>R10</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>R11</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>R12</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>R13</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>R14</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>R15</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>ModeFlags</b>&quot; Data=&quot;<b>00000001</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>EFlags</b>&quot; Data=&quot;<b>0000000000000002</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>ES</b>&quot; Data=&quot;<b>00000023</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>ESBase</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>ESLimit</b>&quot; Data=&quot;<b>00000000FFFFFFFF</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>ESFlags</b>&quot; Data=&quot;<b>00000CF3</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>CS</b>&quot; Data=&quot;<b>00000008</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>CSBase</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>CSLimit</b>&quot; Data=&quot;<b>00000000FFFFFFFF</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>CSFlags</b>&quot; Data=&quot;<b>00000C9B</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>SS</b>&quot; Data=&quot;<b>00000010</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>SSBase</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>SSLimit</b>&quot; Data=&quot;<b>00000000FFFFFFFF</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>SSFlags</b>&quot; Data=&quot;<b>00000C93</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>DS</b>&quot; Data=&quot;<b>00000023</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>DSBase</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>DSLimit</b>&quot; Data=&quot;<b>00000000FFFFFFFF</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>DSFlags</b>&quot; Data=&quot;<b>00000CF3</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FS</b>&quot; Data=&quot;<b>00000038</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FSBase</b>&quot; Data=&quot;<b>000000007FFDE000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FSLimit</b>&quot; Data=&quot;<b>0000000000000FFF</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FSFlags</b>&quot; Data=&quot;<b>000004F3</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>GS</b>&quot; Data=&quot;<b>00000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>GSBase</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>GSLimit</b>&quot; Data=&quot;<b>000000000000FFFF</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>GSFlags</b>&quot; Data=&quot;<b>00000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>LDTR</b>&quot; Data=&quot;<b>00000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>LDTBase</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>LDTLimit</b>&quot; Data=&quot;<b>000000000000FFFF</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>LDTFlags</b>&quot; Data=&quot;<b>00000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>TR</b>&quot; Data=&quot;<b>00000028</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>TSSBase</b>&quot; Data=&quot;<b>0000000080042000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>TSSLimit</b>&quot; Data=&quot;<b>00000000000020AB</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>TSSFlags</b>&quot; Data=&quot;<b>00000089</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>IDTBase</b>&quot; Data=&quot;<b>000000008003F400</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>IDTLimit</b>&quot; Data=&quot;<b>00000000000007FF</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>GDTBase</b>&quot; Data=&quot;<b>000000008003F000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>GDTLimit</b>&quot; Data=&quot;<b>00000000000003FF</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>DR0</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>DR1</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>DR2</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>DR3</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>DR6</b>&quot; Data=&quot;<b>00000000FFFF0FF0</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>DR7</b>&quot; Data=&quot;<b>0000000000000400</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>CR0</b>&quot; Data=&quot;<b>0000000080010031</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>CR2</b>&quot; Data=&quot;<b>000000000000000C</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>CR3</b>&quot; Data=&quot;<b>000000000043D000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>CR4</b>&quot; Data=&quot;<b>00000000000006D9</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>CR8</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>TSC</b>&quot; Data=&quot;<b>00000000000000E3</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000010</b>&quot; Data=&quot;<b>00000000000000E3</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0010111</b>&quot; Data=&quot;<b>0000000001000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0000080</b>&quot; Data=&quot;<b>00000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0000100</b>&quot; Data=&quot;<b>000000007FFDE000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0000101</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0000102</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0011004</b>&quot; Data=&quot;<b>000000008001350C</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M000000FE</b>&quot; Data=&quot;<b>0000000000000508</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FCW</b>&quot; Data=&quot;<b>0000107F</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FSW</b>&quot; Data=&quot;<b>00000020</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FTW</b>&quot; Data=&quot;<b>0000FFFF</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FDS</b>&quot; Data=&quot;<b>00000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FCS</b>&quot; Data=&quot;<b>00000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FIP</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FOP</b>&quot; Data=&quot;<b>00000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FP0</b>&quot; Data=&quot;<b>00000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FP1</b>&quot; Data=&quot;<b>00000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FP2</b>&quot; Data=&quot;<b>3ffee6455d0000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FP3</b>&quot; Data=&quot;<b>3ffdb139430000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FP4</b>&quot; Data=&quot;<b>4005c45c6d0000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FP5</b>&quot; Data=&quot;<b>4004ccf8aa0000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FP6</b>&quot; Data=&quot;<b>40018ac7100000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>FP7</b>&quot; Data=&quot;<b>40068d00470000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0000081</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0000082</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0000083</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M0000001B</b>&quot; Data=&quot;<b>00000000FEE00900</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000200</b>&quot; Data=&quot;<b>0000000000000006</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000202</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000204</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000206</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000208</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M0000020A</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M0000020C</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M0000020E</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000201</b>&quot; Data=&quot;<b>000000FF80000800</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000203</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000205</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000207</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000209</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M0000020B</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M0000020D</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M0000020F</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000250</b>&quot; Data=&quot;<b>1E1E1E1E1E1E1E1E</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000258</b>&quot; Data=&quot;<b>1E1E1E1E1E1E1E1E</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000259</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000268</b>&quot; Data=&quot;<b>1515151515151515</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000269</b>&quot; Data=&quot;<b>1010101010101010</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M0000026A</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M0000026B</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M0000026C</b>&quot; Data=&quot;<b>0404040404040404</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M0000026D</b>&quot; Data=&quot;<b>0404040404040404</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M0000026E</b>&quot; Data=&quot;<b>1010101010101010</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M0000026F</b>&quot; Data=&quot;<b>1010101010101010</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M000002FF</b>&quot; Data=&quot;<b>0000000000000C00</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000400</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000405</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000408</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M0000040C</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000410</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M000001D9</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M000001DB</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M000001DC</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M000001DD</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M000001DE</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000277</b>&quot; Data=&quot;<b>0007010600070106</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000174</b>&quot; Data=&quot;<b>0000000000000008</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000175</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>M00000176</b>&quot; Data=&quot;<b>000000008052D480</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>MXCSR</b>&quot; Data=&quot;<b>0000000000001F80</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>XMM00</b>&quot; Data=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>XMM00</b>&quot; Data=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>XMM01</b>&quot; Data=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>XMM02</b>&quot; Data=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>XMM03</b>&quot; Data=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>XMM04</b>&quot; Data=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>XMM05</b>&quot; Data=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>XMM06</b>&quot; Data=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>XMM07</b>&quot; Data=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>XMM08</b>&quot; Data=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>XMM09</b>&quot; Data=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>XMM10</b>&quot; Data=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>XMM11</b>&quot; Data=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>XMM12</b>&quot; Data=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>XMM13</b>&quot; Data=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>XMM14</b>&quot; Data=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>CPU</b>&quot; Item=&quot;<b>XMM15</b>&quot; Data=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0010010</b>&quot; Data=&quot;<b>0000000000160601</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0010015</b>&quot; Data=&quot;<b>000000000A000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0010016</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0010017</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0010018</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0010019</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC001001A</b>&quot; Data=&quot;<b>0000000080000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC001001D</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0010030</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0010031</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0010032</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0010033</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0010034</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0010035</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0010112</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0010113</b>&quot; Data=&quot;<b>0000000000000001</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0011020</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>SREG</b>&quot; Item=&quot;<b>MC0011023</b>&quot; Data=&quot;<b>0000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Init Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>APIC</b>&quot; Length=&quot;<b>1024</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000000000000000000000010000400</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>0000000000000000ffffffffff000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000000000000000000010000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000000000000000000000000000000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>16</b>&quot; Value=&quot;<b>00000100000001000000010000000100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/Init&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;!--</font><font face="Verdana"> </font><font face="Times New Roman" color="#888888" size="-1">Trace started on instruction 227</font><font face="Verdana" size="-1"> --&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>IOR</b>&quot; ICount=&quot;<b>326</b>&quot; Address=&quot;<b>a03e</b>&quot; Size=&quot;<b>2</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>2</b>&quot; Value=&quot;<b>0100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/Event&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>IOW</b>&quot; ICount=&quot;<b>345</b>&quot; Address=&quot;<b>a03c</b>&quot; Size=&quot;<b>2</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>2</b>&quot; Value=&quot;<b>0000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/Event&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>IOW</b>&quot; ICount=&quot;<b>364</b>&quot; Address=&quot;<b>a03e</b>&quot; Size=&quot;<b>2</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>2</b>&quot; Value=&quot;<b>1100</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/Event&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>IOR</b>&quot; ICount=&quot;<b>588</b>&quot; Address=&quot;<b>a037</b>&quot; Size=&quot;<b>1</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>1</b>&quot; Value=&quot;<b>0c</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/Event&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;INSTR Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>FJMP</b>&quot; ICount=&quot;<b>6778</b>&quot; JMP=&quot;<b>1</b>&quot; RIP=&quot;<b>f86b0619</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;INSTR Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>FJMP</b>&quot; ICount=&quot;<b>6797</b>&quot; JMP=&quot;<b>1</b>&quot; RIP=&quot;<b>f86b0619</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>IOW</b>&quot; ICount=&quot;<b>6817</b>&quot; Address=&quot;<b>a038</b>&quot; Size=&quot;<b>2</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>2</b>&quot; Value=&quot;<b>40af</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/Event&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;INSTR Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>FJMP</b>&quot; ICount=&quot;<b>7081</b>&quot; JMP=&quot;<b>1</b>&quot; RIP=&quot;<b>f86b0317</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;INSTR Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>FJMP</b>&quot; ICount=&quot;<b>7099</b>&quot; JMP=&quot;<b>1</b>&quot; RIP=&quot;<b>f86b0317</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>IOR</b>&quot; ICount=&quot;<b>7110</b>&quot; Address=&quot;<b>a037</b>&quot; Size=&quot;<b>1</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>1</b>&quot; Value=&quot;<b>0d</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/Event&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>IOR</b>&quot; ICount=&quot;<b>7121</b>&quot; Address=&quot;<b>a037</b>&quot; Size=&quot;<b>1</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>1</b>&quot; Value=&quot;<b>0d</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/Event&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>IOR</b>&quot; ICount=&quot;<b>7137</b>&quot; Address=&quot;<b>a03e</b>&quot; Size=&quot;<b>2</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>2</b>&quot; Value=&quot;<b>0000</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/Event&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>IOW</b>&quot; ICount=&quot;<b>7198</b>&quot; Address=&quot;<b>a03c</b>&quot; Size=&quot;<b>2</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>2</b>&quot; Value=&quot;<b>5fc0</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/Event&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>DMAW</b>&quot; ICount=&quot;<b>8403</b>&quot; Address=&quot;<b>000000000c254340</b>&quot; Length=&quot;<b>64</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>64</b>&quot; Value=&quot;<b>6d00005f5e5bc3909ac04600b7c04600d4c04600eec0460008c1460022c146003cc146002fc2460067c2460085c24600a3c24600909090909090909090909090</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/Event&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>DMAW</b>&quot; ICount=&quot;<b>18228</b>&quot; Address=&quot;<b>000000000e67dc00</b>&quot; Length=&quot;<b>64</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>64</b>&quot; Value=&quot;<b>00005f5e5d5b64890d0000000081c414040000c218008bff293b47003b3b47003b3b47004d3b47004d3b47004d3b4700568bf18b460c85c0c706f4eb5b007406</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/Event&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>DMAW</b>&quot; ICount=&quot;<b>23921</b>&quot; Address=&quot;<b>000000000c254340</b>&quot; Length=&quot;<b>64</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>64</b>&quot; Value=&quot;<b>6d00005f5e5bc3909ac04600b7c04600d4c04600eec0460008c1460022c146003cc146002fc2460067c2460085c24600a3c24600909090909090909090909090</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/Event&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>PIN</b>&quot; ICount=&quot;<b>326462</b>&quot; Name=&quot;<b>INTR</b>&quot; Level=&quot;<b>A</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>TO_DO_IN_NB</b>&quot; Type=&quot;<b>APIC</b>&quot; ICount=&quot;<b>326462</b>&quot; Name=&quot;<b>EXTINT</b>&quot; DestinationMode=&quot;<b>F</b>&quot; DeliveryMode=&quot;<b>07</b>&quot; Level=&quot;<b>F</b>&quot; TriggerMode=&quot;<b>F</b>&quot; Vector=&quot;<b>00</b>&quot; Destination=&quot;<b>00</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>PIN</b>&quot; ICount=&quot;<b>326462</b>&quot; Name=&quot;<b>INTR</b>&quot; Level=&quot;<b>D</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>INTACK</b>&quot; ICount=&quot;<b>326462</b>&quot; Vector=&quot;<b>00000000000000d1</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>IOW</b>&quot; ICount=&quot;<b>326532</b>&quot; Address=&quot;<b>70</b>&quot; Size=&quot;<b>1</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>1</b>&quot; Value=&quot;<b>0c</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/Event&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>IOR</b>&quot; ICount=&quot;<b>326536</b>&quot; Address=&quot;<b>71</b>&quot; Size=&quot;<b>1</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>1</b>&quot; Value=&quot;<b>c0</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/Event&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>IOW</b>&quot; ICount=&quot;<b>326541</b>&quot; Address=&quot;<b>70</b>&quot; Size=&quot;<b>1</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>1</b>&quot; Value=&quot;<b>0c</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/Event&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>CPU0</b>&quot; Type=&quot;<b>IOR</b>&quot; ICount=&quot;<b>326545</b>&quot; Address=&quot;<b>71</b>&quot; Size=&quot;<b>1</b>&quot;&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Data Length=&quot;<b>1</b>&quot; Value=&quot;<b>00</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/Event&gt;</font></p>
+
+  <p><font face="Verdana" size="-1">&lt;Event Device=&quot;<b>XTR</b>&quot; Type=&quot;<b>EOT</b>&quot; ICount=&quot;<b>400967</b>&quot; /&gt; </font></p>
+
+  <p><font face="Verdana" size="-1">&lt;/AmdEventTrace&gt;</font></p></ul><p align="left"><a href="help-34.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-36.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

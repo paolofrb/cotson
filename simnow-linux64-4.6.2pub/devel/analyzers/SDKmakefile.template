@@ -1,0 +1,56 @@
+## 
+## Copyright 1995 - 2004 ADVANCED MICRO DEVICES, INC.  All Rights Reserved. 
+##
+
+ifndef GOTRULES
+ifeq ($(shell test -d ../../../broadsword/sdk_internal && echo true),true)
+#
+# If part of AMDs build environment.
+#
+export PROJROOT := $(shell pwd)/../../..
+include ../../../makerules
+export CXXFLAGS += -I.. -I../.. -I../../../libraries/disassembler/inc/disassembler -I../../../libraries/cpudisassembler -I../../../libraries/disassembler/inc
+else
+#
+# Used for SDK build as not part of AMD's SimNow build tree
+#
+export PROJROOT := $(shell pwd)/../..
+include ../SDKmakerules
+endif
+endif
+
+all: copy
+
+include makefile.local
+
+.PHONY: clean copy dep
+
+$(LIB): $(OBJS)
+ifneq ($(shell basename $(LIB) .so),$(LIB))
+	libtool --mode=link $(CXX) --shared -module $(OBJS) -o $(LIB) $(LIBTOOL_LIBS)
+else
+	$(AR) rv $(LIB) $(OBJS)
+endif
+
+copy: $(LIB)
+ifneq ($(NOCOPY),TRUE)
+#	mkdir -p $(ANALYZER_DESTINATION_DIR)
+	cp -uf $(LIB) $(ANALYZER_DESTINATION_DIR)
+endif
+
+clean:
+	rm -f core *.o $(LIB) *.moc
+
+dep:
+	echo '# DO NOT DELETE THIS LINE -- make depend depends on it.' > .depend
+	makedepend -f.depend $(SDKINC) $(INCLUDEDIRS) $(MKDEPINC) $(DEFINES) *.cpp *.c 2> /dev/null
+	rm -f .depend.bak
+
+%.moc : %.h
+	$(MOC) $< -o $@
+
+# To get the depend logic to work even from an unused tree
+ifeq ($(shell test -f .depend && echo true),true)
+include .depend
+endif
+

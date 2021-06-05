@@ -1,0 +1,6 @@
+## 
+## Copyright 1995 - 2004 ADVANCED MICRO DEVICES, INC.  All Rights Reserved. 
+##
+                                                                                
+OBJS=Sample.o
+LIB=cpulogger.so

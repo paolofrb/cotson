@@ -1,0 +1,121 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="396">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-10.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-12.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><p align="left"><a name="P1291_81122"></a><img src="images/gtabsepm.gif"></p>
+<h1><font face="Arial" size="+2"><b>6 Create a Simulated Computer</b></font></h1>
+
+  <p><font face="Times New Roman">This section describes how to create a simulated computer from scratch. We will build a computer identical to the &#8220;s<i>olo.bsd</i><a name="P1292_81276"></a>&#8221; computer. </font></p>
+
+  <p><font face="Times New Roman"><i><a href="#P1297_81497">Figure 6-1</a> </i>shows the layout of the existing &#8220;s<i>olo.bsd</i>&#8221; Device Window. The device position is not important because the connections between devices are completely represented by the lines between devices.</font></p>
+
+  <p align="center"><img src="images/help-76.gif" border="0" width="348" height="336"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1297_81497"></a>Figure 6-1: Solo.bsd Configuration</b></font></p>
+
+  <p><font face="Times New Roman">The thickness of the connection between devices represents the number of existing connections.</font></p>
+
+  <h2><a name="P1299_81625"></a><font face="Arial" size="+1"><b><i>6.1 BSD Files</i></b></font></h2>
+
+  <p><font face="Times New Roman">A BSD file<a name="P1300_81648"></a> contains the configuration of a computer system (how models are connected together and their settings), sometimes called a &quot;virtual motherboard description&quot; and a checkpoint<a name="P1300_81822"></a> of the state of all devices in the simulator. BSD files are stored in the simulator&#8217;s home directory. For a list of BSD files provided with the simulator, see Appendix <a href="help-55.htm#P4812_272713">A.2.1</a> on page <a href="help-55.htm#P4811_272693">182</a>. </font></p>
+
+  <h2><a name="P1301_82012"></a><font face="Arial" size="+1"><b><i>6.2 Device Placement</i></b></font></h2>
+
+  <p><font face="Times New Roman">To place a device into a simulated computer system:</font></p>
+
+    <ul><p><font face="Times New Roman"><a name="P1304_82083"></a>1. Open a new simulator instance by launching &quot;<i>SimNow.exe</i>&quot; in your install directory.</font></p>
+
+    <p><font face="Times New Roman">2. Select &#8220;<i>File&#8594;New BSD</i>&#8220; or click on the <img src="images/help-14.gif" border="0" width="16" height="16"> button to create a new BSD file.</font></p>
+
+    <p><font face="Times New Roman">3. Select &#8220;<i>View&#8594;Show Devices</i>&#8221; or click on the <img src="images/help-15.gif" border="0" width="16" height="16"> button to show the blank <i>Device Window</i>.</font></p>
+
+    <p><font face="Times New Roman">4. For each item added, click and drag the icon from the device list on the left side into the workspace area on the right side of the window.</font></p>
+
+    <p><font face="Times New Roman">5. Add the Debugger device. This device needs no connections drawn.</font></p>
+
+    <p><font face="Times New Roman">6. Add the AweSim Processor and the AMD 8th Generation Integrated Northbridge. When you add the AweSim Processor, CPU Simulation Stats are added to the <i>Main Window</i>.</font></p>
+
+    <p><font face="Times New Roman">7. Connect the AweSim Processor and the AMD 8th Generation Integrated Northbridge by shift-click-dragging from one to the other. When the &#8220;<i>Connections</i>&#8221; tab of <i>Device Properties Window</i> appears (shown in <a href="#P1313_83410">Figure 6-2</a>), choose the CPU Bus 0 for both devices, and click on Ok. The connection appears as a line between the two devices on the <i>Device Window</i>. Then create an additional connection between the two devices using the Interrupt/IOAPIC Bus on each device. The <i>Device Window</i> shows only one line for the two connections between these devices. You can view the connections for each device by right-clicking on the device and looking at the <i>&#8220;Connections</i>&#8221;<i> </i>tab in the <i>Device Properties Window</i>.</font></p>
+
+  </ul><p align="center"><img src="images/help-77.gif" border="0" width="434" height="325"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1313_83410"></a>Figure 6-2: Connections Tab of Device Properties Window</b></font></p>
+
+    <ul><p><font face="Times New Roman">8. Add the DIMM Device. Connect it to the AMD 8th Generation Integrated Northbridge, using the Northbridge's Memory Bus and the DIMM&#8217;s Generic Bus.&nbsp;</font></p>
+
+    <p><font face="Times New Roman">9. Add the AMD-8151&#8482; AGP Tunnel. This is a HyperTransport&#8482; tunnel and AGP bridge. Connect it to the Northbridge using each device's HyperTransport Bus 0.</font></p>
+
+    <p><font face="Times New Roman">10. Add the Matrox Millenium G400 Graphics Device. This is the simulated video device. Connect it to the AMD-8151 AGP Tunnel Device using AMD-8151 AGP Tunnel AGP Bus and the Graphics Device's AGP or PCI Bus.</font></p>
+
+    <p><font face="Times New Roman">11. Add the Southbridge Device. Connect it to AMD-8151 AGP Tunnel using AMD-8151 AGP Tunnel HyperTransport Bus 1 and HyperTransport Bus 0. Also, connect AMD-8111&#8482; to the DIMM device using AMD-8111 System Management Bus 0 and DIMM&#8217;s Generic Bus.</font></p>
+
+    <p><font face="Times New Roman">12. Add the Winbond W83627HF SIO device. This is a Super IO device that supports keyboard, mouse, and floppy disk. Connect it to Southbridge using Winbond's Generic Bus and Southbridge's LPC Bus.</font></p>
+
+    <p><font face="Times New Roman">13. Add the PCI Bus. Connect it to AMD-8111 Southbridge using both devices' PCI Bus 0.</font></p>
+
+    <p><font face="Times New Roman">14. Add the Memory Device. This will contain the System BIOS image. Connect it to AMD-8111 Southbridge device using AMD-8111 LPC Bus and the Memory Device's Generic Bus.</font></p>
+
+  </ul><h2><a name="P1321_84678"></a><font face="Arial" size="+1"><b><i>6.3 Solo.bsd Device Configuration</i></b></font></h2>
+
+  <p><font face="Times New Roman"><a name="P1322_84711"></a>To configure each device, right-click on the device and choose <i>Configure Device</i> from the workspace popup menu (see also Section <a href="help-12.htm#P1358_86449">7</a>,<i> </i>&#8220;<i><a href="help-12.htm#P1358_86449">Device Configuration</a></i>&#8221;<i>,</i> on page <a href="help-12.htm#P1358_86449">53</a>).</font></p>
+
+    <ul><p><font face="Times New Roman"><i>1. Configure the Matrox Millenium G400 Graphics Device. </i></font></p>
+
+        <ul><ul><p><font face="Times New Roman">&#8226; Go to its <i>Configuration </i>tab.</font></p>
+
+        <p><font face="Times New Roman">&#8226; Choose the BIOS file <i>Images/g400_897-21.bin</i>. </font></p>
+
+    </ul></ul><p><font face="Times New Roman"><i>2. Configure the Memory device. </i></font></p>
+
+        <ul><ul><p><font face="Times New Roman">&#8226; Go to its <i>Memory Configuration</i> tab. </font></p>
+
+        <p><font face="Times New Roman">&#8226; Set the base address to fffc0000.</font></p>
+
+        <p><font face="Times New Roman">&#8226; Set the <i>Size</i> to 8.</font></p>
+
+        <p><font face="Times New Roman">&#8226; Set the Init File to <i>Images/ASLA00-3.BIN</i>.</font></p>
+
+        <p><font face="Times New Roman">&#8226; Check the boxes for <i>Read Only</i>, <i>System BIOS ROM</i>, <i>Memory Address Masking</i>, <i>Memory is non-cacheable</i>.</font></p>
+
+        <p><font face="Times New Roman">&#8226; Clear the boxes for &#8220;<i>Initialized unwritten memory</i>.</font></p>
+
+    </ul></ul><p><font face="Times New Roman"><i>3. Configure the PCI device.</i></font></p>
+
+        <ul><ul><p><font face="Times New Roman">&#8226; Go to its <i>PCI Bus Configuration</i> tab.</font></p>
+
+        <p><font face="Times New Roman">&#8226; For the <i>PCI Slot 1</i>, add device ID 4, set <i>Base IRQ Pin</i> to <i>PCIIRQ A</i>, and check the <i>Enable Slot</i> box. </font></p>
+
+        <p><font face="Times New Roman">&#8226; For the next three devices, use <i>Device IDs</i> 5, 6, and 7, with <i>PCIIRQs</i> B, C, and D, in that order. Check their &#8220;<i>Enable Slot</i>&#8221; boxes as well.</font></p>
+
+  </ul></ul></ul><p align="center"><img src="images/help-78.gif" border="0" width="402" height="325"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1342_85666"></a>Figure 6-3: PCI Bus Configuration dialog window</b></font></p>
+
+    <ul><p><font face="Times New Roman"><i>4. Configure the DIMM Memory device.</i></font></p>
+
+        <ul><ul><p><font face="Times New Roman">&#8226; Go to the <i>Dimm 0</i> tab<i>.</i></font></p>
+
+        <p><font face="Times New Roman">&#8226; Click <i>Import SPD</i>. </font></p>
+
+        <p><font face="Times New Roman">&#8226; Open the SPD file <i>Images/simnow_DDR_256M.spd</i>.</font></p>
+
+    </ul></ul><p><font face="Times New Roman"><i>5. Configure the AweSim CPU device.</i></font></p>
+
+        <ul><ul><p><font face="Times New Roman">&#8226; Go to the <i>Processor Type</i> tab<i>.</i></font></p>
+
+        <p><font face="Times New Roman">&#8226; Choose the <i>Ahtlon64-754_SH-C0_(800MHz).id</i> product file, as shown in <a href="help-13.htm#P1536_90055">Figure 7-1</a> on page <a href="help-13.htm#P1536_90055">56</a>.</font></p>
+
+  </ul></ul></ul><h2><a name="P1351_86007"></a><font face="Arial" size="+1"><b><i>6.4 Save and Run</i></b></font></h2>
+
+  <p><font face="Times New Roman">The created simulated computer is identical to the &#8220;s<i>olo.bsd</i>&#8221; computer. You can close the <i>Device Window</i> and save the file from the &#8220;<i>File&#8594;Save BSD</i>&#8221; or by clicking on the <img src="images/help-12.gif" border="0" width="16" height="16"> button. All that remains is to set up disk images (see Section <a href="help-08.htm#P1095_68483">4.1</a>, &#8220;<i><a href="help-08.htm#P1095_68483">Creating A Blank Hard-Drive Image</a></i>&#8221;, on page <a href="help-08.htm#P1095_68483">35</a>, Section <a href="help-09.htm#P1172_73075">5.2.1</a>, &#8220;<i><a href="help-09.htm#P1172_73075">Assigning Disk-Images</a></i>&#8221;, on page <a href="help-09.htm#P1172_73075">42</a>, and Section <a href="help-51.htm#P4476_251456">13</a>, &#8220;<i><a href="help-51.htm#P4476_251456">DiskTool</a></i>&#8221;, on page <a href="help-51.htm#P4476_251456">165</a>) and run the simulation.</font></p>
+
+  <p><font face="Times New Roman"> </font></p></ul><p align="left"><a href="help-10.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-12.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

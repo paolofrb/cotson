@@ -1,0 +1,139 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="437">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-51.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-53.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><p align="left"><a name="P4589_257650"></a><img src="images/gtabsepm.gif"></p>
+<h1><font face="Arial" size="+2"><b>14 BIOS Developer&#8217;s Quick Start Guide</b></font></h1>
+
+  <p><font face="Times New Roman">This section provides you with instructions on how to perform common tasks within the simulation environment. The tasks described in this section are likely to be of particular interest to BIOS developers. However, developers of other types of software will benefit as well, especially from tasks like logging CPU cycles and using the debugger.</font></p>
+
+  <h2><a name="P4591_258033"></a><font face="Arial" size="+1"><b><i>14.1 Loading a BIOS Image</i></b></font></h2>
+
+    <ul><p><font face="Times New Roman">1. Move the BIOS ROM<a name="P4592_258078"></a> image into your Images directory.</font></p>
+
+    <p><font face="Times New Roman">2. Use &#8220;<i>View&#8594;Show Devices</i>&#8221; to show the Devices Window, shown in <a href="help-07.htm#P674_29839">Figure 3-2</a> on page <a href="help-07.htm#P674_29839">9</a>.</font></p>
+
+    <p><font face="Times New Roman">3. Right-click on the system-BIOS memory device icon in the Device Window and select the &#8220;<i>Configure Device</i>&#8221; option on the Workspace Popup Menu (<a href="help-07.htm#P692_32125">Figure 3-3</a> on page <a href="help-07.htm#P692_32125">11</a>). </font></p>
+
+    <p><font face="Times New Roman">4. Choose the &#8220;<i>Memory Configuration</i>&#8221; tab.</font></p>
+
+    <p><font face="Times New Roman">5. Enter the appropriate base address<a name="P4596_258457"></a> and size for your BIOS ROM.</font></p>
+
+    <p><font face="Times New Roman">6. Browse for your BIOS ROM image file. The browser will only show files that have a ROM or BIN filename extension.</font></p>
+
+    <p><font face="Times New Roman">7. Select the read-only option, unless the BIOS code will modify its image within the device.</font></p>
+
+    <p><font face="Times New Roman">8. For most BIOS ROM select the system BIOS ROM, memory-address masking, and memory is non-cacheable options.</font></p>
+
+    <p><font face="Times New Roman">9. Click OK to close the configuration dialog and accept the changes.</font></p>
+
+  </ul><h2><a name="P4601_258871"></a><font face="Arial" size="+1"><b><i>14.2 Changing DRAM Size</i></b></font></h2>
+
+  <p><font face="Times New Roman">There are two ways to configure the simulated memory size. For generic memory size configuration in powers of two you can use the <i>Memory Configurator</i>, see <a href="#P4613_259711">Figure 14-1</a> and for specific or non-symmetric DIMM configurations please follow the steps on page <a href="#P4613_259711">172</a>. </font></p>
+
+  <p><font face="Times New Roman">To open the <i>Memory Configurator</i><a name="P4604_259183"></a> dialog click on the main menu item <i>View</i> and then choose <i>Show Memory Configurator</i> (<i>View</i>&#8594;<i>Show Memory Configurator</i>).</font></p>
+
+  <p><font face="Times New Roman">The <i>Memory Configurator</i> populates each DIMM device with two DIMMs of all identical size and type. It accounts for DDR and DDR2 and registered or unregistered memory types as required. The SPD files are loaded using the default path for SPD files &#8220;./Images/&lt;spdfile&gt;&#8221;.</font></p>
+
+  <p><font face="Times New Roman">Please be advised that memory configurations that are too large will slow down the simulation significantly and may also confuse some BIOS's.</font></p>
+
+  <p align="center"><img src="images/help-153.gif" border="0" width="348" height="343"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P4613_259711"></a>Figure 14-1: Memory Configurator</b></font></p>
+
+  <p><font face="Times New Roman">If you want specific or non-symmetric DIMM configurations please follow these steps: </font></p>
+
+    <ul><p><font face="Times New Roman">1. Use &#8220;<i>View</i></font><font face="Times New Roman"><i>&#8594;Show Devices</i>&#8221; to show the Devices Window.</font><a name="P4617_259888"></a></p>
+
+    <p><font face="Times New Roman">2. Right-click on the DIMM-memory device icon in the Device Window and select the &#8220;<i>Configure Device</i>&#8221; option on the Workspace Popup Menu </font><font face="Times New Roman">(<a href="help-07.htm#P692_32125">Figure 3-3</a> on page <a href="help-07.htm#P692_32125">11</a>).</font></p>
+
+    <p><font face="Times New Roman">3. Select the tab for the DIMM slot that you wish to alter.</font></p>
+
+    <p><font face="Times New Roman">4. Click the Import SPD button and browse for an appropriate SPD<a name="P4620_260175"></a> file. The SPD files should be stored in the Images directory. The SPD filename should give an indication of the size of the DIMM that it represents.</font></p>
+
+    <p><font face="Times New Roman">5. A DIMM can be eliminated from the system, by changing the contents of SPD byte 0 (Number of SPD Bytes Used) to zero.</font></p>
+
+    <p><font face="Times New Roman">6. Click OK to close the configuration property sheet and accept the changes.</font></p>
+
+  </ul><h2><a name="P4623_260520"></a><font face="Arial" size="+1"><b><i>14.3 Changing SPD Data</i></b></font></h2>
+
+  <p><font face="Times New Roman">Any byte of SPD data<a name="P4624_260562"></a> can be altered in order to model DIMM configurations that do not currently exist. The process for modifying a SPD data byte is as follows:</font></p>
+
+    <ul><p><font face="Times New Roman">1. Use &#8220;<i>View&#8594;Show Devices</i>&#8221; to show the Devices Window.</font></p>
+
+    <p><font face="Times New Roman">2. Right-click on the DIMM Memory device icon in the Device Window and select the &#8220;<i>Configure Device</i>&#8221; option on the Workspace Popup Menu (<a href="help-07.htm#P692_32125">Figure 3-3</a> on page <a href="help-07.htm#P692_32125">11</a>). </font></p>
+
+    <p><font face="Times New Roman">3. Select the tab for the DIMM slot that you wish to alter. </font></p>
+
+    <p><font face="Times New Roman">4. Select an SPD byte description from the large list box. The corresponding data byte will be shown as two hex digits in the small edit box to the right of the list box. </font></p>
+
+    <p><font face="Times New Roman">5. Type a new hex value in the edit box. </font></p>
+
+    <p><font face="Times New Roman">6. Optionally, the altered SPD data can be saved to a file by clicking the Export SPD button. </font></p>
+
+    <p><font face="Times New Roman">7. Click OK to close the configuration property sheet and accept the changes. </font></p>
+
+  </ul><p><font face="Times New Roman">If the contents of SPD byte 0 (Number of SPD Bytes Used) is set to zero, the DIMM will not respond to any SMBUS accesses.&nbsp;This allows simulation of a DIMM module that does not include an SPD ROM.</font></p>
+
+  <h2><a name="P4635_261566"></a><font face="Arial" size="+1"><b><i>14.4 Clearing CMOS</i></b></font></h2>
+
+  <p><font face="Times New Roman">View the Devices Window and double-click on the Southbridge. Choose the &#8220;<i>CMOS&#8221;</i> tab.</font><a name="P4636_261671"></a></p>
+
+    <ul><p><font face="Times New Roman">1. Save the current CMOS<a name="P4638_261695"></a> to disk and call it &#8220;<i>blank.cmos</i>&#8221;.</font></p>
+
+    <p><font face="Times New Roman">2. Open the file in Notepad and change all the data fields from their current values to the desired fill pattern (usually 0x00 or 0xFF; do not include the <i>h</i> character in the file). Save the file. These first three steps are needed only once. </font></p>
+
+    <p><font face="Times New Roman">3. Reload the file into the simulator whenever you wish to clear CMOS. </font></p>
+
+    <p><font face="Times New Roman">4. View the Diagnostic Port Output in the Main Window, as shown in <a href="#P4644_262125">Figure 14-2</a>.</font></p>
+
+  </ul><p align="center"><img src="images/help-154.gif" border="0" width="123" height="69"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P4644_262125"></a>Figure 14-2: Diagnostics Display</b></font></p>
+
+  <p><font face="Times New Roman">The Diagnostic Display displays data written to three I/O address ranges, 0x80-0x83, 0x84-0x87, 0xE0-0xE3. Currently, the Diagnostic Display is implemented only for Southbridge device.&nbsp;If the system configuration includes a Southbridge device, then the Diagnostic Display will be displayed.</font></p>
+
+  <h2><a name="P4646_262448"></a><font face="Arial" size="+1"><b><i>14.5 Logging PCI Configuration Cycles</i></b></font></h2>
+
+  <p><font face="Times New Roman">Northbridge devices can be configured to produce PCI configuration-cycle log messages.&nbsp; Complete the following steps to enable and capture of these log messages.</font></p>
+
+    <ul><p><font face="Times New Roman">1. Open the Device Window from the Main Window Menu (&#8220;<i>View&#8594;Show Devices&#8221;</i>). Double-click on the Northbridge device. This will bring up the device Properties Window. Click on <i>Logging Capabilities</i> that will display the logging options. Select <i>Log PCI Configuration Cycle</i> to and then click OK to accept the configuration.</font></p>
+
+    <p><font face="Times New Roman">2. Select &quot;<i>View&#8594;Log Window</i>&quot; from the Main Window Menu. This will bring up a Message Log dialog box similar to the one shown in <i><a href="#P4655_263492">Figure 14-3</a></i>. </font></p>
+
+    <p><font face="Times New Roman">3. Log messages will only be captured from devices that have a check beside their name. If the Northbridge device does not have a check, then check it by clicking its check box. </font></p>
+
+    <p><font face="Times New Roman">4. Select whether to send log messages to the window, and/or to a file. If logging to a file, enter a filename for the log file. </font></p>
+
+    <p><font face="Times New Roman">5. Execute the simulation, and the requested information will be logged. </font></p>
+
+  </ul><p align="center"><img src="images/help-155.gif" border="0" width="575" height="356"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P4655_263492"></a>Figure 14-3: Message Log Window</b></font></p>
+
+  <h2><a name="P4656_263523"></a><b><font face="Arial" size="+1"><i>14.6 Logging CPU Cycles</i></font></b></h2>
+
+  <p><font face="Times New Roman">Setting up the simulator to log CPU cycles<a name="P4657_263588"></a> requires most of the steps detailed in Section <a href="#P4646_262448">14.5</a>,<i> </i>&#8220;<i><a href="#P4646_262448">Logging PCI Configuration Cycles</a></i>&#8221;. However, in this case, the messages from the CPU are captured. The steps are:</font></p>
+
+    <ul><p><font face="Times New Roman">1. Open the Device Window (&#8220;<i>View&#8594;Show Devices</i>&#8221;). Double-click on the CPU device. This will bring up the device Properties Window that will list available logging options.&nbsp;Select the desired logging options. Click OK to accept the configuration. See Section <a href="help-13.htm#P1510_88268">7.1</a>, &#8220;<a href="help-13.htm#P1510_88268"><i>AweSim&#8482; Processor </i>Device</a>&#8221;, on page <a href="help-13.htm#P1510_88268">55</a> to obtain detailed information about CPU Logging options.</font></p>
+
+    <p><font face="Times New Roman">2. Select &quot;<i>View&#8594;Log Window</i>&quot; from the Main Window Menu. This will bring up a Message Log dialog box similar to the one shown in <i><a href="#P4655_263492">Figure 14-3</a></i>. </font></p>
+
+    <p><font face="Times New Roman">3. Log messages will only be captured from devices that have a check beside their name. If the CPU device does not have a check, then check it by clicking its check box. </font></p>
+
+    <p><font face="Times New Roman">4. Repeat the steps here.</font></p>
+
+  </ul><h2><a name="P4663_264467"></a><font face="Arial" size="+1"><b><i>14.7 Creating a Floppy-Disk Image</i></b></font></h2>
+
+  <p><font face="Times New Roman">Use the DiskTool<i> </i>utility to create a floppy-disk image<a name="P4664_264554"></a> file suitable for loading into the simulator. DiskTool is located in the &#8220;<i>SimNow\Tools</i>&quot; directory. To create an image of a physical floppy disk, see Section <a href="help-51.htm#P4476_251456">13</a>, &#8220;<a href="help-51.htm#P4476_251456">DiskTool</a>&#8221;, on page <a href="help-51.htm#P4476_251456">165</a>. </font></p>
+
+  <p><font face="Times New Roman">When the image has been created, it can be loaded into the simulation as described in Section <a href="help-09.htm#P1162_71646">5.1.1</a>,<i> </i>&#8220;<a href="help-09.htm#P1162_71646"><i>Open a Simulation Definition</i></a>&#8221;, on page <a href="help-09.htm#P1162_71646">40</a>.</font></p></ul><p align="left"><a href="help-51.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-53.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

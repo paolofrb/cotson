@@ -1,0 +1,109 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="435">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-49.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-51.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><p align="left"><a name="P4402_249520"></a><img src="images/gtabsepm.gif"></p>
+<h1><font face="Arial" size="+2"><b>12 Command API</b></font></h1>
+
+  <p><font face="Times New Roman">The <i>CMDAPI</i> (cmdapi.dll) gives Windows users a way to script the simulator using any scripting language that can interface with the Microsoft Component Object Model (COM). It gives you the opportunity to create scripts that instantiate a simulator object. You can use this instantiated object to execute any of the SimNow&#8482; automation commands, see Section <a href="help-59.htm#P9811_384062">A.7</a>, &#8220;<i><a href="help-59.htm#P9811_384062">Automation Commands</a></i>&#8221;, on page <a href="help-59.htm#P9811_384062">228</a>.</font></p>
+
+  <p><font face="Times New Roman"><i>CMDAPI</i> is installed and registered whenever a SimNow release package has been installed successfully.</font></p>
+
+<p><font face="Times New Roman">After instantiating a <i>SimNow.Command</i> object, you can use the following methods to execute automation commands, and retrieve status.</font></p></ul>
+<p><ul>
+<table>
+<tr>
+<td valign="top" width="544"><p><font face="Times New Roman"><b>Exec</b></font></p>
+    <ul><ul><p><font face="Times New Roman">The <i>Exec</i> method executes the automation command that <i>arg1</i> contains.</font></p>
+    <p><font face="Courier New" color="#3366ff">bool</font><font face="Courier New"> Exec(arg1, arg2);</font></p>
+</ul></ul><p><font face="Times New Roman"><b>Parameters</b></font></p>
+    <ul><ul><p><font face="Times New Roman"><i>arg1</i></font></p>
+    <p><font face="Times New Roman">A string that contains the SimNow automation command to execute. For example, &quot;debug:0.execcmd t&quot;.</font></p>
+    <p><font face="Times New Roman"><i>arg2</i></font></p>
+    <p><font face="Times New Roman">An input string buffer in which SimNow is to place the response from the command in <i>arg1</i>.</font></p>
+</ul></ul><p><font face="Times New Roman"><b>Return Value</b></font></p>
+<ul><ul><p><font face="Times New Roman">Returns <i>true</i> if command completed successfully; otherwise it returns <i>false</i>.</font></p></ul></ul>
+</td></tr>
+<tr>
+<td valign="top" width="544">&#160;
+</td></tr></table></ul>
+<p><ul>
+<table>
+<tr>
+<td valign="top" width="544"><p><font face="Times New Roman"><b>GetLastError</b></font></p>
+    <ul><ul><p><font face="Times New Roman">The <i>GetLastError</i> method returns the last error code. If <i>Exec</i> returns <i>false</i> you can call <i>GetLastError</i> to retrieve the error code.</font></p>
+    <p><font face="Courier New" color="#3366ff">void</font><font face="Courier New"> GetLastError(arg1);</font></p>
+</ul></ul><p><font face="Times New Roman"><b>Parameters</b></font></p>
+    <ul><ul><p><font face="Times New Roman"><i>arg1</i></font></p>
+    <p><font face="Times New Roman">An input string buffer, in which SimNow will place the last error that was recorded from the automation interface.</font></p></ul></ul>
+    </td></tr>
+<tr>
+<td valign="top" width="544">&#160;
+</td></tr></table></ul>
+
+  <ul><p><font face="Times New Roman">The Perl code in Example 12-1 shows how to instantiate a <i>SimNow.Command</i> object and how to interact with the SimNow&#8482; CMDAPI interface.</font></p>
+
+      <blockquote><blockquote><p><font face="Courier New">#!perl -w</font></p>
+
+      <p><font face="Courier New">use Win32::OLE;</font></p>
+
+      <p><font face="Courier New">use Win32::OLE::Variant;</font></p>
+
+      <p><font face="Courier New">$Win32::OLE::Warn = 3;</font></p>
+
+      <p><font face="Courier New">$cmd = Win32::OLE-&gt;new('SimNow.Command')</font></p>
+
+      <p><font face="Courier New"> or die &quot;Cannot open SimNow.Command\n&quot;;</font></p>
+
+      <p><font face="Courier New">$MyResponse = Variant(VT_BSTR | VT_BYREF, &quot;&quot;);</font></p>
+
+      <p><font face="Courier New">do {</font></p>
+
+      <p><font face="Courier New">print &quot;simnow&gt; &quot;;</font></p>
+
+      <p><font face="Courier New">$CmdLine = &lt;&gt;;</font></p>
+
+      <p><font face="Courier New">chomp($CmdLine);</font></p>
+
+      <p><font face="Courier New">if ($CmdLine)</font></p>
+
+      <p><font face="Courier New">{</font></p>
+
+      <p><font face="Courier New">if ($cmd-&gt;Exec($CmdLine, $MyResponse))</font></p>
+
+      <p><font face="Courier New">{</font></p>
+
+      <p><font face="Courier New">print &quot;$MyResponse\n&quot;;</font></p>
+
+      <p><font face="Courier New">}</font></p>
+
+      <p><font face="Courier New">else</font></p>
+
+      <p><font face="Courier New">{</font></p>
+
+      <p><font face="Courier New">$cmd-&gt;GetLastError($MyResponse);</font></p>
+
+      <p><font face="Courier New">print &quot;Cannot Exec: $MyResponse\n&quot;;</font></p>
+
+      <p><font face="Courier New">}</font></p>
+
+      <p><font face="Courier New">}</font></p>
+
+      <p><font face="Courier New">} while ($CmdLine);</font></p>
+
+      <p><font face="Courier New">print &quot;\ndone\n&quot;;</font></p>
+
+  </blockquote></blockquote><p align="center"><font face="Times New Roman"><b>Example 12-1: Perl Sample CMDAPI Source Code</b></font></p>
+
+  <p><font face="Times New Roman"> </font></p>
+
+<p align="left"><a href="help-49.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-51.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

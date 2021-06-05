@@ -1,0 +1,48 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="424">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-38.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-40.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P3794_209368"></a><b><font face="Arial" size="+1"><i>7.27 ATI SB400/SB600/SB700/SB800 Southbridge Devices</i></font></b></h2>
+
+  <p><font face="Times New Roman">The ATI Southbridge devices provide the basic I/O Southbridge functionality of the system. Features include 4 or 6 SATA ports, a PIO-mode IDE controller supporting 1 or 2 channels, fully functinoal USB 1.1 Controller supporting legacy emulation, an LPC/ISA bridge, an SMB 2.0 compliant controller, an IOAPIC controller, HPET timer, and legacy AT devices (8259 PIC, 8254 PIT, CMOS, and DMA controller). The legacy AT devices have the standard behavior and IO addresses unless otherwise noted.</font></p>
+
+  <p><font face="Times New Roman"><b>Interface</b></font></p>
+
+  <p><font face="Times New Roman">The Southbridge devices have several connection points. Possible connection points include a PCI bus, an SMB bus, an LPC bus, and an upstream PCIe link. The PCI bus acts as a host bus, and should connect to a &quot;PCI Bus Device&quot;. The SMB connects to devices such as the DIMM, an SMB hub device, or another SMB compatible endpoint. The LPC bus provides connectivity to devices such as Super IO chips and BIOS ROMs. The PCIe port is used for connectivity upstream to a compatible Northbridge Device. See Section <a href="help-40.htm#P3824_212216">7.28</a>, &quot;<a href="help-40.htm#P3824_212216"><i>ATI RS480/RS780/RD790/RD890 Northbridge Devices</i></a>&quot;, on page <a href="help-40.htm#P3824_212216">138</a> for more information.</font></p>
+
+  <p><font face="Times New Roman"><b>Initialization and Reset State</b></font></p>
+
+  <p><font face="Times New Roman">When first initialized, the Southbridge devices are in the default state. This is described in detail in the respective datasheets. The legacy CMOS sub device initializes to all zeroes. </font></p>
+
+  <p><font face="Times New Roman">When reset, a Southbridge device takes on all default register values as above. The exception to this is that the CMOS contents remain the same.</font></p>
+
+  <p><font face="Times New Roman"><b>Contents of a BSD</b></font></p>
+
+  <p><font face="Times New Roman">The BSD file contains the contents of all registers. It also saves the contents of any buffers, and states of all internal devices (HDD controllers, PIT, PIC, etc.). When the BSD file is read in, all buffers are filled with past data, and all states are restored to their saved states.</font></p>
+
+  <p><font face="Times New Roman"><b>Configuration Options</b></font></p>
+
+  <p><font face="Times New Roman">These Southbridge devices share many configuration properties with the AMD-8111 Southbridge. For more information please refer to Section <a href="help-24.htm#P2666_136021">7.12</a>,<i> </i>&#8220;<a href="help-24.htm#P2666_136021"><i>AMD-8111&#8482; Southbridge Devices &#8211; IO Hubs</i></a>&#8221;, on page <a href="help-24.htm#P2666_136021">94</a>.</font></p>
+
+  <p><font face="Times New Roman">Addittionaly these SouthBridge devices contain a SATA configuration page to attatch images to the individual SATA ports.</font></p>
+
+  <p align="center"><img src="images/help-144.gif" border="0" width="498" height="500"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P3814_211526"></a>Figure 7-39: ATI SB600 SATA Configuration Dialog</b></font></p>
+
+  <p><b><font face="Times New Roman">Log Messages</font></b></p>
+
+  <p><font face="Times New Roman">These SouthBridge devices have the ability to log messages to the Message Log Window as specified by the options in the Logging Option tab. These devices can log I/O-mapped Transactions, Memory-mapped Transactions, and SMI and SCI assertions.</font></p>
+
+  <p><font face="Times New Roman"><b>Difference from Real Hardware</b></font></p>
+
+  <p><font face="Times New Roman">These Southbridge devices differ from other devices mainly in those items that deal with real-time operation. Those items cannot be modeled in the current simulator. The functionality of the USB 2.0 controller is also absent (PCI registers and memory-mapped registers are the only portion present). Hardware supporting HD Audio is also not modelled in SimNow.</font></p></ul><p align="left"><a href="help-38.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-40.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

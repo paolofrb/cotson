@@ -1,0 +1,1198 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="402">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-16.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-18.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P1789_106261"></a><font face="Arial" size="+1"><b><i>7.5 Matrox MGA-G400 PCI/AGP</i></b></font></h2>
+
+  <p><font face="Times New Roman">The Matrox G400 graphics device <a name="P1790_106320"></a>provides a high performance PCI/AGP VGA-compatible video device<a name="P1790_106383"></a>. The device provides a fully functional set of PCI configuration registers, and a 2D drawing engine. The AGP<a name="P1790_106492"></a> interface is currently somewhat minimal, and is not capable of generating neither AGP cycles nor AGP-specific modes at this time. </font></p>
+
+  <p><font face="Times New Roman">High performance device drivers are available for most operating systems (Windows, Linux, and Solaris). The Matrox G400 supports full acceleration of all GDI and DirectDraw functions.</font></p>
+
+  <p><font face="Times New Roman"><a href="#P1797_107030">Figure 7-9</a> shows the integrated components of the Matrox G400 graphics device. Features and components which are currently not supported by the Matrox G400 graphics device model have a <img src="images/help-113.gif" border="0" width="12" height="12"> symbol in the following block diagram.</font></p>
+
+  <p align="center"><img src="images/help-114.gif" border="0" width="359" height="551"></p>
+
+  <p align="center"><b><font face="Times New Roman"><a name="P1797_107030"></a>Figure 7-9: Matrox G400 Block Diagram</font></b></p>
+
+  <p><b><font face="Times New Roman">Interfaces</font></b></p>
+
+  <p><font face="Times New Roman">The Matrox G400 graphics device has both a PCI bus and an AGP bus connection, only one of which can be used at any time to connect to PCI bus or AGP bus ports in other devices.</font></p>
+
+  <p><font face="Times New Roman"><b>Initialization and Reset State</b></font></p>
+
+  <p><font face="Times New Roman">Upon initial creation, this device initializes the internal registers to Matrox G400 standard reset state, and creates a display window that acts as the VGA display. The Configuration options are initialized to enable both the VGA and Matrox Power Graphics Mode. The frame-buffer size is initialized to 32 Mbytes and the Bios File memory area is initialized to all ones.</font></p>
+
+  <p><font face="Times New Roman">A reset will re-load the default PCI configuration registers and place default values in the Chip and FIFO configuration for the Matrox G400 graphics device.</font></p>
+
+  <p><font face="Times New Roman"><b>Contents of a BSD</b></font></p>
+
+  <p><font face="Times New Roman">The data saved in the BSD depends on the mode the graphics controller was in when the BSD was saved. If the graphics controller was in VGA mode, the BSD file contains the contents of all VGA registers, a copy of the 256-Kbyte VGA frame buffer, and all configuration information. If the graphics controller was in Matrox Power Graphics Mode (non-VGA in Windows) the linear frame buffer, Power Graphics registers, and PCI configuration registers are saved in the BSD. When the BSD file is reloaded, all registers and the frame buffer are restored, and a display image is captured and displayed in the display window.</font></p>
+
+  <p><font face="Times New Roman"><b>Configuration Options</b></font></p>
+
+  <p><font face="Times New Roman"><a href="#P1826_109292">Figure 7-10</a> shows the <i>Information</i> tab. The following information describes the active configuration of the Matrox G400 graphics device.</font></p>
+
+  <p><font face="Times New Roman">The Graphics Hardware <i>Model</i> can be set to one of the following models:</font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; Matrox Millennium G400 PCI</font></p>
+
+    <p><font face="Times New Roman">&#8226; Matrox Millennium G400 AGP</font></p>
+
+  </ul><p><font face="Times New Roman">Currently there is only support for the Matrox G400 chip with SingleHead feature support available. </font></p>
+
+  <p><font face="Times New Roman">The <i>Graphics BIOS </i>version is the version of the BIOS that is assigned and used by the graphics device. If you flash the BIOS the version number will change. For more information about flashing the graphics device BIOS see <a href="#P1832_109547">Figure 7-11</a>.</font></p>
+
+  <p><font face="Times New Roman">The <i>Graphics Memory</i> section shows information about the current memory configuration of the graphics device. Currently supported memory configurations are:</font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; 32/16 MB SGRAM with 300 MHz RAMDAC</font></p>
+
+    <p><font face="Times New Roman">&#8226; 32/16 MB SDRAM with 300 MHz RAMDAC</font></p>
+
+  </ul><p align="center"><img src="images/help-115.gif" border="0" width="441" height="394"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1826_109292"></a>Figure 7-10: Matrox G400 Information Property Dialog</b></font></p>
+
+  <p><font face="Times New Roman">The <i>Configuration</i> tab displays details about the active configuration of the Matrox G400 graphics device. </font></p>
+
+  <p><font face="Times New Roman">If you want to change the active configuration, click on the <i>Configuration</i> Tab (see <a href="#P1832_109547">Figure 7-11</a>).</font></p>
+
+  <p align="center"><img src="images/help-116.gif" border="0" width="441" height="394"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1832_109547"></a>Figure 7-11: Matrox G400 Configuration Properties</b></font></p>
+
+  <p><font face="Times New Roman">The <i>BIOS ROM File</i> input field gives you the ability to load different Matrox G400 BIOS ROMs into the device. This is in particular useful if Matrox releases a new BIOS ROM file which has improvements or bug fixes. </font></p>
+
+  <p><font face="Times New Roman">To check for new Matrox BIOS ROM releases go to <u><!-- TRANSIT - HYPERLINK --><!-- .http://www.matrox.com/mga/support/drivers/bios/. --><a href="http://www.matrox.com/mga/support/drivers/bios/" target="_top">http://www.matrox.com/mga/support/drivers/bios/</a></u>.</font></p>
+
+  <p><font face="Times New Roman">The Matrox G400 ROM has a maximum size of 32-Kbytes, and is assigned to ISA bus address 0x000C0000 - 0x000C7FFF, which is the industry-standard location. </font></p>
+
+  <p><font face="Times New Roman">The <i>Configuration</i> tab lets you choose from six different Matrox G400 graphics adapters. For instance, if you prefer to use a Matrox Millennium G400, SingleHead, 16 Mbytes of SDRAM, with a 300 MHz RAMDAC, instead of the default adapter then select this adapter from the <i>Millennium G400 Adapters</i> list. To apply the new configuration, click on the &#8216;Ok&#8217; button.</font></p>
+
+  <p><font face="Times New Roman">Note if you make any changes in the <i>Configuration</i> tab you <b>must</b> restart or reset your simulation before the new configuration will take effect! </font></p>
+
+  <p><font face="Times New Roman"><b>Difference from Real Hardware</b></font></p>
+
+  <p><font face="Times New Roman">The Matrox G400 graphics device is a faithful simulation of the software-visible portion of a Matrox G400 adapter; it is not a model of the specific Matrox G400 hardware. Because of this, the graphics device is not equivalent in certain areas. Any issues related to timing, such as the vertical retrace time, will be different. Any software that depends on exact timing behavior may not function correctly.</font></p>
+
+  <p><font face="Times New Roman">The following features are only partially implemented. Any software that depends on these features may not function correctly.</font></p>
+
+        <ul><ul><ul><p><font face="Times New Roman">&#8226; Translucency / Full Alpha-Blending</font></p>
+
+        <p><font face="Times New Roman">&#8226; Full Texture Mapping</font></p>
+
+        <p><font face="Times New Roman">&#8226; Gouraud Shaded Fills (ALPHA, FOG, STENCIL)</font></p>
+
+        <p><font face="Times New Roman">&#8226; Trapezoids functions</font></p>
+
+        <p><font face="Times New Roman">&#8226; Bitblts</font></p>
+
+        <p><font face="Times New Roman">a. Color Patterning 8x8</font></p>
+
+        <p><font face="Times New Roman">b. Expansion (Character Drawing) 1 bpp Planar</font></p>
+
+        <p><font face="Times New Roman">&#8226; Lines</font></p>
+
+        <p><font face="Times New Roman">b. With Line-style</font></p>
+
+        <p><font face="Times New Roman">c. With Depth</font></p>
+
+        <p><font face="Times New Roman">d. Polyline/Polysegment using Vector Pseudo-DMA Mode</font></p>
+
+        <p><font face="Times New Roman">&#8226; Image Load (ILOAD)</font></p>
+
+        <p><font face="Times New Roman">b. Linear-Color Expansion (Character Drawing) 1 bpp</font></p>
+
+        <p><font face="Times New Roman">c. Loading the Texture Color Palette</font></p>
+
+        <p><font face="Times New Roman">&#8226; Loading any accelerator registers through the Pseudo DMA Window</font></p>
+
+        <p><font face="Times New Roman">&#8226; ZBuffer Direct Access Procedure when ZBuffer is in AGP Space</font></p>
+
+        <p><font face="Times New Roman">&#8226; Table-Fog</font></p>
+
+        <p><font face="Times New Roman">&#8226; Video Scaler</font></p>
+
+        <p><font face="Times New Roman">&#8226; Texture Unit blending</font></p>
+
+        <p><font face="Times New Roman">&#8226; Texture Staging</font></p>
+
+  </ul></ul></ul><p><font face="Times New Roman"><b>Supported 2D Features</b></font></p>
+
+        <ul><ul><ul><p><font face="Times New Roman">&#8226; Bus-Mastering (PCI/AGP)</font></p>
+
+        <p><font face="Times New Roman">&#8226; Raster Operations: 0, ~(D | S), D &amp; S, D &amp; ~S, ~S, (~D) &amp; S, ~D, D ^ S, ~(D &amp; S), D &amp; S, ~(D ^ S), D,  D | ~S, S, (~D) | S, D | S, 1</font></p>
+
+        <p><font face="Times New Roman">&#8226; Hardware Clipping</font></p>
+
+        <p><font face="Times New Roman">&#8226; Software-/Hardware-Cursor</font></p>
+
+        <p><font face="Times New Roman">b. Three-Color Cursor</font></p>
+
+        <p><font face="Times New Roman">c. XGA Cursor</font></p>
+
+        <p><font face="Times New Roman">d. X-Windows Cursor</font></p>
+
+        <p><font face="Times New Roman">e. 16-Color Palletized Cursor</font></p>
+
+        <p><font face="Times New Roman">&#8226; Bitblts</font></p>
+
+        <p><font face="Times New Roman">b. Two-Operand</font></p>
+
+        <p><font face="Times New Roman">c. Transparent Two-Operand </font></p>
+
+        <p><font face="Times New Roman">d. With Expansion (Character Drawing) 1bpp</font></p>
+
+        <p><font face="Times New Roman">&#8226; Image Load (ILOAD)</font></p>
+
+        <p><font face="Times New Roman">b. Two-operand</font></p>
+
+        <p><font face="Times New Roman">c. With Expansion (Character Drawing) 1bpp</font></p>
+
+        <p><font face="Times New Roman">&#8226; Rectangles</font></p>
+
+        <p><font face="Times New Roman">b. Patterned Fills</font></p>
+
+        <p><font face="Times New Roman">c. Constant Shaded</font></p>
+
+        <p><font face="Times New Roman">d. Gouraud Shaded (partially)</font></p>
+
+        <p><font face="Times New Roman">e. Texture Mapping (partially)</font></p>
+
+        <p><font face="Times New Roman">&#8226; Trapezoids</font></p>
+
+        <p><font face="Times New Roman">b. Constant Shaded</font></p>
+
+        <p><font face="Times New Roman">&#8226; Lines</font></p>
+
+        <p><font face="Times New Roman">b. Auto-Lines (line open/line close)</font></p>
+
+        <p><font face="Times New Roman">c. Solid-Lines (line open/line close)</font></p>
+
+        <p><font face="Times New Roman">&#8226; 8, 15, 16, 24, and 32 Bits Per Pixel video modes</font></p>
+
+        <p><font face="Times New Roman">&#8226; ILOAD Pseudo- DMA Window Transfers</font></p>
+
+        <p><font face="Times New Roman">&#8226; Programmable, transparent BLTer</font></p>
+
+        <p><font face="Times New Roman">&#8226; Linear packed pixel frame buffer</font></p>
+
+  </ul></ul></ul><p><font face="Times New Roman"><b>Supported DirectX 6.1 Features</b></font></p>
+
+        <ul><ul><ul><p><font face="Times New Roman">&#8226; Alpha Test0</font></p>
+
+        <p><font face="Times New Roman">&#8226; Alpha Blending Functions</font></p>
+
+        <p><font face="Times New Roman">b. Normal-Blending </font></p>
+
+        <p><font face="Times New Roman">c. Transparency-Blending </font></p>
+
+        <p><font face="Times New Roman">d. Additive-Blending </font></p>
+
+        <p><font face="Times New Roman">e. Soft-Additive-Blending </font></p>
+
+        <p><font face="Times New Roman">f. Multiplicative-Blending</font></p>
+
+        <p><font face="Times New Roman">&#8226; Depth Test (Z-Buffer) 15-bit, 16-bit, 24-bit, and 32-bit</font></p>
+
+        <p><font face="Times New Roman">&#8226; Texel-Width (4-, 8-, 12-,  15-, 16-, and 32-bit </font></p>
+
+        <p><font face="Times New Roman">&#8226; UV Texture Coordinate support</font></p>
+
+        <p><font face="Times New Roman">&#8226; DMA-Vertex Engine</font></p>
+
+  </ul></ul></ul><p><font face="Times New Roman"><b>Supported Graphics Modes</b></font></p>
+
+<p><font face="Times New Roman">The Matrox G400 provides three different display modes: text (VGA or SVGA), VGA graphics, and SVGA graphics. <a href="#P2170_114675">Table 7-4</a> list all of the display modes which are available through BIOS calls.</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e6e6e6" valign="top" width="103"><p><font face="Times New Roman"><b>Mode Number</b></font></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="49"><p><b><font face="Times New Roman">Type</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="152"><p><b><font face="Times New Roman">Organization</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="79"><p><b><font face="Times New Roman">Resolution</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="91"><p><b><font face="Times New Roman">No. of colors</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="74"><p><b><font face="Times New Roman">Supported</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x00</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">40x25 Text</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">360x400</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x01</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">40x25 Text</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">360x400</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x02</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">80x25 Text</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">720x400</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x03</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">80x25 Text</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">720x400</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x04</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 2 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">320x200</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">4</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x05</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 2 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">320x200</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">4</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x06</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 1 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">640x200</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">2</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x07</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">80x25 Text</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">720x400</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">2</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0D</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Multi-plane 4 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">320x200</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0E</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Multi-plane 4 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">640x200</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0F</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Multi-plane 1 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">640x350</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">2</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x10</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Multi-plane 4 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">640x350</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x11</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Multi-plane 1 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">640x480</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">2</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x12</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Multi-plane 4 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">640x480</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x13</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 8 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">320x200</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">256</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0108</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">80x60 Text</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">640x480</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0109</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">132x25 Text</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">1056x400</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x010A</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">132x43 Text</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">1056x350</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x010B</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">132x50 Text</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">1056x400</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x010C</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">VGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">132x60 Text</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">1056x480</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0100</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 8 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">640x400</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">256</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0101</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 8 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">640x480</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">256</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0110</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 16 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">640x480</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">32K</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0111</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 16 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">640x480</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">64K</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0112</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 16 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">640x480</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16M</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0102</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Multi-plane 4 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">800x600</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0103</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 8 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">800x600</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">256</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0113</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 16 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">800x600</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">32K</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0114</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 16 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">800x600</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">64K</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0115</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 32 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">800x600</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16M</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0105</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 8 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">1024x768</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">256</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0116</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 16 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">1024x768</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">32K</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0117</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 16 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">1024x768</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">64K</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0118</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 32 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">1024x768</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16M</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0107</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 8 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">1280x1024</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">256</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x0119</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 16 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">1280x1024</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">32K</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x011A</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 16 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">1280x1024</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">64K</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x011B</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 32 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">1280x1024</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">16M</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x011C</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 8 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">1600x1200</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">256</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x011D</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 16 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">1600x1200</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">32K</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="103"><p align="right"><font face="Courier" size="-1">0x011E</font></p>
+</td>
+<td valign="top" width="49"><p align="right"><font face="Courier" size="-1">SVGA</font></p>
+</td>
+<td valign="top" width="152"><p><font face="Courier" size="-1">Packed-pixel 16 bpp</font></p>
+</td>
+<td valign="top" width="79"><p align="right"><font face="Courier" size="-1">1600x1200</font></p>
+</td>
+<td valign="top" width="91"><p align="right"><font face="Courier" size="-1">64K</font></p>
+</td>
+<td valign="top" width="74"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P2170_114675"></a>Table 7-4: Matrox G400 VESA Modes</b></font></p>
+
+  <p><b><font face="Times New Roman">Memory Interface</font></b></p>
+
+  <p><font face="Times New Roman">The Matrox G400 supports a total of 32 megabytes of SGRAM/SDRAM memory comprised of one or two banks of 8, 16, or 32 Mbytes each.</font></p>
+
+  <p><font face="Times New Roman">In Power Graphics Mode, the resolution depends on the amount of available memory. <a href="#P2332_115491">Table 7-5</a> shows the memory configuration for each standard VESA resolution in pixel depth.</font></p></ul>
+<p><ul>
+<center><table>
+<tr>
+<td width="80"></td>
+<td width="45"></td>
+<td width="50"></td>
+<td width="51"></td>
+<td width="51"></td>
+<td width="46"></td>
+<td width="51"></td>
+<td width="54"></td>
+<td width="46"></td>
+<td width="54"></td>
+<td width="54"></td></tr>
+<tr>
+<td rowspan="2" valign="top" width="80">&#160;
+</td>
+<td colspan="4" bgcolor="#e6e6e6" valign="top" width="199"><p align="center"><font face="Times New Roman"><b>Single Frame Buffer Mode</b></font></p>
+</td>
+<td colspan="6" bgcolor="#e6e6e6" valign="top" width="307"><p align="center"><b><font face="Times New Roman">Single Z-Buffer</font></b></p>
+</td></tr>
+<tr>
+
+<td colspan="4" bgcolor="#e6e6e6" valign="top" width="199"><p align="center"><b><font face="Times New Roman">No Z</font></b></p>
+</td>
+<td colspan="3" bgcolor="#e6e6e6" valign="top" width="152"><p align="center"><b><font face="Times New Roman">Z 16 bits</font></b></p>
+</td>
+<td colspan="3" bgcolor="#e6e6e6" valign="top" width="155"><p align="center"><b><font face="Times New Roman">Z 32 bits</font></b></p>
+</td></tr>
+<tr>
+<td bgcolor="#e6e6e6" valign="top" width="80"><p align="center"><b><font face="Times New Roman">Resolution</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="45"><p align="center"><b><font face="Times New Roman">8-bit</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="50"><p align="center"><b><font face="Times New Roman">16-bit</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="51"><p align="center"><b><font face="Times New Roman">24-bit</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="51"><p align="center"><b><font face="Times New Roman">32-bit</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="46"><p align="center"><b><font face="Times New Roman">8-bit</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="51"><p align="center"><b><font face="Times New Roman">16-bit</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="54"><p align="center"><b><font face="Times New Roman">32-bit</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="46"><p align="center"><b><font face="Times New Roman">8-bit</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="54"><p align="center"><b><font face="Times New Roman">16-bit</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="54"><p align="center"><b><font face="Times New Roman">32-bit</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="80"><p align="right"><font face="Times New Roman">640x480</font></p>
+</td>
+<td valign="top" width="45"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">8M</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="80"><p align="right"><font face="Times New Roman">720x480</font></p>
+</td>
+<td valign="top" width="45"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">8M</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="80"><p align="right"><font face="Times New Roman">800x600</font></p>
+</td>
+<td valign="top" width="45"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">8M</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="80"><p align="right"><font face="Times New Roman">1024x768</font></p>
+</td>
+<td valign="top" width="45"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">8M</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="80"><p align="right"><font face="Times New Roman">1152x864</font></p>
+</td>
+<td valign="top" width="45"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">8M</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="80"><p align="right"><font face="Times New Roman">1280x1024</font></p>
+</td>
+<td valign="top" width="45"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">10M</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="80"><p align="right"><font face="Times New Roman">1600x1200</font></p>
+</td>
+<td valign="top" width="45"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">16M</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="80"><p align="right"><font face="Times New Roman">1920x1080</font></p>
+</td>
+<td valign="top" width="45"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">16M</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="80"><p align="right"><font face="Times New Roman">1800x1440</font></p>
+</td>
+<td valign="top" width="45"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">16M</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="80"><p align="right"><font face="Times New Roman">1920x1200</font></p>
+</td>
+<td valign="top" width="45"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">16M</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="80"><p align="right"><font face="Times New Roman">2048x1536</font></p>
+</td>
+<td valign="top" width="45"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman">8M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="51"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">32M</font></p>
+</td>
+<td valign="top" width="46"><p align="center"><font face="Times New Roman">16M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">32M</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman">32M</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P2332_115491"></a>Table 7-5: Supported Resolutions in Power Graphics Mode</b></font></p>
+
+  <p><b><font face="Times New Roman">Supported Guest Operating Systems</font></b></p>
+
+<p><font face="Times New Roman"><a href="#P2362_116147">Table 7-6</a> shows all operating systems which are tested and known to work with the Matrox G400 graphics device model:</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="287"><p align="center"><font face="Times New Roman"><b>Guest Operating System</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="149"><p align="center"><b><font face="Times New Roman">Device Driver Version</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="115"><p align="center"><b><font face="Times New Roman">Known Issues</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="287"><p><font face="Times New Roman">MS-DOS&#8482;</font></p>
+</td>
+<td valign="top" width="149"><p><font face="Times New Roman">N/A</font></p>
+</td>
+<td valign="top" width="115"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="287"><p><font face="Times New Roman">Windows 2000</font></p>
+</td>
+<td valign="top" width="149"><p><font face="Times New Roman">5.93.009</font></p>
+</td>
+<td valign="top" width="115"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="287"><p><font face="Times New Roman">Windows XP (32-bit/64-bit)</font></p>
+</td>
+<td valign="top" width="149"><p><font face="Times New Roman">5.93.009/1.11.00.114SE</font></p>
+</td>
+<td valign="top" width="115"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="287"><p><font face="Times New Roman">Windows Server 2003 (32-bit/64-bit))</font></p>
+</td>
+<td valign="top" width="149"><p><font face="Times New Roman">5.93.009/1.11.00.114SE</font></p>
+</td>
+<td valign="top" width="115"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="287"><p><font face="Times New Roman">Windows Vista<sup>®</sup> (32-bit/64-bit)</font></p>
+</td>
+<td valign="top" width="149"><p><font face="Times New Roman">N/A (VESA only)</font></p>
+</td>
+<td valign="top" width="115"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="287"><p><font face="Times New Roman">Linux<sup>®</sup> (32-bit/64-bit), RedHat/SuSE/SuSE Xen</font></p>
+</td>
+<td valign="top" width="149"><p><font face="Times New Roman">Standard MGA Driver</font></p>
+</td>
+<td valign="top" width="115"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="287"><p><font face="Times New Roman">Solaris 10 for AMD64</font></p>
+</td>
+<td valign="top" width="149"><p><font face="Times New Roman">XF86 MGA Solaris </font></p>
+</td>
+<td valign="top" width="115"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P2362_116147"></a>Table 7-6: Supported Guest Operating Systems</b></font></p>
+
+  <p><b><font face="Times New Roman">Improve Graphics Performance</font></b></p>
+
+  <p><font face="Times New Roman">When you run Windows in simulation and you open a menu, list box, tool-tips, or other screen element, the object may open slowly. To disable this option, use the following steps:</font></p>
+
+    <ul><p><font face="Times New Roman">1. Click <b>Start</b>, point to Settings, and then click <b>Control Panel</b>.</font></p>
+
+    <p><font face="Times New Roman">2. Double-click <b>Display</b>.</font></p>
+
+    <p><font face="Times New Roman">3. Click <b>Effects</b>, clear the <b>Use the following transition effects for menus and tool tips </b>check box, click <b>ok</b>, and then close Control Panel.</font></p>
+
+  </ul><p><font face="Times New Roman">Or:</font></p>
+
+    <ul><p><font face="Times New Roman">1. Right click on <b>My Computer</b> and select <b>Properties</b>.</font></p>
+
+    <p><font face="Times New Roman">2. Click on <b>Advanced</b>, <b>Performance</b>, and then on <b>Settings&#8230;</b>.</font></p>
+
+    <p><font face="Times New Roman">3. Select the <b>Adjust For Best Performance</b> option.</font></p>
+
+    <p><font face="Times New Roman">4. Click on <b>Apply</b>.</font></p>
+
+  </ul><p><font face="Times New Roman">Also make sure you have installed the Matrox G400 graphics device drivers. You can download the latest Matrox Millennium G400 graphic device drivers for Windows and Linux at <u><!-- TRANSIT - HYPERLINK --><!-- .http://www.matrox.com/mga/support/drivers/latest/home.cfm. --><a href="http://www.matrox.com/mga/support/drivers/latest/home.cfm" target="_top">http://www.matrox.com/mga/support/drivers/latest/home.cfm</a></u>. </font></p>
+
+  <p><font face="Times New Roman"><b>Enabling Graphics Hardware Acceleration on Windows Server Operating Systems</b></font></p>
+
+  <p><font face="Times New Roman">Graphics Hardware Acceleration and DirectX are disabled by default on a Windows Server configuration to ensure maximum stability and uptime. But if you need to improve the graphics performance the following steps will guide you through on how you can enable hardware acceleration.</font></p>
+
+    <ul><p><font face="Times New Roman">1. Right-click the desktop, and then click <b>Properties</b> on the menu.</font></p>
+
+    <p><font face="Times New Roman">2. Click the <b>Settings</b> tab, and then click on <b>Advanced</b>.</font></p>
+
+    <p><font face="Times New Roman">3. Click the <b>Troubleshoot</b> tab.</font></p>
+
+    <p><font face="Times New Roman">4. Move the <b>Hardware Acceleration</b> slider across to <b>full</b> (see <a href="#P2389_117651">Figure 7-12</a>).</font></p>
+
+    <p><font face="Times New Roman">5. Click <b>Ok</b>, and then click <b>Close</b>.</font></p>
+
+  </ul><p align="center"><img src="images/help-117.gif" border="0" width="36" height="35"><br>
+<img src="images/help-118.gif" border="0" width="532" height="582"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2389_117651"></a>Figure 7-12: Enable Full Hardware Acceleration on WindowsXP guest</b></font></p>
+
+  <p><b><font face="Times New Roman">Enabling Hardware Cursor Support</font></b></p>
+
+  <p><font face="Times New Roman">Please follow the following steps to enable native hardware cursor support on Windows platforms:</font></p>
+
+    <ul><p><font face="Times New Roman">1. Install latest Matrox G400 drivers.</font></p>
+
+    <p><font face="Times New Roman">2. Reboot computer.</font></p>
+
+    <p><font face="Times New Roman">3. Right click on &#8220;My Computer&#8221; and select &#8220;Properties&#8221;.</font></p>
+
+    <p><font face="Times New Roman">4. Click on &#8220;Advanced&#8217;, &#8220;Performance&#8221;, and then on &#8220;Settings&#8230;&#8221;.</font></p>
+
+    <p><font face="Times New Roman">5. Uncheck &#8220;Show shadows under mouse pointer&#8221; checkbox.</font></p>
+
+    <p><font face="Times New Roman">6. Click on &#8220;Apply&#8221;</font></p></ul></ul><p align="left"><a href="help-16.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-18.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

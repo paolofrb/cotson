@@ -1,0 +1,36 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="421">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-35.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-37.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P3566_194394"></a><font face="Arial" size="+1"><b><i>7.24 JumpDrive Device</i></b></font></h2>
+
+  <p><font face="Times New Roman">The purpose of the JumpDrive device is to allow easy import and export of data between a host system and a simulation environment. You can import files from the host system on to the JumpDrive, where they will be accessible by the simulated operating system. Data can also be exported from the JumpDrive back to the host system after the simulation ended.</font></p>
+
+  <p><font face="Times New Roman">The image file used by the JumpDrive is very different from any other image files that the simulator supports. The only image files that can be loaded are those image files that are saved by the JumpDrive itself. </font></p>
+
+  <p><font face="Times New Roman">Section <a href="help-59.htm#P10811_427446">A.7.26</a>, &#8220;<a href="help-59.htm#P10811_427446">JumpDrive</a>&#8221;, on page <a href="help-59.htm#P10749_426845">248</a> describes the JumpDrives automation commands.</font></p>
+
+  <p><font face="Times New Roman"><b>Interface</b></font></p>
+
+  <p><font face="Times New Roman">The JumpDrive device has an USB interface that can connect to any USB controller, e.g., you can connect the JumpDrive device to the AMD-8111 I/O Hub.</font></p>
+
+  <p><font face="Times New Roman"><b>Initialization and Reset State</b></font></p>
+
+  <p><font face="Times New Roman">The JumpDrives initialized state is all zero. There is no partition table or any other structure defined. It is totally blank. The default size is 64 Mbytes. The JumpDrive is not modified after a reset.</font></p>
+
+  <p><font face="Times New Roman"><b>Contents of a BSD</b></font></p>
+
+  <p><font face="Times New Roman">The JumpDrive device saves its entire state, including the contents of its memory, to the BSD. Any data that exists on the JumpDrive device will be restored when the BSD is reloaded.</font></p>
+
+  <p><font face="Times New Roman"><b>Configuration Options</b></font></p>
+
+  <p><font face="Times New Roman">Most of the automation commands will return an error if the JumpDrive is &quot;plugged into&quot; the simulated computer, i.e., if the JumpDrive device is connected to a USB controller. The device must be &quot;not connected&quot;, i.e., unplugged, to issue commands that alter the JumpDrive image.</font></p></ul><p align="left"><a href="help-35.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-37.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

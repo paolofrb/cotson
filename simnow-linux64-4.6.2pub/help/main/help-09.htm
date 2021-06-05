@@ -1,0 +1,282 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="394">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-08.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-10.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><p align="left"><a name="P1126_70405"></a><img src="images/gtabsepm.gif"></p>
+<h1><font face="Arial" size="+2"><b>5 Running the Simulator</b></font></h1>
+
+  <p><font face="Times New Roman">You can start AMD SimNow&#8482; by launching &quot;<i>SimNow.exe</i>&quot; in your install directory. For convenience, you can create a desktop shortcut to launch the simulator. When you run the simulator, you will see the simulator's <i>Main Window</i> as shown in <a href="#P1130_70770">Figure 5-1</a>. It will also open a console window (shown in <a href="help-07.htm#P1002_59994">Figure 3-15</a>) that is used for text interaction.</font></p>
+
+  <p><img src="images/help-67.gif" border="0" width="575" height="451"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1130_70770"></a>Figure 5-1: Main Window (No BSD Loaded)</b></font></p>
+
+  <h2><a name="P1131_70809"></a><b><font face="Arial" size="+1"><i>5.1 Command-Line Arguments</i></font></b></h2>
+
+<p><font face="Times New Roman">This section describes the command-line arguments supported by the simulator. <a href="#P1158_71480">Table 5-1</a> shows the command-line arguments. </font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e6e6e6" valign="top" width="101"><p><font face="Times New Roman"><b>Argument</b></font></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="295"><p><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">-l &lt;path&gt;     </font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Directory to load devices from.  If used, it must be first.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">-f &lt;file&gt;     </font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Open the .bsd file &lt;file&gt;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">-e &lt;file&gt;     </font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Execute commands in &lt;file&gt; on startup.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">-i &lt;path&gt;</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Image search path for loading image files.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">-m &lt;path&gt;</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Mediator connection string for network adapters to use.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">-n --novga</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Disable VGA Window.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">-c --nogui</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Disable GUI (console mode).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">-d</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Disable mouse and keyboard inputs to simulator.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">-r --register</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Register the simulator with the O/S as an automation server.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">-h --help -?</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Print this help message.</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P1158_71480"></a>Table 5-1: Command-Line Arguments</b></font></p>
+
+  <p><font face="Times New Roman">For instance, to open the <i>cheetah_1p.bsd</i> when starting the simulator you can enter the following:</font></p>
+
+    </ul><blockquote><blockquote><p><font face="Courier New">C:\SimNow\simnow &#8211;f cheetah_1p.bsd</font></p>
+
+  </blockquote></blockquote><ul><h3><a name="P1162_71646"></a><font face="Arial" size="+1"><b>5.1.1 Open a Simulation Definition File</b></font></h3>
+
+  <p><font face="Times New Roman">Click on <img src="images/help-13.gif" border="0" width="16" height="16"> and select one of the <i>&quot;.bsd</i>&quot; files<a name="P1163_71729"></a> located in the &#8220;<i>\SimNow</i>&#8221; directory. The <i>&quot;.bsd</i>&quot; files contain pre-configured simulation definitions designed to model a specific AMD processor-based computer system. For this example, load the &#8220;<i>cheetah_1p.bsd</i>&#8221; file, from in the SimNow directory. Upon loading the BSD file, the <i>Main Window</i> (shown in <a href="#P1165_72464">Figure 5-2</a>) will be filled with three sections. The left column contains informational graphs if selected (see Section <a href="help-07.htm#P1008_60731">3.4.2</a>, &#8220;<a href="help-07.htm#P1008_60731"><i>CPU-Statistics Graphs</i></a>&#8221;, on page<i> <a href="help-07.htm#P1008_60731">30</a></i>), the top row contains numeric displays of simulation statistics and disk-drive access information, and the remainder contains the <i>Simulation Display Area</i> of the simulated machine. The <i>Simulation Display Area</i> remains blank until the simulated machine is started.</font></p>
+
+  <p><img src="images/help-68.gif" border="0" width="645" height="587"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1165_72464"></a>Figure 5-2: Main Window (BSD Loaded)</b></font></p>
+
+  <p><font face="Times New Roman">You can view the configuration of the simulated machine by clicking on <img src="images/help-15.gif" border="0" width="16" height="16">. A window appears with a graphical representation of the simulated machine, as shown in <a href="#P1169_72671">Figure 5-3</a>.</font></p>
+
+  <p align="center"><img src="images/help-69.gif" border="0" width="575" height="431"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1169_72671"></a>Figure 5-3: Device Window</b></font></p>
+
+  <h2><a name="P1170_72696"></a><b><font face="Arial" size="+1"><i>5.2 Installing an Operating System</i></font></b></h2>
+
+  <p><font face="Times New Roman">This section describes the steps that are necessary to install Windows or Linux using the simulator. Before you can start installing an operating system make sure you have a blank hard-drive image available. To create a blank hard-drive image with DiskTool please follow the steps in Section <a href="help-08.htm#P1095_68483">4.1</a>, &quot;<i><a href="help-08.htm#P1095_68483">Creating A Blank Hard-Drive Image</a></i>&quot;, on page <a href="help-08.htm#P1095_68483">35</a>.</font></p>
+
+  <h3><a name="P1172_73075"></a><font face="Arial" size="+1"><b>5.2.1 Assigning Disk-Images</b></font></h3>
+
+  <p><font face="Times New Roman">Assign a blank hard-drive image by selecting &#8220;<i>File&#8594;Set IDE Primary Master Image...</i>&#8221;. Open the directory that contains your hard-drive images and choose a blank hard-drive image that you created earlier (see Section <a href="help-08.htm#P1095_68483">4.1</a>, &quot;<i><a href="help-08.htm#P1095_68483">Creating A Blank Hard-Drive Image</a></i>&quot;, on page <a href="help-08.htm#P1095_68483">35</a>) or use one of the hard-disk images which come with the simulator (see Section <a href="help-55.htm#P5295_276082">A.2.4.1</a>, &quot;<i><a href="help-55.htm#P5295_276082">Hard-Disk Image Files</a></i>&quot;, on page <a href="help-55.htm#P5295_276082">183</a>) and un-check the &quot;<i>Journal</i>&quot; check-box (see below &quot;<i>The IDE controller has two important features</i>&quot;), then click on &quot;<i>Ok</i>&quot;. </font></p>
+
+  <p><font face="Times New Roman">Assign the first OS installation ISO image to the IDE Secondary Master Channel of the hard-disk controller by selecting &#8220;<i>File&#8594;Set IDE Secondary Master Image...</i>&#8220;. </font></p>
+
+  <p><font face="Times New Roman">If you don't have access to any ISO images you have two options:</font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; You can download Linux ISO images from fedora.redhat.com. If you are a MSDN Subscription member you can also download Windows ISO images from Microsoft's MSDN Subscription Webpage. </font></p>
+
+    <p><font face="Times New Roman">&#8226; You can assign a physical host DVD-/CD-ROM drive to the simulators IDE Secondary Master Channel and use your host&#8217;s physical DVD-/CD-ROM drive to install from a CD or DVD media. Section <a href="help-08.htm#P1072_66527">4</a>, &quot;<a href="help-08.htm#P1072_66527"><i>Disk Images</i></a>&quot;, on page <a href="help-08.htm#P1072_66527">35</a> describes how to assign a physical DVD-/CD-ROM drive</font></p>
+
+  </ul><p><font face="Times New Roman">When the OS installation prompts you, eject the current ISO image using &quot;<i>File&#8594;Clear IDE Secondary Master</i>&quot; and insert the next ISO image using &quot;<i>File&#8594;Set IDE Secondary Master</i>&quot;. In case you are using a physical DVD/-CD-ROM drive for the OS installation, eject the media and insert the next media.</font></p>
+
+  <p><font face="Times New Roman">The disk-images are now assigned to the device that is connected to the IDE Primary Master and IDE Secondary Master connector of the hard disk controller, as shown in <a href="help-24.htm#P2700_140132">Figure 7-25</a> on page <a href="help-24.htm#P2700_140132">97</a>. </font></p>
+
+  <p><font face="Times New Roman">The IDE controller has two important features:</font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; All disk devices (Primary Master, etc.) by default have the disk journaling<a name="P1188_74923"></a> feature turned on, which allows simulations to write to the disk image during normal operation and not affect the contents of the real disk image. This is useful for being able to kill a simulation in the middle, for multiple copies of the simulator running at the same time, etc. Journal contents are saved in BSD checkpoint files but lost if you don't save a checkpoint before exiting. To change journal settings or commit journal contents to the hard disk image, go to the <i>Device View Window</i>, then the AMD-8111&#8482; Southbridge, then the configuration for the hard disk in question on either the Primary or Secondary IDE controller. Here you can either commit<a name="P1188_75584"></a> the contents of the journal to the hard-disk image or turn off journaling for the hard disk image in question. Turning off journaling is recommended during the installation process for an operating system.</font></p>
+
+    <p><font face="Times New Roman">&#8226; DVD-ROM support is provided through an option in the BSD platform checkpoint file. To install a DVD-ROM at any hard disk device location (Secondary Master, Primary Slave, etc.), turn on the &#8216;<i>DVD-ROM</i>&#8217; checkbox. By default, the Secondary Master in all distributed BSDs has &#8216;<i>DVD-ROM&#8217;</i> checked and is a DVD-ROM device. </font></p>
+
+  </ul><p><font face="Times New Roman">Copying files into the simulator corresponds to putting data into some media on the Host which will be inserted into the simulation. The choices for doing this are:</font></p>
+
+      <ul><ul><p><font face="Times New Roman">&#8226; Create an ISO image with the data inside it then get it into your guest OS. Use the &quot;<i>File&#8594;Set IDE Secondary Master Image</i>&quot; item in the <i>Main Window Menu</i> to insert<a name="P1194_76446"></a> it into the DVD-ROM simulation, which is by default on the secondary master position in all BSDs. Finally, mount it in your guest OS.</font></p>
+
+      <p><font face="Times New Roman">&#8226; Use a raw floppy-disk<a name="P1195_76605"></a> image in a manner similar to the above. It's a lot smaller and a bit more hassle, so we don't recommend it. </font></p>
+
+      <p><font face="Times New Roman">&#8226; Mount a hard-disk image on the host. (On a Linux host, you can use the &quot;loopback device<a name="P1196_76805"></a>&quot;). </font></p>
+
+      <p><font face="Times New Roman">&#8226; Use the JumpDrive USB device to copy files into the simulator and out of the simulator, see. Section <a href="help-59.htm#P10811_427446">A.7.26</a>, &#8220;<a href="help-59.htm#P10811_427446"><i>JumpDrive</i></a>&#8221;, on page <a href="help-59.htm#P10749_426845">248</a>.</font></p>
+
+  </ul></ul><p><font face="Times New Roman">Copying files out of the simulator corresponds to putting some data into some media in the guest which will then be extracted on the host. To do this, mount a hard-drive image on the host after placing the data on it in the guest. (On a Linux host, you can use the &quot;<i>loopback device</i>&quot;).</font></p>
+
+  <h3><a name="P1201_77235"></a><font face="Arial" size="+1"><b>5.2.2 Run the Simulation</b></font></h3>
+
+  <p><font face="Times New Roman">Once the disk-images are assigned, the simulation may be started by clicking on the <i>Play</i> button <img src="images/help-6.gif" border="0" width="16" height="16"> on the <i>Main Window&#8217;s Tool Bar</i>.</font></p>
+
+  <p align="center"><img src="images/help-70.gif" border="0" width="575" height="478"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1205_77388"></a>Figure 5-4: Installing WindowsXP</b></font></p>
+
+  <h3><a name="P1206_77420"></a><b><font face="Arial" size="+1">5.2.3 Interaction with the Simulated Machine</font></b></h3>
+
+  <p><font face="Times New Roman">The simulator will boot and the simulated output screen appears in the bottom right portion of the <i>Main Window</i>, which is the <i>Simulation Display Area</i>. When the focus is on this portion of the window, most keystrokes and mouse operations are passed through to the simulated machine. When moving the mouse cursor outside of the Simulation Display area the <i>Main Window</i> returns the mouse cursor and keyboard control to the host machine. Some keystrokes, such as ALT-combinations, must be entered using the Special Keyboard Menu. At present we have some predefined keystrokes which can be entered by the <i>&quot;Special Keyboard&#8594;Special Keys Generator&quot; </i>as shown in <i><a href="#P1210_78466">Figure 5-5</a>.</i> The simulator superimposes a small square over the screen at the position of the host mouse. You can also allow the simulator to take complete control of the mouse and keyboard by selecting &#8220;<i>Special Keyboard&#8594;Grab Mouse and Keyboard</i>&#8221;. To return from this mode, press and hold <i>Ctrl</i> then <i>Alt</i>, and then release them in reverse order. </font></p>
+
+  <p align="center"><img src="images/help-71.gif" border="0" width="278" height="248"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1210_78466"></a>Figure 5-5: Special  Keys Generator</b></font></p>
+
+  <h3><a name="P1211_78501"></a><b><font face="Arial" size="+1">5.2.4 Simulation Reset</font></b></h3>
+
+  <p><font face="Times New Roman">To reset<a name="P1212_78531"></a> the entire simulator, stop the simulation with the &quot;<i>Stop</i>&quot; button (<img src="images/help-7.gif" border="0" width="16" height="16">), then press the &quot;<i>Reset</i>&quot; button (<img src="images/help-8.gif" border="0" width="16" height="16">), which is to the right of the &quot;<i>Stop</i>&quot; button. At this point, hard-drive images may be changed as described in <a href="#P1172_73075">5.2.1</a> <a href="#P1172_73075">Assigning Disk-Image</a> on page <a href="#P1172_73075">42</a>.</font></p>
+
+  <h2><a name="P1213_78781"></a><font face="Arial" size="+1"><b><i>5.3 Multi-Machine Support</i></b></font></h2>
+
+  <p><font face="Times New Roman">The multiple machine concept allows the simulator to create multiple simulation machines within the same process space, and to load and execute these machines independently. </font></p>
+
+  <p><font face="Times New Roman">The default shell provided with the simulator includes three new commands that allow the user access to the multiple machine functionality. </font></p>
+
+  <p><font face="Times New Roman">The &#8216;<i>newmachine</i>&#8217; command creates a new &#8216;emtpy&#8217; simulation machine. The created new machine is in no way related to the current machine. Tou can load BSDs, edit device configurations, etc., in the new machine, and they are completely independent of any other &#8216;machine&#8217; currently loaded. </font></p>
+
+  <p><font face="Times New Roman">The leading number before the prompt identifies which machine is currently the active machine. All subsequent automation commands typed into the console window are directed to the current machine. </font></p>
+
+<p><font face="Times New Roman"><a href="#P1250_80165">Table 5-2</a> describes the arguments provided by the <i>newmachine</i> command. </font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e6e6e6" valign="top" width="101"><p><font face="Times New Roman"><b>Argument</b></font></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="295"><p><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">--nogui</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Disable Graphical User Interface (GUI).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">--gui</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Enable Graphical User Interface (GUI).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">-c</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Enable console mode.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">--novga</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Disable VGA Window.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">--vga</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Enable VGA Window.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">-n</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Disable VGA Window.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">-d</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Disable mouse and keyboard inputs to simulator.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">+d</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Enable mouse and keyboard inputs to simulator.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">-i &lt;path&gt;</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Image search path for loading image files.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">-m &lt;path&gt;</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Mediator connection string for network adapters to use.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="101"><p><font face="Times New Roman">-l &lt;path&gt;</font></p>
+</td>
+<td valign="top" width="295"><p><font face="Times New Roman">Directory to load devices from.  If used, it must be first.</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P1250_80165"></a>Table 5-2: Newmachine Command Arguments</b></font></p>
+
+    </ul><blockquote><blockquote><p><font face="Courier New" size="-1">Usage:</font></p>
+
+    <p><font face="Courier New" size="-1">newmachine[ [--nogui | -c | --gui] [--novga | -n | --vga] </font></p>
+
+    <p><font face="Courier New" size="-1">            [-d | +d] [-i &lt;path&gt;] [-m &lt;path&gt;] [-l &lt;path&gt;] ]</font></p>
+
+  </blockquote></blockquote><ul><p><font face="Times New Roman">The following command creates a new simulation machine:</font></p>
+
+    </ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; newmachine</font></p>
+
+    <p><font face="Courier New">2 simnow&gt;</font></p>
+
+  </blockquote></blockquote><ul><p><font face="Times New Roman">The &#8216;<i>switchmachine n</i>&#8217; command switches the console window to the machine identified by &#8216;<i>n</i>&#8217;. All subsequent automation commands typed into the console window are directed to the given machine &#8216;<i>n</i>&#8217;.</font></p>
+
+    </ul><blockquote><blockquote><p><font face="Courier New">2 simnow&gt; switchmachine 1</font></p>
+
+    <p><font face="Courier New">1 simnow&gt;</font></p>
+
+  </blockquote></blockquote><ul><p><font face="Times New Roman">The &#8216;<i>listmachines</i>&#8217; command lists all machines that currently exist. </font></p>
+
+    </ul><blockquote><blockquote><p><font face="Courier New"><img src="images/help-72.gif" border="0" width="201" height="20"><br>
+<img src="images/help-73.gif" border="0" width="143" height="64"><br>
+2 simnow&gt; listmachines</font></p>
+
+    <p><font face="Courier New">*2 &#8211;-gui -&#8211;vga +d</font></p>
+
+    <p><font face="Courier New"> 1 &#8211;-gui &#8211;-vga +d</font></p>
+
+    <p><font face="Courier New">2 simnow&gt;</font></p>
+
+  </blockquote></blockquote><ul><p><img src="images/help-74.gif" border="0" width="188" height="20"><br>
+<img src="images/help-75.gif" border="0" width="183" height="20"><br>
+</p>
+
+  <p><font face="Times New Roman">See also Section <a href="#P1131_70809">5.1</a>, &#8220;<a href="#P1131_70809"><i>Command-Line Arguments</i></a>&#8221;, on page <a href="#P1131_70809">39</a> for further information regarding available command-line arguments.</font></p>
+
+  <p><font face="Times New Roman">.</font></p>
+
+  <p><font face="Times New Roman">To exit a created simulated machine enter &#8216;<i>exit</i>&#8217;, as shown in the following example: </font></p>
+
+    </ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; exit</font></p>
+
+    <p><font face="Courier New">2 simnow&gt;</font></p>
+
+    </blockquote></blockquote><ul><p><font face="Times New Roman">This example exits the simulated machine &#8216;<i>1</i>&#8217;.</font></p></ul><p align="left"><a href="help-08.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-10.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

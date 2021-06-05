@@ -1,0 +1,126 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="436">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-50.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-52.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><p align="left"><a name="P4476_251456"></a><img src="images/gtabsepm.gif"></p>
+<h1><font face="Arial" size="+2"><b>13 DiskTool</b></font></h1>
+
+  <p><font face="Times New Roman">Use the DiskTool utility to create hard-disk images. DiskTool<a name="P4477_251528"></a> copies, byte-for-byte, the contents of a secondary hard disk into an <i>.hdd</i> file. This <i>.hdd</i> file can be loaded as a disk image in the simulator.</font></p>
+
+  <p><font face="Times New Roman">DiskTool runs in two modes, GUI mode, and command-line mode. Double-clicking on the DiskTool icon, or running DiskTool from the command line with no command line options, starts DiskTool in GUI mode. If you run DiskTool from the command line and include any command-line parameters, DiskTool runs in command line mode. To get a list of the command-line options, run &quot;<i>DiskTool -help</i>&quot;.</font></p>
+
+  <h2><a name="P4480_252054"></a><font face="Arial" size="+1"><b><i>13.1 Command-Line Mode</i></b></font></h2>
+
+<p><font face="Times New Roman">The functions recognized by the DiskTool command line include: </font></p></ul>
+<p><ul>
+<table>
+<tr>
+<td valign="top" width="544"><p><font face="Times New Roman"><b>Option:</b></font></p>
+  <ul><p><font face="Times New Roman">G = Copy a physical device to the given image file.</font></p>
+</ul><p><font face="Times New Roman"><b>Syntax</b>:</font></p>
+  <ul><p><font face="Times New Roman">{/G|-G} &lt;DeviceName&gt; &lt;ImageName&gt; [ImageSize]</font></p>
+    <ul><p><font face="Times New Roman">[ImageSize] = # of sectors of data to copy from the device to the image file</font></p>
+    <p><font face="Times New Roman">         0   =   All sectors (this is the default value)</font></p>
+    <p><font face="Times New Roman">         1   =   All data to the end of physical partition 1</font></p>
+    <p><font face="Times New Roman">         2   =   All data to the end of physical partition 2</font></p>
+    <p><font face="Times New Roman">         3   =   All data to the end of physical partition 3</font></p>
+    <p><font face="Times New Roman">         4   =   All data to the end of physical partition 4</font></p>
+    <p><font face="Times New Roman">      &lt;Any Other Valid Number&gt; = The number of sectors specified</font></p>
+</ul></ul><p><font face="Times New Roman"><b>Example:  </b></font></p>
+  <ul><p><font face="Times New Roman"><i>disktool &#8211;g /dev/hd0 image.hdd 102400</i></font></p>
+  <p><font face="Times New Roman">This command reads the first 102400 sectors from device <i>/dev/hd0</i> and places them in the image file, <i>image.hdd</i>.</font></p></ul>
+</td></tr></table></ul>
+<p><ul>
+<table>
+<tr>
+<td valign="top" width="544"><p><font face="Times New Roman"><b>Option:</b></font></p>
+  <ul><p><font face="Times New Roman">P = Put the image file &lt;ImageName&gt; to physical device &lt;DeviceName&gt;.</font></p>
+</ul><p><font face="Times New Roman"><b>Syntax</b>:</font></p>
+  <ul><p><font face="Times New Roman">{/P|-P} &lt;DeviceName&gt; &lt;ImageName&gt;</font></p>
+</ul><p><font face="Times New Roman"><b>Example:  </b></font></p>
+  <ul><p><font face="Times New Roman"><i>disktool &#8211;p /dev/hd0 image.hdd</i></font></p>
+  <p><font face="Times New Roman">This command reads image file <i>image.hdd</i> and writes data to physical device <i>/dev/hd0</i>.</font></p></ul>
+</td></tr></table></ul>
+<p><ul>
+<table>
+<tr>
+<td valign="top" width="544"><p><font face="Times New Roman"><b>Option:</b></font></p>
+  <ul><p><font face="Times New Roman">E = Erase (Write zeros to all blocks) physical device.</font></p>
+</ul><p><font face="Times New Roman"><b>Syntax</b>:</font></p>
+  <ul><p><font face="Times New Roman">{/E|-E} &lt;DeviceName&gt;</font></p>
+</ul><p><font face="Times New Roman"><b>Example:  </b></font></p>
+  <ul><p><font face="Times New Roman"><i>disktool &#8211;e /dev/hd0</i></font></p>
+  <p><font face="Times New Roman">This command writes zeros to all sectors on device <i>/dev/hd0</i>.</font></p></ul>
+</td></tr></table></ul>
+<p><ul>
+<table>
+<tr>
+<td valign="top" width="544"><p><font face="Times New Roman"><b>Option:</b></font></p>
+  <ul><p><font face="Times New Roman">N = Create a new blank image file that represents a freshly formatted device.</font></p>
+</ul><p><font face="Times New Roman"><b>Syntax</b>:</font></p>
+  <ul><p><font face="Times New Roman">{/N|-N} &lt;ImageName&gt; &lt;ImageSize&gt;</font></p>
+</ul><p><font face="Times New Roman"><b>Example:  </b></font></p>
+  <ul><p><font face="Times New Roman"><i>disktool &#8211;n image.hdd 102400</i></font></p>
+  <p><font face="Times New Roman">This command creates an image file named <i>image.hdd</i> that represents a physical hard-disk drive containing 102400 sectors (each sector is 512 bytes).</font></p></ul>
+</td></tr></table></ul>
+
+  <ul><h2><a name="P4542_253571"></a><font face="Arial" size="+1"><b><i>13.2 GUI Mode</i></b></font></h2>
+
+  <p><font face="Times New Roman">The DiskTool GUI window is shown in <a href="#P4562_255999">Figure 13-2</a>. DiskTool will only display floppy drives, and DVD/CD and HDD drives that are connected to either the primary or the secondary IDE controller. It will not display external USB or firewire drives, drives attached to SCSI controllers, etc. </font></p>
+
+  <p><font face="Times New Roman">DiskTool displays the names of these devices in the <i>Physical Drives</i> list box, using names appropriate for the host operating system. When running under Windows, the <i>Physical Drives</i><a name="P4545_254050"></a> list box will&nbsp;show you the physical drives, and in parenthesis, the logical drive letters that are associated with the partitions on that drive. Selecting any of these physical devices causes DiskTool to display information about that device in the lower <i>Drive Information</i> list box.</font></p>
+
+  <p><font face="Times New Roman">DiskTool also displays information about all identified devices in a shell window. The DiskTool shell window is shown in <a href="#P4550_254467">Figure 13-1</a>.</font></p>
+
+  <p align="center"><img src="images/help-150.gif" border="0" width="575" height="311"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P4550_254467"></a>Figure 13-1: DiskTool Shell Window</b></font></p>
+
+  <p><font face="Times New Roman">DiskTool will only copy drives - not partitions<a name="P4551_254548"></a>, although it does have the ability to stop copying at the end of a given partition.&nbsp;So, for example, you can copy the contents of a drive starting at the beginning of the drive and ending at the end of the 2nd partition, but you can not copy only the 2nd partition.</font></p>
+
+  <p><font face="Times New Roman"><b>LINUX Note:</b> The list box always shows <i>/dev/fd0</i> and <i>/dev/fd1</i>. If you click on one of these and the physical device does not actually exist, the GUI will hang for a short time, and will then display information in the lower list box indicating that a 4Kb media is installed in this device DiskTool only recognizes device names <i>/dev/hda</i> through <i>/dev/hdz</i>. In addition, it looks for the file <i>/proc/ide/hd?/media</i>, and uses the information in that file to determine whether the device is a hard drive or a DVD/CD drive. If the file does not exist, or if its contents cannot be parsed, the device will not be listed.</font></p>
+
+  <p><font face="Times New Roman">The buttons on the right side of the DiskTool Window correspond to the four command line options listed above. In addition, there are <i>About</i> and <i>Exit</i> buttons that perform the obvious function.</font></p>
+
+  <p><font face="Times New Roman">When creating a new blank image, or when getting an image from a physical device to an image file, an additional dialog is presented that allows you to select how large the new image file should be. The options in this dialog mirrors the [<i>Image Size</i>] options for the equivalent command line-commands.</font></p>
+
+  <p><font face="Times New Roman">After launching DiskTool, you are presented with the interface, shown in <a href="#P4562_255999">Figure 13-2</a>.</font></p>
+
+  <p align="center"><img src="images/help-151.gif" border="0" width="576" height="357"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P4562_255999"></a>Figure 13-2: DiskTool GUI Window</b></font></p>
+
+  <p><font face="Times New Roman">You may select any physical drive in your system, including floppy drives. Selecting a drive updates the <i>Drive Information</i> list box as shown in <a href="#P4568_256244">Figure 13-3</a>.</font></p>
+
+  <p><font face="Times New Roman"><b>Note</b>: DiskTool does <b>not </b>support Serial ATA (SATA) drives!</font></p>
+
+  <p align="center"><img src="images/help-152.gif" border="0" width="576" height="357"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P4568_256244"></a>Figure 13-3: DiskTool Drive Information</b></font></p>
+
+  <p><font face="Times New Roman">When a drive is selected, you have the option to get an image from the drive, put an image onto the drive, or erase the contents of the drive.</font></p>
+
+  <p><font face="Times New Roman">If you erase the contents of the drive, a dialog will ask for confirmation that you actually wish to permanently destroy the contents of that hard disk.</font></p>
+
+  <p><font face="Times New Roman">In case DiskTool displays an &#8220;Operation failed!&#8221; message box, DiskTool was unable to lock or unlock the drive. This can happen if, for example, any files or explorer windows are open on any of the partitions on the selected drive.</font></p>
+
+  <p><font face="Times New Roman">&nbsp;</font></p>
+
+  <p><font face="Times New Roman">For example, if the drive that DiskTool is trying to access has partitions for C: and D:, and an explorer window is open on any path within D:, then DiskTool won&#8217;t be able to lock or unlock that drive, and DiskTool will display an &#8220;Operation failed!&#8221; message box.</font></p>
+
+  <p><font face="Times New Roman">If you put an image onto the drive, a dialog will again ask for confirmation that you actually wish to permanently destroy the contents of that hard disk. Then a dialog prompts for the location of the image file that should be placed on that hard disk. A progress bar (<a href="#P4582_257580">Figure 13-4</a>) will inform you of the progress being made.</font></p>
+
+  <p><font face="Times New Roman">If you get an image from a drive, a dialog window will prompt for the path of file that will store the disk image. A progress bar will inform you of the progress being made.</font></p>
+
+  <p align="center"><img src="images/help-65.gif" border="0" width="390" height="142"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P4582_257580"></a>Figure 13-4: DiskTool Progress Window</b></font></p></ul><p align="left"><a href="help-50.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-52.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

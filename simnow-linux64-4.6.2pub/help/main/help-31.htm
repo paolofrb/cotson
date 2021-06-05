@@ -1,0 +1,42 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="416">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-30.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-32.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P2866_153194"></a><font face="Arial" size="+1"><b><i>7.19 SMB Hub Device</i></b></font></h2>
+
+  <p><font face="Times New Roman">The SMB hub<a name="P2867_153224"></a> device is used to connect one SMBus to any of four SMBus branches. The device is programmed via read-byte and write-byte commands on the SMBus where the 7-bit address field is 0x18.</font></p>
+
+  <p><font face="Times New Roman">The SMB hub device models the combination of two physical devices manufactured by Philips Semiconductors: the PCA9516 5-channel I<sup>2</sup>C hub, and the PCA9556 Octal SMBus and I<sup>2</sup>C registered interface. In the simulator&#8217;s device model the two devices are configurable via <i>GPIO x enables segment x</i>, as shown in <a href="#P2884_154495">Figure 7-33</a>.</font></p>
+
+  <p><font face="Times New Roman"><b>Interface</b></font></p>
+
+  <p><font face="Times New Roman">The SMB hub has five SMBus interfaces. SMB0 can be connected within the SMB hub to any of the four other SMBuses (SMB[1..3]).&nbsp;Typically, SMB0 is connected to a SMBus connection on a Southbridge device, and the other SMBus ports are connected to other devices in the system.</font></p>
+
+  <p><font face="Times New Roman"><b>Initialization and Reset State</b></font></p>
+
+  <p><font face="Times New Roman">When first initialized or reset the SMB hub registers are set to their default state. The internal registers and their default states are described in the PCA9556 data sheet.</font></p>
+
+  <p><font face="Times New Roman"><b>Contents of a BSD</b></font></p>
+
+  <p><font face="Times New Roman">The current state of all internal registers and any internal state variables are saved in the BSD.</font></p>
+
+  <p><font face="Times New Roman"><b>Configuration Options</b></font></p>
+
+  <p><font face="Times New Roman">The SMB Hub device allows you to enable up to eight GPIO segments (GPIO0 &#8211; GPIO7) to connect SMB devices to SMB hub device, as shown in <a href="#P2884_154495">Figure 7-33</a>.</font></p>
+
+  <p align="center"><img src="images/help-138.gif" border="0" width="386" height="341"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2884_154495"></a>Figure 7-33: SMB Hub Properties Dialog</b></font></p>
+
+  <p><b><font face="Times New Roman">Differences from Real Hardware</font></b></p>
+
+  <p><font face="Times New Roman">This device model is the combination of two physical devices connected in a specific way. The model attempts to match the functionality of the physical devices from a programmer's perspective. The SMBus protocol is not modeled. Also, the SMBus address of the PCA9556 is programmable based on pin-strapping, whereas&nbsp;this model has a fixed SMBus base address.</font></p></ul><p align="left"><a href="help-30.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-32.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

@@ -1,0 +1,18 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="419">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-33.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-35.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P2925_157018"></a><font face="Arial" size="+1"><b><i>7.22 USB Keyboard and USB Mouse Devices</i></b></font></h2>
+
+  <p><font face="Times New Roman">USB legacy emulation is not yet supported by the simulator model. USB 2.0 support is very limited, only basic PCI configuration and memory read and write functionality is available.</font></p>
+
+  <p><font face="Times New Roman">By default, the simulator uses the keyboard device model to send user&#8217;s keystrokes to the simulation. For example, when the user presses Enter with the host mouse on the graphics display window, the simulator sends the internal command, <i>keyboard.key 0x10 0x80</i>, to its command interpreter. If the user has a USB keyboard or mouse in his simulation, he can redirect the simulator to use these USB devices for keyboard and mouse input. He does this by modifying the following simulator registry keys: <i>Gui_Key_Device</i>=<i>usbkey</i> and <i>Gui_Mouse_Device</i>=<i>usbmouse </i>(from the top-level <i>View&#8594;Registry</i>). With these changes, when the user presses the Enter key in simulation, the simulator will send the internal command, <i>usbkey.key 0x10 0x80</i> to its command interpreter. When the user moves the mouse around the simulator display, the simulator will send commands, such as <i>usbmouse.mousemouve 10 10</i> to the interpreter. </font></p></ul><p align="left"><a href="help-33.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-35.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

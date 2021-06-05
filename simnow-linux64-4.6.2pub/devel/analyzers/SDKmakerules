@@ -1,0 +1,61 @@
+## 
+## Copyright 1995 - 2004 ADVANCED MICRO DEVICES, INC.  All Rights Reserved. 
+##
+
+ifndef GOTRULES
+#
+# Used for SDK build as not part of AMD's SimNow build tree
+#
+
+# compiler and tools
+export CCC := g++
+export CC := gcc
+export LD := ld
+export AR := ar
+
+# clear out basic compiler flags
+export CXXFLAGS :=
+export DEFINES :=
+
+export INCLUDEDIRS :=
+
+# other variables to work with our makefiles
+export ANALYZER_DESTINATION_DIR := $(PROJROOT)/../analyzers
+
+endif
+
+#
+# These are part of our normal build
+#
+
+# More QT definitions
+export MOC := $(QT_BIN_DIR)/moc
+export UIC := $(QT_BIN_DIR)/uic
+
+# basic compiler flags
+export SDKINC += -I. -I..
+export CXX := $(CCC)
+export DEFINES += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DLINUX -DNEW_GUI -DNO_MFC_GUI -D_WITH_STBUF
+export CXXFLAGS += -fPIC -Wall $(DEFINES) $(SDKINC)
+
+#
+# Compilation target flags here
+#
+
+# This next 'if' may seem a bit funny, but it lets us use this
+# file as part of our internal build environment.  What we give
+# you is what we use!
+ifneq ($(SIMNOW_SPECIAL_TARGET), TRUE)
+
+ifneq ($(SIMNOW_DEBUG), TRUE)
+# This is the primary target we use!
+#  This corresponds to the old "fast" target.
+  CXXFLAGS += -O3 -fforce-addr -funroll-loops -g
+else
+# This is the old debug target
+  CXXFLAGS += -g -fno-inline-functions
+endif
+
+endif
+
+

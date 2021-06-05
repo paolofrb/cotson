@@ -1,0 +1,256 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="401">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-15.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-17.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P1654_100618"></a><font face="Arial" size="+1"><b><i>7.4 Emerald Graphics Device</i></b></font></h2>
+
+  <p><font face="Times New Roman">The Emerald graphics device <a name="P1655_100673"></a>provides an industry-standard PCI/AGP VGA-compatible video device<a name="P1655_100738"></a>. The device provides a fully functional set of PCI configuration registers. The AGP<a name="P1655_100822"></a> interface is currently somewhat minimal, and is not capable of generating AGP cycles nor AGP-specific modes at this time. </font></p>
+
+  <p><font face="Times New Roman">The Emerald graphics device is comprised of a standard VGA and the Emerald Graphics sub device. The graphics display engine automatically switches between the Emerald Graphics sub device and the VGA as necessary to display the selected video modes, with only one being able to display at a time. The VGA sub device provides an industry-standard VGA interface used by BIOS and DOS. The Emerald Graphics device provides an AGP and PCI graphics device interface controllable either by VESA BIOS extensions or a video driver. In addition to the VGA standard modes, Emerald Graphics supports a wide range of graphics modes from 320x200 at 16-bit color up to 2048x1536 at 32-bit color with either the VESA BIOS extensions or a video driver.</font></p>
+
+  <p><font face="Times New Roman"><b>Interfaces</b></font></p>
+
+  <p><font face="Times New Roman">The Emerald graphics device has a PCI slot, PCIe and an AGP bus connection, only one of which can be used at any time to connect to PCI slots, PCIe or AGP bus ports in other devices.</font></p>
+
+  <p><font face="Times New Roman"><b>Initialization and Reset State</b></font></p>
+
+  <p><font face="Times New Roman">Upon initial creation, this device initializes the internal registers to VGA standard reset state, and creates a display window that acts as the VGA display. The Configuration options are initialized to enable both the VGA and Emerald Graphics. The frame-buffer size is initialized to 16 Mbytes and the Bios File memory area is initialized to all ones.</font></p>
+
+  <p><font face="Times New Roman">A reset will re-load the default PCI configuration registers and place default values in the Chip and FIFO configuration for the Emerald Graphics device.</font></p>
+
+  <p><font face="Times New Roman"><b>Contents of a BSD</b></font></p>
+
+  <p><font face="Times New Roman">The data saved in the BSD depends on the mode the graphics controller was in when the BSD was saved. If the graphics controller was in VGA mode, the BSD file contains the contents of all VGA registers, a copy of the 256-Kbyte VGA frame buffer, and all configuration information. If the graphics controller was in a high-resolution mode (non-VGA in Windows) the frame buffer, Emerald Graphics registers, and PCI configuration registers are saved in the BSD. When the BSD file is reloaded, all registers and the frame buffer are restored, and a display image is captured and displayed in the display window.</font></p>
+
+  <p><font face="Times New Roman"><b>Configuration Options</b></font></p>
+
+  <p><b><font face="Times New Roman"><i>VGA Sub Device Configuration</i></font></b></p>
+
+  <p align="center"><img src="images/help-111.gif" border="0" width="421" height="194"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1675_103077"></a>Figure 7-7: Graphics-Device VGA Sub Device Properties Dialog</b></font></p>
+
+  <p><font face="Times New Roman">In <a href="#P1675_103077">Figure 7-7</a><i>,</i> the <i>BIOS File</i> option enables you to load different VGA BIOS ROMs into the device. The VGA ROM is assumed to be a maximum of 32-Kbytes, and is assigned to ISA bus address 0x000C0000 - 0x000C7FFF, which is the industry-standard location. This file must be a standard binary file, with the correct header and checksum information already incorporated.</font></p>
+
+  <p><font face="Times New Roman"><i>The VGA enabled</i> checkbox enables or disables the VGA registers. If it is not checked, the VGA registers are not updated and the display window will not display from the VGA frame buffer.</font></p>
+
+  <p><font face="Times New Roman"><b><i>Frame Buffer Sub Device Configuration</i></b></font></p>
+
+  <p><font face="Times New Roman">In <a href="#P1689_104176">Figure 7-8</a><i>,</i> the <i>Frame Buffer Size (Mbytes) </i>sets the size of the frame-buffer<a name="P1682_103802"></a> in megabytes. The value placed in this option is only read at reset. The frame-buffer size can not be dynamically modified.</font></p>
+
+  <p><font face="Times New Roman">The <i>Accelerator Enabled</i> checkbox enables or disables the graphics accelerator. The accelerator is enabled by default.</font></p>
+
+  <p><font face="Times New Roman">The <i>VESA BIOS Extensions Enabled</i> checkbox enables or disables the VESA BIOS support. The VESA BIOS Extensions are enabled by default.</font></p>
+
+  <p align="center"><img src="images/help-112.gif" border="0" width="421" height="325"></p>
+
+  <p align="center"><b><font face="Times New Roman"><a name="P1689_104176"></a>Figure 7-8: Graphics Device Frame Buffer SubDevice Properties</font></b></p>
+
+  <p><b><font face="Times New Roman">Difference from Real Hardware</font></b></p>
+
+  <p><font face="Times New Roman">The Emerald Graphics device currently does not simulate any specific graphics hardware, it simulates something functionally &#8220;like&#8221; a modern graphics adapter, with only 2D acceleration implemented at this time.  Drivers are Windows only at the moment.</font></p>
+
+  <p><font face="Times New Roman">When the VGA display window has the focus, any keyboard messages and mouse-click messages received by the window are routed via a <i>DEVCWINDOWMSG</i> message through the simulators I/O subsystem. The keyboard or mouse device accepts these messages and simulates key-presses and key-releases to match the keys. While certain key combinations do not result in the generation of keyboard messages by the OS, this does enable you to use the real keyboard to interact with the simulation in many cases.</font></p>
+
+  <p><font face="Times New Roman"><b>Supported VESA BIOS Graphics Modes</b></font></p>
+
+  <p><font face="Times New Roman">Only supports flat and linear frame buffer, with 16-bit/64K (5:6:5) colors and 32-bit/16.8M (8:8:8:8) colors modes.</font></p>
+
+<p><font face="Times New Roman"><a href="#P1721_105349">Table 7-2</a> shows the subset of &quot;standard&quot; VESA mode numbers supported.</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e6e6e6" valign="top" width="110"><p align="center"><font face="Times New Roman"><b>Mode Number</b></font></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="102"><p align="center"><b><font face="Times New Roman">Resolution</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="89"><p align="center"><b><font face="Times New Roman">Color depth</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">10Eh</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">320x200</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">16-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">111h</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">640x480</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">16-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">114h</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">800x600</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">16-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">117h</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">1024x768</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">16-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">11Ah</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">1280x1024</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">16-bit</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P1721_105349"></a>Table 7-2: Supported Standard VESA Modes</b></font></p>
+
+<p><font face="Times New Roman"><a href="#P1780_105788">Table 7-3</a> shows the supported custom VESA mode numbers.</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e6e6e6" valign="top" width="110"><p align="center"><font face="Times New Roman"><b>Mode Number</b></font></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="102"><p align="center"><b><font face="Times New Roman">Resolution</font></b></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="89"><p align="center"><b><font face="Times New Roman">Color depth</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">140h</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">320x200</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">32-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">141h</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">640x480</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">32-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">142h</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">800x600</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">32-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">143h</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">1024x768</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">32-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">144h</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">1280x720</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">16-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">145h</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">1280x720</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">32-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">146h</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">1280x960</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">16-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">147h</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">1280x960</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">32-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">148h</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">1280x1024</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">32-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">149h</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">1600x1200</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">16-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">14Ah</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">1600x1200</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">32-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">14Bh</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">1920x1080</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">16-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">14Ch</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">1920x1080</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">32-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">14Dh</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">1920x1200</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">16-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">14Eh</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">1920x1200</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">32-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">14Fh</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">2048x1536</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">16-bit</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="110"><p><font face="Times New Roman">150h</font></p>
+</td>
+<td valign="top" width="102"><p><font face="Times New Roman">2048x1536</font></p>
+</td>
+<td valign="top" width="89"><p><font face="Times New Roman">32-bit</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P1780_105788"></a>Table 7-3: Supported Custom VESA Modes</b></font></p>
+
+  <p><b><font face="Times New Roman">Improve Graphics Performance</font></b></p>
+
+  <p><font face="Times New Roman">When you run Windows in simulation and you open a menu, list box, tool-tips, or other screen element, the object may open very slow. To disable this option, use the following steps:</font></p>
+
+    <ul><p><font face="Times New Roman"><a name="P1784_106035"></a>1. Click <b>Start</b>, point to Settings, and then click <b>Control Panel</b>.</font></p>
+
+    <p><font face="Times New Roman">2. Double-click <b>Display</b>.</font></p>
+
+    <p><font face="Times New Roman">3. Click <b>Effects</b>, clear the <b>Use the following transition effects for menus and tooltips </b>check box, click <b>ok</b>, and then close Control Panel.</font></p></ul></ul><p align="left"><a href="help-15.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-17.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

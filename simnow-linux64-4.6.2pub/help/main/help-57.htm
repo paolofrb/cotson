@@ -1,0 +1,58 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="442">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-56.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-58.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><p><a name="P5753_282377"></a><b><font face="Arial" size="+1"><i>1.5 Known Issues</i></font></b></p>
+
+      <ul><ul><p><b><font face="Arial" size="+1"><a name="P5754_282393"></a>1.5.1 FSAVE/FRSTOR and FSTENV/FLDENV</font></b></p>
+
+  </ul></ul><p><font face="Times New Roman">When the simulator is executing FSAVE<a name="P5755_282466"></a>/FRSTOR<a name="P5755_282473"></a> and FSTENV<a name="P5755_282484"></a>/FLDENV<a name="P5755_282491"></a> in real-mode it is using the 16-bit protected-mode memory format. </font></p>
+
+      <ul><ul><p><font face="Arial" size="+1"><b><a name="P5756_282558"></a>1.5.2 Triple Faulting</b></font></p>
+
+  </ul></ul><p><font face="Times New Roman">If the processor encounters an exception while trying to invoke the double fault <a name="P5757_282660"></a>(#DF) exception handler, a triple fault exception occurs. This can rarely occur, but is possible. For example, if the invocation of a double fault exception causes the stack to overflow, then this would cause a triple fault. When this happens, the CPU will triple fault<a name="P5757_282929"></a> and cause a shutdown-cycle to occur. This special cycle should be interpreted by the motherboard hardware, which then pulls RESET, which ultimately resets the CPU and the computer.</font></p>
+
+  <p><font face="Times New Roman">However, the simulator does not simulate triple faults. In case a triple fault occurs, the simulator stops the simulation. The simulation cannot be restarted until a reset is asserted but the simulation state can be inspected with the simulator&#8217;s debugger.</font></p>
+
+      <ul><ul><p><font face="Arial" size="+1"><b><a name="P5760_283368"></a>1.5.3 Performance-Monitoring Counter Extensions</b></font></p>
+
+  </ul></ul><p><font face="Times New Roman">Setting CR4.PCE<a name="P5761_283430"></a> (bit 8) to 1 allows software running at any privilege level to use the RDPMC instruction. Software uses the RDPMC<a name="P5761_283544"></a> instruction to read the four performance-monitoring MSRs, PerfCTR[3:0]. Clearing PCE to 0 allows only the most-privileged software (CPL=0) to use the RDPMC instruction.</font></p>
+
+  <p><font face="Times New Roman">The simulator does support the RDPMC instruction but there is no logic behind the simulated performance counter MSRs.</font></p>
+
+      <ul><ul><p><font face="Arial" size="+1"><b><a name="P5764_283830"></a>1.5.4 Microcode Patching</b></font></p>
+
+  </ul></ul><p><font face="Times New Roman"><a name="P5765_283854"></a>Microcode patches do not affect the simulated machine behavior. This may have unintended consequences.</font></p>
+
+      <ul><ul><p><font face="Arial" size="+1"><b><a name="P5766_283956"></a>1.5.5 Instruction Coherency</b></font></p>
+
+  </ul></ul><p><font face="Times New Roman">Instruction coherency does not work when code pages<a name="P5767_284034"></a> have multiple virtual-mappings<a name="P5767_284065"></a>. Here is an example that would not work right:</font></p>
+
+    <ul><p><font face="Times New Roman">1. There is an x86 physical page that has code on it.</font></p>
+
+    <p><font face="Times New Roman">2. This page is mapped by two different virtual addresses, A and B</font></p>
+
+    <p><font face="Times New Roman">3. There is a store to virtual page A</font></p>
+
+    <p><font face="Times New Roman">4. We execute code from page B</font></p>
+
+    <p><font face="Times New Roman">5. We store again to A, modifying some of the x86 code that we executed in step 4</font></p>
+
+    <p><font face="Times New Roman">6. We execute the code from step 4 again</font></p>
+
+  </ul><p><font face="Times New Roman">&nbsp;</font></p>
+
+  <p><font face="Times New Roman">The code we execute in step 6 will probably be the old code because our page-based coherency mechanism depends on the software TLB to write protect pages which have x86 code that has been translated. However, this mechanism protects physical pages through the virtual mapping mechanism and this mechanism only knows about one virtual address mapping, not all possible mappings of any code page.</font></p>
+
+  <p><font face="Times New Roman"><!-- REX32 --></font></p>
+
+  <p><i><!-- The simulator does not simulate the REX32 features. Any attempt to enable the REX32 feature will causes a &#8216;FeatureNotImplemented&#8217; exception and the simulation will be stopped. --></i></p></ul><p align="left"><a href="help-56.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-58.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

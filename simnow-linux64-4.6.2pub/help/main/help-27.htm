@@ -1,0 +1,50 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="412">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-26.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-28.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P2777_146130"></a><font face="Arial" size="+1"><b><i>7.15 AMD-8132&#8482; PCI-X<sup>®</sup> Controller</i></b></font></h2>
+
+  <p><font face="Times New Roman">The AMD-8132<a name="P2778_146177"></a> PCI-X Controller is a HyperTransport tunnel<a name="P2778_146221"></a> that provides two PCI-X buses and two IOAPICs. These PCI-X buses may or may not be configured as hot-plug-capable, depending on the platform.</font></p>
+
+  <p><font face="Times New Roman"><b>Interface</b></font></p>
+
+  <p><font face="Times New Roman">AMD-8132 has two types of interfaces, HyperTransport and PCI buses. It has two HyperTransport links, HT0 and HT1 that can connect to other HyperTransport link-capable devices. Either HyperTransport link can be set to be the upstream HyperTransport link. The PCI bus interfaces in the AMD-8132 must be connected to a PCI Bus device, which provides the Slot interfaces with which to connect devices for simulation.</font></p>
+
+  <p><font face="Times New Roman"><b>Initialization and Reset State</b></font></p>
+
+  <p><font face="Times New Roman">When first initialized, AMD-8132 device is in its default state. This is described in detail in the AMD-8132 datasheet. Each bridge defaults with hot-plug functionality disabled. </font></p>
+
+  <p><font face="Times New Roman">When reset, AMD-8132 takes on all default register values.</font></p>
+
+  <p><font face="Times New Roman"><b>Contents of a BSD</b></font></p>
+
+  <p><font face="Times New Roman">The entire configuration of the AMD-8132 chipset, including all state and registers for its sub devices, is saved in the BSD.</font></p>
+
+  <p><font face="Times New Roman"><b>Configuration Options</b></font></p>
+
+  <p><font face="Times New Roman">The <i>Hot Plug</i> tab options for AMD-8132 are to enable or disable hot-plug for each of its PCI-X bridges, as shown in <a href="#P2795_147417">Figure 7-30</a>. You cannot enable or disable hot-plug after a simulation has already begun.</font></p>
+
+  <p align="center"><img src="images/help-135.gif" border="0" width="381" height="177"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2795_147417"></a>Figure 7-30: AMD-8132&#8482; Device Hot Plug Configuration</b></font></p>
+
+  <p><font face="Times New Roman"><a href="#P2799_147523">Figure 7-31</a> shows the <i>HT Link Configuration</i> options.</font></p>
+
+  <p align="center"><img src="images/help-136.gif" border="0" width="381" height="325"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2799_147523"></a>Figure 7-31: AMD-8132 Properties Dialog</b></font></p>
+
+  <p><font face="Times New Roman">The <i>Upstream HyperTransport Link</i><a name="P2800_147594"></a> selection, shown in <a href="#P2799_147523">Figure 7-31</a>, specifies the <i>HyperTransport Bus</i> that will be used as a upstream link.</font></p>
+
+  <p><font face="Times New Roman"><b>Differences from Real Hardware</b></font></p>
+
+  <p><font face="Times New Roman">Clock-sensitive functionality, like setting bus speed, is not supported. Neither are system errors, nor power management.</font></p></ul><p align="left"><a href="help-26.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-28.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

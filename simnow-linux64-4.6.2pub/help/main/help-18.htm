@@ -1,0 +1,96 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="403">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-17.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-19.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P2402_118124"></a><font face="Arial" size="+1"><b><i>7.6 ATI Radeon&#8482; HD 3870</i></b></font></h2>
+
+  <p><font face="Times New Roman">The <i>ATI Radeon</i></font><font face="Times New Roman"><i>&#8482; HD 3870</i> device model provides a simulation of an <i>ATI Radeon HD 3870</i> GPU and is the foundation for the new graphics architecture Microsoft DirectX<sup>®</sup> 10.1</font><font face="Times New Roman" size="-1"><sup><a href="#P2404_118319" name="P2404_118320">2</a></sup></font><font face="Times New Roman">. The functionality of this device model supports full OpenGL 2.0, DirectX 9, and will support all required features of DirectX 10.1. </font></p>
+
+  <p><font face="Times New Roman">This device model implements a small subset of 3D features which are used by operating systems to render graphical user interface components and it does not support enough features to run most modern 3D applications and games correctly. </font></p>
+
+  <p><font face="Times New Roman"><b>Interfaces</b></font></p>
+
+  <p><font face="Times New Roman">The <i>ATI Radeon HD 3870</i> device has a PCIe connection point. The PCIe port is used for connectivity upstream to a compatible Northbridge Device. See Section <a href="help-40.htm#P3824_212216">7.28</a>, &quot;<i><a href="help-40.htm#P3824_212216">ATI RS480/RS780/RD790/RD890 Northbridge Devices</a></i>&quot;, on page <a href="help-40.htm#P3824_212216">138</a> for more information</font></p>
+
+  <p><font face="Times New Roman"><b>Initialization and Reset State</b></font></p>
+
+  <p><font face="Times New Roman">Upon initial creation, this device initializes the internal GPU state to <i>ATI Radeon HD 3870</i> standard reset state, and creates a display window that acts as the VGA display. The board configuration options are loaded and initialized. Frame buffer memory is initialized to all zeros. Most of the simulated hardware features that are available during simulation depend on the specific board configuration settings. </font></p>
+
+  <p><font face="Times New Roman">A reset will re-load the default GPU and PCI configuration registers. The internal GPU state will be also set to the <i>ATI Radeon HD 3870</i> default values.</font></p>
+
+  <p><font face="Times New Roman"><b>Contents of a BSD</b></font></p>
+
+  <p><font face="Times New Roman">The data saved in the BSD depends on the mode the graphics controller was in when the BSD was saved. If the graphics controller was in VGA mode, the BSD file contains a copy of the 256-Kbyte VGA frame buffer, and all configuration information. If the graphics controller was in an accelerated graphics mode the entire linear frame buffer, is saved in the BSD. All modified GPU and PCI configuration registers, and the current GPU state of all blocks are saved in the BSD. Display device data and display device connection information are saved as well in the BSD.</font></p>
+
+  <p><font face="Times New Roman">When the BSD file is reloaded, the internal GPU state, registers and the frame buffer are restored, and a display image is captured and displayed in the display window.</font></p>
+
+  <p><font face="TimesEuropa Roman"><b>Configuration Options</b></font></p>
+
+  <p><font face="Times New Roman">It is recommended to install the latest available <i>ATI Radeon HD 3870</i> device drivers if you want to enable and use full DirectX and OpenGL support. Please refer to <u><!-- TRANSIT - HYPERLINK --><!-- .http://www.ati.com/drivers. --><a href="http://www.ati.com/drivers" target="_top">http://www.ati.com/drivers</a></u> for more information about available device drivers. </font></p>
+
+  <p><font face="Times New Roman">In most cases the simulated graphics perfromance can be improved by reducing the simulated video resolution to 800x600 or 1024x768.</font></p>
+
+  <p><font face="Times New Roman">To obtain detailed information about this device model and its hardware configuration, such as memory size and general BIOS information, please open the GUI device property dialog and then click on the <i>Information</i> tab (see <i><a href="#P2432_121082">Figure 7-13</a></i>). </font></p>
+
+  <p><img src="images/help-119.gif" border="0" width="576" height="467"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2432_121082"></a>Figure 7-13: ATI Radeon HD 3870 Configuration Information</b></font></p>
+
+  <p><font face="Times New Roman"><a href="#P2443_122020"><i>Figure 7-14</i></a> shows detailed information about the connected display device, such as &#8220;<i>Basic Display Parameters</i>&#8221;, &#8220;<i>Standard Timings</i>&#8221;, &#8220;<i>Color / Estabilished Timings</i>&#8221;, and &#8220;<i>Raw Data</i>&#8221; (see <a href="#P2445_122061"><i>Figure 7-15</i></a>). </font></p>
+
+  <p><font face="Times New Roman">Additional display devices can be added and used by importing <b><i><u>E</u></i></b>xtended <b><i><u>D</u></i></b>isplay <b><i><u>I</u></i></b>dentification <b><i><u>D</u></i></b>ata (EDID). To import EDID open the GUI device property dialog and then click on the &#8220;<i>Import EDID</i>&#8221; button. Automation commands can be used alternatively, see section <i><a href="help-59.htm#P10999_434771">A.7.31</a></i>, <i><a href="help-59.htm#P10999_434771">ATI Radeon HD 3870</a></i>, on page <i><a href="help-59.htm#P10999_434771">253</a></i>. EDID versions up to version 1.3 are supported. EDID files contain 128 byte of user defined EDID information in binary format. </font></p>
+
+  <p><font face="Times New Roman">Note that SimNow does not provide any tools to create EDID binary files.</font></p>
+
+  <p><font face="Times New Roman">The <i>Display Device</i> drop down list can be used to select a different display device. By default the <i>ATI Radeon HD 3870</i> is connected to the <i>AMD SimNow Display Device</i>.</font></p>
+
+  <p align="center"><img src="images/help-120.gif" border="0" width="583" height="473"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2443_122020"></a>Figure 7-14: Display Device configuration</b></font></p>
+
+  <p align="center"><img src="images/help-121.gif" border="0" width="588" height="477"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2445_122061"></a>Figure 7-15: Extended Display Identification Data Viewer</b></font></p>
+
+  <p><b><font face="Times New Roman">Difference from Real Hardware</font></b></p>
+
+  <p><font face="Times New Roman">The <i>ATI Radeon HD 3870</i> device model is a faithful simulation of the software-visible portion of an <i>ATI Radeon HD 3870</i> adapter; it is not a model of the specific <i>ATI Radeon HD 3870</i> hardware. Because of this, the graphics device model is not equivalent in certain areas. Any issues related to timing, such as the vertical retrace time, DAC, CRTC and GPU clock timing, will be different. Any software that depends on exact timing behavior may not function correctly.</font></p>
+
+<p><font face="Times New Roman">The following features are not supported in this version of the <i>ATI Radeon HD 3870</i> device model. Any software that depends on these features may not function correctly.</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="582"><p align="center"><font face="Times New Roman"><b>Unsupported Feature List</b></font></p>
+</td></tr>
+<tr>
+<td valign="top" width="582"><p><font face="Times New Roman">DirectX 10+ (shader constant buffer, geometry processing, shader import/export from memory, DirectX 10 shader instructions)</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="582"><p><font face="Times New Roman">Flow control and conditional shader instructions</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="582"><p><font face="Times New Roman">Texture Filtering, mip mapping, LOD, anti-aliasing, blending weight generation, depth filtering</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="582"><p><font face="Times New Roman">Line color gradients, wireframe fill mode, Fog</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="582"><p><font face="Times New Roman">UVD</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="582"><p><font face="Times New Roman">Dual screen configurations and display hotplug detection</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="582"><p><font face="Times New Roman">ATI CrossFire&#8482;</font></p>
+</td></tr></table></center></ul>
+
+<p><font face="Times New Roman" size="-1"><sup><a name="P2404_118319" href="#P2404_118320">2</a> </sup></font><font face="Times New Roman"> ATI Radeon HD 3870 device model supports DirectX 9 version (including DirectX 9Ex) and earlier versions of DirectX. DirectX 10 and DirectX 10.1 are not supported.</font></p><p align="left"><a href="help-17.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-19.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

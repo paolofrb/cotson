@@ -1,0 +1,22 @@
+<bsg_file version="1.0">
+
+<!--
+The empty unnamed device
+-->
+
+<!--
+// {14F6E22C-7C89-4ec7-BC11-DFFD65867594}
+static const GUID <<name>> = 
+{ 0x14f6e22c, 0x7c89, 0x4ec7, { 0xbc, 0x11, 0xdf, 0xfd, 0x65, 0x86, 0x75, 0x94 } };
+-->
+
+<!--
+flags:
+#define ICF_DEPRECATED		0x1
+#define ICF_NOTACTIVE		0x2	//Device is not active. Dont show in Device Window
+-->
+
+<!--//UserManual@Section:7.31 AMD &#8220;Magny-Cours&#8221; Device-->
+<bsg name="Unnamed Group" desc="this is what you get if you use an automation command to create a device group by grouping a list of devices" icon="./icons/unnamed.png" help="help/main/html/help-xx.htm" GUID="14F6E22C-7C89-4ec7-BC11-DFFD65867594" flags="1"/>
+
+</bsg_file>

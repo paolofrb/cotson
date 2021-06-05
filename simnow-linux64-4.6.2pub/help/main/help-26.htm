@@ -1,0 +1,42 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="411">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-25.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-27.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P2753_144682"></a><font face="Arial" size="+1"><b><i>7.14 AMD-8131&#8482; PCI-X<sup>®</sup> Controller</i></b></font></h2>
+
+  <p><font face="Times New Roman">The AMD-8131 PCI-X Controller is a HyperTransport tunnel that provides two PCI-X<a name="P2754_144797"></a> buses and two IOAPICs. These PCI-X buses may or may not be configured as hot-plug-capable, depending on the platform.</font></p>
+
+  <p><font face="Times New Roman"><b>Interfaces</b></font></p>
+
+  <p><font face="Times New Roman">The AMD-8131 has two types of interfaces, HyperTransport and PCI buses. It has two HyperTransport links, HT0 and HT1, that can connected to other non-coherent HyperTransport link-capable devices. The PCI bus interfaces in the AMD-8131 must be connected to a PCI bus device, which provides the Slot interfaces with which to connect devices for simulation.</font></p>
+
+  <p><font face="Times New Roman"><b>Initialization and Reset State</b></font></p>
+
+  <p><font face="Times New Roman">When first initialized, the AMD-8131 tunnel is in its default state. This is described in detail in the AMD-8131 datasheets. Each bridge defaults with hot-plug functionality disabled. </font></p>
+
+  <p><font face="Times New Roman">When reset, the AMD-8131 takes on all default register values.</font></p>
+
+  <p><font face="Times New Roman"><b>Contents of a BSD</b></font></p>
+
+  <p><font face="Times New Roman">The entire configuration of the AMD-8131 device, including all state and registers for its sub devices, is saved in the BSD.</font></p>
+
+  <p><font face="Times New Roman"><b>Configuration Options</b></font></p>
+
+  <p><font face="Times New Roman">The only configuration options for AMD-8131 are to enable or disable hot-plug for each of its PCI-X bridges, as shown in <a href="#P2771_145926">Figure 7-29</a>. You cannot enable or disable hot-plug after a simulation has already begun.</font></p>
+
+  <p align="center"><img src="images/help-134.gif" border="0" width="381" height="177"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2771_145926"></a>Figure 7-29: AMD-8131&#8482; Device Hot Plug Configuration</b></font></p>
+
+  <p><b><font face="Times New Roman">Differences from Real Hardware</font></b></p>
+
+  <p><font face="Times New Roman">Clock-sensitive functionality, like setting bus speeds, is not supported. Neither are system errors or power management.</font></p></ul><p align="left"><a href="help-25.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-27.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

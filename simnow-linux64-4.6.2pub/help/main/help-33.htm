@@ -1,0 +1,32 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="418">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-32.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-34.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P2907_155702"></a><b><font face="Arial" size="+1"><i>7.21 EXDI Server Device</i></font></b></h2>
+
+  <p><font face="Times New Roman">This interface, and the instructions contained herein, applies only to the Windows operating system-hosted version of the simulator.</font></p>
+
+  <p><font face="Times New Roman">The simulator provides a special device known as the EXDI<a name="P2910_155914"></a> Server Device. This device can be added to any BSD. When a BSD containing the EXDI Server Device is loaded, the EXtended Debugging Interface becomes available. This allows client debugging software, such as CmdeXdi and the Windows kernel debugger, to interact with the platform being simulated, as if it were a real hardware platform. </font></p>
+
+  <p><font face="Times New Roman">The installation of the simulator should provide all the COM registration hooks that are required. If it does not, here are the steps to manually register the EXDI server: </font></p>
+
+    <ul><p><font face="Times New Roman">1. Open a command window (run cmd.exe).</font></p>
+
+    <p><font face="Times New Roman">2. Change the current directory to the location where the simulator was installed.</font></p>
+
+    <p><font face="Times New Roman">3. Execute the command [Regsvr32 exdi64ps.dll]. You should get a message box indicating that registration was successful.</font></p>
+
+    <p><font face="Times New Roman">4. Execute the command [Regrgs exdiamdserver.rgs MODULE=&quot;path and file name of exdi64ps.dll, usually C:\SimNow\exdi64ps.dll&quot;].</font></p>
+
+  </ul><p><font face="Times New Roman">When running the Windows kernel debugger<a name="P2919_156830"></a>, you must provide command line information that tells the debugger how to attach to the EXDI Server. The command line for this is: </font></p>
+
+  <blockquote><blockquote><p><font face="Courier New">kd -kx exdi:clsid={F65E71B3-FEDC-4FA7-A818-5959CD30DD41}</font></p></blockquote></blockquote></ul><p align="left"><a href="help-32.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-34.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

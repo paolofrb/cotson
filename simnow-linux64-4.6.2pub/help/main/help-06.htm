@@ -1,0 +1,189 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="391">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-05.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-07.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><p align="left"><a name="P514_18880"></a><img src="images/gtabsepm.gif"></p>
+<h1><font face="Arial" size="+2"><b>2 Installation</b></font></h1>
+
+  <h2><a name="P515_18894"></a><b><font face="Arial" size="+1"><i>2.1 System Requirements</i></font></b><a name="P515_18917"></a></h2>
+
+  <p><font face="Times New Roman">The AMD SimNow&#8482; simulator runs on both Linux<sup>®</sup> 64 for AMD systems and Windows<sup>®</sup> for 64-bit AMD systems.&nbsp;</font></p>
+
+  <p><font face="Times New Roman">The requirements for each system are as follows:</font><a name="P518_19072"></a></p></ul>
+<p><ul>
+<center><table>
+<tr>
+<td width="128"></td>
+<td width="234"></td>
+<td width="216"></td></tr>
+<tr>
+<td valign="top" width="128">&#160;
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="234"><p><font face="Times New Roman"><b>Linux</b><sup>®</sup><b> 64 for AMD64</b></font></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="216"><p><font face="Times New Roman"><b>Windows</b><sup>®</sup><b> XP 64Bit Edition for AMD64</b></font></p>
+</td></tr>
+<tr>
+<td bgcolor="#e6e6e6" valign="top" width="128"><p><b><font face="Times New Roman">OS Distribution</font></b></p>
+</td>
+<td valign="top" width="234"><p><font face="Times New Roman">Any of the following 64-Bit Linux distributions for AMD64.</font></p>
+  <ul><p><font face="Times New Roman">&#8226; SuSE 9 Pro and newer</font></p>
+  <p><font face="Times New Roman">&#8226; RedHat 64Bit Enterprise 3 and above</font></p>
+<p><font face="Times New Roman">&#8226; Fedora Core 2 and newer.</font></p></ul>
+</td>
+<td valign="top" width="216"><p><font face="Times New Roman">Windows XP x64 Edition or Windows Server 2003 x64 Edition for AMD64. </font></p>
+</td></tr>
+<tr>
+<td bgcolor="#e6e6e6" valign="top" width="128"><p><font face="Times New Roman"><i>Recommended</i></font></p>
+</td>
+<td valign="top" width="234"><p><font face="Times New Roman">SuSE 9.1 or newer for AMD64.</font></p>
+</td>
+<td valign="top" width="216"><p><font face="Times New Roman">Build 1218 or newer.</font></p>
+</td></tr>
+<tr>
+<td bgcolor="#e6e6e6" valign="top" width="128"><p><font face="Times New Roman"><b>Memory</b></font></p>
+</td>
+<td colspan="2" valign="top" width="450"><p><font face="Times New Roman">Approx. 64MB of memory, plus </font></p>
+<p><font face="Times New Roman">Approx. 150 MB of memory for each simulated processor, plus the amount of simulated RAM.</font></p>
+</td></tr>
+<tr>
+<td bgcolor="#e6e6e6" valign="top" width="128"><p><font face="Times New Roman"><b>Processor</b></font></p>
+</td>
+<td colspan="2" valign="top" width="450"><p align="center"><font face="Times New Roman">AMD Athlon&#8482; 64 or AMD Opteron&#8482;.</font></p>
+</td></tr>
+<tr>
+<td bgcolor="#e6e6e6" valign="top" width="128"><p><font face="Times New Roman"><b>Hard Disk Space</b></font></p>
+</td>
+<td colspan="2" valign="top" width="450"><p align="center"><font face="Times New Roman">1 Gigabyte of free hard disk space for the simulator and devices plus 3 Gigabytes free space for disk file images.</font></p>
+</td></tr>
+<tr>
+<td bgcolor="#e6e6e6" valign="top" width="128"><p><font face="Times New Roman"><b>Other Hardware</b></font></p>
+</td>
+<td colspan="2" valign="top" width="450"><p align="center"><font face="Times New Roman">3.5-inch, 1.44-MB floppy drive.</font></p>
+<p align="center"><font face="Times New Roman">CD-ROM Drive.</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P549_19774"></a>Table 2-1: Software and Hardware Requirements</b></font></p>
+
+  <p><font face="Times New Roman">Running the simulator on a Linux kernel prior to version 2.6.10 may cause the simulator to malfunction. The bug is in the 64-bit path only, and the symptom is in signals that are not associated with &quot;system calls&quot; still being treated as &quot;system calls&quot; as they go back to user space, i.e. in certain cases it tries to restart the &quot;system call&quot; even when it did not come from a &quot;system call&quot;. Updating the Linux kernel to kernel version 2.6.10 or later resolves this problem.</font></p>
+
+  <p><font face="Times New Roman">The simulator may stress the system more than most applications, including the base operating system. AMD has received reports that the simulator has caused some systems to crash, and in general this has been traced to unstable hardware. Hardware instability can also crash applications or operating systems inside the simulator.</font></p>
+
+  <h2><a name="P553_20621"></a><font face="Arial" size="+1"><b><i>2.2 Installation Procedure</i></b></font></h2>
+
+  <p><font face="Times New Roman">Insert the CD-ROM into your system's CD-ROM drive, or download the simulator program and its data files from <u><!-- TRANSIT - HYPERLINK --><!-- .http://developer.amd.com/simnow.aspx. --><a href="http://developer.amd.com/simnow.aspx" target="_top">http://developer.amd.com/simnow.aspx</a></u>. Browse to the root directory of the CD or to the path where the downloaded simulator is stored, and begin the installation, as follows. To install under Windows, double-click on the self-extracting executable. To install under Linux, extract the zipped tar file as shown below:</font></p>
+
+      <blockquote><blockquote><p><font face="Courier New">tar &#8211;xzf Simnow-Linux64-&lt;version&gt;.tar.gz</font></p>
+
+  </blockquote></blockquote><h2><a name="P557_21113"></a><font face="Arial" size="+1"><b><i>2.3 Directory Structure and Executable</i></b></font></h2>
+
+  <p><font face="Times New Roman">After the opening screen and license agreement are displayed, you will be prompted to choose an installation directory. When you select this, the install program will copy the executable files and device models to the selected directory and setup the registry entries necessary to run the simulator.</font></p>
+
+  <p><font face="Times New Roman">The install program will create the following subdirectories under the install directory:</font></p>
+
+  <p><img src="images/help-3.gif" border="0" width="588" height="210"><br>
+</p>
+
+  <p><img src="images/help-4.gif" border="0" width="440" height="34"><br>
+</p>
+
+  <p><font face="Times New Roman" size="-1"><i><sup>1 </sup>Under Windows each model is a Windows DLL. Under Linux each model is a Linux library. Each model has a &quot;.bsl&quot; extension.</i></font></p>
+
+  <h2><a name="P572_21661"></a><i><font face="Arial" size="+1"><b>2.4 Setting<sup>®</sup> up Linux for the Simulator</b></font></i></h2>
+
+  <p><font face="Times New Roman">Make a file: &quot;<i>/etc/sysctl.conf</i>&quot; (or add to the existing one)</font></p>
+
+  <p><font face="Courier New"># This is here to make sure we get enough &quot;mmap&quot;able virtual address</font></p>
+
+  <p><font face="Courier New"># space<a name="P576_21836"></a>, in 4K pages.  It defaults to 65536, which is generally</font></p>
+
+  <p><font face="Courier New"># too small.</font></p>
+
+  <p><font face="Courier New">vm.max_map_count = 1048576</font></p>
+
+  <p><font face="Courier New"># This line doesn't need to be here for newer Linux kernels, but some</font></p>
+
+  <p><font face="Courier New"># early AMD64 Linux kernels would log SEGV<a name="P581_22041"></a>s even if a process had a</font></p>
+
+  <p><font face="Courier New"># handler for them, which is what SimNow does.</font></p>
+
+  <p><font face="Courier New">debug.exception-trace = 0</font></p>
+
+  <p align="center"><font face="Times New Roman"><b>Example 2-1: Setting up Linux for the Simulator</b></font></p>
+
+  <p><font face="Times New Roman">Then run &quot;<i>sysctl -p</i>&quot;, or make sure the boot sequence does this if you don't want to run it at each reboot.</font></p>
+
+  <p><font face="Times New Roman">Newer Linux distributions may set a per-process memory limit by default. SimNow allocates a large amount of memory that is never touched. This untouched memory will not be backed by DRAM or swap, but Linux counts it against SimNows process memory limit when it comes to resource limits.</font></p>
+
+  <p><font face="Times New Roman">You can unset the per-process memory limits by running the following commands as root.</font></p>
+
+      <blockquote><ul><p><font face="Courier New">ulimit -m unlimited</font></p>
+
+      <p><font face="Courier New">ulimit -v unlimited</font></p>
+
+  </ul></blockquote><h2><a name="P593_22700"></a><font face="Arial" size="+1"><b><i>2.5 Configuration File</i></b></font></h2>
+
+  <p><font face="Times New Roman">The simulator's configuration file is a text file that may be edited and that is stored in different locations depending on which host OS you are using.</font></p>
+
+  <p><font face="Times New Roman">If you are using Windows as host operating system the configuration file<a name="P596_22946"></a> is located in:</font></p>
+
+      <blockquote><ul><p><font face="Courier New">C:\Documents and Settings\All Users\Application Data\simnowrc</font></p>
+
+  </ul></blockquote><p><font face="Times New Roman">If you are using Linux as host operating system the configuration file is located in:</font></p>
+
+      <blockquote><ul><p><font face="Courier New">$HOME/.qt/simnowrc</font></p>
+
+  </ul></blockquote><p><font face="Times New Roman">Here is an example of the contents of this file, with an explanation: </font></p>
+
+      <blockquote><ul><p><font face="Courier New">[General]</font></p>
+
+      <p><font face="Courier New">[UserKeys]</font></p>
+
+      <p><font face="Courier New">CTL-ESC=Sends a CTL-ESC to the application,1D 01 81 9D</font></p>
+
+      <p><font face="Courier New">ALT-F4=Sends an ALT-F4 to the application,38 3e be b8</font></p>
+
+      <p><font face="Courier New">[UserBottons]</font></p>
+
+      <p><font face="Courier New">BUTTON0=&#8221;MyIconPath\MyIcon.png&#8221;,&#8220;cpu.name&#8221;</font></p>
+
+  </ul></blockquote><p><font face="Times New Roman">The configuration file is divided into sections, with each section title enclosed in square brackets. This particular example includes three sections, named [General], [UserKeys] and [UserBottons]. </font></p>
+
+  <p><font face="Times New Roman">All user key definitions<a name="P617_23606"></a> are stored in the [UserKeys] section. Each user key definition is defined by a single line. This example defines two user keys. The string to the left of the equal sign is the string that will be placed in the menu. To the right of the equal sign are two strings, separated by a comma. The first string is the text that is displayed when the user clicks on the &quot;<i>What's This</i>&quot; help button, and the second string is the list of scan codes that are sent when this menu item is selected. </font></p>
+
+  <p><font face="Times New Roman">The two examples shown can also be generated by the &#8220;<i>Generate Key Codes</i>&#8221; menu item on the &#8220;<i>Special Keyboard</i>&#8221; menu, see Section<i> <a href="help-09.htm#P1206_77420">5.2.3</a>, &#8220;<a href="help-09.htm#P1206_77420">Interaction with the Simulated Machine</a>&#8221;, </i>on page<i> <a href="help-09.htm#P1206_77420">45</a>. </i></font></p>
+
+  <p><font face="Times New Roman">All user button definitions<a name="P621_24317"></a> are stored in the [UserButtons] section. Each user button definition is defined by a single line. This example defines one user button (BUTTON0). The string to the left of the equal sign is the path including the file name of the icon that will be placed in the toolbar menu. To the right of the equal sign is the string that represents the automation command (please refer to Section <a href="help-59.htm#P9811_384062">A.7</a>, &#8220;<i><a href="help-59.htm#P9811_384062">Automation Commands</a></i>&#8221;, on page <a href="help-59.htm#P9811_384062">228</a>) that will be executes when the user clicks on the defined user button.</font></p>
+
+  <p><font face="Times New Roman">Note that minimal parsing of the text is done, so it is important that <b><u>no spaces</u></b> exist around the separating comma.</font></p>
+
+  <h2><a name="P624_24933"></a><font face="Arial" size="+1"><b><i>2.6 Updates and Questions</i></b></font></h2>
+
+  <p><font face="Times New Roman">Please refer to the <i><u>Release Notes</u></i> located at &quot;<i>SimNow\docs</i>&quot; to obtain the latest information about the simulator. If you have any question regarding the simulator please refer to Section <a href="help-54.htm#P4673_264928">15</a>, &#8220;<i><a href="help-54.htm#P4673_264928">Frequently Asked Questions (FAQ)</a>&#8221;,</i> on page <a href="help-54.htm#P4673_264928">177</a> or contact your AMD account representative.</font></p>
+
+  <p><font face="Times New Roman">Appendixes are provided that describe: </font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; <a href="help-55.htm#P4798_270271">Format of Floppy and Hard-Drive Images</a>, page <a href="help-55.htm#P4798_270271">181</a></font></p>
+
+    <p><font face="Times New Roman">&#8226; <a href="help-55.htm#P4811_272693">Bill of Material</a>, page <a href="help-55.htm#P4811_272693">182</a></font></p>
+
+    <p><font face="Times New Roman">&#8226; <a href="help-55.htm#P5386_278533">Supported Guest Operating Systems</a>, page <a href="help-55.htm#P5382_278276">184</a></font></p>
+
+    <p><font face="Times New Roman">&#8226; <a href="help-56.htm#P5438_280083">CPUID</a>, page <a href="help-56.htm#P5438_280083">186</a></font></p>
+
+    <p><font face="Times New Roman">&#8226; <a href="help-57.htm#P5753_282377">Known Issues</a>, page <a href="help-57.htm#P5753_282377">188</a></font></p>
+
+    <p><font face="Times New Roman">&#8226; <a href="help-58.htm#P5782_285004">Instruction Reference</a>, page <a href="help-58.htm#P5782_285004">190</a> </font></p>
+
+    <p><font face="Times New Roman">&#8226; <a href="help-59.htm#P9811_384062">Automation Commands</a>, page <a href="help-59.htm#P9811_384062">228</a></font></p>
+
+    </ul><p><font face="Times New Roman"> </font></p></ul><p align="left"><a href="help-05.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-07.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

@@ -1,0 +1,84 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="408">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-22.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-24.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P2609_131026"></a><font face="Arial" size="+1"><b><i>7.11 AMD 8th Generation Integrated Northbridge Device</i></b></font></h2>
+
+  <p><font face="Times New Roman">The AMD 8th Generation Integrated Northbridge<a name="P2610_131124"></a> device supports the AMD 8th generation family of processors - AMD Athlon&#8482; 64 and AMD Opteron&#8482; processors. Although the physical processor chip has a Northbridge built in, for simulation purposes, the Northbridge is considered as a separate unit. Features include HyperTransport&#8482; technology<a name="P2610_131420"></a> (for coherent and non-coherent connections) and a memory controller. The integrated debugging functions of the 8<sup>th</sup> generation processors are not included.</font></p>
+
+  <p><font face="Times New Roman"><b>Interface</b></font></p>
+
+  <p><font face="Times New Roman">The Northbridge device has several connection points. It has multiple HyperTransport bus ports that connects to the other AMD 8th Generation Integrated Northbridge devices, or to HyperTransport link-capable devices <a name="P2613_131799"></a> (e.g., AMD-8131 PCI-X device). These ports are mutually exclusive, and should be connected to only one other device. The Northbridge also has a memory bus to the DIMM devices. The CPU bus gives connection points for the CPU. The final port is a system-message bus port for connection with a Log device. A 940-pin 8<sup>th</sup> generation processor part (AMD Opteron) has three HyperTransport ports; a 754-pin 8<sup>th</sup> generation processor part (AMD Athlon 64) has one HyperTransport port.</font></p>
+
+  <p><font face="Times New Roman"><b>Initialization and Reset State</b></font></p>
+
+  <p><font face="Times New Roman">When first initialized, the Northbridge device is in the default state. This is described in detail in the 8<sup>th</sup> generation processor PCI register specification.</font></p>
+
+  <p><font face="Times New Roman">When reset, the Northbridge device takes on all default register values.</font></p>
+
+  <p><font face="Times New Roman"><b>Contents of a BSD</b></font></p>
+
+  <p><font face="Times New Roman">The BSD file contains the contents of all Northbridge registers. It also saves the contents of any tables and the states of all internal devices (the memory controller, HyperTransport&nbsp;table contents, etc.). When the BSD file is read in, all tables are filled with past data, and all states are restored to their saved states.</font></p>
+
+  <p><font face="Times New Roman"><b>Configuration Options</b></font></p>
+
+  <p><font face="Times New Roman"><a href="#P2627_132973">Figure 7-20</a> and <a href="#P2633_133263">Figure 7-21</a> show configuration options for the Northbridge.</font></p>
+
+  <p align="center"><img src="images/help-126.gif" border="0" width="434" height="325"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2627_132973"></a>Figure 7-20: Northbridge Logging Capabilities Properties Dialog</b></font></p>
+
+  <p><font face="Times New Roman">If <i>Log PCI Configuration Cycles</i> is selected, the device will produce log messages whenever PCI configuration registers are accessed.</font></p>
+
+  <p><font face="Times New Roman">If <i>Log HyperTransport Message Routing </i>is selected, the device will log HyperTransport messages<a name="P2630_133262"></a>.</font></p>
+
+  <p align="center"><img src="images/help-127.gif" border="0" width="434" height="325"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2633_133263"></a>Figure 7-21: Northbridge HT Link Configuration Properties Dialog</b></font></p>
+
+  <p><font face="Times New Roman">If the <i>DDR DRAM Controller</i> is selected, the device will support DDR DRAM. In order to use DDR2 DRAM select the <i>DDR2 DRAM Controller</i>.</font></p>
+
+  <p><font face="Times New Roman">Each HyperTransport link<a name="P2636_133483"></a> can be enabled separately. Each link can be 8- or 16-bits wide. Only the 940-pin AMD Opteron processor can have three links; a 754-pin AMD Athlon 64 has one HyperTransport port.</font></p>
+
+  <p><img src="images/help-128.gif" border="0" width="576" height="333"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2639_133661"></a>Figure 7-22: Northbridge DDR2 Training Properties Dialog</b></font></p>
+
+  <p><font face="Times New Roman">When the <i>DDR2 DRAM Controller</i> is selected and DDR2 DRAM is being used you can manually modify these values to verify the correctness of the DDR2 training algorithmn. </font></p>
+
+  <p><font face="Times New Roman">The <i>DDR2 Training Properties Dialog</i> contains the lowest and highest values that the BIOS can program into these registers. While these registers are programmed out of bounds DRAM access will be corrupted.</font></p>
+
+  <p><font face="Times New Roman">Note the <i>DDR2 Training Properties Dialog</i> is only useful for BIOS developer and the values should only be modified and used by BIOS developers.</font></p>
+
+  <p><font face="Times New Roman"><b>Log Messages</b></font></p>
+
+  <p><font face="Times New Roman"><a name="P2647_134241"></a>If <i>Log PCI Configuration Cycles</i> is selected, the device produces log messages whenever the PCI configuration data register (0xCFC) is accessed. Log files can get <b>very</b> large. Reads from this I/O-mapped register produce PCI CONFIG READ messages, and writes to the register produce PCI CONFIG WRITE messages. The formats of the PCI CONFIG READ and PCI CONFIG WRITE messages are as follows:</font></p>
+
+      <blockquote><blockquote><p><font face="Times New Roman"><a name="P2649_134627"></a>PCI CONFIG READ Bus a, Device b, Function c, Register d, Data e</font></p>
+
+      <p><font face="Times New Roman"><a name="P2650_134690"></a>PCI CONFIG WRITE Bus a, Device b, Function c, Register d, Data e</font></p>
+
+  </blockquote></blockquote><p><font face="Times New Roman"><a name="P2652_134754"></a>where a, b, c, d, and e are all hexadecimal numbers. </font></p>
+
+  <p><font face="Times New Roman"><a name="P2654_134807"></a>The data value, e, is always one byte (two hex digits) in width. The device will log multiple messages for PCI configuration accesses that are greater than one byte in width. For example, a dword read of 0x11223344 from PCI configuration register 0x40 of device 7, function 1 on bus 0 would produce the following log messages: </font></p>
+
+      <blockquote><blockquote><p><font face="Times New Roman"><a name="P2656_135134"></a>PCI CONFIG READ Bus 0, Device 7, Function 1, Register 40, Data 44</font></p>
+
+      <p><font face="Times New Roman"><a name="P2657_135199"></a>PCI CONFIG READ Bus 0, Device 7, Function 1, Register 41, Data 33</font></p>
+
+      <p><font face="Times New Roman"><a name="P2658_135264"></a>PCI CONFIG READ Bus 0, Device 7, Function 1, Register 42, Data 22</font></p>
+
+      <p><font face="Times New Roman">PCI CONFIG READ Bus 0, Device 7, Function 1, Register 43, Data 11</font></p>
+
+  </blockquote></blockquote><p><font face="Times New Roman"><b>Differences from Real Hardware</b></font></p>
+
+  <p><font face="Times New Roman">The Northbridge device differs from the real hardware in that the simulator does not support the debug hardware registers. The device also does not support memory-interleaving by node, though this will change in the near future. The device will differ in those things that are of a timing-related nature, such as setting of bus speeds. Full probe transactions are not modeled. Registers that deal with items outside of the testing of transfer protocols at the register level are not functional (buffer count registers, etc.). They are present and read/write able, but do not effect the simulation.</font></p></ul><p align="left"><a href="help-22.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-24.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

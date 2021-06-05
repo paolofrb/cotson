@@ -1,0 +1,96 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="404">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-18.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-20.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P2463_123188"></a><font face="Arial" size="+1"><b><i>7.7 Super IO Devices: Winbond W83627HF SIO/ITE 8712 SIO</i></b></font></h2>
+
+  <p><font face="Times New Roman">Device models of the Super IO<a name="P2464_123272"></a> device contain the keyboard, PS/2 mouse<a name="P2464_123312"></a>, floppy, COM1<a name="P2464_123326"></a>, COM2<a name="P2464_123332"></a>, LPT1<a name="P2464_123338"></a>, IR<a name="P2464_123342"></a>, fan<a name="P2464_123347"></a>, GPIO<a name="P2464_123353"></a>, MIDI<a name="P2464_123359"></a>, and joystick<a name="P2464_123373"></a> devices, as well as PCI support and control information. The COM1 and COM2 devices create named-pipes &quot;<i>SimNow.Com1</i>&quot; and &quot;<i>SimNow.Com2</i>&#8221; and send all serial communication through these. </font><a name="P2464_123559"></a></p>
+
+  <p><font face="Times New Roman"><b>Interfaces</b></font></p>
+
+  <p><font face="Times New Roman">The Super IO device model has a single interface connection, and is connected to the LPC connection of the Southbridge device.</font></p>
+
+  <p><font face="Times New Roman"><b>Initialization and Reset State</b></font></p>
+
+  <p><font face="Times New Roman">The following conditions represent the keyboard and/or mouse during initialization and reset state:</font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; A20<a name="P2472_123831"></a> and reset released. </font></p>
+
+    <p><font face="Times New Roman">&#8226; Mouse scaling set to 1. </font></p>
+
+    <p><font face="Times New Roman">&#8226; Mouse resolution set to 4. </font></p>
+
+    <p><font face="Times New Roman">&#8226; Stream mode off. </font></p>
+
+    <p><font face="Times New Roman">&#8226; Mouse sample rate set to 100. </font></p>
+
+    <p><font face="Times New Roman">&#8226; All sticky keys released. </font></p>
+
+    <p><font face="Times New Roman">&#8226; Keyboard output port set to 0xDF.</font></p>
+
+  </ul><p><font face="Times New Roman">The floppy is initialized with no drive image present. Reset clears the controller to an idle state. If an image is loaded, reset does not unload the image.</font></p>
+
+  <p><font face="Times New Roman">COM1 and COM2 are initialized with 9600 Baud, no parity, 8-bit words, 1 stop bit, and interrupts off.</font></p>
+
+  <p><font face="TimesEuropa Roman">The parallel port initializes with the data and control ports set to zero. Reset clears these ports to their initial values. </font></p>
+
+  <p><font face="TimesEuropa Roman">The following devices have no functionality behind them at this time, with the exception of their configuration registers. These registers are initialized and reset to the values specified in the Super I/O specification:</font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; IR </font></p>
+
+    <p><font face="Times New Roman">&#8226; GPIO </font></p>
+
+    <p><font face="Times New Roman">&#8226; MIDI </font></p>
+
+    <p><font face="Times New Roman">&#8226; Joystick </font></p>
+
+    <p><font face="Times New Roman">&#8226; Fan </font></p>
+
+  </ul><p><font face="Times New Roman"><b>Contents of a BSD</b></font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; Keyboard and Mouse </font></p>
+
+    <p><font face="Times New Roman">&#8226; Floppy </font></p>
+
+    <p><font face="Times New Roman">&#8226; COM1 and COM2 </font></p>
+
+    <p><font face="Times New Roman">&#8226; LPT1 </font></p>
+
+    <p><font face="Times New Roman">&#8226; IR </font></p>
+
+    <p><font face="Times New Roman">&#8226; GPIO </font></p>
+
+    <p><font face="Times New Roman">&#8226; MIDI </font></p>
+
+    <p><font face="Times New Roman">&#8226; Joystick </font></p>
+
+    <p><font face="Times New Roman">&#8226; Fan </font></p>
+
+  </ul><p><font face="TimesEuropa Roman">All devices store their current state in the BSD files, as well as any data that may be buffered at the time of the save. Register content is also saved for all devices.</font></p>
+
+  <p><font face="TimesEuropa Roman"><b>Configuration Options</b></font></p>
+
+  <p><font face="Times New Roman">The Super I/Os have the capability of setting device breakpoints on an event basis. In this case, the event is the sequence of writes to access the Super I/O's device configuration registers. Selecting the <i>PNP Lock/Unlock Registers</i> option in <a href="#P2512_125433">Figure 7-16</a> activates the breakpoint anytime the lock and unlock sequence is hit. The other option is to set breakpoints to trigger whenever any of the device configuration registers are accessed.</font></p>
+
+  <p align="center"><img src="images/help-122.gif" border="0" width="542" height="470"></p>
+
+  <p align="center"><b><font face="Times New Roman"><a name="P2512_125433"></a>Figure 7-16: Super IO Properties Dialog: Winbond W83627HF</font></b></p>
+
+  <p><b><font face="Times New Roman"><i>Floppy Configuration Options</i></font></b></p>
+
+  <p><font face="Times New Roman">The floppy is capable of reading disk images of real floppies created with the <i>DiskTool</i> Utility, described in Section <a href="help-51.htm#P4476_251456">13</a>, on page <a href="help-51.htm#P4476_251456">165</a>. To use an image, first create an image file with <i>DiskTool</i> and then specify the floppy image file in the Super I/O configuration dialog page.</font></p>
+
+  <p><font face="Times New Roman"><b>Difference from Real Hardware</b></font></p>
+
+  <p><font face="Times New Roman">Keyboard, Mouse, Floppy, COM1 and COM2 differ from real hardware. </font><font face="TimesEuropa Roman">Baud rate<a name="P2518_125897"></a>, parity, and stop bits are ignored. Communication is always available. Baud rate timing is approximate. Modem status and line status always show the device is ready.</font></p>
+
+  <p><font face="TimesEuropa Roman">The default values of the control registers are read-writable or read only as defined by the appropriate Super IO specification.</font></p></ul><p align="left"><a href="help-18.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-20.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

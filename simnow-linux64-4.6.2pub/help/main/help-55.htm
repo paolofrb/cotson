@@ -1,0 +1,1372 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="440">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-54.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-56.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><p align="left"><a name="P4797_270261"></a><img src="images/gtabsepm.gif"></p>
+<p><font face="Arial" size="+2"><b>A Appendix</b></font></p>
+
+  <p><a name="P4798_270271"></a><b><font face="Arial" size="+1"><i>1.1 Format of Floppy and Hard-Drive Images</i></font></b></p>
+
+  <p><font face="Times New Roman">The floppy-disk format assumes a standard 1.44 Mbyte floppy disk, consisting of 80 cylinders, 2 heads, and eighteen 512-byte sectors per head (36 sectors per cylinder). The image file consists simply of each sector, starting with the first sector of the first cylinder on the first head, and proceeding sequentially through the last sector of the last cylinder on the second head. The total size of the image file is identical to the total capacity of a 1.44 Mbyte floppy disk, or 1,474,560 bytes.</font></p>
+
+  <p><font face="Times New Roman">The hard-disk image is formatted in a similar fashion, with the exception that the total number of cylinders, heads, and sectors per head varies. Because of this, the hard-disk image file contains a 512-byte header before the raw data. This 512-byte header is identical to the information provided by the drive in response to the ATA command &quot;<i>IDENTIFY</i>&quot;. Following the 512-byte header is the data for each sector from the device. As with the floppy, the data starts with the first sector of the first cylinder on the first head. Unlike floppies, however, the image file may end before the last sector of the last cylinder on the last head. If an attempt is made by the simulator, to access data on the drive image that is beyond the end of the available data (but still within the bounds defined by the geometry of the device), the simulator will extend the image file dynamically.</font></p>
+
+  <p><font face="Times New Roman">The BSD file contains the contents of all Viper Plus registers. It also saves the contents of any buffers and the states of all internal devices (HDD controllers, PIT, PIC, etc.). When the BSD file is read in, all buffers are filled with past data, and all states are restored to their saved states.</font></p>
+
+  <p><font face="Times New Roman"> </font></p>
+
+  <p><font face="Times New Roman">The symbol files that the debugger uses are in a simple text format.&nbsp;Each line contains an address, length, and symbol name.&nbsp; Any line that starts with a semicolon is considered a comment.&nbsp;Following is a sample file:</font></p>
+
+  <p><font face="Courier">; SimNow Debugger Symbol File Format<br>
+;<br>
+; Address&nbsp;&nbsp; Length&nbsp;&nbsp; Symbolic Name</font></p>
+
+  <p><font face="Courier">004011f0&nbsp;&nbsp;&nbsp; 3f&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _main<br>
+00401a3c&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _GetModuleHandleA@4<br>
+00401a42&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _GetCommandLineA@0</font></p>
+
+  <p><font face="Times New Roman">The address value may be an absolute address or a module-relative address.&nbsp;For the latter case, the load address may be specified when the symbols are loaded into the debugger with the &quot;<i>load_symbols</i>&quot; command (see Section <a href="help-48.htm#P4192_236346">10.2</a>, &#8220;<i><a href="help-48.htm#P4192_236346">Debugger Command Reference</a></i>&#8221;, on page <a href="help-48.htm#P4192_236346">155</a>).</font></p>
+
+  <p><a name="P4811_272693"></a><font face="Arial" size="+1"><b><i>1.2 Bill of Material</i></b></font></p>
+
+      <ul><ul><p><b><font face="Arial" size="+1"><a name="P4812_272713"></a>1.2.1 Computer Platform Files (BSD)</font></b></p>
+
+</ul></ul><p><font face="Times New Roman">This section gives a brief description of the computer platform description (BSD) files, devices, and disk- and ROM-image files that come with AMD SimNow&#8482; Platform Simulator.</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="165"><p align="center"><font face="Times New Roman" size="-1"><b>File name</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="47"><p align="center"><b><font face="Times New Roman" size="-1"># </font></b></p>
+<p align="center"><b><font face="Times New Roman" size="-1">CPUs</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="50"><p align="center"><b><font face="Times New Roman" size="-1"># CPU Cores</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="52"><p align="center"><b><font face="Times New Roman" size="-1"># PCI Buses</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="78"><p align="center"><b><font face="Times New Roman" size="-1">Southbridge</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="76"><p align="center"><b><font face="Times New Roman" size="-1">SIO</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="58"><p align="center"><b><font face="Times New Roman" size="-1">Graphic</font></b></p>
+<p align="center"><b><font face="Times New Roman" size="-1">Type</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="54"><p align="center"><b><font face="Times New Roman" size="-1">Public</font></b></p>
+<p align="center"><b><font face="Times New Roman" size="-1">Release</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Solo<sup><a href="#P4828_273003" name="P4828_273004">3</a></sup></font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">AGP</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Fuge</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">8</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Melody_1p</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Melody_1p_jh</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Melody_2p</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Melody_2p_jh</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Quartet</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Serenade_1p-ami</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">3</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Serenade-ami</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">3</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Family10h_1p</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">3</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Family10h_2p</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">3</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Warthog2_Family10h</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Cat2_Family11h</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">SB600</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">SMSC KBC1100</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Warthog2</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Cheetah_1p</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">3</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Cheetah_1p_jh</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">3</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Cheetah_2p</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">3</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Cheetah_2p_jh</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">3</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Vp_bd_phase1</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">3</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Vp_bd_phase2</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">3</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">AMD-8111</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Sahara_Family10h</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">SB400</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">ITE8712SIO</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Shiner_family10h</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">SB700</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">ITE8712SIO</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Guam_family10h</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">SB800</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">SMSC KBC1100</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCIe</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Dune</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">SB400</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">ITE8712SIO</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">Drachma_peso_1p_family10h</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">6</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">SB700</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">W83627HF</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCI</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="165"><p><font face="Times New Roman" size="-1">ati_mako_hd3870</font></p>
+</td>
+<td valign="top" width="47"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="50"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="52"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="78"><p align="center"><font face="Times New Roman" size="-1">SB600</font></p>
+</td>
+<td valign="top" width="76"><p align="center"><font face="Times New Roman" size="-1">ITE8712SIO</font></p>
+</td>
+<td valign="top" width="58"><p align="center"><font face="Times New Roman" size="-1">PCIe</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P5037_273933"></a>Table 15-1: Computer Platform Files (BSD)</b></font></p>
+
+  <p><a name="P5038_273974"></a><b><font face="Arial" size="+1">1.2.2 Device Files (*.BSL)</font></b></p>
+
+  <p><font face="Times New Roman">Please see Section <a href="help-12.htm#P1358_86449">7</a>, &#8220;<a href="help-12.htm#P1358_86449"><i>Device Configuration</i></a>&#8221;, on page <a href="help-12.htm#P1358_86449">53</a> for device listings and descriptions.</font></p>
+
+      <ul><ul><p><font face="Arial" size="+1"><b><a name="P5040_274098"></a>1.2.3 Product Files (*.ID)</b></font></p>
+
+</ul></ul><p><font face="Times New Roman">A product file configures the CPU and Northbridge to represent and behave as an actual AMD product. A product file will set the CPUID Family Model and Stepping, the BrandID, the MANID, and fuses.</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="228"><p align="center"><font face="Times New Roman" size="-1"><b>Product File</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="96"><p align="center"><b><font face="Times New Roman" size="-1">CPU Type</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="53"><p align="center"><b><font face="Times New Roman" size="-1"># CPU Cores</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="54"><p align="center"><b><font face="Times New Roman" size="-1">PIN</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="42"><p align="center"><b><font face="Times New Roman" size="-1">Rev.</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="90"><p align="center"><b><font face="Times New Roman" size="-1">AMD Virtualization</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="62"><p align="center"><b><font face="Times New Roman" size="-1">Public</font></b></p>
+<p align="center"><b><font face="Times New Roman" size="-1">Release</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Athlon64-754_SH-C0_(800MHz).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Athlon64</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">754</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">C0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Athlon64-754_SH-CG_(800MHz).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Athlon64</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">754</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">CG</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Athlon64-754_SH-D0_(800MHz).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Athlon64</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">754</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">D0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Athlon64-754_SH-E0_(800MHz).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Athlon64</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">754</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">E0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Athlon64-939_JH-E0_(800MHz x2).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Athlon64</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">939</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">E0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Athlon64-939_SH-CG_(800MHz).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Athlon64</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">939</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">CG</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Athlon64-939_SH-D0_(800MHz).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Athlon64</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">939</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">D0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Athlon64-939_SH-E0_(800MHz).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Athlon64</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">939</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">E0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Athlon64-AM2_BH-G1B_(800MHz x2).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Athlon64</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">AM2</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">G1B</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Athlon64-AM2_JH-F2G_(800MHz x2).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Athlon64</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">AM2</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">F2G</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Athlon64-AM2_SH-F0_(800MHz).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Athlon64</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">AM2</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">F0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Athlon64-S1_BH-G1B_(800MHz x2).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Athlon64</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">S1</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">G1B</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Athlon64-S1_JH-F2G_(800MHz x2).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Athlon64</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">S1</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">F2G</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Athlon64-S1_SH-F0_(800MHz).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Athlon64</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">S1</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">F0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Opteron-940_JH-E0_(800MHz x2).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Opteron</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">940</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">E0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Opteron-940_SH-B3_(800MHz).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Opteron</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">940</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">B3</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Opteron-940_SH-C0_(800MHz).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Opteron</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">940</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">C0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Opteron-940_SH-CG_(800MHz).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Opteron</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">940</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">CG</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Opteron-940_SH-D0_(800MHz).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Opteron</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">940</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">D0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Opteron-940_SH-E0_(800MHz).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Opteron</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">940</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">E0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Opteron-L1_JH-F0_(800Mhz x2).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Opteron</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">L1</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">F0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Opteron-L1_JH-F2G_(800Mhz x2).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Opteron</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">L1</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">F2G</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Opteron-L1_SH-F0_(800Mhz).id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">AMD Opteron</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">1</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">L1</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">F0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Family10hDR-L1_A0.id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">Family 10h</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">L1</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">A0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Family10hDR-L1_B0.id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">Family 10h</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">L1</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">B0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Family10hDR-L1_C0.id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">Family 10h</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">L1</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">C0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Family10hDR-AM2_B0.id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">Family 10h</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">AM2</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">B0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Family10hRB-AM3_C0.id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">Family 10h</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">AM3</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">C0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Family10hBL-AM3_C2A.id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">Family 10h</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">4</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">AM3</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">C2A</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Family10hHY-G3M_D0A.id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">Family 10h</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">12 or 8</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">G34</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">D0A</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Family10hHY-G3S_D0A.id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">Family 10h</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">6 or 4</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">G34</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">D0A</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Family10hHY-L1_D0A.id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">Family 10h</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">6</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">L1</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">D0A</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Family11h-S1_A0.id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">Family 11h</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">S1</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">A0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman" size="-1">Family11h-S1_B0.id</font></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman" size="-1">Family 11h</font></p>
+</td>
+<td valign="top" width="53"><p align="center"><font face="Times New Roman" size="-1">2</font></p>
+</td>
+<td valign="top" width="54"><p align="center"><font face="Times New Roman" size="-1">S1</font></p>
+</td>
+<td valign="top" width="42"><p align="center"><font face="Times New Roman" size="-1">B0</font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="62"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P5291_275906"></a>Table 15-2: Product Files</b></font></p>
+
+      <ul><ul><p><b><font face="Arial" size="+1"><a name="P5292_275931"></a>1.2.4 Image Files (*.HDD, *.FDD, *.ROM, *.SPD, *.BIN)</font></b></p>
+
+  </ul></ul><p><font face="Times New Roman">An image file is an exact representation of a media including the contents and the logical format.</font></p>
+
+  <p><a name="P5295_276082"></a><font face="Times New Roman" size="+1"><b>1.2.4.1 Hard-Disk Image Files</b></font></p>
+
+<p><font face="Times New Roman"><a href="#P5306_276401">Table 15-3</a> shows hard-disk image files present in the simulator. These images can be found in the simulators &quot;<i>/image</i>&quot; folder (see Section <a href="help-06.htm#P557_21113">2.3</a>, &quot;<a href="help-06.htm#P557_21113"><i>Directory Structure and Executable</i></a>&quot;, on page <a href="help-06.htm#P557_21113">4</a>).</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="156"><p align="center"><font face="Times New Roman"><b>File name</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="168"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="156"><p><font face="Times New Roman">Bare-4gig.<a name="P5301_276333"></a>hdd</font></p>
+</td>
+<td valign="top" width="168"><p><font face="Times New Roman">4-GB bare hard disk image.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="156"><p><font face="Times New Roman">Bare-8gig.<a name="P5303_276372"></a>hdd</font></p>
+</td>
+<td valign="top" width="168"><p><font face="Times New Roman">8-GB bare hard disk image.</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P5306_276401"></a>Table 15-3: Hard-Disk Images</b></font></p>
+
+  <p><a name="P5307_276429"></a><b><font face="Arial">1.2.4.2 Memory SPD Files</font></b></p>
+
+<p><font face="Times New Roman">When a computer is booted (started), serial presence detect (SPD) is information stored in an electrically erasable programmable read-only memory (EEPROM) chip on memory module that tells the BIOS the memory module's size, data width, and speed. The BIOS uses this information to configure the memory properly for maximum reliability and performance.</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="193"><p align="center"><font face="Times New Roman"><b>File name</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="217"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR_32M.spd</font><a name="P5313_276841"></a></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">32MB DDR memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR_64M.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">64MB DDR memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR_128M.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">128MB DDR memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR_256M.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">256MB DDR memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR_512M.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">512MB DDR memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR_1G.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">1024MB DDR memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR_2G.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">2048MB DDR memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR_4G.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">4096MB DDR memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR_32M_Reg.spd</font><a name="P5329_277118"></a></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">32MB registered DDR memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR_64M_Reg.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">64MB registered DDR memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR_128M_Reg.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">128MB registered DDR memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR_256M_Reg.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">256MB registered DDR memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR_512M_Reg.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">512MB registered DDR memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR_1G_Reg.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">1024MB registered DDR memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR_2G_Reg.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">2048MB registered DDR memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR_4G_Reg.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">4096MB registered DDR memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR2_128M.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">128MB DDR2 memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR2_256M.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">256MB DDR2 memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR2_512M.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">512MB DDR2 memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR2_1G.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">1024MB DDR2 memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR2_2G.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">2048MB DDR2 memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR2_4G.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">4096MB DDR2 memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR2_8G.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">8192MB DDR2 memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR2_16G.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">16384MB DDR2 memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR2_128M_Reg.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">128MB registered DDR2 memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR2_256M_Reg.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">256MB registered DDR2 memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR2_512M_Reg.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">512MB registered DDR2 memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR2_1G_Reg.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">1024MB registered DDR2 memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR2_2G_Reg.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">2048MB registered DDR2 memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR2_4G_Reg.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">4096MB registered DDR2 memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR2_8G_Reg.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">8192MB registered DDR2 memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">simnow_DDR2_16G_Reg.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">16384MB registered DDR2 memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">IBM_512_Reg.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">512MB registered DDR memory</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">Smart_DDR_128_2_133.spd</font></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">128MB DDR memory</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P5382_278276"></a>Table 15-4: Memory SPD Files</b></font></p>
+
+  <p><font face="Times New Roman">In order to use <i>unbuffered</i> DDR/DDR2 memory we recommend using the &#8220;<i>simnow_DDRx_yyyy_.spd</i>&#8221; SPD files. To use <i>buffered</i> DDR/DDR2 memory use the &#8220;<i>simnow_DDRx_yyyy_reg.spd</i>&#8221; SPD files (for DDR2 x = 2 and yyyy = size in Mbytes).</font></p>
+
+  <p><a name="P5386_278533"></a><font face="Arial" size="+1"><b><i>1.3 Supported Guest Operating Systems</i></b></font></p>
+
+<p><font face="Times New Roman"><a href="#P5429_279526">Table 15-5</a> lists the guest OS compatibility matrix.</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="260"><p align="center"><font face="Times New Roman"><b>Operating System</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="288"><p align="center"><b><font face="Times New Roman">Known Issues</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">Windows 2000 UP</font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">Windows XP (32-Bit) UP</font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">Windows XP (32 Bit) MP</font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">Windows XP (64-Bit) UP</font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">Windows Server 2003 (32-Bit) UP</font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">Windows Server 2003 (64-Bit) UP</font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">Windows Server 2003 (64-Bit) MP</font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">Windows Vista<sup>®</sup> (32-Bit/64-Bit) UP/MP</font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">Windows Server 2008</font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">MS-DOS&#8482;</font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">Linux<sup>®</sup> (32-bit/64-bit), RedHat/SuSE, UP/MP</font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">Kernel versions 2.4 and 2.6 are all known to work.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">SUSE LiveCD 9.1 </font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">Hangs during PCMCIA probe when the VESA BIOS Extension is enabled and the active VESA Mode is <b>not</b> 1024x768.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">SUSE LiveCD 9.2 </font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">SUSE LiveCD 9.3</font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">No support for initial graphical setup screen. Setup screen will appear in text mode.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">SUSE 10.1</font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">Red Hat Enterprise Linux 4</font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">Solaris x86</font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="260"><p><font face="Times New Roman">Solaris 10 for AMD64</font></p>
+</td>
+<td valign="top" width="288"><p><font face="Times New Roman">No known issues.</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P5429_279526"></a>Table 15-5: Supported Guest Operating Systems</b></font></p>
+
+  <p><font face="Arial" size="+1">The simulator<b> </b>has recently</font><font face="Times New Roman"> (but not specifically tested for this release): </font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; Successfully completed a 64-bit SpecJBB run on a simulated 4-processor machine. The simulator has also successfully completed the entire SPECint<sup>®</sup>2000 and SPECfp<sup>®</sup>2000 suite. </font></p>
+
+    <p><font face="Times New Roman">&#8226; Successfully completed an in-memory run of TPC-C on a simulated multi-processor system, as well as parts of TPC-C on a simulated RAID device. </font></p>
+
+    <p><font face="Times New Roman">&#8226; Successfully completed Sysmark<sup>®</sup> 2004's Office Productivity section and parts of Internet Content Creation. </font></p></ul></ul>
+
+<p><font face="Times New Roman" size="-1"><sup><a name="P4828_273003" href="#P4828_273004">3</a> </sup></font><font face="Times New Roman"> This is the recommended default uniprocessor platform.</font></p><p align="left"><a href="help-54.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-56.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

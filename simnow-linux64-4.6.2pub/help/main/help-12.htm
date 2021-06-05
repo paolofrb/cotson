@@ -1,0 +1,340 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="397">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-11.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-13.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><p align="left"><a name="P1358_86449"></a><img src="images/gtabsepm.gif"></p>
+<h1><font face="Arial" size="+2"><b>7 Device Configuration</b></font></h1>
+
+  <p><font face="Times New Roman">Each section in this chapter provides a description of how to configure device models in the simulator&#8217;s <i>Device Properties</i> window. These device models include the CPU, CPU debugger, Northbridge, DIMM memory modules, AMD graphics device, Southbridge, Super IO, memory device, PCA9548- and PCA9556-SMB, PCI bus, AMD-8131&#8482;    PCI-X<sup>®</sup> device, PCI-X test device, AMD-8132&#8482; PCI-X2 device, Raid device, SMB Hub device, EXDI server and the USB keyboard and mouse devices. These sections should be considered as a reference for how to configure a device model and are not intended to document how to use the model within the simulator.</font></p>
+
+<p><font face="Times New Roman">The full release version of the simulator ships with more devices then the public release version. <a href="#P1505_88004">Table 7-1</a> gives an overview of supported devices depending on the simulators version.</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="64"><p><font face="Times New Roman"><b>Symbol</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="257"><p><b><font face="Times New Roman">Device</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="103"><p align="center"><b><font face="Times New Roman">Public Release</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="90"><p align="center"><b><font face="Times New Roman">Full Release</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-79.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">AMD Debugger</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-80.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">AweSim Processor</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-81.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">DIMM Device</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-82.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">AMD 8<sup>th</sup> Generation Integrated Northbridge</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-83.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">AMD-8111&#8482; Southbridge</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-84.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">AMD-8131&#8482; PCI-X<sup>®</sup> Controller</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-85.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">AMD-8132&#8482; PCI-X Controller</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-86.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">AMD-8151&#8482; AGP Bridge Device</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-87.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">Emerald Graphics Device</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-88.gif" border="0" width="22" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">Matrox<sup>®</sup> G400/G450 Graphics Device</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-90.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">PCI Bus</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-90.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">PCI-X Test Device</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-91.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">Winbond W83627HF SIO</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-92.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">Memory Device</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-93.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">SMB Hub Device</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-94.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">PCA9548 Device</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-95.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">PCA9556 Device</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-94.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">LTC4306 Device</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-95.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">AT24C Device</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-96.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">USB JumpDrive</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-97.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">Desktop Network Adapter</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-98.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">EXDI Server</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-99.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">Compaq SmartArray 5304</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-96.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">USB Keyboard</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-96.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">USB Mouse</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-82.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">XTR Device</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-100.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">ITE 8712 SIO</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-101.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">ATI SB600/RD790</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-101.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">ATI SB700/RS780</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-101.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">ATI SB800/RS880</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-101.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">ATI SB400/RS480//RD890</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-102.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">ATI Radeon HD 3870</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-103.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">AMD &#8220;Istanbul&#8221;/AMD &#8220;Sao Paulo&#8221;/AMD &#8220;Magny-Cours&#8221;</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p align="center"><img src="images/help-104.gif" border="0" width="23" height="23"></p>
+</td>
+<td valign="top" width="257"><p><font face="Times New Roman">AMD &#8220;DeerHound&#8221; revB QuadCore Socket L1 device</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P1505_88004"></a>Table 7-1: Supported Devices</b></font></p>
+
+  <p><font face="Times New Roman">To open a Device Property dialog window, open the Device View window &#8220;<i>View&#8594;Show Devices&#8221; </i>or click on the <img src="images/help-15.gif" border="0" width="16" height="16"> button. Then Open the workspace popup menu, right-click on a device in the workspace area and select &#8220;<i>Configure Device</i>&#8221;.</font></p></ul><p align="left"><a href="help-11.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-13.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

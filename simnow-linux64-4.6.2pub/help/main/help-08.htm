@@ -1,0 +1,89 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="393">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-07.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-09.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><p align="left"><a name="P1072_66527"></a><img src="images/gtabsepm.gif"></p>
+<h1><font face="Arial" size="+2"><b>4 Disk Images</b></font></h1>
+
+  <p><font face="Times New Roman">The simulator uses hard-drive images to provide simulated hard disks to the simulated computer. There are several ways to obtain hard drive-images. </font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; Install your OS onto a hard drive in a real system, then move it to the secondary drive in a system and use <i>DiskTool</i> to copy the contents of the drive to an &#8220;<i>.hdd</i>&#8221; image file.</font></p>
+
+    <p><font face="Times New Roman">&#8226; Make a blank hard-drive image and a DVD-/CD-ROM<a name="P1076_66922"></a> &#8220;<i>ISO</i>&#8221; image, and install a fresh operating system onto the hard-drive image. To make the hard drive and DVD-/CD-ROM images, refer to Section <a href="#P1095_68483">4.1</a>, &quot;<a href="#P1095_68483"><i>Creating A Blank Hard-Drive Image</i></a>&quot; and Section <a href="help-51.htm#P4476_251456">13</a>,<i> </i>&#8220;<a href="help-51.htm#P4476_251456"><i>DiskTool</i></a>&#8221;,<i> </i>on page <a href="help-51.htm#P4476_251456">165</a>.</font></p>
+
+    <p><font face="Times New Roman">&#8226; To use a physical DVD-/CD-ROM: </font></p>
+
+      <ul><p><font face="Times New Roman">&#8226; Click on the <img src="images/help-15.gif" border="0" width="16" height="16"> button or select &#8220;<i>View&#8594;Show Devices</i>&#8221; to open the <i>Device Window</i> (<a href="help-07.htm#P674_29839">Figure 3-2</a>, on page <a href="help-07.htm#P674_29839">9</a>). </font></p>
+
+      <p><font face="Times New Roman">&#8226; Open the Southbridge's properties window by double-clicking on it, and choose the &#8220;<i>HDD Secondary Channel</i>&#8221; tab. </font></p>
+
+      <p><font face="Times New Roman">&#8226; On a Windows host type <i>&#8220;</i><b>\\.\</b><i>D:</i>&#8221; where &#8220;<i>D:</i>&#8221; is the drive letter for the DVD-/CD-ROM, and on a Linux host type &#8220;/dev/cdrom&#8221; in the <i>&#8220;Master Drive - Image Filename</i>&#8221; field. </font></p>
+
+      <p><font face="Times New Roman">&#8226; Check the <i>DVD-ROM</i> check box below the <i>Filename</i> field.</font></p>
+
+  </ul></ul><p><font face="Times New Roman">The simulator can access media via the following mechanisms: </font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; IDE Hard Disk: </font></p>
+
+      <ul><p><font face="Times New Roman">&#8226; DiskTool IDE hard-disk image, is a flat file consisting of a 512-byte header (the IDE probe sector) and a raw image of data from the hard disk (if the raw data is cut off before the end of the disk, the disk-image from there on will just read as zero).</font></p>
+
+    </ul><p><font face="Times New Roman">&#8226; IDE DVD-ROM: (The simulator does not simulate DVD-ROM &quot;<i>insert</i>&quot; events)</font></p>
+
+        <ul><ul><p><font face="Times New Roman">&#8226; DVD-ROM disk image is a flat file of the raw image of a data DVD-/CD-ROM. These correspond exactly to ISO file images, for example.</font></p>
+
+        <p><font face="Times New Roman">&#8226; IDE DVD-ROM direct access</font></p>
+
+    </ul></ul><p><font face="Times New Roman">&#8226; Floppy Disk:</font></p>
+
+        <ul><ul><p><font face="Times New Roman">&#8226; Floppy-disk image, a flat file of the raw image of a floppy disk.</font></p>
+
+        <p><font face="Times New Roman">&#8226; Floppy direct access</font></p>
+
+  </ul></ul></ul><p><font face="Times New Roman">Please refer to Section <a href="help-51.htm#P4476_251456">13</a>,<i> </i>&#8220;<a href="help-51.htm#P4476_251456"><i>DiskTool</i></a>&#8221;, on page <a href="help-51.htm#P4476_251456">165</a> to find out how to set up a Windows or Linux hard-drive image for the simulator.</font></p>
+
+  <h2><a name="P1095_68483"></a><font face="Arial" size="+1"><b><i>4.1 Creating A Blank Hard-Drive Image</i></b></font></h2>
+
+  <p><font face="Times New Roman">To create a hard-drive image use DiskTool. You can start DiskTool by launching &quot;<i>disktool.exe</i>&quot; in your install directory. For convenience, you can create a desktop shortcut to launch DiskTool. When you run DiskTool, you will see the DiskTool dialog window, as shown in <a href="#P1099_68944">Figure 4-1</a>. It will also open a shell window, as shown in <a href="#P1105_69153">Figure 4-2</a>, that is used to inform the user about all physical drives which DiskTool has detected.</font></p>
+
+  <p align="center"><img src="images/help-62.gif" border="0" width="576" height="357"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1099_68944"></a>Figure 4-1: DiskTool Dialogue Window</b></font></p>
+
+  <p><font face="Times New Roman">For information about supported options and modes that DiskTool supports, please refer to Section <a href="help-51.htm#P4476_251456">13</a>,<i> </i>&#8220;<a href="help-51.htm#P4476_251456"><i>DiskTool</i></a>&#8221;, on page <a href="help-51.htm#P4476_251456">165</a>.</font></p>
+
+  <p><font face="Times New Roman"><a href="#P1105_69153">Figure 4-2</a> shows the DiskTool shell window.</font></p>
+
+  <p align="center"><img src="images/help-63.gif" border="0" width="524" height="283"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1105_69153"></a>Figure 4-2: DiskTool Shell Window</b></font></p>
+
+  <p><font face="Times New Roman">To create a blank disk image click on the &quot;<i>Create Blank Disk Image</i>&quot; button on the right side of the DiskTool dialog window (see <a href="#P1099_68944">Figure 4-1</a>). A &quot;<i>Save As</i>&quot; dialog will ask you for the location and image filename that will be created. Choose the location where you want to store the blank image file and then enter the image filename. Click on the &quot;<i>Save</i>&quot; button. An additional dialog, see <a href="#P1109_69663">Figure 4-3</a>, is presented that allows you to select how large the blank image file should be.</font></p>
+
+  <p align="center"><img src="images/help-64.gif" border="0" width="237" height="342"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1109_69663"></a>Figure 4-3: New Image Size</b></font></p>
+
+  <p><font face="Times New Roman">Before you start creating a new blank disk image make sure that the image will be large enough to install Windows or Linux on it. You can enter the image size in MB or in number of sectors. We recommend an image size of 4-GB. Increase the value of &quot;<i>Image Size (MB)</i>&quot; to 4096 and then click on the &quot;<i>Ok</i>&quot; button to create the image file. A progress bar will inform you of the progress being made (see <a href="#P1113_70098">Figure 4-4</a>).</font></p>
+
+  <p align="center"><img src="images/help-65.gif" border="0" width="390" height="142"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1113_70098"></a>Figure 4-4: Create Blank Image</b></font></p>
+
+  <p><font face="Times New Roman">Once the image is created successfully DiskTool will display a message box, as shown in <a href="#P1117_70253">Figure 4-5</a>. Click on the &quot;<i>Ok</i>&quot; button.</font></p>
+
+  <p align="center"><img src="images/help-66.gif" border="0" width="172" height="122"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1117_70253"></a>Figure 4-5: DiskTool Operation Successful</b></font></p>
+
+  <p><font face="Times New Roman">To exit DiskTool click on the &quot;<i>Exit</i>&quot; button on the right side of the DiskTool dialog window (see <a href="#P1099_68944">Figure 4-1</a>). </font></p>
+
+  <p><font face="Times New Roman"> </font></p></ul><p align="left"><a href="help-07.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-09.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

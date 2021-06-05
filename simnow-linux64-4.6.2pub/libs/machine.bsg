@@ -1,0 +1,22 @@
+<bsg_file version="1.0">
+
+<!--
+The empty Machine device
+-->
+
+<!--
+// {654E2597-980D-479f-B3CA-5C98AF2439CD}
+static const GUID <<name>> = 
+{ 0x654e2597, 0x980d, 0x479f, { 0xb3, 0xca, 0x5c, 0x98, 0xaf, 0x24, 0x39, 0xcd } };
+-->
+
+<!--
+flags:
+#define ICF_DEPRECATED		0x1
+#define ICF_NOTACTIVE		0x2	//Device is not active. Dont show in Device Window
+-->
+
+<!--//UserManual@Section:TODO: No documentation!-->
+<bsg name="Machine" desc="simnow machine used for a new machine (new bsd)" icon="./icons/machine.png" help="help/main/html/help-xx.htm" GUID="654E2597-980D-479f-B3CA-5C98AF2439CD" flags="1"/>
+
+</bsg_file>

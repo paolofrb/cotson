@@ -1,0 +1,82 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="409">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-23.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-25.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P2666_136021"></a><font face="Arial" size="+1"><b><i>7.12 AMD-8111&#8482; Southbridge Devices &#8211; IO Hubs</i></b></font></h2>
+
+  <p><font face="Times New Roman">The Southbridge devices provide the basic I/O Southbridge functionality of the system. Features include a PIO-mode IDE controller, register set for the USB controller(s), an LPC/ISA bridge<a name="P2667_136257"></a>, a system-management bus controller, IOAPIC bus bridge if applicable, and legacy AT devices (PIC, PIT, CMOS, timer, and DMA controller). The legacies AT devices have the standard behavior and IO addresses unless otherwise noted.</font></p>
+
+  <p><font face="Times New Roman"><b>Interfaces</b></font></p>
+
+  <p><font face="Times New Roman">The Southbridge devices have several connection points. Possible connection points include a PCI bus, a SMB bus, a LPC bus, an INT/IOAPIC<a name="P2670_136633"></a> bus for interrupt signaling, and ISA and HyperTransport ports depending on the device type. The PCI bus acts as a host bus (AMD-8111<a name="P2670_136766"></a>). The SMB connects to devices such as the DIMM or the SMB hub. The LPC bus provides connectivity to devices such as Super IO's and BIOS ROMs. A HyperTransport port is used for main connectivity for the AMD-8111 device to the reset of the system.</font></p>
+
+  <p><font face="Times New Roman"><b>Initialization and Reset State</b></font></p>
+
+  <p><font face="Times New Roman">When first initialized, the Southbridge devices are in the default state. This is described in detail in the respective datasheets. The legacy CMOS sub device initializes to all zeroes. </font></p>
+
+  <p><font face="Times New Roman">When reset, a Southbridge device takes on all default register values as above. The exception to this is that the CMOS contents remain the same.</font></p>
+
+  <p><font face="Times New Roman"><b>Contents of a BSD</b></font></p>
+
+  <p><font face="Times New Roman">The BSD file contains the contents of all registers. It also saves the contents of any buffers, and states of all internal devices (HDD controllers, PIT, PIC, etc.). When the BSD file is read in, all buffers are filled with past data, and all states are restored to their saved states.</font></p>
+
+  <p><font face="Times New Roman"><b>Common Configuration Options</b></font></p>
+
+  <p><font face="Times New Roman">The USB dialogue window, shown in <a href="#P2686_138029">Figure 7-23</a>, gives the user the ability to enable or disable USB ports of the USB controller. USB devices which are connected to disabled USB ports won't be identified and detected by an operating system.</font><a name="P2681_137940"></a></p>
+
+  <p><font face="Times New Roman">For instance, in <a href="#P2686_138029">Figure 7-23</a> the USB Port 0 is disabled and USB Port 1 and 2 are enabled.</font></p>
+
+  <p align="center"><img src="images/help-129.gif" border="0" width="480" height="457"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2686_138029"></a>Figure 7-23: USB Properties Dialog (AMD-8111&#8482; Southbridge)</b></font></p>
+
+  <p><font face="Times New Roman">The CMOS<a name="P2688_138097"></a> dialogue window, shown in <a href="#P2692_138519">Figure 7-24</a>, gives the user the ability to change the contents of CMOS. When first created, the CMOS contains all zeroes to force a CMOS checksum error, resulting in the default settings being loaded by BIOS. The alternative to this is loading a binary file containing the CMOS desired data. The user can create this file by entering changes and using the save feature to create the binary file.</font></p>
+
+  <p align="center"><img src="images/help-130.gif" border="0" width="480" height="457"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2692_138519"></a>Figure 7-24: CMOS Properties Dialog (AMD-8111&#8482; Southbridge)</b></font></p>
+
+  <p><font face="Times New Roman">The <i>Primary HDD Channel </i>and <i>Secondary HDD Channel</i> tabs, shown in <a href="#P2700_140132">Figure 7-25</a>, contain the same information for each hard drive channel. The user has two options for drive simulation: an image of a hard drive created with DiskTool<i> </i>(see Section <a href="help-51.htm#P4476_251456">13</a> on page <a href="help-51.htm#P4476_251456">165</a>), or use of a real hard disk. Using a real drive requires Windows<sup>®</sup> 2000 and a drive that is able to be isolated (locked) from the rest of the system. You cannot use the drive(s) that the OS and/or the simulator reside on. To use a drive image, enter a file name in the <i>Image Filename</i> field. A browse window is activated by pressing the right-most button. </font></p>
+
+  <p><font face="Times New Roman">All disk devices (Primary Master, etc.) by default have the disk journaling<a name="P2695_139269"></a> feature turned on, which allows simulations to write to the disk image during normal operation and not affect the contents of the real disk image. This is useful for being able to kill a simulation in the middle, for multiple copies of the simulator running at the same time, etc. Journal contents are saved in BSD checkpoint files but <b>lost if you don't save</b> a checkpoint before exiting. To change journal settings or commit journal contents to the hard disk image, go to the <i>Device View Window</i>, then the AMD-8111 Southbridge, then the configuration for the hard disk in question on either the Primary or Secondary IDE controller. Here you can either commit<a name="P2695_139927"></a> the contents of the journal to the hard-disk image or turn off journaling for the hard disk image in question.</font></p>
+
+  <p><font face="Times New Roman">Turning off journaling<a name="P2697_140060"></a> is recommended during the installation process for an operating system.</font></p>
+
+  <p align="center"><img src="images/help-131.gif" border="0" width="488" height="500"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2700_140132"></a>Figure 7-25: HDD Primary Channel Properties Dialog (AMD-8111 Southbridge)</b></font></p>
+
+  <p><b><font face="Times New Roman">Device Options</font></b></p>
+
+  <p><font face="Times New Roman">The AMD-8111 device has specific configuration requirements that relate to device option type and HyperTransport information. </font></p>
+
+  <p><font face="Times New Roman">The <i>Default Base Unit ID</i> is a way of telling the device of the strapping option for ID selection. </font></p>
+
+  <p><font face="Times New Roman">The <i>Generate HT Messages for Interrupts</i> selection specifies whether interrupts go out the HyperTransport port in a HyperTransport format, or out the INT/IOAPIC bus as a classic interrupt pin.</font></p>
+
+  <p align="center"><img src="images/help-132.gif" border="0" width="480" height="457"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2710_140634"></a>Figure 7-26: Device Options Properties Dialog (AMD-8111 chipset)</b></font></p>
+
+  <p><b><font face="Times New Roman">Log Messages</font></b></p>
+
+  <p><font face="Times New Roman">The AMD-8111 device produces log messages to the <i>Message Log Window</i> as specified by the options in the <i>Logging Option </i>tab, shown in <a href="#P2714_140954">Figure 7-27</a>. The device can log I/O-mapped Transactions, Memory-mapped Transactions, and SMI and SCI assertions.</font></p>
+
+  <p align="center"><img src="images/help-133.gif" border="0" width="480" height="457"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2714_140954"></a>Figure 7-27: Logging Options Properties Dialog (AMD-8111 chipset) </b></font></p>
+
+  <p><b><font face="Times New Roman">Differences from Real Hardware</font></b></p>
+
+  <p><font face="Times New Roman">The AMD-8111 Southbridge device differs from other devices mainly in those items that deal with real-time operation. Those items cannot be modeled in the current simulator. The model does not include any of the power-management registers. The functionality of the USB 2.0 controller is also absent (PCI registers and memory-mapped registers are the only portion present).</font></p>
+
+  <p><font face="Times New Roman">For experimental purposes, the AMD-8111 Southbridge device supports an optional IOMMU (based on IOMMU spec. 1.2) that can be enabled and disabled via the automation command &quot;<i>8111.SetIOMMU 0|1</i>&quot;. The addition of this block to the device model does not reflect any real or planned hardware. When enabled, the AMD-8111 device&#8217;s IOMMU PCI registers live in a capability block of the PCI Bridge. When enabled, the AMD-8111 device&#8217;s IOMMU delivers interrupts via PCIINTD. The AMD-8111 device doesn't support PCI Express<sup>®</sup>. This limits the number of distinct requester ID's available (Three requester ID's: legacy LPC, legacy PCI, internal IDE controller). There are no SimNow PCI models that implement MSI. This means the only APIC-style interrupts the IOMMU can intercept are from a single requester ID, the AMD-8111 device&#8217;s internal IOAPIC.</font></p></ul><p align="left"><a href="help-23.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-25.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

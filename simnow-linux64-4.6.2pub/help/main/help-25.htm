@@ -1,0 +1,50 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="410">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-24.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-26.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P2723_142263"></a><font face="Arial" size="+1"><b><i>7.13 PCI BUS Device</i></b></font></h2>
+
+  <p><font face="Times New Roman">The PCI Bus device enables you to add PCI devices to the system. You can configure the PCI Bus device to provide any number of PCI slots for one to six connections. You configure each PCI slot on the PCI Bus by setting its device number and base IRQ-routing pin<a name="P2724_142543"></a>.</font></p>
+
+  <p><font face="Times New Roman"><b>Interfaces</b></font></p>
+
+  <p><font face="Times New Roman">The PCI Bus device has two types of interfaces, a bus interface and one or more slot interfaces. The bus interface connects to a device that provides a PCI bus, such as a Northbridge. Each PCI-slot interface is capable of connecting to a PCI device, such as a PCI video controller.</font></p>
+
+  <p><font face="Times New Roman">The PCI bus behaves somewhat differently than other AMD SimNow devices. First, the connection points are not all centered in the middle of the icon; instead each connection point has a discrete location around the perimeter of the icon to provide a visual indication that each PCI device is connected to a different PCI slot. Second, the connection points are exclusive; that is, only one device can connect to each connection point on the PCI bus, because in a real system one cannot install two PCI cards into a single PCI slot. It is planned that these new behaviors will be used in other devices when required.</font></p>
+
+  <p><font face="Times New Roman"><b>Initialization and Reset State</b></font></p>
+
+  <p><font face="Times New Roman">The default state of the device has all slots disabled. This is because each platform configures its PCI Buses in specific ways that make it impossible to provide a generic default.</font></p>
+
+  <p><font face="Times New Roman">Since the PCI Bus device does not include any state that is altered during the course of a simulation, after a reset, the PCI Bus device remains unchanged</font></p>
+
+  <p><font face="Times New Roman"> </font></p>
+
+  <p><font face="Times New Roman"><b>Contents of a BSD</b></font></p>
+
+  <p><font face="Times New Roman">The configuration of the PCI bus, including which slots are enabled, the device ID for each slot and the base IRQ-routing pin for each slot, and the connection points, are saved in the BSD. </font></p>
+
+  <p><font face="Times New Roman"><b>Configuration Options</b></font></p>
+
+  <p><font face="Times New Roman"><a href="#P2743_144095">Figure 7-28</a> shows the <i>PCI-Bus configuration</i> options.</font></p>
+
+  <p align="center"><img src="images/help-78.gif" border="0" width="402" height="325"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2743_144095"></a>Figure 7-28: PCI Bus Properties Dialog</b></font></p>
+
+  <p><font face="Times New Roman">The first field is the <i>Device ID</i> <a name="P2744_144166"></a>of the slot. This value may range from zero to 31. The second field is the <i>Base IRQ Pin</i> for the slot. You can choose from pin A, B, C, or D.</font></p>
+
+  <p><font face="Times New Roman">The third field is an <i>Enable Slot</i>. By default, all slots are disabled.&nbsp; One cannot disable a slot that has a device connected to it.</font></p>
+
+  <p><font face="Times New Roman"><b>Differences from Real Hardware</b></font></p>
+
+  <p><font face="Times New Roman">The PCI Bus device differs from other devices in that it is a generic model. We do not simulate PCI down to a clock-accurate level, so devices do not arbitrate for bus ownership or insert wait states, for example.</font></p></ul><p align="left"><a href="help-24.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-26.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

@@ -1,0 +1,97 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="431">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-45.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-47.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><p align="left"><a name="P4003_221753"></a><img src="images/gtabsepm.gif"></p>
+<h1><font face="Arial" size="+2"><b>9 Logging</b></font></h1>
+
+  <p><font face="Times New Roman">The simulator provides support for three types of logging:</font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; A message log that can provide detailed text data from simulator devices and modules.</font></p>
+
+    <p><font face="Times New Roman">&#8226; An error log that provides text messages in response to critical errors or unexpected conditions.</font></p>
+
+    <p><font face="Times New Roman">&#8226; I/O Logging that provides detailed information about PCI Configuration, I/O and Memory Space accesses.</font></p>
+
+  </ul><h2><a name="P4009_222116"></a><font face="Arial" size="+1"><b><i>9.1 Message Log</i></b></font></h2>
+
+  <p><font face="Times New Roman">The simulator shell provides an interface that loaded modules (devices and extensions) may use to report status and events. The messages may be displayed in a window, written to a file, or both. The information log may be enabled and disabled on a module-specific basis.</font><a name="P4010_222401"></a></p>
+
+  <p><font face="Times New Roman">The informational log is controlled via the &quot;<i>Message Log Window</i>&quot; dialog box. To view this dialog, select the &quot;<i>View&#8594;Message Log</i>&quot; entry from the Main Window shell menu.</font></p>
+
+  <p><font face="Times New Roman">A sample of this dialog is shown in <a href="#P4017_222616">Figure 9-1</a>:</font></p>
+
+  <p><img src="images/help-146.gif" border="0" width="574" height="514"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P4017_222616"></a>Figure 9-1: Message Log</b></font></p>
+
+  <p><font face="Times New Roman">The left-hand window lists all of the currently loaded modules. The user may individually enable or disable logging from a given module by using the checkbox next to the module's name. In addition, the user may configure module-specific logging options by double-clicking on the module name. </font></p>
+
+  <p><font face="Times New Roman">The top-right window contains three checkboxes which allow the user to control whether messages are displayed in the log window, written to a file, or logged to the AMD SimNow console. The bottom right window is used to display the informational message if the &quot;<i>Log to Window</i>&quot; option is selected.</font></p>
+
+  <p><font face="Times New Roman">To open the log file the first time a simulation is started, check the &quot;<i>Log To File</i>&quot; box is checked. The log file will remain open until one of the following events occurs:</font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; The BSD is closed or the simulator program terminates.</font></p>
+
+    <p><font face="Times New Roman">&#8226; The simulation is stared with the &quot;<i>Log To File</i>&quot; box unchecked.</font></p>
+
+    <p><font face="Times New Roman">&#8226; The simulation is started with a new log-file name specified.</font></p>
+
+  </ul><h2><a name="P4027_223588"></a><font face="Arial" size="+1"><b><i>9.2 Error Log</i></b></font></h2>
+
+  <p><font face="Times New Roman">The simulator provides an interface that loaded modules may use to report critical errors or unexpected conditions. The messages are always written to a file, and the most-recent messages may be displayed in a window. The error log may not be disabled. </font><a name="P4028_223854"></a></p>
+
+  <p><font face="Times New Roman">The most-recent error log entries may be viewed by selecting the &quot;<i>View&#8594;Error Log</i>&quot; entry from the Main Window menu, shown in <a href="#P4035_224331">Figure 9-2</a>.</font></p>
+
+  <p><font face="Times New Roman">The error log file is enabled by checking the &quot;<i>Log to File</i>&quot; check box in the Message log dialog (<a href="#P4035_224331">Figure 9-2</a>) and setting a filename for the error log. This file is created (or truncated to zero length if it already exists) and opened whenever a BSD file is opened or a new BSD is created. The error log is closed whenever the BSD is closed.</font></p>
+
+  <p align="center"><img src="images/help-147.gif" border="0" width="388" height="561"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P4035_224331"></a>Figure 9-2: Error Log</b></font></p>
+
+  <h2><a name="P4036_224352"></a><b><font face="Arial" size="+1"><i>9.3 I/O Logging</i></font></b></h2>
+
+  <p><font face="Times New Roman">This is a generic feature available on all devices for logging slave accesses (i.e. accesses responded to by this device). Several categories of generic I/O logging<a name="P4037_224531"></a> are available.  Logging is performed to the I/O loggers (see Section <a href="#P4009_222116">9.1</a>, &quot;<i><a href="#P4009_222116">Message Log</a></i>&quot;, on page <a href="#P4009_222116">145</a>) of names similar to the device you are enabling the logging for.</font></p>
+
+  <p><font face="Times New Roman"><i>Caveat</i>:  Currently, devices which route to other devices may appear as if they are responding to the messages themselves, so bridge devices will likely log everything that is behind them.</font></p>
+
+  <p align="center"><img src="images/help-148.gif" border="0" width="381" height="325"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P4042_224884"></a>Figure<u> </u>9-3: I/O Logging Dialog</b></font></p>
+
+  <p><font face="Times New Roman"><i>Log PCI Config Space Accesses</i></font></p>
+
+  <p><font face="Times New Roman">Checking this will log PCI Config Space accesses made to the device.</font></p>
+
+  <p><font face="Times New Roman"><i>Log I/O Space Accesses</i></font></p>
+
+  <p><font face="Times New Roman">Checking this will log I/O Space accesses made to the device. These are the accesses made with the x86 IO read/write instructions.</font></p>
+
+  <p><font face="Times New Roman"><i>Disable Fastpath I/O when Logging</i></font></p>
+
+  <p><font face="Times New Roman">This item, checked by default, disables the Fastpath I/O mechanism when I/O Space Accesses logging is enabled.  If this is unchecked, accesses may not appear in the log.</font></p>
+
+  <p><font face="Times New Roman"><i>Log Memory Space Accesses</i></font></p>
+
+  <p><font face="Times New Roman">Checking this will log Memory Space accesses made to the device. These are the accesses corresponding to standard x86 <i>move</i>, <i>read</i> and <i>write</i> instructions to memory.</font></p>
+
+  <p><font face="Times New Roman"><i>Disable Fastpath Memory when Logging</i></font></p>
+
+  <p><font face="Times New Roman">This item, checked by default, disables the Fastpath Memory mechanism when Memory Space Accesses logging is enabled.  If this is unchecked, accesses may not appear in the log.</font></p>
+
+  <p><font face="Times New Roman">WARNING: Un-checking this item may lead to significantly compromised performance of SimNow if large numbers of accesses are being made to the device in question.  For example, logging all accesses to the DIMM device would make SimNow extremely slow.</font></p>
+
+  <p><font face="Times New Roman"><i>Log Fastpath Memory Requests when Logging</i></font></p>
+
+  <p><font face="Times New Roman">This item, when combined with un-checking <i>Disable Fastpath Memory when Logging</i>, will log both memory space accesses and Fastpath Memory requests themselves.</font></p>
+
+  <p><font face="Times New Roman">What is then logged are slow-path Memory Space Accesses and Fastpath Memory handle requests. Actual calls to Fastpath Memory, i.e. usage of Fastpath Memory handles, are not logged.</font></p></ul><p align="left"><a href="help-45.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-47.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

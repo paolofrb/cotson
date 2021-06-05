@@ -1,0 +1,149 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="434">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-48.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-50.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><p align="left"><a name="P4304_242938"></a><img src="images/gtabsepm.gif"></p>
+<h1><font face="Arial" size="+2"><b>11 Debug Interface</b></font></h1>
+
+  <p><font face="Times New Roman">The simualtor supports Linux and Windows<sup>®</sup> based debugging. It is recommended to use the GDB interface to debug on Linux based hosts. The kernel debugger interface can be used to debug on Windows based hosts.</font></p>
+
+  <h2><a name="P4306_243164"></a><font face="Arial" size="+1"><b><i>11.1 Kernel Debugger</i></b></font></h2>
+
+  <p><font face="Times New Roman"><a name="P4307_243184"></a>This only applies to the Windows<sup>®</sup> version of the simulator and <b>not</b> to the Linux version.</font></p>
+
+  <p><font face="Times New Roman">The simulator can interact with the kernel debugger through: </font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; EXDI interface (see Section <a href="help-33.htm#P2907_155702">7.21</a>, &quot;<a href="help-33.htm#P2907_155702"><i>EXDI Server Device</i></a>&quot;, on page <a href="help-33.htm#P2907_155702">112</a>).</font></p>
+
+    <p><font face="Times New Roman">&#8226; Serial port connection.</font></p>
+
+  </ul><p><font face="Times New Roman">The serial ports can be configured so that any data read from or written to the simulated serial ports is made available to the host machine. The serial ports can each be configured to do this using either a named-pipe, or the actual serial port hardware.</font></p>
+
+  <p><font face="Times New Roman">The automation commands &quot;GetCommPort&quot; and &quot;SetCommPort&quot; are used for this purpose, see Section <a href="help-59.htm#P10245_403359">A.7.10</a>, &#8220;<a href="help-59.htm#P10245_403359">Serial</a>&#8221;, on page <a href="help-59.htm#P10245_403359">236</a>.</font></p>
+
+  <p><font face="Times New Roman">Use the serial ports &quot;SetCommPort&quot; command to set the simulated serial port to use a specific COM port. For example, to set the second serial port in the simulation to use COM4 for its communication, you would type</font></p>
+
+      <blockquote><blockquote><p><font face="Courier New">Serial:1.SetCommPort COM4 57600</font></p>
+
+  </blockquote></blockquote><p><font face="Times New Roman">The simulator will program the appropriate COM port (COM4 in the above example) to 57600 baud, 8 bits, no parity, 1 stop bit, no flow control.</font></p>
+
+  <p><font face="Times New Roman">All characters transmitted by the simulation through the serial port (second serial port in the above example) will be sent out to the given COM port (COM4 in the above example). In the same manner, all data received by the simulator through the given COM port (COM4 in the above example) will appear as received data in the simulated COM port.</font></p>
+
+  <p><font face="Times New Roman">To set the simulated serial port (COM1) to use a named-pipe you would type</font></p>
+
+      <blockquote><blockquote><p><font face="Courier New">Serial:1.SetCommPort pipe</font></p>
+
+  </blockquote></blockquote><p><font face="Times New Roman">The simulator will program the appropriate COM port (COM1 in the above example) to use the named-pipe<a name="P4330_244749"></a> &#8220;<i>\\.\pipe\SimNow.Com1</i>&#8221; on the host to transfer data between host and the simulated machine.</font></p>
+
+  <p><font face="Times New Roman">The pipe is not created until the first &#8220;go&#8221; command will be executed. This can be achieved by clicking on the &#8220;go&#8221; button followed by a click on the &#8220;stop&#8221; button. This command sequence will setup the named-pipe<a name="P4332_245069"></a>. </font></p>
+
+  <p><font face="Times New Roman">If you try to connect the kernel debugger without setting up the named-pipe as described the kernel debugger will return an error message.</font></p>
+
+  <p><font face="Times New Roman">In case you have difficulties to establish a connection, or the connection is unstable, or KD has difficulties to stay in sync with the simulated OS. You can set a <i>multiplier</i> to delay the baud rate. The baud rate is normally modeled based on the time elapsed on the simulated system. The simulated system may be running at 1/100 of normal time which will give longer time delays than the kernel debugger can tolerate. Consequently we provide a way to speed up the modeled baud rate by up to 100 times. For example to delay the baud rate by 1/100th of normal you would use the following automation command:</font></p>
+
+      <blockquote><blockquote><p><font face="Courier New">Serial:1.SetMultiplier 1</font></p>
+
+  </blockquote></blockquote><p><font face="Times New Roman">By default, the <i>multiplier</i> is 100 which means the modeled rate is unchanged. The user may set it in the range 1 to 100. When set to 1, the modeled rate is 100 times faster than the baud rate, so the system delays will be that much shorter. See also Section <a href="help-59.htm#P10245_403359">A.7.10</a>, &#8220;<i><a href="help-59.htm#P10245_403359">Serial</a></i>&#8221;, on page <a href="help-59.htm#P10245_403359">236</a>.</font></p>
+
+  <p><font face="Times New Roman">The following command will connect the kernel debugger to the simulator using a pipe as communication channel:</font></p>
+
+    <blockquote><p><font face="Courier New">C:\Program Files\Debugging Tools for Windows 64-bit\kd &#8211;k com:pipe,port=\\.\pipe\SimNow.Com1</font></p>
+
+  </blockquote><p><font face="Times New Roman">We recommend not starting the kernel debugger too early. To achieve best results launch the kernel debugger after the O/S kernel has loaded and it is trying to establish a connection with the kernel debugger.</font></p>
+
+  <h2><a name="P4347_246541"></a><font face="Arial" size="+1"><b><i>11.2 GDB Interface</i></b></font></h2>
+
+  <p><font face="Times New Roman">Getting the gdb<a name="P4348_246574"></a> interface in the simulator to work involves a sequence of commands in both the simulator and gdb. The current implementation requires the simulator to be started and told to be ready for gdb to connect and then having gdb connect. As long as the gdb command, &quot;<i>target remote ...</i>&quot; is issued last, the interface should be established. </font></p>
+
+  <p><font face="Times New Roman">It has been observed that after shutting down the simulator, the port used by the gdb interface may not become immediately available for reuse. If this happens just shut down both the simualtor and gdb and start again and the problem should go away.</font></p>
+
+  <h3><a name="P4351_247156"></a><font face="Arial" size="+1"><b>11.2.1 Simple Approach</b></font></h3>
+
+  <p><font face="Times New Roman">This assumes you are running the simulator and gdb on the same machine. </font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; Start the simualtor</font></p>
+
+    <p><font face="Times New Roman">&#8226; Run the following automation command:</font></p>
+
+      </ul></ul><blockquote><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; shell.gdb &lt;ENTER&gt;</font></p>
+
+    </blockquote></blockquote></blockquote><ul><ul><p><font face="Times New Roman">&#8226; Start gdb </font></p>
+
+      </ul></ul><blockquote><blockquote><blockquote><p><font face="Courier New">gdb&gt; set architecture i386:x86-64 &lt;ENTER&gt;</font></p>
+
+      <p><font face="Courier New">gdb&gt; target remote:2222 &lt;ENTER&gt;</font></p>
+
+  </blockquote></blockquote></blockquote><ul><h3><a name="P4361_247427"></a><font face="Arial" size="+1"><b>11.2.2 Alternate Approach</b></font></h3>
+
+  <p><font face="Times New Roman">This assumes you are running the simualtor and gdb on the same machine. </font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; Start the simulator</font></p>
+
+    <p><font face="Times New Roman">&#8226; Run the following automation command:</font></p>
+
+    <p><font face="Courier New">1 simnow&gt; shell.gdb &lt;ENTER&gt;</font></p>
+
+    <p><font face="Times New Roman">&#8226; Add the following to your <i>.gdbinit file</i> </font></p>
+
+      </ul></ul><blockquote><blockquote><blockquote><p><font face="Courier New">define simnow</font></p>
+
+      <p><font face="Courier New">set architecture i386:x86-64</font></p>
+
+      <p><font face="Courier New">target remote:2222</font></p>
+
+      <p><font face="Courier New">end</font></p>
+
+    </blockquote></blockquote></blockquote><ul><ul><p><font face="Times New Roman">&#8226; Start gdb </font></p>
+
+      </ul></ul><blockquote><blockquote><blockquote><p><font face="Courier New">gdb&gt; simnow &lt;ENTER&gt;</font></p>
+
+  </blockquote></blockquote></blockquote><ul><h3><a name="P4376_247754"></a><font face="Arial" size="+1"><b>11.2.3 Using Another Port on the Same Machine</b></font></h3>
+
+  <p><font face="Times New Roman">The simualtor defaults to using port 2222 but can be directed to use another port. </font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; Start the simulator </font></p>
+
+    <p><font face="Times New Roman">&#8226; Run the following automation command:</font></p>
+
+      </ul></ul><blockquote><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; shell.gdb 2233 &lt;ENTER&gt;</font></p>
+
+    </blockquote></blockquote></blockquote><ul><ul><p><font face="Times New Roman">&#8226; Start gdb </font></p>
+
+      </ul></ul><blockquote><blockquote><blockquote><p><font face="Courier New">gdb&gt; set architecture i386:x86-64 &lt;ENTER&gt;</font></p>
+
+      <p><font face="Courier New">gdb&gt; target remote:2233 &lt;ENTER&gt;</font></p>
+
+  </blockquote></blockquote></blockquote><ul><h3><a name="P4386_248065"></a><font face="Arial" size="+1"><b>11.2.4 Using Two Separate Machines</b></font></h3>
+
+    <ul><p><font face="Times New Roman">&#8226; Start the simualtor on <i>simnow-host</i> </font></p>
+
+    <p><font face="Times New Roman">&#8226; Run the following automation command:</font></p>
+
+      </ul></ul><blockquote><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; shell.gdb &lt;ENTER&gt;</font></p>
+
+    </blockquote></blockquote></blockquote><ul><ul><p><font face="Times New Roman">&#8226; Start gdb on <i>gdb-host</i> </font></p>
+
+      </ul></ul><blockquote><blockquote><blockquote><p><font face="Courier New">gdb&gt; set architecture i386:x86-64 &lt;ENTER&gt;</font></p>
+
+      <p><font face="Courier New">gdb&gt; target remote simnow-host:2222 &lt;ENTER&gt;</font></p>
+
+  </blockquote></blockquote></blockquote><ul><h2><a name="P4394_248316"></a><font face="Arial" size="+1"><b><i>11.3 Linux<sup>®</sup> Host Serial Port Communication</i></b></font></h2>
+
+  <p><font face="Times New Roman">When running the simulator on a Linux host, the serial port is able to communicate with external host applications via either a named-pipe or the host serial port. If the user has configuired named-pipe <a name="P4395_248562"></a>communication, the simualtor will set up an input pipe and an output pipe at </font><font face="Courier New">&quot;~./simnow/comX/simnow_in</font><font face="Times New Roman">&quot; and &quot;</font><font face="Courier New">~./simnow/comX/simnow_out</font><font face="Times New Roman">&quot;. External applications should read data from the simulation using the <i>simnow_out</i> named-pipe<a name="P4395_248789"></a>. Conversely, external applications should send serial data to the simulation using the simnow_in pipe.</font></p>
+
+  <p><font face="Times New Roman">Note that it is not possible for two simualtor sessions to communicate with each other on the same host using named-pipes. This is an issue that will be fixed in a future version of the simulator.</font></p>
+
+  <p><font face="Times New Roman">When the simaultor serial port has been configuired to use the host serial port, the simualtor will open &quot;</font><font face="Courier New">/dev/ttyS0</font><font face="Times New Roman">&quot; or &quot;</font><font face="Courier New">/dev/ttyS1</font><font face="Times New Roman">&quot; (depending on wether it is COM1 or COM2). Note that the user will need to be running the simulator with root privelages to avoid an access denied error when the simualtor attempts to open the device. The simulator can communicate with external applications, such as a kernel debugger in this mode.</font></p>
+
+  <p><font face="Times New Roman"> </font></p>
+
+<p align="left"><a href="help-48.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-50.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

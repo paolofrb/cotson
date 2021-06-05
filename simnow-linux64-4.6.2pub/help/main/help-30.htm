@@ -1,0 +1,28 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="415">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-29.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-31.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P2849_150700"></a><font face="Arial" size="+1"><b><i>7.18 Raid Device: Compaq SmartArray 5304</i></b></font></h2>
+
+  <p><font face="Times New Roman">The RAID<a name="P2850_150748"></a> device uses disk images, which are accessed as simulated volumes by the RAID controller. Storage devices like ATA HDD and RAID are implemented with concepts like disk-block cache, journaling, file, and memory stores. This page describes journaling in more detail.</font></p>
+
+  <p><font face="Times New Roman">A simulated volume in the RAID device is represented by an image file and one or more optional journals. The combination of an image and zero or more optional journals is used to hold the contents of a simulated volume. While creating a volume assign a disk-image file to it (e.g., &#8220;<i>raid.image 0 imagefilename&#8221;).</i> One or more additional journals can be added to the image file. The image file uses a data block to store the data, and the journal files use sparse indexing to hold just the blocks that have been changed. Not only does journaling provide an efficient way to access the data blocks in the simulated volume, but it also gives the user the flexibility to change the data-block size. </font></p>
+
+  <p><font face="Times New Roman">Journals<a name="P2854_151718"></a> can be created either in-memory or as file, depending on the use of <i>&#8220;addjournal</i>&#8221; command. RAID device supports multi-level journaling; i.e., for a created volume, the user can add multiple journals (however, one cannot add a journal after an in-memory journal). Conceptually, the disk image is equivalent to the image and fixed-journal pair. </font></p>
+
+  <p><font face="Times New Roman">Journals grow in size as the volumes associated with them are accessed (writes of data-blocks which haven&#8217;t been written before). File-based journals are preferred over in-memory Journaling if a large number of writes are going to be made to the simulated volume. </font></p>
+
+  <p><font face="Times New Roman">The journal architecture is index-based, consisting of super blocks, index blocks, and data blocks. This provides a hierarchical indexing mechanism, in which data blocks are accessed by their LBA (logical block address). </font></p>
+
+  <p><font face="Times New Roman">Several performance mechanisms are implemented in the RAID device, including <i>Disk Block Cache</i> and <i>Last Sector Hit</i>, which can be viewed at any time using the &#8220;<i>raid.status &#8211;v&#8221;</i> command.</font></p>
+
+  <p><font face="Times New Roman">AMD tested the RAID device both on SUSE Linux-64 and a 32-bit version of Windows 2003 Enterprise Server, using stock drivers to drive this model. This model emulates devices at the volume level, so that the files used to represent the data correspond to logical volumes, not disks. This model associates one logical volume with one image file. The model does not represent the timing of any real system, because data becomes available almost immediately.</font></p></ul><p align="left"><a href="help-29.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-31.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

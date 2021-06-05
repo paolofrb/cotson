@@ -1,0 +1,70 @@
+				Advanced Micro Devices, Inc.
+				SimNow License Agreement
+-----------------------------------------------------------------------------------
+
+IMPORTANT-READ CAREFULLY:  Do not load or use the Simulator until you have carefully read and agreed to the following terms and conditions.  This is a legal agreement ("Agreement") between you (either an individual or an entity) ("Licensee") and Advanced Micro Devices, Inc. ("AMD"). If Licensee does not agree to the terms of this Agreement, do not install or use this software or any portion thereof.  By loading or using the object code version only of the software obtained herewith, which may include the AMD64 architecture simulator (the "SimNow Software"), associated Software Developer Kit package (the "SimNow SDK"), associated media, printed materials, and online or electronic documentation or any portion thereof (collectively, the "Simulator"), associated install scripts and online or electronic documentation or any portion thereof, that is made available by AMD to download from any media, Licensee agrees to all of the terms of this Agreement. 
+
+1.	License Grant.  
+
+1.1	AMD hereby grants to LICENSEE a nonexclusive, non-transferable, royalty-free copyright license to use internally at LICENSEE’s premises only the object code version of the SimNow Software and object code portions of the SimNow SDK for development of hardware or software for use with computers incorporating AMD microprocessors.  LICENSEE shall have no right to distribute the SimNow Software in whole or in part, or to make or have made derivatives of the SimNow Software and object code portions of the SimNow SDK.  Additionally, LICENSEE shall have no right to reverse engineer, modify, disassemble or to decompile the SimNow Software and object code portions of the SimNow SDK, or otherwise reduce any part of the SimNow Software and object code portions of the SimNow SDK to any human readable form.
+
+1.2	AMD hereby grants to LICENSEE a nonexclusive, non-transferable, royalty-free copyright license to download, use, copy, and create derivative works of the source code portions of the SimNow SDK only for the purpose of internal evaluation of the SimNow SDK solely for development of LICENSEE hardware or software for use with SimNow Software and computers incorporating AMD microprocessors.  
+
+1.3	Additionally, AMD hereby grants to LICENSEE a nonexclusive, non-transferable copyright license to distribute derivative works derived from the source code portions of the SimNow SDK only in conjunction with the distribution of LICENSEE products incorporating AMD products and only in object code form.  Said distribution shall be under an enforceable license agreement with terms and conditions at least as restrictive as those set forth herein and shall require such derivative works be kept confidential.
+
+	1.4	For clarification, LICENSEE may not combine the Simulator in whole or in part, with any other code that would require any portion of the Simulator to be licensed to third parties or that would require any portion of the SimNow SDK to be released in source code form.
+
+	1.5	AMD specifically prohibits LICENSEE’s use of the Simulator for development of x86 compatible microprocessors, translators that allow x86 code to run on non-x86 machines, or the development of tests to aid in development of such products.  Any license for use with products other than microprocessor products designed by and manufactured by or for AMD is expressly denied.  This Agreement does not grant LICENSEE any rights, by license, implication or otherwise, in or to all or portions of the Simulator or any associated materials or technology, except as is expressly provided herein.  Furthermore, LICENSEE acknowledges that except as expressly provided herein, the Simulator and any associated materials provided by AMD hereunder are for LICENSEE'S internal use only and LICENSEE may not sell, transfer, assign, sublicense or distribute the Simulator or the associated materials, in whole or in part, in any manner whatsoever. 
+ 
+1.6	LICENSEE grants AMD a worldwide, irrevocable, perpetual, royalty-free license to use, disclose, reproduce, license, and distribute LICENSEE’s feedback regarding the Simulator and/or derivative works provided to AMD in any AMD product, technology, service or documentation.  LICENSEE acknowledges it is not obligated to provide such feedback to AMD.
+
+2.	Ownership and Copyright Notices.  The Simulator is owned by AMD and is protected by United States and foreign intellectual property laws (e.g. patent and copyright laws) and international treaty provisions. LICENSEE will not alter or remove any copyright notices on the Simulator and any other materials provided pursuant to this Agreement.  LICENSEE agrees to prevent any unauthorized copying of the Simulator.  All title and copyrights in and to the Simulator, all copies thereof (in whole or in part, and in any form), and all rights therein shall remain vested in AMD.  Except as expressly provided herein, AMD does not grant any express or implied right to LICENSEE under AMD patents, copyrights, trademarks, or trade secret information.
+
+3.	Support.  LICENSEE will not be entitled to any support of any kind from AMD or AMD’s licensors.  AMD may, in its sole discretion, provide to LICENSEE updates, and such updates will be covered under this Agreement.  Furthermore, LICENSEE shall be solely responsible for providing support to LICENSEE’s end users for any derivative works of the SimNow SDK that are distributed by LICENSEE.  
+
+4.	Warranty, Limitations of Liability and Indemnification.  
+
+4.1	THE SIMULATOR AND ANY OTHER MATERIALS PROVIDED PURSUANT TO THIS AGREEMENT ARE PROVIDED "AS IS," WITH ALL FAULTS, AND WITHOUT WARRANTY OF ANY KIND.  AMD DISCLAIMS ALL WARRANTIES, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, NONINFRINGE-MENT, AND ALL WARRANTIES ARISING FROM COURSE OF DEALING OR CUSTOM OF TRADE WITH RESPECT TO THE SIMULATOR AND ANY OTHER MATERIALS PROVIDED PURSUANT TO THIS AGREEMENT.  AMD DOES NOT WARRANT THAT THE SIMULATOR  AND ANY ASSOCIATED MATERIALS PROVIDED BY AMD ARE ERROR FREE OR THAT THE SIMULATOR WILL RUN CONTINUOUSLY.  
+
+4.2	AMD SHALL NOT, UNDER ANY CIRCUMSTANCES, BE LIABLE TO LICENSEE FOR CONSEQUENTIAL, INCIDENTAL, PUNITIVE OR SPECIAL DAMAGES, INCLUDING BUT NOT LIMITED TO, LOSS OF USE, DATA OR PROFITS, ARISING FROM THIS AGREEMENT, EVEN IF AMD HAS BEEN APPRISED OF THE LIKELIHOOD OF SUCH DAMAGES.
+
+4.3	LICENSEE AGREES TO DEFEND, INDEMNIFY AND HOLD HARMLESS AMD AND ITS LICENSORS, AND ANY OF THEIR DIRECTORS, OFFICERS, EMPLOYEES, AFFILIATES OR AGENTS, FROM AND AGAINST ANY AND ALL LOSS, DAMAGE, LIABILITY AND OTHER EXPENSES (INCLUDING REASONABLE ATTORNEYS' FEES), RESULTING FROM (a) LICENSEE'S IMPROPER USE OF THE SIMULATOR OR ANY OTHER MATERIALS PROVIDED PURSUANT TO THIS AGREEMENT or (b) DERIVATIVE WORKS OF THE SIMNOW SDK CREATED OR DISTRIBUTED BY LICENSEE.
+
+5.	Confidentiality.
+
+5.1	Unless otherwise previously approved by AMD in writing, LICENSEE will consider the Simulator and any other materials provided pursuant to this Agreement to be confidential and will not disclose the Simulator and any other materials provided pursuant to this Agreement to anyone other than those of its employees or subcontractors (i) who have a need to know in furtherance of the purpose stated above and (ii) who have signed an agreement with LICENSEE obligating them (a) not to disclose the Simulator and any other materials provided pursuant to this Agreement to anyone other than employees or subcontractors of LICENSEE who signed similar agreements with LICENSEE and (b) not to use the Simulator and any other materials provided pursuant to this Agreement for any purpose other than the purpose stated above.  LICENSEE’s confidentiality obligation will expire five (5) years from the Effective Date, with the exception of the source code portions of the SimNow SDK which shall be kept confidential in perpetuity.
+
+5.2	Before disclosing the Simulator and any other materials provided pursuant to this Agreement to any of its employees or subcontractors, LICENSEE will advise each such employee or subcontractor that the Simulator and any other materials provided pursuant to this Agreement are confidential and subject to the restrictions stated in this Section 5.  LICENSEE further agrees to secure and protect the Simulator and any other materials provided pursuant to this Agreement with the same degree of care that it uses to protect its own confidential information to prevent the unauthorized use, dissemination or disclosure, but no less than a reasonable degree of care.
+
+5.3	If at any future time AMD, directly or indirectly, discloses any other related technology or information to LICENSEE, including without limitation any updated versions of the Simulator, such disclosure will also be deemed to be confidential, part of the Simulator and will be subject to the provisions of this Agreement.
+
+5.4	These confidentiality obligations will not apply to information that (i) on the date of this Agreement was already known to LICENSEE or available to the public; (ii) after the date of this Agreement becomes known to LICENSEE other than by unauthorized disclosure or becomes available to the public other than by unauthorized disclosure; or (iii) was or is developed by LICENSEE independently without any use of any of the Simulator or the materials provided pursuant to this Agreement.
+
+6.	Term and Termination. This Agreement will terminate immediately without notice from AMD or judicial resolution if LICENSEE fails to comply with any provisions of this Agreement.  Upon termination of this Agreement, LICENSEE shall:  (i) cease using the Simulator and any other materials provided pursuant to this Agreement, (ii) cause its employees and agents to destroy and to certify to the destruction of all copies of the Simulator and any other materials provided pursuant to this Agreement, in whole or in part, (iii) return all original copies of the Simulator and any other materials provided pursuant to this Agreement to AMD, and (iv) make no further use of any of the Simulator and any other materials provided pursuant to this Agreement for any purpose.  AMD and LICENSEE acknowledge that this Agreement shall expire upon AMD’s request that LICENSEE return the Simulator and any other materials provided pursuant to this Agreement to AMD.
+
+7.	Survival.  Notwithstanding the foregoing, Sections 1.5, 1.6, 2, 4, 5, 6, 7, 8 and any sections which naturally should survive shall survive any expiration or termination of this Agreement, until by their own terms they are fulfilled.
+
+8.	General.
+
+8.1	Export.  LICENSEE agrees to comply with all U.S. export laws in connection with the marketing, sale and distribution of products licensed from AMD hereunder, including without limitation the Export Administration Regulations administered by the U.S. Department of Commerce and the International Traffic in Arms Regulations administered by the U.S. Department of State.
+
+8.2	U.S. Government Restricted Rights. The Simulator and associated materials are provided with "RESTRICTED RIGHTS."  Use, duplication or disclosure by the Government is subject to restrictions as set forth in FAR 52.227-14 and DFAR 252.227-7013, et seq., or its successor.  Use of the Simulator and any other materials provided pursuant to this Agreement by the Government constitutes acknowledgment of AMD’s proprietary rights in them.
+
+8.3	Assignment.  LICENSEE may not assign this Agreement.  Any attempted assignment by LICENSEE shall be null and void.
+
+8.4	Governing Law.  This Agreement will be governed under the laws of California, excluding the conflicts of law rules, and is deemed to have been executed and performed in San Jose, California. 
+
+8.5	Authority.  The persons executing this Agreement represent that they have requisite authority to do so.
+
+8.6	Relationship of the Parties.  No agency, partnership, joint venture, or employment is created between AMD and LICENSEE by this Agreement.  Neither party has any authority, express or implied, to create any obligation or responsibility on behalf of the other party.  
+
+8.7	Waiver and Amendment.  No waiver, amendment, or modification of any provision of this Agreement will be effective unless in writing and signed by the party against whom its enforcement is sought.  No failure or delay by either party in exercising any right or remedy under this Agreement, except as provided herein, will operate as a waiver.
+
+8.8	Severability.  If any provision of this Agreement is held by a court of competent jurisdiction to be unenforceable, unlawful, or invalid, such provision will be deemed modified to eliminate the invalid portion and as so modified will be deemed a part of this Agreement.  The remaining provisions of this Agreement will not be affected by such modification and will remain in effect.
+
+8.9	Entire Agreement.  This Agreement constitutes the entire agreement of the parties and supersedes any and all prior and contemporaneous oral and/or written agreements concerning the subject matter hereof.  This Agreement may not be modified except by a written instrument executed by the parties.
+
+8.10	Counterpart Originals.  This Agreement and any counterpart original thereof may be executed and transmitted by facsimile.  The facsimile signature shall be valid and acceptable for all purposes as if it were an original.
+
+If you agree to abide by the terms and conditions of this Agreement, please complete the blanks below and press "Accept."  If you do not agree to abide by the terms and conditions of this Agreement and press "Decline," you may not use the Simulator.
+				

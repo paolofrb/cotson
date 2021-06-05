@@ -1,0 +1,98 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="400">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-14.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-16.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P1582_92588"></a><font face="Arial" size="+1"><b><i>7.3 DIMM Device</i></b></font></h2>
+
+  <p><font face="Times New Roman"><a name="P1583_92603"></a>The DIMM<a name="P1583_92611"></a> device provides a simulation model of an array of up to four dual-inline-memory modules (DIMMs). The model provides RAM storage and serial presence detect (SPD) ROM access for each DIMM. Bytes 0, 5, 13, and 31 (zero-based) of the SPD data are used to configure the DIMM model. The remaining SPD entries are available for BIOS probing, but are not used to configure the DIMM model.</font></p>
+
+  <p><font face="Times New Roman"><a name="P1585_92992"></a>The RAM array for each DIMM is sized based on parameters contained in the SPD array. SPD array bytes 5 and 31 are used to calculate the size of the DIMM's RAM array. If byte 0 in the SPD array has a value of zero, then the DIMM device does not respond to any SMBUS read attempts on the module. This indicates to the reading device that an SPD ROM is not available on the DIMM module. By appropriately setting bytes 5 and 31, and clearing byte 0, the model simulates a valid DIMM that contains no SPD ROM.</font></p>
+
+  <p><font face="Times New Roman"><a name="P1587_93496"></a>Dual data rate (DDR) DIMMs use bidirectional data strobe signals to latch data on transfers. The Northbridge device contains Programmable Delay Lines (PDLs) <a name="P1587_93653"></a>that are used to delay the Data Qualification Signal (DQS) signals so that the edges are centered on the valid data window. BIOS algorithms are used to locate the valid data window and adjust the PDLs accordingly.</font></p>
+
+  <p><font face="Times New Roman"><a name="P1589_93866"></a>Physical DIMMs provide 8 bytes of data per access. On the module, the 8 bytes of data are stored across several memory devices. The data width of the memory devices on the DIMM (SPD byte 13) determines how many PDLs are used. DIMMs that use 8-bit or 16-bit memory devices use one PDL per byte of width (eight total PDLs). DIMMs that use 4-bit devices use one PDL per nibble (16 total PDLs). </font></p>
+
+  <p><font face="Times New Roman">The memory controller in the AMD Opteron&#8482; processor includes two DDR channels that are ganged into a single effective 128-bit interface. Each access to memory hits a pair of 64-bit DIMMs, where one DIMM supplies the lower 64 bits while the other DIMM supplies the upper 64 bits. Each DIMM must have the same arrangement in size and number of banks.</font></p>
+
+  <p><font face="Times New Roman">For each valid access to DRAM, the memory controller will assert one of eight bank-select lines (CS7:0). Each bank-select line selects one &#8220;virtual bank.&#8221; A virtual bank is the combination of one bank on the lower DIMM, and the corresponding bank on the upper DIMM. Row and column addresses select the data offset within the virtual bank.</font></p>
+
+  <p align="center"><img src="images/help-107.gif" border="0" width="575" height="282"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1596_94949"></a>Figure 7-3: AMD Opteron&#8482; Processor Virtual Bank-Select Line Configuration</b></font></p>
+
+  <p><font face="Times New Roman">Memory controllers in AMD Athlon&#8482; 64 provide eight bank select lines. However, in this case, each bank-select is routed to only one physical DIMM bank, i.e., the banks are not ganged.</font></p>
+
+  <p align="center"><img src="images/help-108.gif" border="0" width="575" height="221"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1600_95209"></a>Figure 7-4: AMD Athlon&#8482; 64 Processor Bank-Select Line Configuration</b></font></p>
+
+  <p><font face="Times New Roman">Configuration of the DIMM Device allows the user to specify SPD data for each simulated DIMM. The number of DIMMs supported in the DIMM Device model is dependent on the type of CPU used in the system. If the CPU type is an AMD Opteron processor, then the DIMM Device will assume a 128-bit memory interface and therefore allow configuration of up to eight individual DIMMs. If the CPU type is something other than AMD Opteron, then the DIMM device assumes a 64-bit memory interface and accepts configuration for only four DIMMs. It isn&#8217;t until the simulation is started that the DIMM Device can determine what type of CPU is present. For this reason, the DIMM Device will initially display configuration tabs for 8 DIMMs even when used with a CPU that is not based on the AMD Opteron processor. After the simulation is started, the DIMM device will remove and ignore any configuration of DIMMs 4-7 if a processor other than the AMD Opteron is detected.</font></p>
+
+  <p><font face="Times New Roman">Once the simulation is started, the DIMM Device allocates memory arrays to hold the DRAM data. One array is allocated for each bank or virtual bank. In the case of 64-bit memory interfaces, memory arrays are allocated to match the size of the physical banks on each DIMM. If the memory interface is 128 bits, then the memory arrays are sized to the sum of the physical bank pairs that make up the virtual banks. For example:</font></p>
+
+  <p><font face="Times New Roman">Virtual bank0 is the combination of physical bank0 on DIMM0 and physical bank0 on DIMM1. If physical bank0 on each DIMM is 32MB in size, then the array allocated for virtual bank0 is sized at 64MB.</font></p>
+
+  <p><font face="Times New Roman">Each virtual bank is handled like it is one large bank, rather than two combined smaller banks. The model does not distinguish between addresses that hit in the upper physical bank and addresses that hit in the lower physical bank.</font></p>
+
+  <p><font face="Times New Roman">Memory read- and write-messages sent to the DIMM Device use the same structure for both 128-bit and 64-bit interfaces. Each message includes a bank select field, an address field, and a data size field. The bank select field implements the CS7:0 lines while the address field specifies the beginning offset within the bank/virtual bank, and the data size field specifies the size of the datum.</font></p>
+
+  <p><font face="Times New Roman"><b>Interfaces</b></font></p>
+
+  <p><font face="Times New Roman">The DIMM device is implemented as a single-interface device. However, the device accepts two distinct classes of messages: RAM read/write messages, and SMBUS reads of SPD data. In most system configurations, the DIMM device is connected to a Northbridge device's DIMM interface as well as a Southbridge device's SMBUS interface.</font></p>
+
+  <p><font face="Times New Roman"><b>Initialization/Reset State</b></font></p>
+
+  <p><font face="Times New Roman">On creation of the DIMM device, all RAM arrays are set to all ones, and SPD ROM arrays are cleared. Reset initializes the RAM arrays to all ones, but does not alter the SPD ROM arrays. Configuration options are not affected by reset.</font></p>
+
+  <p><font face="Times New Roman"><b>Contents of a BSD</b></font></p>
+
+  <p><font face="Times New Roman">The RAM arrays, SPD ROM arrays, and all configuration option settings are saved in the BSD.</font></p>
+
+  <p><font face="Times New Roman"><b>Configuration Options</b></font></p>
+
+  <p align="center"><img src="images/help-109.gif" border="0" width="515" height="534"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1623_98202"></a>Figure 7-5: DIMM-Bank Options Properties Dialog</b></font></p>
+
+  <p><font face="Times New Roman"><a href="#P1623_98202">Figure 7-5</a> shows the dialog for configuring DIMM-bank options.</font></p>
+
+  <p><font face="Times New Roman">The <i>PDL Error Simulation Control </i><a name="P1626_98344"></a>section specifies the type of error that the DIMM device will generate, when a memory read is attempted and when a Northbridge PDL is set outside the valid response range. These settings apply to all four simulated DIMMs.</font></p>
+
+  <p><font face="Times New Roman">If <i>Enable PDL Error Simulation</i> <a name="P1628_98596"></a>is selected, then the DIMM device monitors PDL settings for all RAM reads. The <i>0xFF</i> option specifies that the return data should be forced to all ones. The <i>Invert</i> option specifies that the return data should be a bitwise inversion of the valid data.</font></p>
+
+  <p><font face="Times New Roman">The <i>SMB Base Address</i> <a name="P1630_98866"></a>entry selects the 8-bit address that this DIMM device responds to. The SMB address is used for the reading of DIMM SPD data</font></p>
+
+  <p align="center"><img src="images/help-110.gif" border="0" width="515" height="684"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1633_98989"></a>Figure 7-6: DIMM Module Properties Dialog</b></font></p>
+
+  <p><font face="Times New Roman">The two DIMM module configuration dialogs, shown in <a href="#P1633_98989">Figure 7-6</a>, (DIMM0 &#8211; DIMM1) provide module-specific setup options for each simulated DIMM. The two DIMM module configuration dialogs share the same format. </font></p>
+
+  <p><font face="Times New Roman">The upper part of the dialog lists some summary information. This information, which is derived from the SPD data, gives a quick indication of the type of device being simulated.</font></p>
+
+  <p><font face="Times New Roman">The center section of the dialog lists all 256 bytes of data held in the simulated SPD ROM. The list box provides a description of each byte index in the ROM. If a description is selected, the corresponding data byte is displayed in the text box to the right.</font></p>
+
+  <p><font face="Times New Roman"> </font></p>
+
+  <p><font face="Times New Roman">The <i>Import SPD</i> and <i>Export SPD</i> <a name="P1640_99708"></a> <a name="P1640_99709"></a>buttons provide the option of loading and saving SPD ROM data. The file format is an unformatted binary image, with an extension of &#8220;*<i>.spd&#8221;</i>.</font></p>
+
+  <p><font face="Times New Roman">The bottom section of the dialog is used to configure <i>DDR PDL Response</i> ranges for the simulated DIMM. PDL response ranges can be individually set for each of 16 PDLs. Adjusting the <i>Low</i> and <i>High</i> value modifies the response range for a particular PDL. When an appropriate response range is set for one PDL, the same range can be applied to all 16 PDLs by clicking on the <i>Match PDLs</i> button. The <i>Reset PDLs</i> <a name="P1642_100256"></a>button sets all 16 PDL response ranges to their maximum range (0 - 255).</font></p>
+
+  <p><font face="Times New Roman"><b>Log Messages</b></font></p>
+
+  <p><font face="Times New Roman">This device does not produce log messages.</font></p>
+
+  <p><font face="Times New Roman"><b>Difference from Real Hardware</b></font></p>
+
+  <p><font face="Times New Roman">The DIMM device does not simulate timing-related issues except for PDL error simulation. The performance of real DIMM hardware is highly dependent on timing and loading issues.</font></p>
+
+  <p><font face="Times New Roman">ECC<a name="P1650_100590"></a> simulation is not provided.</font></p></ul><p align="left"><a href="help-14.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-16.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

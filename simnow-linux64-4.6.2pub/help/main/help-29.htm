@@ -1,0 +1,40 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="414">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-28.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-30.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P2826_149284"></a><font face="Arial" size="+1"><b><i>7.17 AMD-8151&#8482; AGP Bridge Device</i></b></font></h2>
+
+  <p><font face="Times New Roman">The AMD-8151<a name="P2827_149330"></a> AGP Bridge Device tunnel is a HyperTransport tunnel that provides an AGP bridge. In general, AMD-8151 would be connected in a non-coherent HyperTransport chain between the host bridge and the Southbridge.</font></p>
+
+  <p><font face="Times New Roman"><b>Interface</b></font></p>
+
+  <p><font face="Times New Roman">The AMD-8151 has three types of interfaces, HyperTransport, AGP, and INT/IOAPIC buses. The AMD-8151 has two HyperTransport links, HT0 and HT1, that can connect to other non-coherent HyperTransport link-capable devices. HT0 should be connected to the upstream link (the one closest to the host bridge) and HyperTransport1 should be connected to the downstream link. The AGP interface should be connected to an AGP graphics device. The INT_IOAPIC bus should be connected to the Southbridge; it routes interrupt signals from the AGP bus to the Southbridge.</font></p>
+
+  <p><font face="Times New Roman"><b>Initialization and Reset State</b></font></p>
+
+  <p><font face="Times New Roman">When first initialized or reset, the AMD-8151 registers are set to their default state.&nbsp; This is described in detail in the AMD-8151 datasheet.</font></p>
+
+  <p><font face="Times New Roman"><b>Contents of a BSD</b></font></p>
+
+  <p><font face="Times New Roman">The current state of all PCI configuration registers and any internal state variables are saved in the BSD.</font></p>
+
+  <p><font face="Times New Roman"><b>Configuration Options</b></font></p>
+
+  <p><font face="Times New Roman">The AMD-8151 device allows you to set its <i>Revision number </i>as shown in <a href="#P2842_150498">Figure 7-32</a>.</font></p>
+
+  <p align="center"><img src="images/help-137.gif" border="0" width="515" height="325"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P2842_150498"></a>Figure 7-32: AMD-8151&#8482; Device Properties Dialog</b></font></p>
+
+  <p><b><font face="Times New Roman">Differences from Real Hardware</font></b></p>
+
+  <p><font face="Times New Roman">Clock-sensitive functionality, like setting bus speeds, is not supported. The HyperTransport bus protocol is not simulated.</font></p></ul><p align="left"><a href="help-28.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-30.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

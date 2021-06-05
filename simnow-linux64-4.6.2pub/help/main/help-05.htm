@@ -1,0 +1,113 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="390">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-04.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-06.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><p align="left"><a name="P447_14761"></a><img src="images/gtabsepm.gif"></p>
+<h1><font face="Arial" size="+2"><b>1 Overview</b></font></h1>
+
+  <p><font face="Times New Roman">The AMD SimNow&#8482; simulator is an AMD64 technology-compatible x86 platform simulator for AMD's family of processors. It is designed to provide an accurate model of a computer system from the program, OS, and programmer's point of view. It allows fast simulation of an entire computer system, plus standard debugging features such as break-pointing, memory-viewing, and single-stepping. The simulator allows such work as BIOS and OS development, memory-parameter tuning, and multi-processor system simulation. </font></p>
+
+  <p><font face="Times New Roman">Section <a href="help-06.htm#P515_18894">2.1</a>, &#8220;<a href="help-06.htm#P515_18894"><i>System Requirements</i></a>&#8221;, on page <a href="help-06.htm#P515_18894">3</a> describes supported host Operating Systems. Section <a href="help-55.htm#P5386_278533">A.3</a>, &#8220;<a href="help-55.htm#P5386_278533"><i>Supported Guest Operating Systems</i></a>&#8221;<i>, </i>on page<i> </i><a href="help-55.htm#P5382_278276">184</a> describes supported guest Operating Systems.</font></p>
+
+  <p><font face="Times New Roman">The simulator has between a 10:1 and 100:1 slowdown<a name="P452_15535"></a> rate from the host CPU, depending on whether the workload is in the CPU core or accessing simulated devices intensively. </font></p>
+
+  <p><font face="Times New Roman">The simulator is designed to create an accurate model of a system from the program&#8217;s view. Device models contain all the program-visible state but the actual functionality is abstracted. In many cases only the functionality needed to satisfy the software is implemented. Software may be run on the simulator in an unmodified form. This includes BIOS, drivers, O/S, and applications.</font></p>
+
+  <p><font face="Times New Roman">The simulator has a concept of time, but it is not a cycle-accurate<a name="P456_16108"></a> simulator. The basic timing mechanism is an instruction; all instructions execute in the same amount of time and are one tick in length. This &quot;tick&quot; time is scaled and used by the rest of the system. Long-latency events, like disk or floppy access, have some minimum latency built in because we found legacy software that relied on the physical latency of these peripherals.</font></p>
+
+  <p><font face="Times New Roman">The simulator contains all the classic pieces of a PC system (CPU, memory, Northbridge, Southbridge, display, IDE drives, floppy, keyboard, and mouse support). Images (hard disk, DVD/CD-ROM, and floppy) can be created in custom sizes with the DiskTool program (Section <a href="help-51.htm#P4476_251456">13</a>, &#8220;<a href="help-51.htm#P4476_251456">DiskTool</a>&#8221;, on page <a href="help-51.htm#P4476_251456">165</a>) that is provided with the simulator. A simulation can be saved at any point in the simulation to a media file, from which the simulation can be re-run at a later time. </font></p>
+
+  <p><font face="Times New Roman">A simple diagnostic port model (known as &quot;Port80&quot; device) displays values written by the BIOS in a pane of the simulator's main window. Other panes display guest (simulated machine) and simulator host processor times. The simulator requires several files to be specified. Binary files containing the BIOS and disk images are stored in the images directory. The simulator home directory stores &#8220;<i>*.bsd</i>&#8221; files which contain the configuration of the system (how models are connected together and their settings) and the logical state of all the devices in the simulator. When starting a simulation from reset, the &#8220;<i>*.bsd</i>&#8221; file is rather small and only contains the configuration information. When the simulation starts, the simulated memory is allocated. When the simulation is halted and saved, the &#8220;<i>*.bsd</i>&#8221; file will have grown significantly, slightly larger than the size of simulated memory.</font></p>
+
+  <p><font face="Times New Roman">The graphics<a name="P462_17867"></a> device supplied with the simulator is a 2D and 3D graphics card with linear frame buffer and DirectX<sup>®</sup> 6 support. AMD currently plans to provide a graphics model with the simulator which will also have modern 3D hardware acceleration, including Microsoft<sup>®</sup> DirectX 9/10<a name="P462_18137"></a> support.</font></p>
+
+<p><font face="Times New Roman">The simulator is available in two versions: <i>Public Release</i> and <i>Full Release</i>. <a href="#P499_18691">Table 1-1</a> shows the detailed feature matrix:</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="369"><p><font face="Times New Roman"><b>Feature</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="103"><p align="center"><b><font face="Times New Roman">Public Release</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="90"><p align="center"><b><font face="Times New Roman">Full Release</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="369"><p><font face="Times New Roman">DIMM configuration</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><font face="Times New Roman" size="-1"><i>Limited</i></font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="369"><p><font face="Times New Roman">Available devices </font></p>
+</td>
+<td valign="top" width="103"><p align="center"><font face="Times New Roman" size="-1"><i>Limited</i></font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="369"><p><font face="Times New Roman">Available platform definition files (BSDs)</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><font face="Times New Roman" size="-1"><i>Limited</i></font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="369"><p><font face="Times New Roman">Devices can be added and removed from platform definition files</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="369"><p><font face="Times New Roman">Connecting and disconnecting devices</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="369"><p><font face="Times New Roman">Ships with a variety of different CPU cores (Product Files)</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="369"><p><font face="Times New Roman">Full product support</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><font face="Times New Roman" size="-1"><i>Limited</i></font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="369"><p><font face="Times New Roman">Analyzer support</font></p>
+</td>
+<td valign="top" width="103"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="369"><p><font face="Times New Roman">Support of simulated multi-processor systems (up to 16 CPUs) </font></p>
+</td>
+<td valign="top" width="103"><p align="center"><font face="Times New Roman" size="-1"><sup><a href="#P496_18661" name="P496_18662"><img src="images/help-2.gif" border="0" width="16" height="15">1</a></sup></font></p>
+</td>
+<td valign="top" width="90"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P499_18691"></a>Table 1-1: Feature Overview Public Release versus Full Release</b></font></p>
+
+  <p><font face="Times New Roman">To get more information about how to obtain the full release version of the simulator please send an email to <u><!-- TRANSIT - HYPERLINK --><!-- .mailto:simnow@amd.com. --><a href="mailto:simnow@amd.com" target="_top">simnow@amd.com</a></u>. </font></p>
+
+  <p><font face="Times New Roman"> </font></p></ul>
+
+<p><font face="Times New Roman" size="-1"><sup><a name="P496_18661" href="#P496_18662">1</a> </sup></font><font face="Times New Roman"> Support of up to two cores.</font></p><p align="left"><a href="help-04.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-06.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

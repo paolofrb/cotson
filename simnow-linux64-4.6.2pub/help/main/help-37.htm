@@ -1,0 +1,269 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="422">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-36.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-38.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P3587_195961"></a><font face="Arial" size="+1"><b><i>7.25 E1000 Network Adapter Device</i></b></font></h2>
+
+  <p><font face="Times New Roman">The network adapter device models an Intel Pro/1000 MT Desktop Network Adapter.  The adapter depends heavily on MAC address assignment in order to determine how visible it is to <i>real</i> network resources or other simulator network sessions. The adapter model requires a separate mediator process to bridge access to the real network. This device provides a list of automation commands that can be used to configure the adapter model, see Section <a href="help-59.htm#P9811_384062">A.7</a>, &#8220;<i><a href="help-59.htm#P9811_384062">Automation Commands</a></i>&#8221;, on page <a href="help-59.htm#P9811_384062">228</a>.</font></p>
+
+  <p><font face="Times New Roman">To model network workloads the following are typically required:</font></p>
+
+    <ul><p><font face="Times New Roman">1. One or more BSDs with a NIC device included in each BSD.</font></p>
+
+    <p><font face="Times New Roman">2. A mediator process running remotely or locally.  </font></p>
+
+  </ul><p><font face="Times New Roman">The mediator is a background daemon task, whose purpose is to bridge the NIC model to the real network or other SimNow BSDs. The level of network visibility for each simulator session depends on the format of the MAC address that is used for the simulated NIC model.</font></p>
+
+  <p><font face="Times New Roman"><a href="#P3620_197001">Figure 7-35</a> shows depicts four simulator sessions communicating via a mediator.</font></p>
+
+  <p><img src="images/help-140.gif" border="0" width="570" height="403"><br>
+</p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P3620_197001"></a>Figure 7-35: Communication via Mediator</b></font></p>
+
+  <p><font face="Times New Roman">Alternatively a multi-machine approach can be used in which multiple BSD&#8217;s are loaded in the same process space. This architecture allows the simulator sessions to pass packets back and forth without the need for a mediator. Running without a mediator isolates the simulator sessions from the real network. For more information on running multiple simulator instances in the same process, see Section <a href="help-09.htm#P1213_78781">5.3</a>, <a href="help-09.htm#P1213_78781"><i>Multi-Machine Support</i></a>, on page <a href="help-09.htm#P1213_78781">45</a>. </font></p>
+
+  <p><font face="Times New Roman"><a href="#P3638_197576">Figure 7-36</a> illustrates multi-machine communication of simulator sessions without a mediator.</font></p>
+
+  <p><img src="images/help-141.gif" border="0" width="482" height="268"><br>
+</p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P3638_197576"></a>Figure 7-36: Multi-Machine Communication without a Mediator</b></font></p>
+
+  <h3><a name="P3639_197635"></a><b><font face="Arial" size="+1">7.25.1 Simulated Link Negotiation</font></b></h3>
+
+  <p><font face="Times New Roman">A link will appear connected in the guest system when one of the following occurs:</font></p>
+
+    <ul><p><font face="Times New Roman">&#8226; A mediator connection has been established.</font></p>
+
+    <p><font face="Times New Roman">&#8226; There is at least one other NIC BSD running in the same process, and are aware of each other.</font></p>
+
+  </ul><p><font face="Times New Roman">When a new mediator connection string has been specified, a one-shot link negotiation will take place within the simulator. Depending on whether a connection was made with the mediator, the link will appear to be connected or disconnected on the guest.  If the mediator was killed and has since been restarted, then the user will need to perform a &#8220;linkConnect auto&#8221;, to restart link negotiation.  </font></p>
+
+  <p><font face="Times New Roman">Similarly, in a multi-machine setup, the first simulator session will also need to perform a &#8220;linkConnect auto&#8221; to ensure that the initial guest sees that other simulator peers have been connected.</font></p>
+
+  <p><font face="Times New Roman">When neither of the above conditions is met, the link appears disconnected in the guest.  It may be necessary to re-start link negotiation via &#8220;linkConnect auto&#8221;. This will cause the NIC model to retry a mediator connection or search for any simulator peers, running in the same process.</font></p>
+
+  <h3><a name="P3650_198788"></a><font face="Arial" size="+1"><b>7.25.2 The Mediator Daemon</b></font></h3>
+
+  <p><font face="Times New Roman">The mediator provides several services for the simulator session:</font><a name="P3651_198879"></a></p>
+
+    <ul><p><font face="Times New Roman">&#8226; Access to real network resources (DHCP<a name="P3653_198921"></a> servers, etc.). Note that the mediator will need to be run with supervisor privileges in order to snoop network traffic on its host.</font></p>
+
+    <p><font face="Times New Roman">&#8226; Bridge communication to other simulator sessions.</font></p>
+
+    <p><font face="Times New Roman">&#8226; Group individual sessions into domains so that identical BSD&#8217;s (with identical MAC/IP pairs) can be run simultaneously in separate domains.</font></p>
+
+    <p><font face="Times New Roman">&#8226; Provides an optional gateway to block broadcast traffic and to perform Network Address Translation (NAT) on identical BSD&#8217;s in different domains.  </font></p>
+
+  </ul><p><font face="Times New Roman">The mediator can route traffic to and from the real network. This operation requires low-level kernel actions, so the mediator must be run by a supervisor with sufficient OS privileges.  Users may want to have one machine on the subnet dedicated to running the mediator in this mode. Client machines that connect to the mediator will not require supervisor privileges.</font></p>
+
+  <p><font face="Times New Roman">The mediator is capable of grouping certain simulator sessions into <i>domains</i>. Domains isolate groups of simulator sessions from each other. This can be useful when the user wants to run replicated groups of BSD&#8217;s simultaneously. The user need to ensure that each group of BSD&#8217;s are using unique domains in the mediator by passing an appropriate connect string to the mediator or supplying it on the command line using the &#8220;-m&#8221; option, see Section <a href="help-09.htm#P1131_70809">5.1</a>, <i><a href="help-09.htm#P1131_70809">Command-Line Arguments</a></i>, on page <a href="help-09.htm#P1131_70809">39</a>.</font></p>
+
+  <p><font face="Times New Roman">The mediator can provide one or more gateways<a name="P3662_200312"></a> to isolate broadcast traffic from your simulation environment. A gateway will perform NAT in order to ensure that BSD&#8217;s in different domains get their packets routed appropriately. The simulator sessions using the mediator&#8217;s gateway can continue to access network resources, but are essentially hidden from the real network.</font></p>
+
+<p><font face="Times New Roman"><a href="#P3682_201595">Table 7-9</a> shows command line switches that the mediator accepts:</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e6e6e6" valign="top" width="137"><p align="center"><font face="Times New Roman"><b>Switch</b></font></p>
+</td>
+<td bgcolor="#e6e6e6" valign="top" width="446"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="137"><p><font face="Times New Roman">-p portNum</font></p>
+</td>
+<td valign="top" width="446"><p><font face="Times New Roman">Dictates what port number the mediator will be listening on for incoming traffic. It specifies the base port address used by the mediator, and port usage is based off of this number. The mediator's listening thread uses portNum + 4.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="137"><p><font face="Times New Roman">-l </font></p>
+</td>
+<td valign="top" width="446"><p><font face="Times New Roman">Lists possible host adapters that the mediator can use to snoop real network traffic.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="137"><p><font face="Times New Roman">-s</font></p>
+</td>
+<td valign="top" width="446"><p><font face="Times New Roman">Tells the mediator to snoop real network traffic. Requires supervisor privileges.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="137"><p><font face="Times New Roman">-d DeviceNum</font></p>
+</td>
+<td valign="top" width="446"><p><font face="Times New Roman">Tells the mediator which host adapter to use when snooping real network traffic. This device number will need to be one listed using the &#8220;-l&#8221; command.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="137"><p><font face="Times New Roman">-v[v][v]</font></p>
+</td>
+<td valign="top" width="446"><p><font face="Times New Roman">Turns on verbose output. The verbosity level gets noisier with the number of &#8220;v&#8221; on the command line.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="137"><p><font face="Times New Roman">-m XX:XX</font></p>
+</td>
+<td valign="top" width="446"><p><font face="Times New Roman">Denotes the two high bytes used to classify the simulator&#8217;s MAC addresses. By default these values are FA:CD, but can be configured to avoid collisions with real hardware.</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P3682_201595"></a>Table 7-9: Mediator Command Line Switches</b></font></p>
+
+  <h3><a name="P3683_201636"></a><b><font face="Arial" size="+1">7.25.3 MAC Addresses for use with the Adapter</font></b></h3>
+
+  <p><font face="Times New Roman">The MAC address <a name="P3684_201697"></a>that the simulated adapter is using determines the level of visibility that the model will have with other simulator sessions and with the real network. The mediator routes packets to simulator sessions that have &#8220;FA:CD&#8221; in the high two bytes of the MAC address. The simulator sessions that have anything other than &#8220;FA:CD&#8221; can only communicate with other simulator sessions in the same process space using a &#8220;multi-machine&#8221; approach.</font></p>
+
+  <p><font face="Times New Roman">MAC Address beginning with &#8220;FA:CD&#8221; and having a third byte between 0x00 and 0x20, are classified as &#8220;absolute&#8221;. Simulated adapters using this class of MAC Address are logically equivalent to plugging a real computer into a real network. These sessions can see real network traffic and are visible to all simulator sessions running via the mediator.  In addition, all broadcast traffic, including ARP&#8217;s are routed to this class of MAC addresses.  Allocations of &#8220;absolute&#8221; MAC addresses need to be coordinated such that they are not replicated on the same host subnet.</font></p>
+
+  <p><font face="Times New Roman">MAC addresses beginning with &#8220;FA:CD&#8221; and having a third byte between 0x21 and 0x80 are classified as &#8220;fixed&#8221;. The simulator adapters using this class of MAC address can access the real network, but cannot be seen by other simulator sessions outside of its domain. This class of MAC address allows a user to simultaneously run identical BSD&#8217;s using unique domains. This class of MAC addresses will not receive broadcast traffic such as ARP&#8217;s. Allocations of &#8220;fixed&#8221; MAC addresses need to be coordinated such that they are not replicated in the same mediator domain.</font></p>
+
+  <h3><a name="P3689_203304"></a><font face="Arial" size="+1"><b>7.25.4 Example Configurations</b></font></h3>
+
+  <p><font face="Times New Roman">MAC address assignment was designed to satisfy many usability needs. <a href="#P3704_204169">Table 7-10</a> shows a list of possible usage models for the simulator and MAC Address assignments.</font></p>
+
+  <h4><a name="P3691_203497"></a><font face="Arial" size="+0"><b>7.25.4.1 Absolute NIC</b></font></h4>
+
+<p><font face="Times New Roman">This configuration mimics plugging in a physical computer into whatever network your mediator is running on. The user must select a MAC Address that is not duplicated anywhere else on the mediator&#8217;s subnet. All broadcast and targeted network traffic will be routed to a simulator session using this classification of MAC Address. This provides maximum visibility for the simulator session.</font></p></ul>
+<p><ul>
+<table border="1">
+<tr>
+<td valign="top" width="138"><p><font face="Times New Roman">Example MAC: </font></p>
+</td>
+<td valign="top" width="438"><p><font face="Times New Roman">FA:CD:00:00:00:01</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="138"><p><font face="Times New Roman">IP Address:</font></p>
+</td>
+<td valign="top" width="438"><p><font face="Times New Roman">Any. Can be a static IP address assigned by your sys admin, or a DHCP acquired address.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="138"><p><font face="Times New Roman">Visibility:</font></p>
+</td>
+<td valign="top" width="438"><p><font face="Times New Roman">Can be seen by external network and all simulator sessions running anywhere on the network.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="138"><p><font face="Times New Roman">Mediator String:</font></p>
+</td>
+<td valign="top" width="438"><p><font face="Times New Roman">&#8220;Hostname&#8221;</font></p>
+</td></tr></table></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P3704_204169"></a>Table 7-10: MAC Address Assignments</b></font></p>
+
+  <h4><a name="P3705_204204"></a><b><font face="Arial" size="+0">7.25.4.2 Client-Server simulated network</font></b></h4>
+
+<p><font face="Times New Roman">This configuration uses &#8220;fixed&#8221; MAC addresses to allow this domain to be replicated in the mediator space, without colliding with one another. To allow real network access, we will also run the mediator with a gateway at IP address 192.168.0.1.</font></p></ul>
+<p><ul>
+<table border="1">
+<tr>
+<td valign="top" width="138"><p><font face="Times New Roman">Example MAC: </font></p>
+</td>
+<td valign="top" width="438"><p><font face="Times New Roman">FA:CD:21:00:00:01</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="138"><p><font face="Times New Roman">IP Address:</font></p>
+</td>
+<td valign="top" width="438"><p><font face="Times New Roman">Static IP address 192.168.0.2</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="138"><p><font face="Times New Roman">Visibility:</font></p>
+</td>
+<td valign="top" width="438"><p><font face="Times New Roman">Accesses the real network via the mediator&#8217;s gateway. External network hosts can not directly communicate with this client.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="138"><p><font face="Times New Roman">Mediator String:</font></p>
+</td>
+<td valign="top" width="438"><p><font face="Times New Roman">mydomain@hostname</font></p>
+</td></tr></table></ul>
+
+<ul><p align="center"><font face="Times New Roman"><b> <a name="P3718_204732"></a>Table 7-11: Client-Server: Simulator Server</b></font></p></ul>
+<p><ul>
+<table border="1">
+<tr>
+<td valign="top" width="138"><p><font face="Times New Roman">Example MAC: </font></p>
+</td>
+<td valign="top" width="438"><p><font face="Times New Roman">FA:CD:22:00:00:02</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="138"><p><font face="Times New Roman">IP Address:</font></p>
+</td>
+<td valign="top" width="438"><p><font face="Times New Roman">Static IP address 192.168.0.3</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="138"><p><font face="Times New Roman">Visibility:</font></p>
+</td>
+<td valign="top" width="438"><p><font face="Times New Roman">Accesses the real network via the mediator&#8217;s gateway. External network hosts can not directly communicate with this client.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="138"><p><font face="Times New Roman">Mediator String:</font></p>
+</td>
+<td valign="top" width="438"><p><font face="Times New Roman">mydomain@hostname</font></p>
+</td></tr></table></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P3730_205014"></a>Table 7-12: Client-Server: Simulator Client 1</b></font></p>
+
+  <p><font face="Times New Roman">The BSD&#8217;s that contain the server and client can be run simultaneously on the same network without any collisions. They will require the user to input different domains in the mediator connection string, see also Section <a href="help-09.htm#P1131_70809">5.1</a>, <a href="help-09.htm#P1131_70809"><i>Command-Line Arguments</i></a>, on page <a href="help-09.htm#P1131_70809">39</a> (-m option).</font></p>
+
+  <h4><a name="P3732_205334"></a><font face="Arial" size="+0"><b>7.25.4.3 Isolated Client-Server simulated network (Same process)</b></font></h4>
+
+<p><font face="Times New Roman">This type of setup isolates the simulator sessions from the real network, only allowing visibility to other simulator sessions in the same process. A mediator is not required for this type of setup.</font></p></ul>
+<p><ul>
+<table border="1">
+<tr>
+<td valign="top" width="127"><p><font face="Times New Roman">Example MAC: </font></p>
+</td>
+<td valign="top" width="463"><p><font face="Times New Roman">02:00::00:00:00:01</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="127"><p><font face="Times New Roman">IP Address:</font></p>
+</td>
+<td valign="top" width="463"><p><font face="Times New Roman">Static IP address 192.168.0.1</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="127"><p><font face="Times New Roman">Visibility:</font></p>
+</td>
+<td valign="top" width="463"><p><font face="Times New Roman">Can only communicate with BSD&#8217;s in the same simulator process using multiple machines.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="127"><p><font face="Times New Roman">Mediator String:</font></p>
+</td>
+<td valign="top" width="463"><p><font face="Times New Roman">N/A</font></p>
+</td></tr></table></ul>
+
+<ul><p align="center"><font face="Times New Roman"><b><a name="P3745_205785"></a>Table 7-13: Isolated Client-Server: Simulator Server</b></font></p></ul>
+<p><ul>
+<table border="1">
+<tr>
+<td valign="top" width="127"><p><font face="Times New Roman">Example MAC: </font></p>
+</td>
+<td valign="top" width="463"><p><font face="Times New Roman">02:00::00:00:00:02</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="127"><p><font face="Times New Roman">IP Address:</font></p>
+</td>
+<td valign="top" width="463"><p><font face="Times New Roman">Static IP address 192.168.0.2</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="127"><p><font face="Times New Roman">Visibility:</font></p>
+</td>
+<td valign="top" width="463"><p><font face="Times New Roman">Can only communicate with BSD&#8217;s in the same simulator process using multiple machines.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="127"><p><font face="Times New Roman">Mediator String:</font></p>
+</td>
+<td valign="top" width="463"><p><font face="Times New Roman">N/A</font></p>
+</td></tr></table></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P3757_206026"></a>Table 7-14: Isolated Client-Server: Simulator Client 1</b></font></p>
+
+  <h3><a name="P3758_206080"></a><b><font face="Arial" size="+1">7.25.5 Visibility Diagram</font></b></h3>
+
+  <p><font face="Times New Roman"><a href="#P3763_206894">Figure 7-37</a> depicts the mediator routing packets to and from several simulator sessions in different domains. The session running BSD #3 is using an absolute MAC address, and therefore is globally visible. This session is no different than any other machine running on the external network. All simulator sessions, connected to any mediator, will be able to see this machine.  </font></p>
+
+  <p><font face="Times New Roman">Notice also that domains one and two are using identical BSDs that are running simultaneously. To prevent collisions on the external network, the mediator will not route broadcast packets to these sessions as they are using a fixed MAC classification.  The gateway will be able to do network address translation (NAT) for each BSD in each domain to make sure that there are no collisions between the two domains.</font></p>
+
+  <p align="center"><img src="images/help-142.gif" border="0" width="576" height="432"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P3763_206894"></a>Figure 7-37: Visibility Diagram</b></font></p></ul><p align="left"><a href="help-36.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-38.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

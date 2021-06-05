@@ -1,0 +1,34 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="413">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-27.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-29.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><h2><a name="P2807_147849"></a><font face="Arial" size="+1"><b><i>7.16 PCI-X Test Device</i></b></font></h2>
+
+  <p><font face="Times New Roman">This PCI-X Test Device model provides a simulation of a generic PCI-X device. Its main purpose is to provide BIOS programmers with a tool to test the PCI-X configuration cycle<a name="P2808_148046"></a>. This device is implemented as a single-function device.</font></p>
+
+  <p><font face="Times New Roman"><b>Interface</b></font></p>
+
+  <p><font face="Times New Roman">The interface varies from system to system. In the AMD Athlon 64 or AMD Opteron processor-based system configurations, it can be connected to AMD-8131 PCI-X or AMD-8111 Southbridge devices.</font></p>
+
+  <p><font face="Times New Roman"><b>Initialization and Reset State</b></font></p>
+
+  <p><font face="Times New Roman">At creation and reset states, the PCI-X device registers have the default hard-coded values. By default, the PCI-X device is set to have no I/O, memory-space and interrupt capability. The PCI-X device has a default Device ID and Vendor ID.&nbsp;At reset, the device configuration does not change and the values from the device configuration will be eventually read into the PCI-X registers when the configured system is restarted.</font></p>
+
+  <p><font face="Times New Roman"><b>Contents of a BSD</b></font></p>
+
+  <p><font face="Times New Roman">PCI-X register and interrupt signals are saved in the BSD.</font></p>
+
+  <p><font face="Times New Roman"><b>Differences from Real Hardware</b></font></p>
+
+  <p><font face="Times New Roman">This is a generic PCI-X device. It doesn't have real a memory buffer and I/O buffer. For memory and I/O space transaction,&nbsp;if the transaction belongs to this device's memory or I/O address range, the PCI-X device simply outputs a message to the <i>Log Window</i> which identifies its memory or I/O cycle.</font></p>
+
+  <p><font face="Times New Roman">Interrupt can be de-asserted by doing an I/O transaction. Interrupts can also be de-asserted manually by using the debugger.</font></p></ul><p align="left"><a href="help-27.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-29.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

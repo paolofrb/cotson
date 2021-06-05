@@ -1,0 +1,459 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="433">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-47.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-49.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><p align="left"><a name="P4073_226422"></a><img src="images/gtabsepm.gif"></p>
+<h1><font face="Arial" size="+2"><b>10 CPU Debugger</b></font></h1>
+
+  <h2><a name="P4074_226437"></a><b><font face="Arial" size="+1"><i>10.1 Using the CPU Debugger</i></font></b></h2>
+
+  <p><font face="Times New Roman">The CPU Debugger provides a list of commands and their descriptions when the &#8220;<b>?</b>&#8221; command is typed in the bottom line of the debug window, shown in <a href="#P4077_226627">Figure 10-1</a>.</font></p>
+
+  <p><img src="images/help-149.gif" border="0" width="688" height="549"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P4077_226627"></a>Figure 10-1: CPU Debugger Window</b></font></p>
+
+  <h3><a name="P4078_226659"></a><b><font face="Arial" size="+1">10.1.1 Setting a Breakpoint</font></b></h3>
+
+    <ul><p><font face="Times New Roman">1. Stop the simulation as described in Section <a href="help-07.htm#P643_25720">3.1</a>, &#8220;<a href="help-07.htm#P643_25720"><i>Tool Bar Buttons</i></a>&#8221;, on page <a href="help-07.htm#P643_25720">7</a>.</font></p>
+
+    <p><font face="Times New Roman">2. Open the Debugger Window (&#8220;<i>View&#8594;Show Debugger</i>&#8221;) or click on <img src="images/help-16.gif" border="0" width="16" height="16">. The simulation will pause and the Debugger Window will appear.</font><a name="P4080_226905"></a></p>
+
+    <p><font face="Times New Roman">3. The bottom pane in the CPU Debugger Window is the debugger command line. Enter a <i>BX</i>, <i>BM</i>, or <i>BI</i> on the debugger command line to setup and enable a breakpoint. The <i>BX</i>, <i>BM</i>, and <i>BI</i> commands specify breakpoints on execution, data access, or I/O access, respectively. Each of these commands requires an address parameter that specifies a linear address associated with the breakpoint. An optional parameter can be used to specify the pass count, i.e., the number of times the breakpoint should be hit before breaking into the debugger. In addition, the <i>BM</i> and <i>BI</i> commands accept an optional parameter that specifies whether to break on a read/input, or write/output transaction to the specified address. Examples of each command are shown in <a href="#P4098_228390">Table 10-1</a>.</font></p>
+
+<p><font face="Times New Roman">4. After setting up and enabling the breakpoint(s), enter <i>G</i> on the command line to resume CPU execution. This will execute the debugger's Go command, returning the CPU to continuous execution. If a breakpoint is hit, the simulation will pause, and the debugger will gain attention. </font></p></ul></ul>
+<p><ul><ul>
+<table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="156"><p><font face="Times New Roman"><b>Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="372"><p><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="156"><p><font face="Courier New">BX 1234abcd</font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Break on the next execution of the instruction located at linear address, 0x1234ABCD.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="156"><p><font face="Courier New">BX 1234ABCD 2</font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Break on the third execution of the instruction located at linear address, 0x1234ABCD.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="156"><p><font face="Courier New">BM abcd1234 r 3</font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Break on the fourth read of the memory location, 0xABCD1234 (linear).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="156"><p><font face="Courier New">BM abcd1234 3</font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Break on the fourth access (read or write) of the memory location, 0xABCD1234 (linear).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="156"><p><font face="Courier New">BI 80 w 3</font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Break on the fourth write to I/O address, 0x80.</font></p>
+</td></tr></table></ul></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P4098_228390"></a>Table 10-1: Debugger Breakpoint Command Examples</b></font></p>
+
+  <h3><a name="P4099_228438"></a><b><font face="Arial" size="+1">10.1.2 Single Stepping the Simulation</font></b></h3>
+
+    <ul><p><font face="Times New Roman">1. Stop the simulation as described in Section <a href="help-07.htm#P643_25720">3.1</a>, &#8220;<a href="help-07.htm#P643_25720"><i>Tool Bar Buttons</i></a>&#8221;, on page <a href="help-07.htm#P643_25720">7</a>.</font></p>
+
+    <p><font face="Times New Roman">2. Open the Debugger Window (&#8220;<i>View&#8594;Show Debugger</i>&#8221;) or click on <img src="images/help-16.gif" border="0" width="16" height="16">. The simulation will pause and the Debugger Window will appear. .</font><a name="P4101_228696"></a></p>
+
+    <p><font face="Times New Roman">3. The bottom pane in the Debugger Window is the debugger command line. When the Debugger Window has attention, enter T on the debugger command line. The debugger Trace command will execute, causing the CPU device to execute one instruction, and then return attention to the debugger.</font></p>
+
+    <p><font face="Times New Roman">4. The debugger will repeat the last entered command, if you just type Enter on the command line. So, you can repeatedly step instructions by entering <i>T</i> once, then repeatedly hitting the Enter key.</font></p>
+
+    <p><font face="Times New Roman">5. The simulation can be returned to continuous execution by entering <i>G</i>). This executes the debugger's <i>Go</i> command.</font></p>
+
+  </ul><h3><a name="P4105_229291"></a><font face="Arial" size="+1"><b>10.1.3 Stepping Over an Instruction</b></font></h3>
+
+    <ul><p><font face="Times New Roman">1. Stop the simulation as described in Section <a href="help-07.htm#P643_25720">3.1</a>, &#8220;<a href="help-07.htm#P643_25720"><i>Tool Bar Buttons</i></a>&#8221;, on page <a href="help-07.htm#P643_25720">7</a>.</font></p>
+
+    <p><font face="Times New Roman">2. Open the Debugger Window (&#8220;<i>View&#8594;Show Debugger</i>&#8221;) or click on <img src="images/help-16.gif" border="0" width="16" height="16">. The simulation will pause and the Debugger Window will appear.</font><a name="P4107_229545"></a></p>
+
+    <p><font face="Times New Roman">3. When the Debugger Window has attention, enter <i>P</i> on the debugger command line. The debugger <i>Pretty Trace</i> command will execute, causing the CPU device to execute up to the next instruction in linear order (i.e., step over calls, interrupts, repeated instructions, and loops). This is distinguished from the <i>T</i> command, which will step into calls, interrupts, etc., executing the next instruction regardless of its type.</font></p>
+
+    <p><font face="Times New Roman">4. The debugger will repeat the last entered command, if you just type Enter in the command edit window. So, you can repeatedly execute the pretty trace command by entering P once, then repeatedly hitting the Enter key. </font></p>
+
+    <p><font face="Times New Roman">5. The simulation can be returned to continuous execution by entering G. This executes the debugger's <i>Go</i> command. </font></p>
+
+  </ul><h3><a name="P4111_230298"></a><font face="Arial" size="+1"><b>10.1.4 Skipping an Instruction</b></font></h3>
+
+    <ul><p><font face="Times New Roman"><a name="P4112_230328"></a>1. Stop the simulation as described in Section <a href="help-07.htm#P643_25720">3.1</a>, &#8220;<a href="help-07.htm#P643_25720"><i>Tool Bar Buttons</i></a>&#8221;, on page <a href="help-07.htm#P643_25720">7</a>. </font></p>
+
+    <p><font face="Times New Roman">2. Setup a breakpoint to break at the instruction that you want to step over (see Section <a href="#P4078_226659">10.1.1</a>, &#8220;<a href="#P4078_226659"><i>Setting a Breakpoint</i></a>&#8221;, on page <a href="#P4078_226659">151</a>). Execute to the breakpoint.</font></p>
+
+    <p><font face="Times New Roman">3. Determine the EIP of the next instruction after the one to be skipped. This can easily be determined by viewing the disassembly listing in the debugger. The top line in the disassembly listing is the instruction pointed to by the current EIP (the instruction that you wish to skip). </font></p>
+
+    <p><font face="Times New Roman">4. Use the debugger's <i>R</i> command to change the value in the EIP register. This can be done by typing <i>R EIP = new_value</i> on the debugger command line. In this case, <i>new_value</i> is the linear address of the instruction that follows the one that you want to skip. </font></p>
+
+    <p><font face="Times New Roman">5. Enter <i>G</i> on the debugger command line. This will execute the debugger's <i>Go</i> command. CPU execution will resume. </font></p>
+
+  </ul><h3><a name="P4117_231237"></a><font face="Arial" size="+1"><b>10.1.5 Viewing a Memory Region</b></font></h3>
+
+    <ul><p><font face="Times New Roman"><a name="P4118_231267"></a>1. Stop the simulation as described in Section <a href="help-07.htm#P643_25720">3.1</a>, &#8220;<a href="help-07.htm#P643_25720"><i>Tool Bar Buttons</i></a>&#8221;, on page <a href="help-07.htm#P643_25720">7</a>.</font></p>
+
+    <p><font face="Times New Roman">2. Open the Debugger Window (&#8220;<i>View&#8594;Show Debugger</i>&#8221;) or click on <img src="images/help-16.gif" border="0" width="16" height="16">. The simulation will pause and the Debugger Window will appear.</font><a name="P4119_231486"></a></p>
+
+    <p><font face="Times New Roman">3. When the Debugger Window has attention, use the debugger's <i>DB</i>, <i>DW</i>, <i>DD</i>, or <i>DQ</i> command to display the contents of a memory region in the debugger. The second letter of the command specifies the display format for the dump. The <i>DB</i> command displays byte format, <i>DW</i> displays word format, <i>DD</i> displays dword format, and <i>DQ</i> displays qword format. Each of these commands requires a second parameter that specifies the beginning address (in hex) of the memory dump. A linear address can be specified by adding a &#8216;,L&#8217; suffix to the address. Similarly, a physical address can be specified by adding a &#8216;,P&#8217; suffix to the address. Examples of the memory-dump commands are shown in <a href="#P4133_232571">Table 10-2</a>.</font></p>
+
+<p><font face="Times New Roman">4. After the first memory range is displayed, you can repeatedly hit <i>Enter</i> to advance the display to the next sequential memory block.</font></p></ul></ul>
+<p><ul><ul>
+<table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="156"><p><font face="Times New Roman"><b>Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="372"><p><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="156"><p><font face="Courier New">DB 010,p </font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Dump memory in byte format, starting at physical address, 0x00000010.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="156"><p><font face="Courier New">DW abcd1234,L </font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Dump memory in word format, starting at linear address, 0xABCD1234.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="156"><p><font face="Courier New">DQ c001c0de,L</font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Dump memory in quad word format, starting at linear address, 0xC001C0DE.</font></p>
+</td></tr></table></ul></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P4133_232571"></a>Table 10-2: Debugger Memory Dump Command Examples</b></font></p>
+
+<p><font face="Times New Roman">When using AMD-V&#8482;<a name="P4134_232639"></a> Virtualization Technology in simulation, the user can tell the debugger to access memory for either the guest or the host. If multiple guests are running under a hypervisor, the debugger will acess memory for the last guest that has run. The user can further qualify an input address using the 'G' (Guest) and 'H' (Host) specifiers.  For example:</font></p></ul>
+<p><ul><ul>
+<table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="156"><p><font face="Times New Roman"><b>Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="372"><p><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="156"><p><font face="Courier New">Dd c001c0de,HL </font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Dump the SVM host linear memory starting at address 0xC001C0DE.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="156"><p><font face="Courier New">Dd c001c0de,GL</font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Dump the last SVM guest linear memory starting at address 0xC001C0DE.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="156"><p><font face="Courier New">Dd c001c0de,HP</font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Dump the SVM host physical memory starting at address 0xC001C0DE.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="156"><p><font face="Courier New">Dd c001c0de,GP</font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Dump the last SVM guest physical memory starting at address 0xC001C0DE.</font></p>
+</td></tr></table></ul></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P4148_233329"></a>Table 10-3: Debugger AMD-V&#8482; Memory Dump Command Examples</b></font></p>
+
+  <p><font face="Times New Roman">If the user omits the 'G' or the 'H' specifier, the debugger will access memory from the perspective of the attatched CPU's current state.</font></p>
+
+  <h3><a name="P4150_233525"></a><font face="Arial" size="+1"><b>10.1.6 Reading PCI Configuration Registers</b></font></h3>
+
+    <ul><p><font face="Times New Roman"><a name="P4151_233567"></a>1. Stop the simulation as described in Section <a href="help-07.htm#P643_25720">3.1</a>, &#8220;<a href="help-07.htm#P643_25720"><i>Tool Bar Buttons</i></a>&#8221;, on page <a href="help-07.htm#P643_25720">7</a>.</font></p>
+
+    <p><font face="Times New Roman">2. Open the Debugger Window (&#8220;<i>View&#8594;Show Debugger</i>&#8221;) or click on <img src="images/help-16.gif" border="0" width="16" height="16">. The simulation will pause and the Debugger Window will appear.</font></p>
+
+    <p><font face="Times New Roman">3. Use the debugger's <i>S</i> command to view the PCI configuration register contents for a particular PCI function. The <i>S</i> command takes three hex parameters: bus, device, function. If the specified bus, device, and function exist in the simulated system, the debugger will display all 256 bytes of configuration data.</font></p>
+
+  </ul><h3><a name="P4154_234098"></a><font face="Arial" size="+1"><b>10.1.7 Reading CPU MSR Contents</b></font></h3>
+
+    <ul><p><font face="Times New Roman"><a name="P4155_234129"></a>1. Stop the simulation as described in Section <a href="help-07.htm#P643_25720">3.1</a>, &#8220;<a href="help-07.htm#P643_25720"><i>Tool Bar Buttons</i></a>&#8221;, on page <a href="help-07.htm#P643_25720">7</a>.</font></p>
+
+    <p><font face="Times New Roman">2. Open the Debugger Window (&#8220;<i>View&#8594;Show Debugger</i>&#8221;) or click on <img src="images/help-16.gif" border="0" width="16" height="16">. The simulation will pause and the Debugger Window will appear.</font><a name="P4156_234348"></a></p>
+
+<p><font face="Times New Roman">3. Use the debugger's <i>R</i> command to view the contents of an MSR. This can be accomplished by typing <i>R</i> M<i>address</i> on the debugger command line. In this case, <i>address</i> is the 32-bit address (in hex) of the MSR. All leading zeros must be typed in the address. Examples of MSR reads are shown in <a href="#P4167_234809">Table 10-4</a>:</font></p></ul></ul>
+<p><ul><ul>
+<table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="156"><p><font face="Times New Roman"><b>Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="372"><p><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="156"><p><font face="Courier New">R M00000250</font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Displays the contents of the MSR with an address of 0x0250.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="156"><p><font face="Courier New">R MC001001A</font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Displays the contents of the MSR with an address of 0xC001001A.</font></p>
+</td></tr></table></ul></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P4167_234809"></a>Table 10-4: MSR Read Examples</b></font></p>
+
+    <ul><p><font face="Times New Roman">4. MSR registers can be modified by adding a &quot;= <i>Value</i>&quot; suffix on the above command syntax. <i>Value</i> will be assigned to the MSR register only if the value does not modify any reserved bits in the MSR. If an attempt is made to modify any reserved bits, the MSR write is ignored. An example MSR write is shown in <a href="#P4177_235468">Table 10-5</a>:</font></p>
+
+<p><font face="Times New Roman">5. This command may not allow access to all MSRs that are supported by the CPU model. To view a list of all registers supported by the <i>R</i> command, enter <i>R?</i> on the debugger command line.</font></p></ul></ul>
+<p><ul><ul>
+<table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="288"><p><font face="Times New Roman"><b>Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="240"><p><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="288"><p><font face="Courier New">R MC001001A = 0000000004000000</font></p>
+</td>
+<td valign="top" width="240"><p><font face="Times New Roman">Assigns a value of 0x0000000004000000 to the MSR with an address of 0xC001001A.</font></p>
+</td></tr></table></ul></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P4177_235468"></a>Table 10-5: MSR Write Example</b></font></p>
+
+  <h3><a name="P4178_235497"></a><b><font face="Arial" size="+1">10.1.8 Find Pattern in Memory</font></b></h3>
+
+<p><font face="Times New Roman">The find pattern command<a name="P4179_235550"></a> <b>q1</b> and <b>qa</b> can be used to search for a specific pattern in memory, The pattern that is searched for can either be an ASCII string or a binary pattern. If the search is for an ASCII string the <i>noncase</i> option (see <a href="#P4297_242390">Table 10-7</a>, &quot;<a href="#P4297_242402"><i>Debugger Commands and Definitions</i></a>&quot;, on page <a href="#P4297_242390">158</a>) can be used to match any character. </font></p></ul>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="300"><p><font face="Times New Roman"><b>Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="277"><p><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="300"><p><font face="Courier New">q1 0x1000,L 0x2000 &quot;PCI&quot;</font></p>
+</td>
+<td valign="top" width="277"><p><font face="Times New Roman">Finds the first occurrence of ASCII pattern &quot;PCI&quot; in the given memory range, 0x1000 - 0x2000.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="300"><p><font face="Courier New">qa noncase 0x1000,L 0x2000 &quot;PCI&quot;</font></p>
+</td>
+<td valign="top" width="277"><p><font face="Times New Roman">Same as above but finds all occurrence of the ASCII pattern &quot;PCI&quot; using the none case-sensitive search algorithm.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="300"><p><font face="Courier New">qa 0xF0000,P 0xFFFF 0x55 0xAA</font></p>
+</td>
+<td valign="top" width="277"><p><font face="Times New Roman">Finds all occurrences of the binary-pattern 0x55 0xAA in the given memory range, starting at physical address 0xF0000 and ends at 0xF0000+0xFFFF.</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P4191_236314"></a>Table 10-6: Find Pattern Example</b></font></p>
+
+  <h2><a name="P4192_236346"></a><b><font face="Arial" size="+1"><i>10.2 Debugger Command Reference</i></font></b></h2>
+
+  <p><font face="Times New Roman">The CPU Debugger Window consists of five areas, as shown in <a href="#P4077_226627">Figure 10-1</a>. The top-most area displays the current CPU integer registers in 16-, 32-, or 64-bit mode, depending on the current mode of the CPU. The next area displays a disassembly of the next six instructions, starting at the current CS:[R|E]IP. The next area displays 128 bytes of memory, as bytes, words, dwords, or qwords. The address, size, and physical or virtual attributes are based on the most recent <i>D</i> command. The next area is a general message window where messages and information are displayed. The bottom area is the command area, where debugger commands are entered.</font></p>
+
+<p><font face="Times New Roman"><a href="#P4297_242390">Table 10-7</a> lists the debugger commands and their definitions.</font></p></ul>
+<p><ul>
+<table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="252"><p><font face="Times New Roman"><b>Debugger Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="324"><p><b><font face="Times New Roman">Definition</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">?</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Displays an abbreviated list of the available commands and their syntax.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">&lt;blank line&gt;</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Repeat of previous command.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">*&lt;automation command&gt;</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Execute an automation command.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">#P &lt;Path&gt; [;&lt;Path&gt;</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Sets the file search path.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">#L &lt;Symbol File&gt; [Load Address]</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Loads the named symbol file, optionally offsetting each address by the given load offset. When the load is completed, the module name attached to this group of symbols is displayed. Supported symbol file extentsions are &quot;*.TXT&quot;, &quot;*.SYMTEXT&quot;, and Linux &quot;symbol.map&quot; file (&quot;*.MAP&quot;).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">#M</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Displays a list of the symbol modules currently loaded.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">#U &lt;Module Name&gt;</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Unloads the named symbol module that had previously been loaded with the #l command.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">#? &lt;Symbol&gt;</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Displays all symbols that contain the given string.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">#! &lt;Address&gt;</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Displays the symbol that most closes matches the given address.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">bc {* | list }</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Clears one or all breakpoints.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">bd {* | list }</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Disables one or all breakpoints.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">be {* | list }</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Enables one or all breakpoints.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">bf &lt;vector&gt; &lt;Pass count&gt;</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Creates and enables a breakpoint for the indicated CPU exception. Sets the pass count to [count], or 0 if not specified.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">bh &lt;vector&gt; &lt;Pass count&gt;</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Creates and enables a breakpoint for the indicated hardware interrupt. Sets the pass count to [count], or 0 if not specified.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">bi &lt;address&gt; [r | w] </font><font face="Courier">&lt;Pass count&gt; [v[b|w|d] &lt;data&gt;]</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Creates and enables a breakpoint for the indicated I/O address. Sets the pass count to [count], or 0 if not specified. Defaults to read/write, but can be set to read-only or write-only using the [r] or [w] options. [v] enables the data &lt;data&gt; check capability for [b]yte, [w]ord, or [d]ouble word I/O accesses. For example, &#8220;bi 80 w vb c0&#8221; stands for break when byte 0xC0 is written to I/O port 0x80.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">bl [* | list]</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Display the settings of one or all breakpoints.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">bm &lt;address&gt; [r | w] </font><font face="Courier">&lt;Pass count&gt; [v[b|w|d] &lt;data&gt;]</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Creates and enables a breakpoint for the indicated memory address. Sets the pass count to [count], or 0 if not specified. Defaults to read or write, but can be set to read-only or write-only using the [r] or [w] options. [v] enables the data &lt;data&gt; check capability for [b]yte, [w]ord, or [d]ouble word memory accesses. For example, &#8220;bm 1000 w vb c0&#8221; stands for break when byte 0xC0 is written to memory address 0x1000.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">bs &lt;Vector&gt; &lt;Pass count&gt;</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Creates and enables a breakpoint for the indicated software interrupt vector. Sets the pass count to [count], or 0 if not specified.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">bx &lt;address&gt; &lt;Pass count&gt;</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Creates and enables a breakpoint for the indicated code fetch address. Sets the pass count to [count], or 0 if not specified. Sets the pass count to [count], or 0 if not specified.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">c[r|w] &lt;Bus&gt; &lt;Dev&gt; &lt;Func&gt; &lt;Off&gt; [data] </font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Performs a PCI configuration [r]ead or [w]rite.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">d[b|w|d|q] &lt;address range&gt;[,[l|p]</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Displays the contents of [p]hysical (default) or [l]inear memory as [b]ytes, [w]ords, [d]ouble words, or [q]uad words, or in the previous format if not specified.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">e[b|w|d|q] &lt;address&gt; &lt;data ...&gt;[,[l|p]</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Allows the modification of [p]hysical (default) or [l]inear memory, in [b]ytes, [w]ords, [d]ouble words, or [q]uad words, or in the previous format, if not specified. Data values are entered immediately after the address, separated by spaces.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">f[b|w|d|q] &lt;address range&gt; &lt;value&gt; [,[l|p]</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Fills the given [p]hysical (default) or [l]inear memory-range with the indicated <i>value</i>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">g [address]</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Begins or will resume CPU execution, setting a temporary execution breakpoint on the given <i>address</i>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">h [on | off | clear | &lt;value&gt;]</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Controls history-trace collection. [ON] enables trace collection and clears the current trace buffer; [OFF] disables trace collection, and [CLEAR] clears the current trace buffer. Specifying no arguments, or a value, disassembles the most recent &lt;value&gt; instructions executed.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">i[b|w|d] &lt;port&gt;</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Input a [b]yte, [w]ord, or [d]ouble word from the indicated port.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">o[b|w|d] &lt;port&gt; &lt;data&gt;</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Output a [b]yte, [w]ord, or [d]ouble word to the indicated port.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">p</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Similar to the <i>t</i> command, single steps the simulation one instruction, unless the current instruction is a call, software interrupt, or repeated string instruction, in which case this command sets a temporary execution breakpoint at the instruction sequentially following the current instruction, and starts simulation.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">r [regname[= &lt;value&gt;]]</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Displays, and optionally alters, the contents of various CPU registers. For a list of register names that are supported, type <i>R?</i>. Normally, the display is in the current CPU mode. To force 16-bit, 32-bit, or 64-bit register display, type <i>R16</i>, <i>R32</i>, or <i>R64</i> respectively.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">R16</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Display 16-bit registers (until the next instruction).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">R32</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Display 32-bit registers (until the next instruction).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">R64</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Display 64-bit registers (until the next instruction).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">s &lt;Bus&gt; &lt;Device&gt; &lt;Function&gt;</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Displays the PCI configuration registers associated with the given Bus, Device, and Function number. </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">t [count]</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Executes [count] instructions. The default value for [count] is 1.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">u [address range]</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Disassembles instructions starting, at the given address and continuing for [length] instructions. Instructions are disassembled using the current CPU execution mode.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">v</font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Displays the version number information for the attached processor device.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="252"><p><font face="Courier">q&lt;a|1&gt; [noncase] &lt;StartAddress&gt;[,[l|p]] &lt;[[L]Length] | [EndAddress]&gt; &lt;Pattern&gt; </font></p>
+</td>
+<td valign="top" width="324"><p><font face="Times New Roman">Search physical (default) or linear Memory for pattern and display all or only first occurrence(s). </font></p>
+</td></tr></table></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P4297_242390"></a>Table 10-7: <a name="P4297_242402"></a>Debugger Commands and Definitions</b></font></p>
+
+  <p><font face="Times New Roman"><a name="P4298_242435"></a>In general, address and count values can be specified as constants (hex for addresses, ports, and values; decimal for counts and lengths), or as register names. For addresses, the CS:, DS:, ES:, FS:, GS:, and SS: prefixes are also allowed.</font></p>
+
+  <p><font face="TimesEuropa Roman">Address values may be suffixed by </font><font face="Times New Roman">&#8216;</font><font face="TimesEuropa Roman">,L</font><font face="Times New Roman">&#8217;</font><font face="TimesEuropa Roman"> to specify a linear address (the default) or </font><font face="Times New Roman">&#8216;</font><font face="TimesEuropa Roman">,P</font><font face="Times New Roman">&#8217;</font><font face="TimesEuropa Roman"> to specify a physical address.<a name="P4300_242801"></a> Addresses may also be specified by their symbol name. Precede the symbol name with a <i>#</i> character to distinguish it from a hex constant<a name="P4300_242936"></a>.</font></p>
+
+  <p><font face="Times New Roman"> </font><a name="P4302_242938"></a></p>
+
+<p align="left"><a href="help-47.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-49.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

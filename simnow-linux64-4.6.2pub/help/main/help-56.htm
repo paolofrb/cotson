@@ -1,0 +1,675 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="441">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-55.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-57.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><p><a name="P5438_280083"></a><font face="Arial" size="+1"><b><i>1.4 CPUID</i></b></font></p>
+
+  <p><font face="Times New Roman">This section is an overview of the CPUID<a name="P5439_280132"></a> feature implementation in the AweSim CPU processor model.</font></p>
+
+      <ul><ul><p><font face="Arial" size="+1"><b><a name="P5440_280190"></a>1.4.1 CPUID Standard Feature Support (Standard Function 0x01)</b></font></p>
+
+</ul></ul><p><font face="Times New Roman"><a href="#P5584_281168"><i>Table 15-6</i></a> shows the standard feature bits returned by the AweSim CPU processor model and which features are fully (<img src="images/help-2.gif" border="0" width="16" height="15">) or only partially (<img src="images/help-156.gif" border="0" width="16" height="15">) implemented and supported. A <img src="images/help-89.gif" border="0" width="16" height="15"> indicates that the returned feature bit is zero and this feature is not implemented and not supported.</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="193"><p align="center"><font face="Times New Roman"><b>Feature</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="88"><p align="center"><b><font face="Times New Roman">7<sup>th</sup> Generation</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="96"><p align="center"><b><font face="Times New Roman">8<sup>th</sup> </font></b></p>
+<p align="center"><b><font face="Times New Roman">Generation </font></b></p>
+<p align="center"><b><font face="Times New Roman">(Base)</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="96"><p align="center"><b><font face="Times New Roman">8<sup>th</sup> </font></b></p>
+<p align="center"><b><font face="Times New Roman">Generation Pre.-Rev. F</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="102"><p align="center"><b><font face="Times New Roman">8<sup>th</sup> Generation Rev. F</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">Floating-Point Unit</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">Virtual Mode Extensions</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">Debugging Extensions<sup><a href="#P5463_280673" name="P5463_280674">4</a></sup></font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-156.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-156.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-156.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-156.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">Page-Size Extension </font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">Time Stamp Counter</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">AMD Model-Specific Registers</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">Physical-Address Extensions</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">Machine Check Exception</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">CMPXCHG8B Instruction</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">APIC</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">SYSENTER and SYSEXIT</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">Memory Type Range Registers</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">Page Global Extension</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">Machine Check Architecture</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">Conditional Move Instruction</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">Page Attribute Table</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">Page Size Extensions (PSE-36)</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">CFLUSH Instruction</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">MMX&#8482; Instructions</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">FXSAVE/FXRSTOR</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">SSE</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">SSE2</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">Hyper Threading</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193">&#160;
+</td>
+<td valign="top" width="88">&#160;
+</td>
+<td valign="top" width="96">&#160;
+</td>
+<td valign="top" width="96">&#160;
+</td>
+<td valign="top" width="102">&#160;
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">SSE3/PNI</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="193"><p><font face="Times New Roman">Monitor/MWAIT</font></p>
+</td>
+<td valign="top" width="88"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="102"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P5584_281168"></a>Table 15-6: CPUID Standard Feature implementation</b></font></p>
+
+      <ul><ul><p><b><font face="Arial" size="+1"><a name="P5585_281217"></a>1.4.2 CPUID AMD Feature Support (Extended Function 0x80000001)</font></b></p>
+
+</ul></ul><p><font face="Times New Roman"><i><a href="#P5749_282328">Table 15-7</a> </i>shows the extended feature bits returned by the AweSim CPU processor model and which features are fully (<img src="images/help-2.gif" border="0" width="16" height="15">) or only partially (<img src="images/help-156.gif" border="0" width="16" height="15">) implemented and supported. A <img src="images/help-89.gif" border="0" width="16" height="15"> indicates that the returned feature bit is zero and this feature is not implemented and not supported.</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="191"><p align="center"><font face="Times New Roman"><b>Feature</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="84"><p align="center"><b><font face="Times New Roman">7<sup>th</sup> </font></b></p>
+<p align="center"><b><font face="Times New Roman">Generation</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="108"><p align="center"><b><font face="Times New Roman">8<sup>th</sup> </font></b></p>
+<p align="center"><b><font face="Times New Roman">Generation </font></b></p>
+<p align="center"><b><font face="Times New Roman"> (Base)</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="96"><p align="center"><b><font face="Times New Roman">8<sup>th</sup> </font></b></p>
+<p align="center"><b><font face="Times New Roman">Generation </font></b></p>
+<p align="center"><b><font face="Times New Roman">Pre.-Rev. F</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="96"><p align="center"><b><font face="Times New Roman">8<sup>th</sup> </font></b></p>
+<p align="center"><b><font face="Times New Roman">Generation </font></b></p>
+<p align="center"><b><font face="Times New Roman">Rev. F</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">Floating-Point Unit</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">Virtual Mode Extensions</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">Debugging Extensions</font><font face="Times New Roman" size="-1"><sup><a href="#P5612_281702" name="P5612_281703">5</a></sup></font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-156.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-156.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-156.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-156.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">Page-Size Extension </font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">Time Stamp Counter</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">AMD Model-Specific Registers</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">Page Address Extensions</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">Machine Check Exception</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">CMPXCHG8B Instruction</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">APIC</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">SYSCALL and SYSRET</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">Memory Type Range Registers</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">Page Global Extension</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">Machine Check Architecture</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">Conditional Move Instruction</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">Page Attribute Table</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">Page Size Extensions (PSE-36)</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">No-execute page protection</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">SEM<sup><a href="#P5727_282225">2</a></sup></font><a name="P5692_282127"></a></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">AMD extensions to MMX&#8482; </font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">MMX&#8482;</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">FXSAVE/FXRSTOR</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">Fast FXSAVE/FXRSTOR</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">1 GB Paging feature</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">RDTSCP</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">Long Mode</font><font face="Times New Roman" size="-1"><sup><a href="#P5728_282225" name="P5727_282225">6</a></sup></font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><font face="Times New Roman"> </font><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman"> </font><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><font face="Times New Roman"> </font><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">AMD Extensions to 3DNow!&#8482;</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">3DNow! Instructions</font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr>
+<tr>
+<td valign="top" width="191"><p><font face="Times New Roman">Virtualization Technology </font></p>
+</td>
+<td valign="top" width="84"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="108"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-89.gif" border="0" width="16" height="15"></p>
+</td>
+<td valign="top" width="96"><p align="center"><img src="images/help-2.gif" border="0" width="16" height="15"></p>
+</td></tr></table></center></ul>
+
+<ul><p align="center"><font face="Times New Roman"><b><a name="P5749_282328"></a>Table 15-7: CPUID Extended Feature implementation</b></font><a name="P5749_282377"></a></p></ul>
+
+<p><font face="Times New Roman"><sup><a name="P5463_280673" href="#P5463_280674">4</a> </sup> Only read and write to debug registers is supported, side affects are not implemented.</font></p>
+
+<p><font face="Times New Roman" size="-1"><sup><a name="P5612_281702" href="#P5612_281703">5</a> </sup></font><font face="Times New Roman"> Only read and write to debug registers is supported, side effects are not implemented.</font></p>
+
+<p><font face="Times New Roman" size="-1"><sup><a name="P5728_282225" href="#P5728_282226">6</a> </sup></font><font face="Times New Roman"> Controlled by FUSE state.</font></p><p align="left"><a href="help-55.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-57.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

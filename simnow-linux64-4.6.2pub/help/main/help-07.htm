@@ -1,0 +1,714 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="392">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-06.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-08.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><p align="left"><a name="P639_25526"></a><img src="images/gtabsepm.gif"></p>
+<h1><font face="Arial" size="+2"><b>3 Graphical User Interface</b></font></h1>
+
+  <p><font face="Times New Roman">The simulator has a cross-platform GUI that uses the Qt toolkit. We welcome bug reports and usability feedback on the simulator. </font></p>
+
+  <p><img src="images/help-5.gif" border="0" width="573" height="573"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P642_25681"></a>Figure 3-1: Main Window (In Simulation)</b></font></p>
+
+  <h2><a name="P643_25720"></a><b><font face="Arial" size="+1"><i>3.1 Tool Bar Buttons</i></font></b></h2>
+
+  <p><font face="Times New Roman">The Tool Bar shown in <a href="#P642_25681">Figure 3-1</a> contains up to eleven control buttons.</font></p>
+
+  <p><font face="Times New Roman">The simulation can be started by clicking on the &#8220;<i>Play</i><a name="P646_25867"></a>&#8221; button (<img src="images/help-6.gif" border="0" width="16" height="16">).</font></p>
+
+  <p><font face="Times New Roman">The simulation can be stopped by clicking on the &#8220;<i>Stop</i><a name="P648_25937"></a>&#8221; button (<img src="images/help-7.gif" border="0" width="16" height="16">). To reset the entire simulator, stop the simulation first by clicking on the &#8220;<i>Stop</i>&#8221; button and then click on the &#8220;<i>Reset</i><a name="P648_26076"></a>&#8221; button (<img src="images/help-8.gif" border="0" width="16" height="16">).</font></p>
+
+  <p><font face="Times New Roman">The power-management &#8220;<i>Soft Power</i><a name="P650_26124"></a>&#8221; button (<img src="images/help-9.gif" border="0" width="16" height="16">) and &#8220;<i>Soft Sleep</i><a name="P650_26155"></a>&#8221; button (<img src="images/help-10.gif" border="0" width="16" height="16">) are available only on simulated systems that have an Advanced Configuration and Power Interface (ACPI<a name="P650_26270"></a>) BIOS. </font></p>
+
+  <p><font face="Times New Roman">Clicking on the &#8220;<i>Soft Power</i>&#8221; button puts the simulated system in a very low power consumption mode. The working context can be restored if it is stored on nonvolatile media. The simulated system appears to be off.</font></p>
+
+  <p><font face="Times New Roman">Clicking on the &#8220;<i>Soft Sleep</i>&#8221; button simulates a power-consumption reduction. The power consumption is reduced to one of several levels, depending on how the system is to be used. The lower the level of power consumption, the more time it takes the system to return to the working state.</font></p>
+
+  <p><font face="Times New Roman">To close a previously loaded system simulation definition file click on the &#8220;<i>Close BSD</i>&#8221; button (<img src="images/help-11.gif" border="0" width="16" height="16">). This button is only enabled when a system definition file has been loaded or created earlier. Please make sure you save any changes that you make to the system configuration before clicking on the &#8220;<i>Close BSD</i>&#8221; button (<img src="images/help-11.gif" border="0" width="16" height="16">) to close the system definition file. Otherwise all changes will be lost.</font></p>
+
+  <p><font face="Times New Roman">The &#8220;<i>Save BSD</i>&#8221; button (<img src="images/help-12.gif" border="0" width="16" height="16">) is only enabled/active when a system definition (BSD file) has been loaded or created. To save your current system definition click on the &#8220;<i>Save BSD</i>&#8221; button (<img src="images/help-12.gif" border="0" width="16" height="16">) or click on the &quot;<i>File</i>&quot; menu item and select &quot;<i>Save BSD</i>&quot;. </font></p>
+
+  <p><font face="Times New Roman">To open a system definition file (BSD file) click on the &#8220;<i>Open BSD</i>&#8221; button (<img src="images/help-13.gif" border="0" width="16" height="16">) and select the desired BSD file from the Open File Dialog Window. The &quot;<i>Open BSD</i>&quot; button is only enabled/active when no other system definition file has been open yet. </font></p>
+
+  <p><font face="Times New Roman">To create a blank or new system definition file click on the &#8220;<i>New BSD</i>&#8221; button (<img src="images/help-14.gif" border="0" width="16" height="16">). This button is disabled when a system definition file has been loaded or created earlier. In this case you must close your current system definition file, click on the &#8220;<i>Close BSD</i>&#8221; button (<img src="images/help-11.gif" border="0" width="16" height="16">) or click on the &quot;<i>File</i>&quot; menu item and select &quot;<i>Close BSD</i>&quot;. Please make sure you save any changes that have been made to the system definition file before you click on the &#8220;<i>Close BSD</i>&#8221; button (<img src="images/help-11.gif" border="0" width="16" height="16">). Note, when closing the BSD file all changes will be lost.</font></p>
+
+  <p><font face="Times New Roman">If you want to modify the current system definition use the &#8220;<i>Show Device Window</i>&#8221; button (<img src="images/help-15.gif" border="0" width="16" height="16">) to display the current system configuration. The &#8220;<i>Show Device Window</i>&#8221; button is disabled when the simulation is currently running. To stop the simulation click on the &#8220;<i>Stop Simulation</i>&#8221; button (<img src="images/help-7.gif" border="0" width="16" height="16">).</font></p>
+
+  <p><font face="Times New Roman">To open the simulator's integrated debugger click on the &#8220;<i>Show Debugger</i>&#8221; button (<img src="images/help-16.gif" border="0" width="16" height="16">). The &#8220;<i>Show Debugger</i>&#8221; button is disabled when the simulation is currently running. To stop the simulation click on the &#8220;<i>Stop Simulation</i>&#8221; button (<img src="images/help-7.gif" border="0" width="16" height="16">).</font></p>
+
+  <p><font face="Times New Roman">Click on the &#8220;<i>Best Fit To Window</i>&#8221; button (<img src="images/help-17.gif" border="0" width="16" height="16">) to reduce or enlarge the size of the simulated display area so that the entire simulated display area will fit into the simulators main window. If you hold down the CTRL key when clicking on the &#8220;<i>best fit</i>&#8221; button, it &#8220;locks&#8221; into a state where the simulated display area is resized whenever the simulated graphics display resolution changes. To clear this locked condition, click on the &#8220;<i>best fit</i>&#8221; button again.</font></p>
+
+  <h2><a name="P669_29224"></a><font face="Arial" size="+1"><b><i>3.2 Device Window</i></b></font></h2>
+
+  <p><font face="Times New Roman"><a name="P670_29241"></a>The Devices Window<a name="P670_29259"></a>, shown in <a href="#P674_29839">Figure 3-2</a>, is opened by selecting &#8220;<i>View&#8594;Show Devices</i>&#8221; or clicking on the <img src="images/help-15.gif" border="0" width="16" height="16"> button. In this window, you can create a simulated computer and modify its properties, BIOS images, memory characteristics, and attached components. </font></p>
+
+  <p><font face="Times New Roman">This section describes the main components of the Device Window and shows how to build up and configure a simulated computer. It explains the interface using some of the most-often used simulation components. Please also see the walkthrough of building a single-processor system in Section <a href="help-11.htm#P1291_81122">6</a>, &#8220;<a href="help-11.htm#P1291_81122"><i>Create a Simulated Computer</i></a>&#8221;, on page <a href="help-11.htm#P1291_81122">49</a>.</font></p>
+
+  <p><img src="images/help-18.gif" border="0" width="669" height="499"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P674_29839"></a>Figure 3-2: Device Window</b></font></p>
+
+  <p><font face="Times New Roman">The Device Window, shown in <a href="#P674_29839">Figure 3-2</a> with the &#8220;<i>cheetah1_p.bsd</i>&#8221; computer simulation loaded, graphically depicts a simulated computer system. In the simulator, a computer system is defined as a collection of device models that communicate with each other by exchanging messages. The icons in the workspace <a name="P675_30174"></a> represent device models; the lines connecting the icons represent message routing. You can set up and alter the simulated computer system by using the workspace popup menu (shown in <a href="#P692_32125">Figure 3-3</a>). To open the workspace popup menu, right-click on any icon in the workspace area.</font></p>
+
+  <p><font face="Times New Roman">The Device List<a name="P677_30465"></a>, located on the left side of the Device Window, describes all devices available in the simulator along with their configuration options. For further information please refer to Section <a href="help-12.htm#P1358_86449">7</a>,<i> </i>&#8220;<a href="help-12.htm#P1358_86449"><i>Device Configuration</i></a>&#8221;, on page <a href="help-12.htm#P1358_86449">53</a>.</font></p>
+
+  <p><font face="Times New Roman">The <i>Show Deprecated Devices</i> checkbox is not checked by default. This checkbox gives the user the opportunity to show or hide deprecated devices<a name="P679_30836"></a>. It is not recommended to use deprecated devices in simulation. To show deprecated devices this checkbox must be checked. The <i>Show Deprecated Devices</i> checkbox does not disable the ability to connect or create deprecated devices. Also the automation interface of deprecated devices and loading BSDs which contain deprecated devices are both unaffected.</font></p>
+
+  <h3><a name="P680_31188"></a><font face="Arial" size="+1"><b>3.2.1 Add a New Device</b></font></h3>
+
+  <p><font face="Times New Roman">You can add devices to the workspace by dragging a new device from the Device List on the left side of the workspace window to an appropriate location within the workspace on the right side.<i> </i></font></p>
+
+  <p><font face="Times New Roman">Some devices produce additional windows or dialogs when you add them to the workspace. These windows provide an interface to the device during simulation. For example, adding the Winbond WB83627HF SIO device (see Section <a href="help-17.htm#P1789_106261">7.5</a> on page <a href="help-17.htm#P1789_106261">69</a>) to the workspace adds the floppy byte counts numeric window to the Main Window screen.</font></p>
+
+  <p><font face="Times New Roman">When you add a device to the workspace, the shell sends a reset message to all of the devices in the workspace. The global reset is equivalent to power-cycling the simulated computer system.</font></p>
+
+  <h3><a name="P686_31914"></a><font face="Arial" size="+1"><b>3.2.2 Workspace Popup Menu</b></font></h3>
+
+  <p><font face="Times New Roman">Changing the system configuration of the simulated system can make the simulation nonfunctional.</font></p>
+
+  <p><font face="Times New Roman">Right-clicking on any icon in the workspace produces a popup menu as shown in <a href="#P692_32125">Figure 3-3</a>.</font></p>
+
+  <p align="center"><img src="images/help-19.gif" border="0" width="132" height="132"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P692_32125"></a>Figure 3-3: Workspace Popup Menu</b></font></p>
+
+  <h4><a name="P693_32157"></a><b><font face="Arial" size="+0">3.2.2.1 Add Connection</font></b></h4>
+
+  <p><font face="Times New Roman">You can connect a device to another device by holding Shift, left-click, and drag from one device to the other. You will draw a line from the first device to the second. Release the mouse button to create the connection<a name="P694_32398"></a>. You can also right-click one device, select &quot;<i>Add Connection</i>&quot;, and then click on the device to connect to. </font><font face="TimesEuropa Roman">Then click Finish. </font><font face="Times New Roman">The connection enables simulator-level message exchanges between the connected devices. All connections enable bidirectional message transfers.</font></p>
+
+  <p><font face="TimesEuropa Roman">Some devices contain more than one interface to which a connection can be made. A multi-interface device routes messages out different interfaces, based on the type of message being sent. When you make a connection with a multi-interface device, an interface list dialog appears which enables you to select the appropriate interface. You must choose an interface on either device, even if one or both of the devices has only one interface type. </font></p>
+
+  <p><font face="TimesEuropa Roman">Generally, you shouldn't connect different types of interfaces. For example, interface <i>Type A</i> of Device 1 should only be connected to interface <i>Type A</i> of Device 2. </font></p>
+
+  <p align="center"><img src="images/help-20.gif" border="0" width="480" height="457"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P701_33277"></a>Figure 3-4: Add Connection Dialog of Device Properties Window</b></font></p>
+
+  <p><font face="Times New Roman">A device's connection appears in the &#8220;<i>Connections</i>&#8221; tab of the Device Properties window for each device, as shown in <a href="#P701_33277">Figure 3-4</a>. </font></p>
+
+  <p><font face="Times New Roman">When you add a connection, the simulator shell sends a reset message to all of the devices in the workspace. The global reset is equivalent to power-cycling the simulated computer system.</font></p>
+
+  <h4><a name="P705_33657"></a><font face="Arial" size="+0"><b>3.2.2.2 Configure Device</b></font></h4>
+
+  <p><font face="Times New Roman">Most devices provide configuration options. Selecting &#8220;<i>Configure Device</i>&#8221; from the workspace popup menu produces a dialog window containing options for the specified device. </font></p>
+
+  <p><font face="Times New Roman">Selecting the &#8220;<i>Connections</i>&#8221; tab in the Device Properties window will display a list of all connections between the specified device and any other devices in the workspace.</font></p>
+
+  <h4><a name="P709_34033"></a><font face="Arial" size="+0"><b>3.2.2.3 Disconnect Device</b></font></h4>
+
+  <p><font face="Times New Roman">Selecting &#8220;<i>Disconnect Device</i>&#8221; from the workspace popup menu removes all connections to the specified device. </font></p>
+
+  <h4><a name="P711_34171"></a><font face="Arial" size="+0"><b>3.2.2.4 Delete Device</b></font></h4>
+
+  <p><font face="Times New Roman">Selecting Delete Device from the workspace popup menu removes all connections to the specified device, and removes the device from the workspace.</font></p>
+
+  <h3><a name="P713_34337"></a><font face="Arial" size="+1"><b>3.2.3 Example Computer Description</b></font></h3>
+
+  <p><font face="Times New Roman">In this section we describe the major components of the computer simulation contained in the &#8220;<i>cheetah_1p.bsd</i>&#8221; file.</font></p>
+
+  <p align="center"><img src="images/help-21.gif" border="0" width="449" height="457"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P717_34490"></a>Figure 3-5: Computer Simulation in &#8220;cheetah_1p.bsd&#8221; File</b></font></p>
+
+  <p><font face="Times New Roman">This computer is a single-processor AMD 8<sup>th</sup> Generation machine with 256 MB of memory, a Southbridge that supports two IDE chains, VGA output, and a SuperIO that supports a keyboard, mouse, and floppy drive. This computer also comes with a USB JumpDrive  and NIC device.</font></p>
+
+  <p><font face="Times New Roman">Right-clicking on any icon brings up a Workspace Popup menu (<a href="#P692_32125">Figure 3-3</a>) that allows access to the Device Property window, which includes a list of all components that the selected component is connected to. An example Device Property window is shown in <a href="#P701_33277">Figure 3-4</a>. The right-click Workspace Popup menu also allows you to delete or disconnect the selected device from all its connections. </font></p>
+
+<p><font face="Times New Roman"><a href="#P778_36777"><i>Table 3-1</i></a> lists each component in the &#8220;<i>cheetah_1p.bsd</i>&#8221; computer. For more information about devices and possible device configuration, please refer to Section <a href="help-12.htm#P1358_86449">7</a>,<i> </i>&#8220;<a href="help-12.htm#P1358_86449"><i>Device Configuration</i></a>&#8221; on page <a href="help-12.htm#P1358_86449">53</a>.</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="74"><p><font face="Times New Roman"><b>Symbol</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="217"><p><b><font face="Times New Roman">Device</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="269"><p><b><font face="Times New Roman">Short Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="74"><p align="center"><img src="images/help-22.gif" border="0" width="32" height="32"></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">AMD Debugger</font></p>
+</td>
+<td valign="top" width="269"><p><font face="Times New Roman">Standard debugging support.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="74"><p align="center"><img src="images/help-23.gif" border="0" width="32" height="32"></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">AweSim Processor</font></p>
+</td>
+<td valign="top" width="269"><p><font face="Times New Roman">Simulated Processor.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="74"><p align="center"><img src="images/help-24.gif" border="0" width="32" height="32"></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">DIMM Bank</font></p>
+</td>
+<td valign="top" width="269"><p><font face="Times New Roman">DIMM Memory Modules.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="74"><p align="center"><img src="images/help-25.gif" border="0" width="32" height="32"></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">AMD 8<sup>th</sup> Generation Integrated Northbridge</font></p>
+</td>
+<td valign="top" width="269"><p><font face="Times New Roman">Integrated Northbridge treated as a separate device in simulation.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="74"><p align="center"><img src="images/help-26.gif" border="0" width="32" height="32"></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">AMD-8111&#8482; Southbridge</font></p>
+</td>
+<td valign="top" width="269"><p><font face="Times New Roman">Southbridge supporting Hard drives, DVD-/CD-ROM drives, Floppy drives, USB ports, CMOS,  and POST ports.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="74"><p align="center"><img src="images/help-27.gif" border="0" width="32" height="32"></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">AMD-8132&#8482; PCI-X Controller</font></p>
+</td>
+<td valign="top" width="269"><p><font face="Times New Roman">The AMD-8132<a name="P746_35819"></a> PCI-X Controller is a HyperTransport tunnel<a name="P746_35863"></a> that provides two PCI-X buses and two IOAPICs. These PCI-X buses may or may not be configured as hot-plug-capable, depending on the platform.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="74"><p align="center"><img src="images/help-28.gif" border="0" width="43" height="43"></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">Emerald Graphics Device</font></p>
+</td>
+<td valign="top" width="269"><p><font face="Times New Roman">Simulated VGA device.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="74"><p align="center"><img src="images/help-29.gif" border="0" width="41" height="42"></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">Matrox G400 Graphics Device</font></p>
+</td>
+<td valign="top" width="269"><p><font face="Times New Roman">Simulated VGA/SVGA device.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="74"><p align="center"><img src="images/help-30.gif" border="0" width="32" height="32"></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">PCI Bus</font></p>
+</td>
+<td valign="top" width="269"><p><font face="Times New Roman">Simulated PCI Bus which can connect multiple PCI devices (such as bridges and PCI VGA).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="74"><p align="center"><img src="images/help-31.gif" border="0" width="32" height="32"></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">Winbond W83627HF SIO</font></p>
+</td>
+<td valign="top" width="269"><p><font face="Times New Roman">SuperIO Chip with keyboard, mouse and floppy.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="74"><p align="center"><img src="images/help-32.gif" border="0" width="32" height="32"></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">Memory Device</font></p>
+</td>
+<td valign="top" width="269"><p><font face="Times New Roman">Device that contains a configurable BIOS ROM image.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="74"><p align="center"><img src="images/help-33.gif" border="0" width="32" height="32"></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">SMB Hub Device</font></p>
+</td>
+<td valign="top" width="269"><p><font face="Times New Roman">The SMB hub<a name="P764_36350"></a> device is used to connect one SMBus to any of four SMBus branches.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="74"><p align="center"><img src="images/help-34.gif" border="0" width="32" height="32"></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">PCA9548 Device</font></p>
+</td>
+<td valign="top" width="269"><p><font face="Times New Roman">The PCA9548 is an 8-channel System Management Bus (SMB<a name="P767_36485"></a>) switch.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="74"><p align="center"><img src="images/help-35.gif" border="0" width="32" height="32"></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">AT24C Device</font></p>
+</td>
+<td valign="top" width="269"><p><font face="Times New Roman">The AT24C device<a name="P770_36522"></a> is a Serial EEPROM device.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="74"><p align="center"><img src="images/help-36.gif" border="0" width="32" height="32"></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">USB JumpDrive</font></p>
+</td>
+<td valign="top" width="269"><p><font face="Times New Roman">The JumpDrive device allows easy import and export of data between a host system and a simulation environment. </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="74"><p align="center"><img src="images/help-37.gif" border="0" width="32" height="32"></p>
+</td>
+<td valign="top" width="217"><p><font face="Times New Roman">Desktop Network Adapter</font></p>
+</td>
+<td valign="top" width="269"><p><font face="Times New Roman">The network adapter device models an Intel Pro/1000 MT Desktop Network Adapter.  </font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P778_36777"></a>Table 3-1: Cheetah_1p.bsd Devices</b></font></p>
+
+  <h3><a name="P779_36810"></a><b><font face="Arial" size="+1">3.2.4 Device Window &#8211; Quick Reference</font></b></h3>
+
+<p><font face="Times New Roman"><a href="#P801_37946"><i>Table 3-2</i></a> lists common tasks that may be done in the Device Window and describes how to complete them.</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="204"><p><font face="Times New Roman"><b>Task</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="372"><p><b><font face="Times New Roman">Where to Find the Properties</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="204"><p><font face="Times New Roman">Change CPU Type</font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Enter the &#8220;<i>AweSim properties page&#8594;Processor</i>&#8221; tab and select a CPU type. For more information, please refer to Section <a href="help-13.htm#P1510_88268">7.1</a>, &#8220;<a href="help-13.htm#P1510_88268"><i>AweSim&#8482; Processor </i>Device</a><i>, <a href="help-13.htm#P1536_90055">Figure 7-1</a> </i>&#8221;, on page <a href="help-13.htm#P1536_90055">56</a>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="204"><p><font face="Times New Roman">Change Memory type or size</font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Please refer to Section <a href="help-52.htm#P4601_258871">14.2</a>, &#8220;<a href="help-52.htm#P4601_258871"><i>Changing DRAM Size</i></a>&#8221;, on page <a href="help-52.htm#P4601_258871">171</a>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="204"><p><font face="Times New Roman">Change a hard drive or DVD-/CD-ROM image</font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Go to the <i>Simulation Display Window &#8220;File&#8594;Set IDE {Primary, Secondary} {Master, Slave} Image</i>&#8221;, as shown in <a href="help-24.htm#P2700_140132">Figure 7-25</a>, on page <a href="help-24.htm#P2700_140132">97</a>, </font></p>
+<p><font face="Times New Roman"><b><i>Or</i></b></font></p>
+<p><font face="Times New Roman">Go to the &#8220;<i>Southbridge Properties page&#8594;HDD {Primary, Secondary} Channel</i>&#8221;. If using a DVD-/CD-ROM image, check the DVD-ROM checkbox, as shown in <a href="help-24.htm#P2700_140132">Figure 7-25</a>, on page <a href="help-24.htm#P2700_140132">97</a>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="204"><p><font face="Times New Roman">Change a floppy drive image</font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Go to the Main Window &#8220;<i>File Menu&#8594;Set Floppy Image</i>&#8221;</font></p>
+<p><font face="Times New Roman"><b><i>Or</i></b></font></p>
+<p><font face="Times New Roman">Go to the &#8220;<i>SIO properties page&#8594;Super IO</i>&#8221; <i>tab (see </i><a href="help-19.htm#P2512_125433">Figure 7-16</a> on page <a href="help-19.htm#P2512_125433">83</a><i>)</i>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="204"><p><font face="Times New Roman">Change a BIOS image</font></p>
+</td>
+<td valign="top" width="372"><p><font face="Times New Roman">Go to the &#8220;<i>System BIOS Properties page</i>&#8594;<i>Memory Configuration</i>&#8221; tab (see <a href="help-20.htm#P2560_129628">Figure 7-17</a>, on page <a href="help-20.htm#P2560_129628">86</a>). Change the Init File entry.</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P801_37946"></a>Table 3-2: Device Window - Quick Reference</b></font></p>
+
+  <h2><a name="P802_37988"></a><b><font face="Arial" size="+1"><i>3.3 Device Groups</i></font></b></h2>
+
+  <p><font face="Times New Roman">A platform (*.bsd) consists of devices, and each device is an instance of either a device library (*.bsl or *.so) or a device group (*.bsg). A device group is an aggregation of devices into a single composite device that has some customized aspects (includes its name, icon, ports, initial and default state).</font></p>
+
+  <p><font face="Times New Roman">Device groups are a particular class of devices. They have the same properties and characteristics as traditional devices, but also allow the user to extend and tailor specific device(s) to meet a particular hardware implementation or configuration. Device groups provide a method that allows the user to <i>group</i> or <i>collect</i> one or more devices, libraries or groups into one composite device. To the user, the composite device will look and feel no different than a <i>normal </i>device library and, for the most part, the two should be indistinguishable.</font></p>
+
+  <p><font face="Times New Roman">A device group can consist of one or more child devices, with some optional initialization state associated with each child device, and those devices can optionally be connected to each other. It may be helpful to think of a device group as a BSD within a BSD.  However, a device group also has its own identity as a device, and it can support external connection ports that allow it be connected to other devices in the same manner as a traditional device library.</font></p>
+
+  <h3><a name="P808_39324"></a><font face="Arial" size="+1"><b>3.3.1 Terms</b></font></h3>
+
+  <p><font face="Times New Roman">If any of the language and wording used in these Device Groups sections is unclear, it may help to refer to this list of terms.</font></p>
+
+  <p><font face="Times New Roman"><b>Device</b>: A device library or device group (also, a known device or created device).</font></p>
+
+  <p><font face="Times New Roman"><b>Device Library</b>: Contains binary implementation of device functionality; has no child devices; associated with a &#8220;*.bsl&#8221; Windows or &#8220;*.bsl&#8221; Linux file.</font></p>
+
+  <p><font face="Times New Roman"><b>Device Group</b>: Grouping of one or more devices (libraries and groups) into a single device; gets its functionality through aggregation of its children, and from its group-specific properties/aspects; associated with a &#8220;*.bsg&#8221; file.</font></p>
+
+  <p><font face="Times New Roman"><b>Known Device</b>: A device that the shell knows about (i.e., the shell has all the necessary information to create an instance of this device). Known devices appear in the left hand pane of the Device Viewer window; and on the console using shell.KnownDevices.</font><br>
+</p>
+
+  <p><font face="Times New Roman"><b>Created Device</b>: An instantiation of a known device. All devices in a BSD are <i>created devices</i>. Created devices appear in the right hand pane of the <i>Device Viewer</i> window; and on the console using &#8220;</font><font face="Courier New">shell.CreatedDevices</font><font face="Times New Roman">&#8221;.</font></p>
+
+  <p><font face="Times New Roman"><b>Device grouping tree node relationships:</b> Because of device grouping, created devices in a BSD are nodes in a tree, with parents and children, siblings, and end/root tree node relationships.</font></p>
+
+  <p><font face="Times New Roman"><b>Device connection relationships:</b> Because of device connections, a sibling device can be connected to another sibling device at a connection port of each device.</font></p>
+
+  <p><font face="Times New Roman"><b>Machine Device Group: </b>Just a device group, but it is special since it is the root node of a machine tree (it has no parent, it can't be deleted, it has no ports, and it has no sibling devices); each machine in a BSD has a single machine created device group.</font></p>
+
+  <p><font face="Times New Roman"><b>Archive Data or Device State: </b>A known device group has archive data for its child devices, which specifies the default and initial state for when a known device group is instantiated as a created device. A known device library also has default and initial state for when it is instantiated as a created device. When a BSD is saved, each device's current state (archive data) (which may be different than the original known device's archive data) is saved to the &#8220;*.bsd&#8221; file.</font></p>
+
+  <p><font face="Times New Roman"><b>Internal Connection: </b>A connection between two children of a device group</font></p>
+
+  <p><font face="Times New Roman"><b>External Connection: </b>A connection between a device's parent group and a sibling of the parent group.  Under-the-hood, a connection to a device group is routed to one of its children, via an internal-to-external port mapping between the child device's port and the parent device's port.</font></p>
+
+  <h3><a name="P831_41856"></a><font face="Arial" size="+1"><b>3.3.2 Concept Diagrams</b></font></h3>
+
+  <p><font face="Times New Roman">A device group is a device with its own identity (name, description, icon, help file, etc).  But it is also like a BSD; in fact, every BSD has a single created device group called the <i>Machine</i> device. Tthe default user&#8217;s view into SimNow is from the context of looking inside the <i>Machine</i> device. This encapsulation of devices inside device group&#8217;s results in a hierarchy tree, with a <i>Machine</i> device group as the root node. In this way, a device group tree is like a folder/directory tree (folder is to device group as file is to device library), as demonstrated in <a href="#P835_42458">Figure 3-6</a>. </font></p>
+
+  <p><img src="images/help-38.gif" border="0" width="578" height="204"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P835_42458"></a>Figure 3-6: Device group: BSD with one machine group and three child devices</b></font></p>
+
+  <p><font face="Times New Roman">Any device can also connect to its sibling devices (<a href="#P835_42458">Figure 3-6</a> does not depict any port connections). <a href="#P838_42818">Figure 3-7</a> depicts the same example device tree, but with a different conceptual view - devices are inside groups; arrows represent possible port connections between sibling devices:</font></p>
+
+  <p><img src="images/help-39.gif" border="0" width="572" height="226"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P838_42818"></a>Figure 3-7: Device group (different conceptual view &#8211; devices are inside groups)</b></font></p>
+
+  <p><font face="Times New Roman">The previous diagrams show child devices inside device groups. On the standard top level view (the context of inside the machine device), we would more simply just see three devices, see <a href="#P842_43163">Figure 3-8</a> (arrows represent possible port connections between the devices).</font></p>
+
+  <p><img src="images/help-40.gif" border="0" width="575" height="110"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P842_43163"></a>Figure 3-8: Device Group (2 group devices 1 library device)</b></font></p>
+
+  <h3><a name="P843_43222"></a><b><font face="Arial" size="+1">3.3.3 Working with Device Groups</font></b></h3>
+
+  <p><font face="Times New Roman">From the main SimNow window, &#8220;<i>View&#8594;Show Devices</i>&quot;, opens a device viewer GUI window for the machine device group. We can also open a device viewer GUI window that views any device group's children. Right-click the device icon and select &quot;<i>Modify Group (Show Devices)</i>&quot; from the popup menu. If &quot;<i>Modify Group (Show Devices)</i>&quot; is not present, then the device the user has clicked on is not a group.</font></p>
+
+  <p align="center"><img src="images/help-41.gif" border="0" width="318" height="205"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P846_43649"></a>Figure 3-9: Modify Group</b></font></p>
+
+  <p><font face="Times New Roman">Click on &quot;<i>Modify Group (Show Devices)</i>&quot;. This will open a separate show device viewer window.</font></p>
+
+  <p align="center"><img src="images/help-42.gif" border="0" width="334" height="149"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P849_43765"></a>Figure 3-10: Device Group</b></font></p>
+
+  <p><font face="Times New Roman">If any modifications are done to the device group, then they will be saved with the BSD.  Note that it is possible to modify a device group to a point where its children look nothing like the original device.</font></p>
+
+  <h3><a name="P851_43998"></a><font face="Arial" size="+1"><b>3.3.4 Shell Automation Commands for Device Groups</b></font></h3>
+
+  <p><font face="Times New Roman">The shell automation commands that are used for a device also work for a device group.  For example, shell.KnownDevices lists all known devices (both device libraries and device groups). For example, a device group exposes ports and connections, so &#8220;</font><font face="Courier New">shell.AvailablePorts</font><font face="Times New Roman">&#8221; and &#8220;</font><font face="Courier New">shell.Connect</font><font face="Times New Roman">&#8221; etc. work with a device (regardless of whether it's a group or a library).</font></p>
+
+  <h4><a name="P853_44421"></a><font face="Arial" size="+0"><b>3.3.4.1 Device Tree</b></font></h4>
+
+  <p><font face="Times New Roman">You can optionally reference a device in the parent and child grouping device tree, using the syntax separator &quot;</font><font face="Courier New"> -&gt; </font><font face="Times New Roman">&quot; between device parent and child, and &quot;</font><font face="Courier New">-&gt; Machine #1</font><font face="Times New Roman">&quot; as the root device. Here are some examples, using a machine and platform that just has two &quot;</font><font face="Courier New">4 core Node</font><font face="Times New Roman">&quot; devices...</font></p>
+
+    <blockquote><p><font face="Courier New">1 simnow&gt; shell.createddevices<br>
+          &quot;4 core Node #0&quot;</font></p>
+
+    <p><font face="Courier New">         &quot;4 core Node #1&quot;</font></p>
+
+    <p><font face="Courier New">1 simnow&gt; shell.CreatedDevices &quot;-&gt; Machine #1&quot;<br>
+           &quot;4 core Node #0&quot;</font></p>
+
+    <p><font face="Courier New">           &quot;4 core Node #1&quot;</font></p>
+
+    <p><font face="Courier New">1 simnow&gt; shell.createddevices &quot;-&gt; Machine #1 -&gt; 4 core Node #0&quot;<br>
+Cpu:0  &quot;AweSim Processor #0&quot;<br>
+Cpu:1     &quot;AweSim Processor #1&quot;<br>
+Cpu:2     &quot;AweSim Processor #2&quot;<br>
+Cpu:3  &quot;AweSim Processor #3&quot;<br>
+sledgenb:0 &quot;AMD 8th Generation Integrated Northbridge #4&quot;</font></p>
+
+    <p><font face="Courier New">1 simnow&gt; shell.createddevices &quot;-&gt; Machine #1 -&gt; 4 core Node #1&quot;<br>
+Cpu:4          &quot;AweSim Processor #0&quot;<br>
+Cpu:5          &quot;AweSim Processor #1&quot;<br>
+Cpu:6          &quot;AweSim Processor #2&quot;<br>
+Cpu:7          &quot;AweSim Processor #3&quot;<br>
+sledgenb:1     &quot;AMD 8th Generation Integrated Northbridge #4&quot;</font></p>
+
+    <p><font face="Courier New">1 simnow&gt; shell.modules<br>
+xtrsvc:0<br>
+shell:0<br>
+Cpu:0<br>
+sledgeldt:0<br>
+sledgenb:1<br>
+sledgenb:0<br>
+Cpu:1<br>
+Cpu:2<br>
+Cpu:3<br>
+sledgeldt:1<br>
+Cpu:4<br>
+Cpu:5<br>
+Cpu:6<br>
+Cpu:7</font></p>
+
+  </blockquote><p><font face="Times New Roman">Notice the &#8220;</font><font face="Courier New">shell.modules</font><font face="Times New Roman">&#8221; list is flat, but the devices are in a tree structure that allows us to have both a &quot;</font><font face="Courier New">-&gt; Machine #1 -&gt; 4 core Node #0 -&gt; AweSim Processor #0</font><font face="Times New Roman">&quot; and a &quot;-&gt; Machine #1 -&gt; 4 core Node #1 -&gt; AweSim Processor #0&quot;. Also notice that our default view ignores the tree, and just shows us two devices: &quot;</font><font face="Courier New">4 core Node #0</font><font face="Times New Roman">&quot; and &quot;</font><font face="Courier New">4 core Node #1</font><font face="Times New Roman">&quot;.</font></p>
+
+  <h4><a name="P869_45881"></a><font face="Arial" size="+0"><b>3.3.4.2 Enabled vs. Disabled vs. Mixed</b></font></h4>
+
+  <p><font face="Times New Roman">Shell device commands like &#8220;</font><font face="Courier New">shell.Location</font><font face="Times New Roman">&#8221; or &#8220;</font><font face="Courier New">shell.AddDevice</font><font face="Times New Roman">&#8221; have generic meanings (regardless of whether the device is a group or library). But some are defined from an aggregation of the children. For example, &#8220;</font><font face="Courier New">shell.GetFastPath</font><font face="Times New Roman">&#8221; can return &#8220;<i>Enabled</i>&#8221;, &#8220;<i>Disabled</i>&#8221;, or &#8220;<i>Mixed</i>&#8221; (means some children are &quot;<i>Enabled</i>&quot; and some are &quot;<i>Disabled</i>&quot;).</font></p>
+
+    <blockquote><p><font face="Courier New">1 simnow&gt; shell.GetLogIO &quot;4 core Node #0 -&gt; AweSim Processor #0&quot;<br>
+PCI:       Disabled<br>
+IO:        Disabled<br>
+IOfpdis:   Enabled<br>
+MEM:       Disabled<br>
+MEMfpdis:  Enabled<br>
+GETMEMPTR: Disabled<br>
+<br>
+1 simnow&gt; shell.GetLogIO &quot;4 core Node #0 -&gt; AweSim Processor #1&quot;<br>
+PCI:       Disabled<br>
+IO:        Disabled<br>
+IOfpdis:   Disabled<br>
+MEM:       Disabled<br>
+MEMfpdis:  Disabled<br>
+GETMEMPTR: Disabled</font></p>
+
+  </blockquote><p><font face="Times New Roman">In this example, all other child devices of &quot;</font><font face="Courier New">4 core Node #0</font><font face="Times New Roman">&quot; are &quot;<i>Disabled</i>&quot; for all log options.</font></p>
+
+    <blockquote><p><font face="Courier New">1 simnow&gt; shell.GetLogIO &quot;4 core Node #0&quot;<br>
+PCI:       Disabled<br>
+IO:        Disabled<br>
+IOfpdis:   Mixed<br>
+MEM:       Disabled<br>
+MEMfpdis:  Mixed<br>
+GETMEMPTR: Disabled</font></p>
+
+    <p><font face="Courier New">1 simnow&gt; shell.GetLogIO &quot;-&gt; Machine #1&quot;<br>
+PCI:       Disabled<br>
+IO:        Disabled<br>
+IOfpdis:   Mixed<br>
+MEM:       Disabled<br>
+MEMfpdis:  Mixed<br>
+GETMEMPTR: Disabled</font></p>
+
+  </blockquote><h3><a name="P879_47031"></a><font face="Arial" size="+1"><b>3.3.5 Device Group Examples</b></font></h3>
+
+  <p><font face="Times New Roman">Device groups can be a powerful building block for SimNow users. These next examples should help give further understanding about device groups, and demonstrate some practical uses.</font></p>
+
+  <h4><a name="P881_47239"></a><font face="Arial" size="+0"><b>3.3.5.1 Example: 1GB DDR2 memory</b></font></h4>
+
+  <p><font face="Times New Roman">When you instantiate a &#8220;<i>Dimm Bank</i>&#8221; known device into a created device, you get its default state of 8 empty dimm&#8217;s with no configuration. You can then configure the &#8220;<i>Dimm Bank</i>&#8221;, such as by opening the device&#8217;s GUI configuration properties to specify general options (such as max number of dimm&#8217;s), and to configure each dimm (such as by importing an SPD). You could configure it, for example, to emulate a dimm bank with 2 DDR2 dimm&#8217;s (1GB each).</font></p>
+
+  <p><font face="Times New Roman">Device groups offer us a potentially simpler alternative - for the user to instantiate a preconfigured device group. For example, we could have a device group &#8220;<i>Dimm DDR2 1GBx2</i>&#8221;, which has (inside it) only one child and default archive data (state) for that child. The figure below shows that the (theoretical) known device &#8220;<i>Dimm DDR2 1GBx2</i>&#8221; has inside it a single child device &#8220;<i>Dimm Bank #0</i>&#8221; that is configured with two dimm&#8217;s (type DDR2, 1GB each).</font></p>
+
+  <p><img src="images/help-43.gif" border="0" width="575" height="110"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P886_48196"></a>Figure 3-11: Example DIMM Device Group</b></font></p>
+
+  <p><font face="Times New Roman">When the user instantiates this (theoretical) known device &#8220;<i>Dimm DDR2 1GBx2</i>&#8221; as a created device, we get a created device &#8220;<i>Dimm DDR2 1GBx2 #0</i>&#8221; with a child device &#8220;<i>Dimm Bank #0</i>&#8221; that is already configured (as DDR2, 2 dimm, 1GB each). Our resulting main device GUI would look like this:</font></p>
+
+  <p align="center"><img src="images/help-44.gif" border="0" width="593" height="198"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P890_48531"></a>Figure 3-12: Created DIMM Device Group</b></font></p>
+
+  <p><font face="Times New Roman">The device GUI for the children of &#8220;<i>Dimm DDR2 1GBx2 #0</i>&#8221; would look like this:</font></p>
+
+  <p align="center"><img src="images/help-45.gif" border="0" width="552" height="159"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P895_48650"></a>Figure 3-13: Children of DIMM Device Group</b></font></p>
+
+  <p><font face="Times New Roman">If we looked at the options and configuration of the device library &#8220;<i>-&gt; Machine #1 -&gt; Dimm DDR2 1GBx2 #0 -&gt; Dimm Bank #0</i>&#8221; (either from the GUI or from the console), we would see that it is already configured as DDR2 with 2 dimm slots (1GB each).</font></p>
+
+  <p><font face="Times New Roman">This example demonstrates a broad concept. An existing device that has a more generic and abstract definition (such as a non-configured &#8220;<i>Dimm Bank</i>&#8221;) can be wrapped in a device group to give it an identity as a particular hardware implementation (such as an already configured &#8220;<i>Dimm DDR2 1GBx2</i>&#8221;). More generally, any device can be wrapped by a device group, to give an alternate default configuration for the device&#8217;s state (archive data).</font></p>
+
+  <h4><a name="P900_49389"></a><font face="Arial" size="+0"><b>3.3.5.2 Example: Quad-Core Node</b></font></h4>
+
+  <p><font face="Times New Roman">Next we will consider examples relevant to the ability of a device group to have multiple child devices, default archive data for each child device, and connections between the child devices. These next examples are based on a quad-core processor node.</font></p>
+
+  <p><font face="Times New Roman">Building a processor node in SimNow has traditionally been a multi-step process. First the user would add the &quot;<i>AMD 8th Generation Northbridge Device</i>&quot;, and then add one &quot;<i>AweSim Processor</i>&quot; device for each processing core in the node. These devices then need to be connected together along the respective &quot;<i>CPU Bus&quot; and &quot;Interrupt / IOAPIC</i>&quot; connection ports. Once the devices are connected, a user would then need to load a product ID file so that the simulated devices would represent a real and planned piece of hardware. In summary, building a Quad-core node in SimNow could take as many as 14 individual steps, and these steps would need to be repeated each time a processor node is to be added.</font></p>
+
+  <p><font face="Times New Roman">A device group can both simplify adding a quad-core node, and present the user with a hierarchical view. So we will give some examples with quad-core processor nodes.</font></p>
+
+  <p><font face="Times New Roman">A device group is not required to specify archive data for its child devices. When such a known device group is instantiated as a created device, it simply lets its children use their own default and initial configuration state. We can create an abstract or generic &#8220;<i>4 core Node</i>&#8221; device group that does not represent a particular hardware implementation (just like a non-configured &#8220;<i>Dimm Bank</i>&#8221; does not represent a particular hardware implementation, until it is configured).</font></p>
+
+  <p><img src="images/help-46.gif" border="0" width="571" height="205"></p>
+
+  <p><font face="Times New Roman">A device group can optionally specify initial and default archive data (device state) for each of its child devices. A device group with five children could specify archive data for 0, 1, 2, 3, 4, or all 5 children. We could have an &#8220;<i>AMD 4-core CPU xxxx</i>&#8221; that specifies archive data for all five of its children (configured with the (theoretical) product ID file &#8220;<i>amd-xxxx.id</i>&#8221;).</font></p>
+
+  <p><img src="images/help-47.gif" border="0" width="586" height="207"></p>
+
+  <p><font face="Times New Roman">This is not the only way we could create a (theoretical) &#8220;<i>AMD 4-core CPU xxxx</i>&#8221;. A cleaner idea would be to reuse the non-configured abstract and generic &#8220;<i>4 core Node</i>&#8221;.</font></p>
+
+  <p><img src="images/help-48.gif" border="0" width="581" height="99"></p>
+
+  <p><font face="Times New Roman">This device group would (externally) be functionally the same as our previous &#8220;<i>AMD 4-core CPU xxxx</i>&#8221; example, although it has the additional layer where it cleanly reuses &#8220;<i>4 core Node</i>&#8221;. We could also reuse &#8220;<i>4 core Node</i>&#8221; for other device groups that represent a particular hardware implementation of a 4-core node, such as the (theoretical) &#8220;<i>AMD 4-core CPU yyyy</i>&#8221; configured with the (theoretical) product ID file &#8220;<i>amd-yyyy.id</i>&#8221;. Or a &#8220;<i>DeerHound RevB QuadCore Socket L1</i>&#8221; configured with the product ID file &#8220;<i>Family10hDR-L1_B0.id</i>&#8221;.</font></p>
+
+  <h4><a name="P919_52131"></a><font face="Arial" size="+0"><b>3.3.5.3 Example: SuperIO device</b></font></h4>
+
+  <p><font face="Times New Roman">For SimNow developers, device groups can be a technique for developing SimNow devices in a layered manner, promoting optimal code reuse. Before device groups were available, SuperIO devices were written as device libraries. It is cleaner to implement SuperIO device models with device groups. Typically, SuperIO devices consist of multiple functional blocks such as a UART, LPT, PS2 controller, Floppy controller etc.  Device groups provide a way to develop each functional block as discrete devices that can later be <i>grouped</i> to represent a particular SuperIO controller.</font></p>
+
+  <h3><a name="P921_52733"></a><font face="Arial" size="+1"><b>3.3.6 Creating a Device Group (GUI)</b></font></h3>
+
+  <p><font face="Times New Roman">From the Device Viewer window, select the devices you want to group then Ctrl + left-click a device to add or remove it from being selected; left click drag the background for a rectangle selection. The devices you select will become the children for the device group. An internal connection (see Section <a href="#P808_39324"><i>3.3.1</i></a>, &#8220;<a href="#P808_39324"><i>Terms</i></a>&#8221;, on page <a href="#P808_39324"><i>16</i></a>) will be saved inside the group. An external connection (see Section <a href="#P808_39324"><i>3.3.1</i></a>, &#8220;<a href="#P808_39324"><i>Terms</i></a>&#8221;, on page <a href="#P808_39324"><i>16</i></a>) will be maintained as a connection between the created device group and one of its sibling devices and result in an internal-to-external port mapping. Next right click one of the selected devices and choose &quot;<i>Group Devices</i>&quot;, see <a href="#P925_53445"><i>Figure 3-14</i></a>.</font></p>
+
+  <p align="center"><img src="images/help-49.gif" border="0" width="304" height="159"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P925_53445"></a>Figure 3-14: Group Devices</b></font></p>
+
+  <p><font face="Times New Roman">This brings up the device group creation wizard. On the first page, you give the group an identity as a device, by specifying device properties for the device (name, description, icon file, help file, flags). You specify a file path to save the known device group, because the wizard will create both a known device group *.bsg file, and an instance of the known device as a created device inside your current BSD (replacing the devices that you selected for grouping). The internal preview (left side) shows the child devices inside the group; the external preview (right side) shows the group as a device. This preview only shows each device icon, name, number, and internal device connections.</font></p>
+
+  <p><img src="images/help-50.gif" border="0" width="594" height="485"><br>
+</p>
+
+  <p align="center"><font face="Times New Roman"><b>Figure ?</b></font></p>
+
+  <p><font face="Times New Roman">In the second step, we specify options relative to each child device. For each child's device state, the resulting known device group can either save the child device's current state, or it can specify no default device state and thus inherit the default device state for the particular child device. For example, if a child device is an &quot;<i>AweSim Processor</i>&quot;, we can either save the current configuration for that &quot;<i>AweSim Processor</i>&quot; as the default state for the known device group we are creating. Or the group's child can just inherit the defaults of the &quot;<i>AweSim Processor</i>&quot; known device.</font></p>
+
+  <p><font face="Times New Roman">For each child device, we can specify internal to external port mappings. This maps an internal port name to an external port name (a port for the device group). Since existing external connections are maintained, we automatically require an internal to external port mapping for an existing external connection. To finish, the wizard requires that the external port names are unique to the device group, since a device must have unique port names.</font></p>
+
+  <p><img src="images/help-51.gif" border="0" width="587" height="498"></p>
+
+  <p align="center"><font face="Times New Roman"><b>Figure ?</b></font></p>
+
+  <p><font face="Times New Roman">The &quot;external ports, device state&quot; page shows you all the internal to external port mappings which are currently specified for the device group. You can also click the &quot;<i>Add/Remove Ports</i>&quot; button for a particular child device, to open a sub-page that allows you to add and remove particular port mappings for the child device.</font></p>
+
+  <p><font face="Times New Roman">In a child device sub-page, each checkbox turns a particular port mapping on or off. If a checkbox is grayed out, it is because the device has an existing external connection, thus requiring the port to be mapped for the device group.</font></p>
+
+  <p align="center"><img src="images/help-52.gif" border="0" width="528" height="498"></p>
+
+  <p align="center"><font face="Times New Roman"><b>Figure ? </b></font></p>
+
+  <p><font face="Times New Roman">Clicking &quot;<i>OK</i>&quot; causes the &quot;external ports, device state&quot; page to regenerate its list of ports.  So if you add a port using the checkbox, it will show up on the &quot;external ports, device state&quot; page.</font></p>
+
+  <p><font face="Times New Roman">When you are done defining the device group then simply click the &quot;<i>Finish</i>&quot; button. This causes the device group to get created. A known device group file is created using the *.bsg file you specified for &quot;<i>Export to file</i>&quot;, and loaded as a known device. The devices you grouped are swapped (deleted and replaced) with a created device instance of your new device group. Its internal connections and device state come from the known device. External connections from the devices you grouped are recreated as connections to your new created device group. All of this is done automatically by the wizard when you click &quot;<i>Finish</i>&quot;.</font></p>
+
+  <h3><a name="P967_56602"></a><font face="Arial" size="+1"><b>3.3.7 Creating a Device Group (Automation Commands)</b></font></h3>
+
+  <p><font face="Times New Roman">Although it is simpler to create a device group in the GUI, it is also possible to create a device group on the console using shell automation commands. First we group a set of specified devices into an &#8220;<i>Unnamed Group</i>&#8221;. Then we can customize our &#8220;<i>Unnamed Group</i>&#8221;, by specifying device group options. Next we export it to a file as a known device with a new identity as a device instead of just the generic &#8220;<i>Unnamed Group</i>&#8221;. Finally, we can replace our &#8220;<i>Unnamed Group</i>&#8221; created device with a created device instance of our new known device. Here are the details of these commands:</font></p>
+
+  <p><font face="Times New Roman">You can specify devices to get grouped into an &#8220;<i>Unnamed Group</i>&#8221; device:</font></p>
+
+    <blockquote><p><font face="Courier New">shell.GroupDevices[devices]</font></p>
+
+  </blockquote><p><font face="Times New Roman">We can modify an existing created device group&#8217;s options:</font></p>
+
+    <blockquote><p><font face="Courier New">shell. SetDeviceGroupOption [device group] [ExternalPortMap | ExportDeviceState] [variable args]</font></p>
+
+  </blockquote><p><font face="Times New Roman"><br>
+Specifically, we can add, remove, and rename the internal-to-external port mappings between a device child and its parent device group:</font></p>
+
+    <blockquote><p><font face="Courier New">shell.SetDeviceGroupOption [device] ExternalPortMap Add [device child] [in] [out]<br>
+shell.SetDeviceGroupOption [device] ExternalPortMap Delete [out]<br>
+shell.SetDeviceGroupOption [device] ExternalPortMap Rename [out] [out renamed]</font></p>
+
+  </blockquote><p><font face="Times New Roman"><br>
+And we can specify whether or not to use the created device child&#8217;s device state for each child device (for if/when the group is exported as a known device):</font></p>
+
+    <blockquote><p><font face="Courier New">shell.SetDeviceGroupOption [device] ExportDeviceState [optional child device] [0|1]</font></p>
+
+  </blockquote><p><font face="Times New Roman">There is also a shell command to get the options (ie &#8211; to print them to the console/stdout). This can print the values for either options (ExternalPortMap or ExportDeviceState):</font></p>
+
+    <blockquote><p><font face="Courier New">shell.GetDeviceGroupOption [device group] [ExternalPortMap | ExportDeviceState] [variable args]<br>
+shell.GetDeviceGroupOption [device group] ExternalPortMap [optional: child device]<br>
+shell.GetDeviceGroupOption [device group] ExportDeviceState [optional: child device]</font></p>
+
+  </blockquote><p><font face="Times New Roman">We can export a created device group (including the options we set) to a known device file. To do this, we also specify values for the known device&#8217;s identity as a device:</font></p>
+
+    <blockquote><p><font face="Courier New">shell.ExportDeviceGroupToFile [device group] [name] [desc] [icon] [help] [flags] [bsg file path]</font></p>
+
+  </blockquote><p><font face="Times New Roman">The previous command only exports the created device group to a file as a known device; it does not change our existing created device group. However, after we export our created device to a file, we can then replace our created device with an instance of the device we exported. By doing this, we give our device a new device identity:</font><br>
+</p>
+
+    <blockquote><p><font face="Courier New">shell.SwapDevice [created device] [known device]</font></p>
+
+  </blockquote><h3><a name="P994_59194"></a><font face="Arial" size="+1"><b>3.3.8 Ungrouping a created device group</b></font></h3>
+
+  <p><font face="Times New Roman">Since a device group is really just a container for its child device's, with its own identity as a device, it is simple to ungroup a device group, on either the GUI or the console. In the show devices GUI, right-click a device group, click &#8220;<i>Ungroup Device</i>&#8221;. Or, in the console, execute the command:</font></p>
+
+    <blockquote><p><font face="Courier New">shell.UngroupDevice [created device group]</font></p>
+
+  </blockquote><h2><a name="P998_59577"></a><font face="Arial" size="+1"><b><i>3.4 Main Window</i></b></font></h2>
+
+  <p><font face="Times New Roman">The AMD SimNow&#8482; Main Window, shown in <a href="#P642_25681">Figure 3-1</a>, is the main application window. It contains a Menu Bar with a set of pull down menus, and a Tool Bar, both of which control many aspects of the simulation environment. The console window<a name="P999_59830"></a>, shown in <a href="#P1002_59994">Figure 3-15</a>, provides a textual interface for status information and command-line style control, see Section <a href="help-59.htm#P9811_384062">A.7</a>, &#8220;<i><a href="help-59.htm#P9811_384062">Automation Commands</a></i>&#8221;, on page <a href="help-59.htm#P9811_384062">228</a>.</font></p>
+
+  <p align="center"><img src="images/help-53.gif" border="0" width="575" height="291"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1002_59994"></a>Figure 3-15: Console Window</b></font></p>
+
+  <h3><a name="P1003_60021"></a><b><font face="Arial" size="+1">3.4.1 SimStats and Diagnostic Ports</font></b></h3>
+
+  <p><font face="Times New Roman">The <i>SimStats</i><a name="P1004_60068"></a> and <i>Diagnostic Ports</i><a name="P1004_60089"></a> numeric displays appear in the <i>Main Window</i> when a Southbridge device is added to the workspace. The <i>SimStats</i> display shows host and simulation elapsed time and a simulation MIPS counter that is updated as the simulation runs. The simulator effectively has a built-in POST<a name="P1004_60361"></a> card output, ports 80h to 87h and e0h to e3h. You can see these codes on the right upper part of the <i>Main Window</i> in the &quot;<i>Diagnostic Ports</i>&quot; section.</font></p>
+
+  <p align="center"><a name="P1005_60509"><img src="images/help-54.gif" border="0" width="579" height="264"></a></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1006_60509"></a>Figure 3-16: Progress Meter and Diagnostic Ports</b></font></p>
+
+  <p><font face="Times New Roman">The simulation counter measures the number of microseconds of simulated time.&nbsp; However, it is not a performance or cycle-based simulator, so the simulated time is estimated.</font></p>
+
+  <h3><a name="P1008_60731"></a><font face="Arial" size="+1"><b>3.4.2 CPU-Statistics Graphs</b></font></h3>
+
+  <p><font face="Times New Roman">There are several graphs that can be displayed on the left side of the <i>Main Window</i>. These graphs can be activated by the <i>&#8220;View&#8594;CPU Graphs</i>&#8221; menu selection.</font></p>
+
+  <h4><a name="P1010_60918"></a><font face="Arial" size="+0"><b>3.4.2.1 Translation Graph</b></font></h4>
+
+  <p><font face="Times New Roman">The <i>Translation Graph</i> updates once a second. Full vertical scale means the address-Translation cache<a name="P1011_61043"></a> (tcache<a name="P1011_61051"></a>) is full. Dark color on the bottom of the graph represents percent of tcache containing valid translations. Lighter color above the dark color represents percent of tcache containing invalidated translations. Black color growing from the top represents the meta data that describes the translations.</font></p>
+
+  <p><img src="images/help-55.gif" border="0" width="568" height="105"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1013_61351"></a>Figure 3-17: CPU Translation Graph</b></font></p>
+
+  <h4><a name="P1014_61385"></a><b><font face="Arial" size="+0">3.4.2.2 Real MIPS Graph</font></b></h4>
+
+  <p><font face="Times New Roman">The <i>Real MIPS Graph</i> updates once a second. If this value exceeds what can be displayed on this graph, the graph line turns red. It shows the instantaneous MIPS<a name="P1015_61567"></a>, i.e., how many millions of instructions per host CPU-second at which the simulator is running. A value of zero will appear as a one-pixel-high horizontal line. Full scale represents 100 MIPS.</font></p>
+
+  <p><img src="images/help-56.gif" border="0" width="600" height="101"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1017_61760"></a>Figure 3-18: CPU Real MIPS Graph</b></font></p>
+
+  <h4><a name="P1018_61792"></a><b><font face="Arial" size="+0">3.4.2.3 Invalidation Rate Graph</font></b></h4>
+
+  <p><font face="Times New Roman">The <i>Invalidation Rate Graph</i> updates once a second. If this value exceeds what can be displayed on this graph, the graph line turns red. A rate of zero will appear as a horizontal line, one pixel high. Full vertical scale represents one invalidatated translation per thousand simulated instructions. The lower, darker color represents plain invalidations. The upper, lighter color represents range invalidations. This upper, lighter color is a minimum of one pixel high, i.e., a value of zero range invalidations still results in a one-pixel-high line of the lighter color.</font></p>
+
+  <p><img src="images/help-57.gif" border="0" width="571" height="105"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1021_62395"></a>Figure 3-19: CPU Invalidation Graph</b></font></p>
+
+  <h4><a name="P1022_62430"></a><b><font face="Arial" size="+0">3.4.2.4 Exception Rate Graph</font></b></h4>
+
+  <p><font face="Times New Roman">The <i>Exception Rate Graph</i> updates once a second. If this value exceeds what can be displayed on this graph, the graph line turns red. A rate of zero appears as a horizontal line one pixel high. Full vertical scale represents a rate of one exception taken by the simulator per ten simulated instructions. These exceptions may be internal to the simulator and not turn into exceptions in the simulated machine. The lower, darker color represents all such exceptions other than segmentation violation (SEGV) exceptions. The upper, lighter color represents all the SEGV<a name="P1023_63022"></a> exceptions. This upper, lighter color is a minimum of a one-pixel-high line, i.e., a value of zero SEGV exceptions still shows a one-pixel-high line of the lighter color.</font></p>
+
+  <p><img src="images/help-58.gif" border="0" width="569" height="102"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1025_63193"></a>Figure 3-20: CPU Exception Rate Graph</b></font></p>
+
+  <h4><a name="P1026_63230"></a><b><font face="Arial" size="+0">3.4.2.5 PIO Rate Graph</font></b></h4>
+
+  <p><font face="Times New Roman">The <i>PIO Rate Graph</i> updates once a second. If the port I/O (PIO) rate exceeds what can be displayed on this graph, the graph line turns red. A rate of zero will appear as a horizontal line one pixel high. Full scale represents one PIO per ten simulated instructions. Darker color on the bottom of the graph represents the read PIO's, the lighter color represents the write PIO&#8217;s.</font></p>
+
+  <p><img src="images/help-59.gif" border="0" width="584" height="97"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1029_63632"></a>Figure 3-21: CPU PIO Rate Graph</b></font></p>
+
+  <h4><a name="P1030_63663"></a><b><font face="Arial" size="+0">3.4.2.6 MMIO Rate Graph</font></b></h4>
+
+  <p><font face="Times New Roman">The <i>MMIO Rate Graph</i> updates once a second. If the memory-mapped I/O (MMIO) rate exceeds what can be displayed on this graph, the graph line turns red. A rate of zero will appear as a horizontal line one pixel high. Full vertical scale represents one MMIO per ten simulated instructions. Darker color on the bottom of the graph represents the read MMIO's, the lighter color represents the write MMIO's.</font></p>
+
+  <p><img src="images/help-60.gif" border="0" width="582" height="90"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1033_64087"></a>Figure 3-22: CPU MMIO Rate Graph</b></font></p>
+
+  <h3><a name="P1034_64119"></a><b><font face="Arial" size="+1">3.4.3 Simulated Video</font></b></h3>
+
+  <p><font face="Times New Roman"><a name="P1035_64140"></a>The simulated video area of the <i>Main Window</i> depicts the VGA output screen that appears when a VGA device is added to the workspace. When the mouse focus is over the video area, the simulator captures host keyboard input, enabling you to type most keyboard entries on your real keyboard. This is a convenience and may not accurately position the mouse or grab all keys correctly. For more accurate mouse and keyboard capture, see &#8220;<i>Grab the mouse and keyboard</i>&#8221; in Section <a href="help-09.htm#P1206_77420">5.2.3</a><i>, </i>&#8220;<a href="help-09.htm#P1206_77420"><i>Interaction with the Simulated Machine</i></a>&#8221;, on page <a href="help-09.htm#P1206_77420">45</a>. </font></p>
+
+  <p><font face="Times New Roman">You can also allow the simulator to take complete control of the mouse and keyboard by selecting &#8220;<i>Special Keyboard&#8594;Grab Mouse and keyboard</i>&#8221;. To return from this mode, press and hold <i>Ctrl</i> then <i>Alt</i>, and then release them in reverse order.</font></p>
+
+  <h3><a name="P1038_64921"></a><font face="Arial" size="+1"><b>3.4.4 Hard Disk and Floppy Display</b></font></h3>
+
+  <p><font face="Times New Roman">The <i>IDE Primary byte counts</i>, <i>IDE Secondary byte counts</i>, and <i>Floppy disk byte counts</i> displays appear when a Southbridge device is added to the workspace.</font></p>
+
+  <p align="center"><img src="images/help-61.gif" border="0" width="357" height="113"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P1042_65107"></a>Figure 3-23: Primary, Secondary, and Floppy Displays</b></font></p>
+
+  <p><font face="Times New Roman">When a disk is accessed in simulation, the status information is updated. </font></p>
+
+  <h3><a name="P1044_65233"></a><font face="Arial" size="+1"><b>3.4.5 Using Hard Drive, DVD-/CD-ROM and Floppy Images</b></font></h3>
+
+<p><font face="Times New Roman">Section <a href="help-08.htm#P1072_66527">4</a> on page <a href="help-08.htm#P1072_66527">35</a> describes how to create disk images. To use a disk image created by DiskTool go to the <i>Main Window</i> <i>File Menu</i> and choose one of the &#8220;<i>Set [&#8230;] Image</i>&#8221; menu items. This brings up an open-file dialog. Select your drive image and click on &#8216;Ok&#8217;. Standard file extensions for disk images are shown in <a href="#P1059_65727">Table 3-3</a>.</font></p></ul>
+<p><ul>
+<center><table border="1">
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="204"><p><font face="Times New Roman"><b>Image Type</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="119"><p><b><font face="Times New Roman">File Extension</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="204"><p><font face="Times New Roman">Hard Drive Image</font></p>
+</td>
+<td valign="top" width="119"><p><font face="Times New Roman">*.hdd</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="204"><p><font face="Times New Roman">Floppy Drive Image</font></p>
+</td>
+<td valign="top" width="119"><p><font face="Times New Roman">*.fdd</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="204"><p><font face="Times New Roman">DVD-/CD-ROM Image</font></p>
+</td>
+<td valign="top" width="119"><p><font face="Times New Roman">*.iso</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="204"><p><font face="Times New Roman">Generic Image</font></p>
+</td>
+<td valign="top" width="119"><p><font face="Times New Roman">*.img</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P1059_65727"></a>Table 3-3: Image Types</b></font></p>
+
+  <p><font face="Times New Roman">After an image is selected, any changes to the image are stored in journal form in the &#8220;<i>.BSD</i>&#8221; file, unless journaling is disabled in the Southbridge (for hard drive images) or SuperIO (for floppy drive images) device. If journaling is disabled, changes are stored to the image file, see also Section <a href="help-09.htm#P1172_73075">5.2.1</a>, &#8220;<a href="help-09.htm#P1172_73075">Assigning Disk-Image</a>&#8221;, on page <a href="help-09.htm#P1172_73075">42</a>.</font></p>
+
+  <h3><a name="P1061_66099"></a><font face="Arial" size="+1">3.4.6 Help, Problems and Bug Reports<b> </b></font></h3>
+
+  <p><font face="Times New Roman">The simulator has HTML on-line help and documentation, with &quot;<i>Help</i>&quot; menu entries or buttons on the dialogs. In the device view, every device has a context menu (right-click) with &quot;<i>Help</i>&quot; documentation links and &quot;<i>What's this</i>&quot; floater text. </font></p>
+
+  <p><font face="Times New Roman">In addition to any other support channel you may have, we encourage feedback on any problems encountered. Please send an email to <u><!-- TRANSIT - HYPERLINK --><!-- .mailto:simnow@amd.com. --><a href="mailto:simnow@amd.com" target="_top">simnow.support@amd.com</a></u>. </font></p></ul><p align="left"><a href="help-06.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-08.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>

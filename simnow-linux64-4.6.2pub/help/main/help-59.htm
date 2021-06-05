@@ -1,0 +1,2640 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>help</title>
+<meta name="GENERATOR" content="HTML Transit 7.0 by Stellent (tm), Inc. www.stellent.com">
+<meta name="TransitPubID" content="444">
+</head>
+<body><a name="TopOfPage"> </a>
+<!-- TRANSIT - INFOBEFORE -->
+<p align="left"><a href="help-58.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="help.htm"><img src="images/home.png" alt="Home" border="0"></a><a href="help-02.htm"><img src="images/toc.png" alt="Table Of Contents" border="0"></a><a href="help-61.htm"><img src="images/index.png" alt="Index" border="0"></a><a href="help-60.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p>
+
+  <ul><p><a name="P9811_384062"></a><font face="Arial" size="+1"><b><i>1.7 Automation Commands</i></b></font></p>
+
+  <p><font face="Times New Roman">The simulator can be controlled externally through a scripting<a name="P9812_384147"></a> interface by issuing automation commands. These commands are directed toward either the shell, or toward any device that is part of the currently loaded BSD. Automation commands are plain ASCII text, and are sent to the simulator&#8217;s automation interface. The method for sending automation commands to the interface, and for retrieving the response, is host dependent on the host OS.</font></p>
+
+  <p><font face="Times New Roman"><a href="#P9817_384800">Figure 15-1</a> shows the simulators <i>Console Window.</i> The <i>Console Window</i> is the user interface to the simulators automation interface. All automation commands can be send from the <i>Console Window </i>to the simulators automation interface,<i> </i>as explained in the following sections.</font></p>
+
+  <p align="center"><img src="images/help-158.gif" border="0" width="575" height="291"></p>
+
+  <p align="center"><font face="Times New Roman"><b><a name="P9817_384800"></a>Figure 15-1: Console Window</b></font></p>
+
+  <p><font face="Times New Roman"><a name="P9818_384827"></a>The automation commands are sent to a specific device by starting the command with the name of the device, followed by a period. For example, to send the <i>Modules</i> command to the <i>shell</i><a name="P9818_385009"></a> device, you would use: </font></p>
+
+    </ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; shell.modules</font></p>
+
+  </blockquote></blockquote><ul><p><font face="Times New Roman"><a name="P9822_385056"></a>If more than one device exists in the currently loaded BSD (for example, most BSDs include two IDE controllers), you identify the specific device by following the device name with a colon, and then the number of the device you are interested in. For example, to send the <i>DVDROMStatus</i> command to the second IDE controller, you would use: </font></p>
+
+    </ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; ide:1.DVDROMStatus 0</font></p>
+
+  </blockquote></blockquote><ul><p><font face="Times New Roman"><a name="P9826_385423"></a>Omitting the colon and the device number causes the simulator to assume device 0. The following two commands are equivalent: </font></p>
+
+    </ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; ide:0.DVDROMStatus 0</font></p>
+
+    <p><font face="Courier New">1 simnow&gt; ide.DVDROMStatus 0</font></p>
+
+  </blockquote></blockquote><ul><p><font face="Times New Roman"><a name="P9831_385606"></a>In addition to the commands supported by the various devices, detailed below, all devices support the <i><a name="P9831_385708"></a>usage</i> and <i>ausage</i> command. These commands return a brief description of each of the commands supported by a specific device. For example, to get a non-alphabetic ordered list of the commands supported by the <i>shell</i>, you could send the command: </font></p>
+
+    </ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; shell.usage</font></p>
+
+</blockquote></blockquote><p><a name="P9834_385971"></a></p>
+
+  <ul><p><font face="Times New Roman">To get an alphabetic ordered list of the commands supported by the <i>shell</i>, please use the <i>ausage</i> command as shown here:</font></p>
+
+    </ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; shell.ausage</font></p>
+
+  </blockquote></blockquote><ul><p><font face="Times New Roman">To get an overview of all automation commands which are not attached to any specific device enter:</font></p>
+
+</ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; help</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="276"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="300"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">exec &lt;file&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Execute automation commands in [file].</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">usage</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">List shell automation commands, same as &#8220;<i>shell.usage</i>&#8221;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">newmachine</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Create a new SimNow machine, and make that machine the &#8220;current&#8221; machine for subsequent commands.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">switchmachine &lt;n&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Switches the &#8220;current&#8221; machine to the machine identified by &#8216;<i>n</i>&#8217; the given number.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">listmachines</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Lists the SimNow machines that currently exist.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">exit</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Quits the current SimNow machine.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">quit</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Exits the current SimNow machine.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">?</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Displays all automation commands which are not attached to any specific device.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">help</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">The same as &#8216;<i>?</i>&#8217;.</font></p>
+</td></tr></table></center></ul>
+
+<p><a name="P9865_386818"></a></p>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P9866_386818"></a>1.7.1 Shell</b></font></p>
+
+  </ul></ul><p><font face="Times New Roman">To list all registered shell commands enter</font></p>
+
+</ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; shell.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="276"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="300"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">ECHO &lt;Value&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Displays <i>value </i>to the standard output device (by default, the screen).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Exit</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Closes all open GUI components and exits the simulator.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Quit</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">See <i>Exit</i>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Go</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Starts the simulation, see also Section <a href="help-07.htm#P643_25720">3.1</a>, &#8220;<a href="help-07.htm#P643_25720"><i>Tool Bar Buttons</i></a>&#8221;, on page <a href="help-07.htm#P643_25720">7</a>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Stop</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Stops the simulation, see also Section <a href="help-07.htm#P643_25720">3.1</a>, &#8220;<a href="help-07.htm#P643_25720"><i>Tool Bar Buttons</i></a>&#8221;, on page <a href="help-07.htm#P643_25720">7</a>. The <i>Stop</i> command does not return until the simulation has in fact stopped or the stop has failed.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Close</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Closes a BSD file that was previously opened.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Open &lt;FileName&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Opens a BSD file.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Modules</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Lists all loaded modules.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Running</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman"><i>Shell.running</i> returns &#8216;<i>No</i>&#8217; if simulation is currently not running; otherwise it returns &#8216;<i>Yes</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Save [&lt;Filename&gt;]</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Saves the current system configuration to a file. Default is &#8220;<i>simnow.bsd</i>&#8221;</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">RunTimeDuration &lt;time&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Runs the simualtion for the given number of microseconds and then stops the simulation.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetRunTimeDuration</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns the run time duration in nanoseconds.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">ModifyRegistry &lt;key&gt; &lt;value&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman"><i>ModifyKey</i> modifies and updates the given registry key with the given value.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">LogConsoleEnabled</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman"><i>Shell.LogConsoleEnabled</i> returns &#8216;<i>disabled</i>&#8217; if console logging is disabled; otherwise it returns &#8216;<i>enabled</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetLogConsoleEnabled &lt;0|1&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Enables or disables logging. <i>Shell.SetLogConsoleEnabled 1</i> enables logging and <i>Shell.SetLogConsoleEnabled 0</i> disables logging.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">LogWndEnabled</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns the Log Window status. The status is &#8216;<i>enabled</i>&#8217; or &#8216;<i>disabled</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetLogWndEnabled &lt;0|1&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Sets the Log Window status to &#8216;<i>enabled</i>&#8217; or &#8216;<i>disabled</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">LogFile</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns the current Log file name. Default is &#8216;<i>simnow.log</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetLogFile &lt;filename&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Sets the Log file name.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">LogFileEnabled</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns &#8216;<i>enabled</i>&#8217; if file logging is enabled otherwise it returns &#8216;<i>disabled</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetLogFileEnabled &lt;0|1&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Enables or disabled file logging. 0 disables file logging, 1 enables file logging.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">LogDevice &lt;Device Name&gt; &lt;0 | 1&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Enabled (1) or disables (0) device logging for &lt;device&gt;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">LoggingEnabled &lt;Device Name&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns the logging status of device &lt;Device Name&gt;. This automation command returns <i>enabled</i> or <i>disabled</i>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">ErrorLogFile</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns the current Error Log file name. Default is &#8216;<i>simnow.errlog</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetErrorLogFile &lt;filename&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Sets the Error Log file name.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">ErrorLogFileEnabled</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns &#8216;<i>enabled</i>&#8217; if error file logging is enabled otherwise it returns &#8216;<i>disabled</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetErrorLogFileEnabled &lt;0|1&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Enables or disabled error file logging. 0 disables error file logging; 1 enables error file logging.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Memdump &lt;FileName&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Set the memory dump file name.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Reset</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Resets the simulation, see also Section <a href="help-07.htm#P643_25720">3.1</a>, &#8220;<a href="help-07.htm#P643_25720"><i>Tool Bar Buttons</i></a>&#8221;, on page <a href="help-07.htm#P643_25720">7</a>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">CreatedDevices</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Lists all created devices.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">AddDevice &lt;Device Name&gt; [&lt;x&gt; &lt;y&gt;]]</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Creates a device and adds the device to the device window at position (x, y). &#8216;x&#8217; and &#8216;y&#8217; are pixel coordinates inside the device window.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Connections &lt;Device Name&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Lists all connections that a device has.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Connect &lt;Device Name1&gt; [connect point1] [Device Name2] [connect point2]</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Connects &#8216;<i>Device Name1&#8217;</i> and &#8216;<i>Device Name2</i>&#8217; using &#8216;<i>connect point1</i>&#8217; and &#8216;<i>connect point2</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">AvailablePorts &lt;Device Name&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Lists available ports of device &#8216;<i>Device Name</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Disconnect &lt;Device Name&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Disconnects all connections of device &#8216;<i>Device Name</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">DeleteDevice &lt;Device Name&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Deletes device &#8216;<i>Device Name</i>&#8217; from simulated system and removes it from device window.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">KnownDevices</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Lists all devices that are known by the simulator. These devices are stored in &#8216;<i>devices\</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">MoveDevice &lt;Device Name&gt; &lt;x&gt; &lt;y&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Moves the specified device &#8216;Device Name&#8217; to x/y coordinates in device window. This command only work when GUI mode is active.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">New</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Creates a new BSD file.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Location</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns the location/postion (x, y) of the device &lt;Device Name&gt; in the device window. 'x' and 'y' are pixel coordinates inside the device window. For example, <i>Location &quot;USB JumpDrive&quot;</i> returns <i>&quot;USB JumpDrive&quot; 152 382</i> where <i>152</i> is the 'x' coordinate and <i>382</i> is the 'y' coordinate.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">DumpRegistry</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Displays all information stored in SimNow&#8217;s registry.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetMPQuantum &lt;time (nanoseconds)&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Sets the time in nanoseconds for a CPU before switching to next CPU in a MP system. Modifying the MP Quantum might have a huge impact on the simulated MP system.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetMPQuantum</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns the current MP Quantum value (see also <i>SetMPQuantum</i>).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GDB -d [[udp|tcp][::] [&lt;port&gt;]]</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Sets up the simulators gdb interface. The default protocol is tcp and the default port is <i>2222</i>. If you don't define any parameters the default protocol and port will be used. You can override <i>tcp</i> with <i>udp</i>. The following example shows how to override the default protocol and port parameters: &quot;<i>shell.gdb udp::2233&quot;</i>. </font></p>
+<p><font face="Times New Roman">The host parameter [::] can't be changed it is always set to localhost. For more information please refer to Section <a href="help-49.htm#P4347_246541">11.2</a>, &quot;<a href="help-49.htm#P4347_246541"><i>GDB Interface</i></a>&quot;, on page <a href="help-49.htm#P4347_246541">160</a>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Swap {X86Sim Processor | AweSim Processor}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Switches CPU model from <i>X86Sim</i> to <i>AweSim</i> or the other way around.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">HasModule &lt;module&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns &#8216;<i>true</i>&#8217; if module is present; otherwise it returns &#8216;<i>false</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetDisplayIndex</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns the 0 based index of which VGA device is currently being displayed in the GUI. Only useful if more than one VGA device is active within a BSD file.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetDisplayIndex &lt;n&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Sets the 0 based index of which VGA devices output is to be displayed in the GUI. Only useful if more than one VGA device is active within a BSD file.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Wait</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Provides a &quot;<i>WAIT UNTIL STOPPED</i>&quot; feature.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">NGo</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Provides a non-blocking &quot;<i>GO</i>&quot; command.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">DisplayScreenShot &lt;index&gt; &lt;filename&gt; &lt;format&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman"><i>&#8220;DisplayScreenShot&#8221;</i> takes a screen shot. This command supports multiple displays <i>Index</i> is a number that identifies the desired display. An <i>Index</i> of 0 means that a screen shot from display 0 will be taken. <i>Filename</i> is the name of the snapshot file. The file name includes the full pathname for the file, any valid path drive names (&#8216;C:&#8217;) or server names (<i>\\servername\</i>) can be used. If a pathname is not given the current default path is used. <i>Format </i>must be one of the formats that <i>GetScreenShotFormats</i> returns (e.g., BMP or PNG).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetScreenShotFormats</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">This command gives the list of supported formats that can be used.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">LogConsoleStdErr</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">&#8220;<i>LogConsoleStdErr</i>&#8221; reports if <i>stderr</i> logging is currently enabled.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetLogConsoleStdErr &lt;0 | 1&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">&quot;<i>SetLogConsoleStderr</i>&quot; cause console logging to go to <i>stderr</i> (1) or <i>stdout</i> (0). The default is the current behavior of logging to <i>stderr</i>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">ForceSingleStep &lt;0 | 1&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Enabled (1) or disables (0) single stepping.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">XTRInstDmpFile &lt;FileName&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Dumps instruction to file &lt;FileName&gt;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">LogIO &lt;device&gt; | &lt;all&gt; &lt;feature&gt; | reset &lt;0 | 1&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Enables (1) or disables (0) IO logging &lt;feature&gt; for &lt;device&gt; or &lt;all&gt; devices. Supported IO logging features are: PCI, IO, IOfpdis, MEM, MEMfpdis and GETMEMPTR. The <i>reset</i> options sets the selected &lt;feature&gt; on &lt;device&gt; or &lt;all&gt; devices to its default value.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetLogIO &lt;device&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns IO logging status of &lt;device&gt;. For example, <i>GetLogIO &quot;USB Jumpdrive&quot;</i>  returns the following information:</font></p>
+<p><font face="Times New Roman">PCI:  Disabled</font></p>
+<p><font face="Times New Roman">IO:  Disabled</font></p>
+<p><font face="Times New Roman">IOfpdis: Enabled</font></p>
+<p><font face="Times New Roman">MEM:  Disabled</font></p>
+<p><font face="Times New Roman">MEMfpdis: Enabled</font></p>
+<p><font face="Times New Roman">GETMEMPTR: Disabled</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Fastpath &lt;device&gt;  | &lt;all&gt; &lt;i | m&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Enables the IO &lt;i&gt; or MEM &lt;m&gt; fastpath for the given &lt;device&gt; or &lt;all&gt; devices.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetFastpath &lt;device&gt; | all &lt;i  | m&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns <i>enabled</i> or <i>disabled</i> depending on if fastpath is enabled or disabled for the given &lt;device&gt; or <i>all</i> devices. The &lt;i&gt; option returns the IO fastpath status. The &lt;m&gt; option returns the MEM fastpath status.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetVGAQuantum &lt;time&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Sets the quantum value for the VGA signature mechanism. If the VGA signature matches with any of the preset golden VGA signatures the simulation stops.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetVGAQuantum</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns the quantum value for the VGA signature mechanism.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GenerateVGASignature &lt;index&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns the VGA signature for the present screenshot. It is an MD5 sum generated from the contes of the present screen.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetGoldenVGASignature &lt;index&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Sets golden signature(s) needed for comparision by the VGA signature mechanism.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">EnableVGASignature &lt;0 | 1&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Enables (1) or disables (0) the VGA signature mechansim.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetSyncQuantum &lt;time (nanoseconds)&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Applies the MP Quantum &lt;time&gt; across all machines (see also <i>SetMPQuantum</i>).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetSyncQuantum</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns the MP Quantum value in nanoseconds set via <i>SetSyncQuantum</i> (see also <i>GetMPQuantum</i>).</font></p>
+</td></tr></table></center></ul>
+
+<p><a name="P10016_394910"></a></p>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10017_394910"></a>1.7.2 IDE</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; ide.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="276"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="300"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Image {master|slave|0|1} &lt;filename&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Creates a volume for the given disk image (For e.g. &#8216;<i>ide.image 0 i:\c0d0.img</i>&#8217;).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetImage {master|slave|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Displays the disk image for the given volume.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Journal {master|slave|0|1} {off|on|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Turns journaling <i>on</i> or <i>off</i> for specified drive. For instance, &#8216;<i>ide.journal master on</i>&#8217; turns on journaling for master drive.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">JournalStatus {master|slave|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns <i>enabled</i> or <i>disabled</i> if journaling is enabled or disabled for specified drive.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">JournalSize {master|slave|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns the journal size for specified dirve.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">JournalSave {master|slave|0|1} &lt;filename&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Saves the contents of the primary or slave disk journal to a file.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">JournalLoad {master|slave|0|1} &lt;filename&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Loads the contents of the primary of slave disk journal from a file.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">JournalCommit {master|slave|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Commits the contents of the disk journal on the master or slave drive to the disk image that drive represents.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">JournalClear {master|slave|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Clears the journal - discards any changes made to the drive.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">JournalDebug {master|slave|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">This may no longer do anything - it originally enabled a debug verification mode.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">DVDROMStatus {master|slave|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Displays the status for the DVD-ROM device or a particular volume.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetDVDROM {master|slave|0|1} {off|on|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Sets master or slave to DVD-ROM device.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Eject {master|slave|0|1} {off|&lt;filename&gt;}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">This command is valid only for drives configured as ATAPI. The command will set the &quot;<i>Media Ejected</i>&quot; flag to true, and will optionally set a new image file to [File]. Use the special name &quot;<i>off</i>&quot; (without the quotes) if you want to leave the drive without an image file (i.e. empty) after the eject.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">DMADelay {master|slave|0|1} &lt;usec delay&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Sets the DMA delay for specified drive (master or slave) to &#8216;<i>usec delay</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Noise {off|on|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Turn <i>on</i> to print debug messages.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetImageType {master|slave|0|1} {ID, RAW, AUTO}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">This command is used to tell SimNow which type of hard disk image is used. ID indicates that the hard disk image contains an ID block. RAW indicates that the hard disk image is a sector-by-sector copy (identical to the source). AUTO indicates that SimNow will try to identify the used type of hard disk image automatically. </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetImageType {master|slave|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns the current image type setting, ID, RAW or AUTO. See SetImageType.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">JournalResize {master|slave|0|1} &lt;Old Journal&gt; &lt;New Journal&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Migrate journal to a new location</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Status {master|slave|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">If connected to a drive image, gives status.  About the disk image: writable, block size.  And about the disk journal: path, size, writable, super block bits, idx levels, index bits, data bits.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">BDROMStatus {master|slave|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns whether the drive is a BD-ROM device</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetBDROM {master|slave|0|1} {off|on|0|1})</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Set master or slave to BD-ROM device, Blu-ray</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetConnectable {off|on|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Sets whether the ide port is available to connect a drive on the platform.  Disable clears the drive image and prevents executation of other automation commands.  For IDE (aka PATA), this is for both master and slave drives.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetConnectable</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns whether we can connect a drive</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10071_398007"></a>1.7.3 SATA</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; sata.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="276"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="300"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Image &lt;filename&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Creates a volume for the given disk image (For e.g. &#8216;sata<i>.image i:\c0d0.img</i>&#8217;).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetImage</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Displays the disk image for the given volume.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Journal {off|on|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Turns journaling <i>on</i> or <i>off</i> for the drive.  SATA has one drive per channel.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">JournalStatus</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns <i>enabled</i> or <i>disabled</i> if journaling is enabled or disabled for the drive.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">JournalSize</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns the journal size for the dirve.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">JournalSave &lt;filename&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Saves the contents of the disk journal to a file.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">JournalLoad &lt;filename&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Loads the contents of the disk journal from a file.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">JournalCommit</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Commits the contents of the disk journal on the drive to the disk image.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">JournalClear</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Clears the journal - discards any changes made to the drive.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">JournalDebug</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">This may no longer do anything - it originally enabled a debug verification mode.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">DVDROMStatus</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Displays the status for the DVD-ROM device or a particular volume.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetDVDROM {off|on|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Sets the drive to DVD-ROM device.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Eject {off|&lt;filename&gt;}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">This command is valid only for drives configured as ATAPI. The command will set the &quot;<i>Media Ejected</i>&quot; flag to true, and will optionally set a new image file to [File]. Use the special name &quot;<i>off</i>&quot; (without the quotes) if you want to leave the drive without an image file (i.e. empty) after the eject.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">DMADelay {master|slave|0|1} &lt;usec delay&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Sets the DMA delay for the drive to &#8216;<i>usec delay</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Noise {off|on|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Turn <i>on</i> to print debug messages.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetImageType {ID, RAW, AUTO}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">This command is used to tell SimNow which type of hard disk image is used. ID indicates that the hard disk image contains an ID block. RAW indicates that the hard disk image is a sector-by-sector copy (identical to the source). AUTO indicates that SimNow will try to identify the used type of hard disk image automatically.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetImageType</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns the current image type setting, ID, RAW or AUTO. See SetImageType.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">JournalResize &lt;Old Journal&gt; &lt;New Journal&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Migrate journal to a new location</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Status</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">If connected to a drive image, gives status.  About the disk image: writable, block size.  And about the disk journal: path, size, writable, super block bits, idx levels, index bits, data bits.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">BDROMStatus</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns whether the drive is a BD-ROM device</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetBDROM {off|on|0|1})</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Set master or slave to BD-ROM device, Blu-ray</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetConnectable {off|on|0|1}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Sets whether the sata port is available to connect a drive on the platform.  Disable clears the drive image and prevents execution of other automation commands.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetConnectable</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns whether we can connect a drive</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10125_400512"></a>1.7.4 USB</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; usb.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="276"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="300"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">log (enable|disable) {mifsopt}</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Enables or disables Memory (m), Interrupt (i), Frame (f), StateChange (s), PCI Config (p), Transfer (t), or/and IO (o) logging.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10135_400726"></a>1.7.5 CMOS</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; cmos.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="276"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="300"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Load &lt;filepath&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Loads CMOS data stored at &#8216;filepath&#8217;. For example &#8216;<i>cmos.load c:\cmos.dat</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">Save &lt;filepath&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Saves CMOS data to &#8216;filepath&#8217;, e.g. &#8216;<i>cmos.save c:\cmos.dat</i>&#8217;</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetTime &lt;seconds&gt; &lt;minutes&gt; &lt;hours&gt; &lt;days since Sunday&gt; &lt;day of the month&gt; &lt;months since January&gt; &lt;years since 1900&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Sets CMOS Time to specified time. For instance &#8216;cmos<i>.SetTime 00 00 12 00 31 12 14&#8217;</i> sets the CMOS time to Sunday December 31th, 2004, at 12:00:00.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetByte &lt;addr&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns byte in CMOS that is stored at address &#8216;<i>addr</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetByte &lt;addr&gt; &lt;data&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Sets byte in CMOS at address &#8216;<i>addr</i>&#8217; to value stored in &#8216;<i>data</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetData</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Dumps complete CMOS.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetRamSize</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns the CMOS RAM size in bytes.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">ClearTo &lt;value&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Sets entire CMOS to specified value &#8216;<i>value</i>&#8217;.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10159_401527"></a>1.7.6 ACPI</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; acpi.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="276"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="300"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">PowerButton   </font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Triggers <i>PowerButton</i> ACPI message.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SleepButton</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Triggers <i>SleepButton</i> ACPI message.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10171_401679"></a>1.7.7 Floppy</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; floppy.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="276"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="300"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">SetFloppy &lt;A/B(0|1)&gt; &lt;filename&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Assigns a floppy image file &#8216;<i>filename&#8217;</i> to drive &#8216;<i>A</i>&#8217; or &#8216;<i>B</i>&#8217;. </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">GetFloppy &lt;A/B(0|1)&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">Returns the assigned floppy image file of drive &#8216;<i>A</i>&#8217; or &#8216;<i>B</i>&#8217;</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="276"><p><font face="Times New Roman">EjectFloppy &lt;A/B(0|1)&gt;</font></p>
+</td>
+<td valign="top" width="300"><p><font face="Times New Roman">The command will set the &quot;<i>Media Ejected</i>&quot; flag of drive &#8216;<i>A</i>&#8217; or &#8216;<i>B</i>&#8217;. </font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10185_402028"></a>1.7.8 Debug</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; debug.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="180"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="396"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">Enable</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Enables the Debugger and opens a debug dialog window, if GUI is enabled.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">Disable</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Disables the Debugger and closes debug dialog window, if GUI is enabled.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">Attach &lt;Processor Num&gt;</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Attaches debugger to specified processor.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">ExecCmd &lt;Command&gt;</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Executes the debug command specified in &#8216;<i>command&#8217;</i>, see Section <a href="help-48.htm#P4192_236346">10.2</a>, &#8220;<i><a href="help-48.htm#P4192_236346">Debugger Command Reference</a></i>&#8221;, on page <a href="help-48.htm#P4192_236346">155</a>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">MemDump</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Dumps 128-bytes of memory.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">DisDump</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Dumps disassembly.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">RegDump</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Dumps all CPU registers.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">MsgDump</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Dumps debug messages.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">WhichProc</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Returns the processor number which the debugger is currently attached to.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">EnableStatus</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Returns &#8216;<i>enabled</i>&#8217; if debugger is enabled, &#8216;<i>disabled</i>&#8217; if debugger is disabled.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">GetConfig</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Displays the current configuration.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10215_402785"></a>1.7.9 AMD-8151&#8482; AGP Bridge</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; amd8151.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="180"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="396"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">SetRev &lt;Rev&gt;</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Sets the internal Chip revision number of the AMD-8151 AGP device, value must be between 1 and 255.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">GetRev</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Gets the internal Chip revision number of the AMD-8151 AGP device.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10227_403048"></a>1.7.10 VGA</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; vga.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="180"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="396"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">Bios &lt;filename&gt;</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Loads the specified BIOS file.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">GetBios</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Returns the active BIOS file name.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">VGA (0|1)</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">1 enables the VGA, 0 disables it.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">GetVGA</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Returns current status of the VGA registers, <i>true</i> if enabled and <i>false</i> if disabled.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">GetConfig</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Displays VGA configuration.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10245_403359"></a>1.7.11 Serial</b></font></p>
+
+    </ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; serial.usage</font></p>
+
+</blockquote></blockquote><ul><p><font face="Times New Roman">Previous versions of the simulator always used only the named-pipe<a name="P10249_403460"></a> format. Because of this, the named-pipe was created as soon as the BSD was loaded. Because the new version allows you to dynamically alter the communications method, the transport is not created until you hit &quot;go&quot; for the first time (or after making any change to the transport method). What this means is that if you are using a named-pipe, you will have to press &quot;go&quot; before the named-pipe is actually created</font></p></ul>
+<p><ul>
+<table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="180"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="396"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">SetLoopback (0|1)</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">0 disables loop back, 1 enables loop back.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">GetLoopback</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Returns &#8216;<i>true</i>&#8217; if loop back is enabled; otherwise it returns &#8216;<i>false</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">GetCommPort</font><font face="Times New Roman" size="-1"><sup><a href="#P10259_404059" name="P10258_404059">12</a></sup></font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Returns information regarding how the simulated serial port is configured. </font></p>
+<p><font face="Times New Roman">The result will be either:</font></p>
+    <ul><ul><p><font face="Times New Roman">&#8226; </font><font face="Courier New">\\.\pipe\SimNow.COMn</font><font face="Times New Roman"><br>
+This indicates that data is being transported through a named-pipe<a name="P10262_404342"></a> with the given name. The &quot;n&quot; will be either 1 for the first serial port, or 2 for the second serial port.</font></p>
+    <p><font face="Times New Roman">&#8226; </font><font face="Courier New">\\.\COMn 57600</font><font face="Times New Roman"><br>
+This indicates that data is being transported through the given serial port on the host machine using a baud rate of 57600. </font></p>
+<p><font face="Times New Roman">&#8226; </font><font face="Courier New">none</font><font face="Times New Roman"><br>
+This indicates that data written to the simulated serial port is discarded, and no data is ever received.</font></p></ul></ul>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">SetCommPort<a href="#P10258_404059"><sup>1</sup></a> &lt;none | pipe | COMn BAUD&gt;</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Sets the mode of communication you want to use with the simulated serial port.</font></p>
+    <ul><ul><p><font face="Times New Roman">&#8226; </font><font face="Courier New">pipe</font><font face="Times New Roman"><br>
+Tells the simulator to use a named-pipe<a name="P10267_404866"></a> as the method of transport for serial data to/from the simulated machine. The pipe name will be of the form &quot;<u>\\.\pipe\SimNow.COMn</u>&quot;, where &quot;n&quot; will be 1 for serial port 1 and 2 for serial port 2. The name is not user configurable.</font></p>
+    <p><font face="Times New Roman">&#8226; </font><font face="Courier New">COMn</font><font face="Times New Roman"><br>
+Tells the simulator to use one of the host serial ports (identified by &quot;n&quot;) as the transport for data to and from the simulated machine. &quot;n&quot; can be any value between 1 and 255, and must be an actual COM port that is present on the host system. Regardless of the configuration of the simulated COM port, the host COM ports baud rate is configured depending on the BAUD parameter, with 8 bit data, no parity, 1 stop bit. &#8220;BAUD&#8221; can be one of the following values (1200, 2400, 4800, 9600, 14400, 38400, 56000, 57600 or 115200). See also Section <a href="help-49.htm#P4306_243164">11.1</a>, &quot;<a href="help-49.htm#P4306_243164"><i>Kernel Debugger</i></a>&quot;, on page <a href="help-49.htm#P4306_243164">159</a>.</font></p>
+<p><font face="Times New Roman">&#8226; </font><font face="Courier New">none</font><font face="Times New Roman"><br>
+Tells the simulator to discard any written data, and always return &quot;receiver empty&quot; on reads.</font></p></ul></ul>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">SetMultiplier nMultiplier</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Use the SetMultiplier automation command to specify the baud rate delay time used to make the serial based communication to Microsoft&#8217;s kernel debugger in some cases much more stable. A valid nMultiplier value must be in the range of &#8220;nMultiplier&gt;=1 and nMultiplier&lt;=100&#8221;. For example to delay the baud rate by 1/00th of normal you would enter &#8220;SetMultiplier 1&#8221;. The default for nMultiplier is 100.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="180"><p><font face="Times New Roman">GetMultiplier</font></p>
+</td>
+<td valign="top" width="396"><p><font face="Times New Roman">Returns the current value of &#8220;nMultiplier&#8221;.</font></p>
+</td></tr></table></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10275_406281"></a>1.7.12 HyperTransport&#8482; Technology Configuration</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; sledgeldt.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="228"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="348"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Link (0|1|2) (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables or disables link 0, 1 or 2. For example &#8216;<i>sledgeldt.link 0 1</i>&#8217; enables link 0 and &#8216;<i>sledgeldt.link 0 0</i>&#8217; disables link0.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">LinkStatus (0|1|2)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the link status of link 0, 1 or 2.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">LinkWidth (0|1|2) (8|16)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Sets link width to 8 or 16 bit of link 0, 1 or 2.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetLinkWidth (0|1|2)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns link width in bits of link 0, 1 or 2.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetConfig</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Displays LDT configuration.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">LogDMA (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) DMA logging.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">DMALogStatus</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns &#8216;<i>enabled</i>&#8217; if logging is enabled otherwise it returns &#8216;<i>disabled</i>&#8217;.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><b><font face="Arial" size="+1"><a name="P10297_406912"></a>1.7.13 8</font><font face="Times New Roman" size="+1"><sup>th</sup></font><font face="Arial" size="+1"> Generation Northbridge</font></b></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; sledgenb.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="228"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="348"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">LogHT (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) logging.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">HTLogStatus</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns &#8216;<i>enabled</i>&#8217; if logging is enabled otherwise it returns &#8216;<i>disabled</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">LogPCIConfig (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) PCI Config logging.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">PCILogStatus</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns &#8216;<i>enabled</i>&#8217; if PCI Config logging is enabled otherwise it returns &#8216;<i>disabled</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetConfig</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Displays Northbridge logging configuration.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">ProductFile &lt;FileName&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Loads the specified product file &#8220;<i>FileName</i>&#8221;.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10317_407426"></a>1.7.14 DBC</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; dbc.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="228"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="348"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetParam</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns disk block cache parameters (size, depth and bits).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SetParam &lt;size&gt; &lt;depth&gt; &lt;bits&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Sets disk block cache parameters.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10329_407614"></a>1.7.15 AMD-8111&#8482; Device</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; 8111.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="228"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="348"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">BaseID (00|01)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">This specifies the HyperTransport&#8482; protocol base unit ID. The IC's logic uses this value to determine the unit IDs for HyperTransport request and response packets. The Base ID must be 00 or 01.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetBaseID</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the HyperTransport base unit ID (BUID).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">HtInterrupts (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) HyperTransport interrupts.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">HtIntStatus</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns &#8216;<i>enabled</i>&#8217; if HyperTransport interrupts are enabled; otherwise it returns &#8216;<i>disabled</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">IoLog (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) IO logging.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">IoLogStatus</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns &#8216;<i>enabled</i>&#8217; if IO Logging is enabled; otherwise it returns &#8216;<i>disabled</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">MemLog (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) IO logging.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">MemLogStatus</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns &#8216;<i>enabled</i>&#8217; if Memory Logging is enabled; otherwise it returns &#8216;<i>disabled</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SmiSciLog (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) IO logging.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SmiSciLogStatus</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns &#8216;<i>enabled</i>&#8217; if SMI SCI Logging is enabled; otherwise it returns &#8216;<i>disabled</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetConfig</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Displays the current AMD-8111 configuration.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10359_408643"></a>1.7.16 EHC</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; ehc.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="228"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="348"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">log (enable | disable) {mp}</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables or disables Memory (m) and PCI Configuration (p) logging.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10369_408793"></a>1.7.17 Journal</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; journal.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="228"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="348"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetParam</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns &#8216;Super Block Size&#8217;, &#8216;Index Block Size&#8217;, &#8216;Index Levels&#8217;, &#8216;Disk Block Size&#8217; and &#8216;Maximum Disk Size&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SetParam &lt;Super Block Size&gt; &lt;Index Block Size&gt; &lt;Index Levels&gt; [ &lt;Disk Block Size&gt; ]</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Sets journal parameters.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10381_409100"></a>1.7.18 CPU</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; cpu.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="228"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="348"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">LoadAnalyzer &lt;analyzer_file&gt; [&lt;args&gt;]</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Loads the analyzer &#8216;<i>analyzer_file</i>&#8217; with specified arguments &#8216;<i>args</i>&#8217;).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">ShowAnalyzers</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Shows all loaded analyzers.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">EnableAnalyzer &lt;num&gt; &lt;0|1&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) analyzer specified by &#8216;<i>num</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">UnloadAnalyzer &lt;num&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Unloads analyzer specified by &#8216;<i>num</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">MCAFault &lt;bank&gt; &lt;GenerateMCAFault(0|1)&gt; &lt;Status Reg&gt; &lt;Address Reg&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Causes a generic MCA fault if <i>GenerateMCAFault</i> is <i>true</i> (1) at specified Bank, <i>AddressReg</i> and status.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">ProductFile &lt;FileName&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Use product file to set fuses and configure CPU and Northbridge.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">CodeGen &lt;command&gt; &lt;args&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Sets or disables and enables code generator settings and options. <i>Command</i> must be one of the commands shown in <a href="#P10479_414859">Table 15-13</a>. <i>Args</i> depends on the <i>command </i>parameter, see <a href="#P10479_414859">Table 15-13</a>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">DumpProfile [&lt;blocks-to-dump&gt;]</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">This command is limited to showing a profile of blocks, without symbols, based on the current epoch. For more information please refer to Section <a href="#P10405_410124">A.7.17.1</a>, &#8220;<a href="#P10405_410124"><i>Profiling in SimNow</i></a>&#8221;.</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p><a name="P10405_410124"></a><font face="Arial"><b>1.7.18.1 Profiling in SimNow&#8482; Technology</b></font></p>
+
+  <p><font face="Times New Roman">Here is an example use of the profiling command and its output:</font></p>
+
+  <p><font face="Courier New">1 simnow&gt; dumpprofile 3</font></p>
+
+  <p><font face="Courier New">34962861.000000 instructions executed since the last epoch</font></p>
+
+  <p><font face="Courier New">-------------------------------------------------------------------</font></p>
+
+  <p><font face="Courier New">Executed 3571672 times</font></p>
+
+  <p><font face="Courier New"> CS.D=0 LongBit=0  physical_addr=00000000000e41de  eip=00000000000041de</font></p>
+
+  <p><font face="Courier New"> 00000000000041de: cmp [04f0h],aah</font></p>
+
+  <p><font face="Courier New"> 00000000000041e3: jnz $-05h</font></p>
+
+  <p><font face="Courier New"> 0000000000000000: This block's execution was 20.431234 percent of the total since the last epoch.</font></p>
+
+  <p><font face="Courier New">-------------------------------------------------------------------</font></p>
+
+  <p><font face="Courier New">Executed 229430 times</font></p>
+
+  <p><font face="Courier New"> CS.D=0 LongBit=0  physical_addr=000000000002fd99  eip=000000000000fd99</font></p>
+
+  <p><font face="Courier New"> 000000000000fd99: lodsb ds:[esi]</font></p>
+
+  <p><font face="Courier New"> 000000000000fd9b: add ah,al</font></p>
+
+  <p><font face="Courier New"> 000000000000fd9d: loop $-04h</font></p>
+
+  <p><font face="Courier New"> 0000000000000020: This block's execution was 1.968632 percent of the total since the last epoch.</font></p>
+
+  <p><font face="Courier New">-------------------------------------------------------------------</font></p>
+
+  <p><font face="Courier New">Executed 178599 times</font></p>
+
+  <p><font face="Courier New"> CS.D=0 LongBit=0  physical_addr=00000000000274b2  eip=00000000000074b2</font></p>
+
+  <p><font face="Courier New"> 00000000000074b2: mov ax,[5724h]</font></p>
+
+  <p><font face="Courier New"> 00000000000074b5: cmp ax,[371ah]</font></p>
+
+  <p><font face="Courier New"> 00000000000074b9: jbe $+61h</font></p>
+
+  <p><font face="Courier New"> 0000000000000040: This block's execution was 1.532475 percent of the total since the last epoch.</font></p>
+
+  <p><font face="Times New Roman">The simulator contains a code profiling facility that is accessed through the <i>dumpprofile</i> automation command. There is no graphical user interface to the profiling facility at this time. Profiling in the simulator has some limitations and features not present in most systems. The limitations are that no symbolic information is present in the output and that only execution since the beginning of the last epoch (see the last paragraph for an explanation of an <i>epoch</i>) is measured. The feature which is most unusual is that the user can ask for a profile at any time, there is no profiling mechanism that needs to be enabled before execution takes place. Another feature is that all code in the system is profiled, even code executed with interrupts off, and code in all modes (16 bit mode, 32-bit legacy mode, 32-bit compatibility mode, long mode, SMM mode, etc.) is measured equally.  This profiling mechanism is non-intrusive, no x86 interrupts are taken and profiling does not affect the target machine's selection of code paths at all.</font></p>
+
+  <p><font face="Times New Roman">The <i>dumpprofile</i> command by itself causes all profile blocks to be displayed. This output can be quite voluminous. The user can select just the most frequently executing blocks by using an optional numeric argument. For example, &quot;<i>dumpprofile 10</i>&quot; will dump the ten most frequently executing blocks. Blocks are ordered by their frequency of execution, not weighted by the number of instructions in a block. Therefore, a short block executing 100 times will be displayed before a long block executing 99 times. In this example, the short block represents fewer total instructions executed. The sense of time that the simulator uses is quite simple, each instruction takes one &quot;instruction count&quot;, with REP instructions taking one extra count per iteration. Therefore, profiles from the simulator can differ substantially from those obtained from other tools.</font></p>
+
+  <p><font face="Times New Roman">The simulator works by translating guest x86 instructions to long-mode user-mode instructions which it then executes. These translated instructions are grouped into blocks called <i>translations</i>. These translations exist in a translation buffer, which is typically about 64 MB. When the translation buffer is full and space for another translation is needed, the simulator disposes of the contents of the translation buffer and starts a new epoch. An epoch, in SimNow terms, is the period of execution between the flushing of the translation cache. It is only the period from the start of the current epoch to the issuance of the <i>dumpprofile</i> command that the profile will cover.</font></p>
+
+  <p><a name="P10438_413884"></a><font face="Arial"><b>1.7.18.2 CPU Code Generator Commands</b></font></p>
+
+<p><font face="Times New Roman"><a href="#P10479_414859">Table 15-13</a> describes all available Code Generator<a name="P10439_413970"></a> commands and their arguments.</font></p></ul>
+<p><ul>
+<center><table>
+<tr>
+<td width="90"></td>
+<td width="94"></td>
+<td width="64"></td>
+<td width="322"></td></tr>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="90"><p align="center"><font face="Times New Roman"><b>command</b></font></p>
+</td>
+<td colspan="2" bgcolor="#e0e0e0" valign="top" width="158"><p align="center"><b><font face="Times New Roman">args</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="322"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="90"><p><font face="Courier New" size="-1">Help</font></p>
+</td>
+<td colspan="2" valign="top" width="158"><p><font face="Courier New" size="-1">None</font></p>
+</td>
+<td valign="top" width="322"><p><font face="Courier New" size="-1">Displays an overview of all available commands.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="90"><p><font face="Courier New" size="-1">param</font></p>
+</td>
+<td colspan="2" valign="top" width="158"><p><font face="Courier New" size="-1">None</font></p>
+</td>
+<td valign="top" width="322"><p><font face="Courier New" size="-1">Displays the current state of the configurable code generator parameters.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="90"><p><font face="Courier New" size="-1">param</font></p>
+</td>
+<td colspan="2" valign="top" width="158"><p><font face="Courier New" size="-1">parameter</font></p>
+</td>
+<td valign="top" width="322"><p><font face="Courier New" size="-1">Displays the current value of &lt;<i>parameter</i>&gt;, e.g., &#8220;cpu.codegen param FastFloat&#8221;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="90"><p><font face="Courier New" size="-1">param</font></p>
+</td>
+<td valign="top" width="94"><p><font face="Courier New" size="-1">parameter</font></p>
+</td>
+<td valign="top" width="64"><p><font face="Courier New" size="-1">value</font></p>
+</td>
+<td valign="top" width="322"><p><font face="Courier New" size="-1">Sets the current value of &lt;<i>parameter</i>&gt; to &lt;<i>value</i>&gt;. For example, &#8220;cpu.codegen param FastFloat 0&#8221; disables &#8221;FastFloat&#8221;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="90"><p><font face="Courier New" size="-1">enable</font></p>
+</td>
+<td colspan="2" valign="top" width="158"><p><font face="Courier New" size="-1">Boolean Parameter</font></p>
+</td>
+<td valign="top" width="322"><p><font face="Courier New" size="-1">Changes the current value of one boolean parameter to true. For example, &#8220;cpu.codegen enable FastFloat&#8221; enables &#8220;FastFloat&#8221;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="90"><p><font face="Courier New" size="-1">disable</font></p>
+</td>
+<td colspan="2" valign="top" width="158"><p><font face="Courier New" size="-1">Boolean Parameter</font></p>
+</td>
+<td valign="top" width="322"><p><font face="Courier New" size="-1">Changes the current value of one boolean parameter to false. For example, &#8220;cpu.codegen disable FastFloat&#8221; disables &#8220;FastFloat&#8221;. </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="90"><p><font face="Courier New" size="-1">optimize</font></p>
+</td>
+<td valign="top" width="94"><p><font face="Courier New" size="-1">accuracy</font></p>
+</td>
+<td valign="top" width="64">&#160;
+</td>
+<td valign="top" width="322"><p><font face="Courier New" size="-1">Changes several parameters to the conservative setting.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="90"><p><font face="Courier New" size="-1">optimize</font></p>
+</td>
+<td valign="top" width="94">&#160;
+</td>
+<td valign="top" width="64"><p><font face="Courier New" size="-1">speed</font></p>
+</td>
+<td valign="top" width="322"><p><font face="Courier New" size="-1">Changes several parameters to the default aggressive setting.</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P10479_414859"></a>Table 15-13: CodeGen Command Overview</b></font></p>
+
+      <ul><ul><p><b><font face="Arial" size="+1"><a name="P10480_414896"></a>1.7.19 Emerald Graphics</font></b></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; emerald.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="228"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="348"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">FrameBufSize &lt;size&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman"><i>FrameBufSize </i>sets the size of the frame buffer in Megabytes. The size must be a power of 2. The value placed in this option is only read at reset. The frame buffer size can not be dynamically modified. </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">FrameBufGetSize</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the size of the frame buffer in Megabytes.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Accel (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) the Accelerator used by the Video driver.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetAccel</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns true if Accelerator is enabled; otherwise it returns false.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">VBE (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) VESA BIOS Extensions.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetVBE</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns true if VESA BIOS Extensions is enabled; otherwise it returns false.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10500_415552"></a>1.7.20 Matrox MGA-G400 Graphics</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; mgag400.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="228"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="348"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SetTexmap (0 | 1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) the texture units. By default the texture units are disabled.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SetCardType CARDID</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Sets the MGA-G400 type to <i>CARDID</i>. Valid values for <i>CARDID</i> are: 6648, 888, 6616, and 824.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetCardType</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the current <i>CARDID</i> value.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10514_415891"></a>1.7.21 PCI Bus</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; pcibus.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="228"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="348"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">DeviceID &lt;SlotID&gt; &lt;DeviceID&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Sets the DeviceID to &#8216;<i>DeviceID</i>&#8217; on slot &#8216;<i>SlotID</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetDeviceID &lt;SlotID&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the DeviceID of specified slot &#8216;<i>SlotID</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">BaseIRQ &lt;SlotID&gt; (a|b|c|d)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Sets the Base IRQ of slot &#8216;<i>SlotID</i>&#8217; to A, B, C or D.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetBaseIRQ &lt;SlotID&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the Base IRQ of slot &#8216;<i>SlotID</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Slot &lt;SlotID&gt; (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) slot wit specified &#8216;<i>SlotID</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SlotStatus &lt;SlotID&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns enabled if slot &#8216;<i>SlotID</i>&#8217; is enabled, otherwise it returns disabled.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetConfig</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Displays PCI Bus configuration information.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10536_416484"></a>1.7.22 SIO</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; sio.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="228"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="348"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">BreakOnLock (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">The Lock (1) or Unlock (0) Registers option activates the breakpoint anytime the lock or unlock sequence is hit. </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetLockStatus</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns enabled if <i>BreakOnLock</i> is enabled; otherwise it returns disabled.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">BreakOnRead (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enable (1) or disable (0) breakpoints whenever any of the device configuration registers is read.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetReadStatus</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns enabled if <i>BreakOnRead</i> is enabled; otherwise it returns disabled.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">BreakOnWrite (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enable (1) or disable (0) breakpoints whenever any of the device configuration registers is modified.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetWriteStatus</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns enabled if <i>BreakOnWrite</i> is enabled; otherwise it returns disabled.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetConfig</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Displays SIO configuration information.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10558_417213"></a>1.7.23 Memory Device</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; memdevice.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="228"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="348"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Save &lt;filename&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Creates file &#8216;<i>filename&#8217;</i> and saves the contents of the currently loaded ROM &#8216;to <i>filename</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Load &lt;filename&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Loads the specified MemDevice &#8216;<i>filename&#8217;</i> to defined address &#8216;<i>BaseAddress&#8217;.</i></font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">BaseAddress &lt;value&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman"><i>&#8216;Value&#8217; </i>is the base address of the device in hex. </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetBaseAddress</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the base address of the device in hex.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SizeInBlocks &lt;value&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman"><i>&#8216;Value&#8217;</i> is the total size of the memory device, given in decimal value for the number of 32-Kbyte blocks (32-Kbyte blocks are used because not initialized memory is dynamically allocated when addressed in 32-Kbyte chunks).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetSizeInBlocks</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the number of 32-Kbyte blocks allocated by this device.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">InitFile &lt;filename&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman"><i>&#8216;filename&#8217;</i> is the name of the binary file that is used to initialize the memory contents. Note that the device initializes memory for the content length of the file. If you specify a 512-Kbyte ROM and use a 256-Kbyte image file, the first 256 Kbytes are initialized.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetInitFile</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the path and name of the init file (see above <i>InitFile</i>).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">ReadOnly &lt;0|1&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Turns (1) the memory device into a ROM. Writes to the device are ignored when the read-only option is selected.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetReadOnly</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns true if memory is read-only otherwise it returns false.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SystemBios &lt;0|1&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Tells (1) the memory device that it is the system BIOS. </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetSystemBios</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns true if memory is used as a System BIOS otherwise it returns false.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">MemAddrMask &lt;0|1&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) memory-address masking. If enabled (1) it indicates that the address received by the memory device is masked by a bit mask with the same number of bits as the size of the memory device (e.g., a 256-Kbyte ROM uses an 18-bit mask, or it is masked by 0x003FFFF). This enables the ROM to be remapped dynamically into different memory address ranges in conjunction with the aforementioned chip select.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetAddrMask</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns true if memory-address masking is enabled otherwise it returns false.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">InitValEnable &lt;0|1&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) the initialized unwritten memory option. If enabled the memory is initialized using a specified byte (see below <i>InitVal</i>) otherwise the memory is not initialized.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">InitVal &lt;hex value&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Sets byte initializer for memory that needs to be initialized.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">InitValStatus</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Displays information if the initializer is used and if the memory initialization is activated.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">DisableCache &lt; 0 | 1 &gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Sets memory region to cacheable (0) or non-cacheable (1). </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetCacheDisabled</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns true if non-cacheable otherwise it returns false.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetConfig</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Displays Memory configuration information.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">FlashMode &lt; 0 | 1 &gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) this device to be used as a flash ROM.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">FlashUpdateFile &lt; 0 | 1 &gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disbales (0) writes to the flash ROM to update the ROM image.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">ncHTMode &lt; 0 | 1 &gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) decoding of HyperTransport messages.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">ForceInitFile &lt;filename&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">The <i>ForceInitFile</i> command allows the user to change the BIOS ROM path once the simulation has already started. This is legitimate only when the new BIOS ROM is a byte-for-byte copy of the initial BIOS ROM that simulation began with (i.e., same file, different path).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetCommandSequence </font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Prints which of the two command sequences the flash device is programmed to.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">CommandSequence &lt; 0 | 1 &gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">0-SST, 1-ATMEL. Allows to set the command sequence to SST or ATMEL.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetFlashMode</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Tells you if the device is configured to act as a flash memory.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">FlashMode &lt; 0 | 1 &gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Allows the user to set the memory device as flash memory.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10622_420701"></a>1.7.24 Raid</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; raid.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="228"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="348"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Noise [ {enable|disable} ]</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enable to print debug messages; otherwise disable.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">RomImage &lt;File name&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Allows a boot ROM image to be supported - at the moment the emulation does not work with any known ROM images.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SetVolume &lt;Vol #&gt; &lt;Image file&gt; [ &lt;Journal file&gt; ]</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">This was the original way to setup the image and journal files - rather than having two separate commands.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">DeleteVolume &lt;Vol #&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Undoes the Image or Journal commands and puts the volume back in an unintialized state.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Sync</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">This command flushes the in-memory caches out to the files.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Type {5304|5312}</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">This was supposed to allow support for both the 5304 (default) and 5312 cards - the 5312 support is not well tested.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Image &lt;Vol #&gt; &lt;Image file&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Creates a volume for the give disk image (For e.g., <i>raid.image 0 i:\c0d0.img</i>).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetImage &lt;Vol #&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Displays the disk image for the given volume.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Journal &lt;Vol #&gt; {0|1}</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables journaling for specified volume.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">AddJournal &lt;Vol #&gt; [ &lt;Journal file&gt; ]</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Creates a journal for the given volume number (For file-based journal: <i>raid.addjournal 0 i:\c0d0j1.jrn</i>; for in-memory journal: <i>raid.addjournal 0</i>).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">ResizeJournal &lt;Vol #&gt; [ &lt;Old Journal&gt; &lt;New Journal&gt; ]</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Resizes the journal for the given volume to the new journal parameters.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Commit &lt;Vol #&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman"><i>Commit</i> copies back the modified data blocks from the journal to the disk image and clears the journals.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Clear &lt;Vol #&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Clears the volume - discards any changes made to the volume.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Flatten &lt;Vol #&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Deletes the journal added last for that particular volume.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Status [ &lt;Vol #&gt; ] [-v | -r]</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Displays the status for the RAID device or a particular volume. -v option displays details regarding the statistics of performance meters implemented in the RAID device, while -r option resets the performance counters.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SetDBC &lt;Entries&gt; &lt;Depth&gt; &lt;Block Size&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Set the parameters for disk block cache (For e.g., <i>raid.setdbc 32768 5 512</i>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SetJournalParameters &lt;Super Block Size&gt; &lt;Index Block Size&gt; &lt;Index Levels&gt; &lt;DiskBlock Size&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Set the Journal Parameters (For e.g., <i>raid.setjournalparameters 8192 512 3 512</i>).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetJournalParameters</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Displays the Journal parameters.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10666_422816"></a>1.7.25 DIMM</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; dimm.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="228"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="348"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">PdlErrorSim (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) the <i>PDL Error Simulation</i>. If enabled then the DIMM device monitors PDL settings for all RAM reads. </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetPdlErrorSim</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns enabled if PdlErrorSim is enabled; otherwise it returns disabled.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">OutOfRangeResp (0xFF | invert)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">The &#8216;<i>Out of Range Response</i>&#8217; selection specifies how the data should be altered if a PDL is out of range. The <i>0xFF</i> option specifies that the return data should be forced to all ones. The Invert option specifies that the return data should be a bitwise inversion of the valid data.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetOutOfRangeResp</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the specified options set by <i>OutOfRangeResp</i>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SMBBaseAddr &lt;addr&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">The <i>SMB Base Address</i> entry selects the 8-bit address that this DIMM device responds to. The SMB address is used for the reading of DIMM SPD data.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetSMBBase</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the specified SMB Base address.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">ImportSPD &lt;DimmNo&gt; &lt;fullpath&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman"><i>ImportSPD</i> provides the option of loading SPD ROM data to DimmNo from the file specified by &#8220;fullpath&#8221;. The file format is an unformatted binary image, with an extension of &#8220;<i>.spd</i>&#8221;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">ExportSPD &lt;DimmNo&gt; &lt;fullpath&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman"><i>ExportSPD</i> provides the option of saving SPD ROM data from DimmNo to the file specified by &#8220;fullpath&#8221;. The file format is an unformatted binary image, with an extension of &#8221;<i>.spd</i>&#8221;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">ResetPDLs &lt;DimmNo&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman"><i>ResetPDL</i> sets all 16 PDL response ranges to their maximum range (0 - 255).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">PDLRespRange &lt;DimmNo&gt; &lt;PDLNo&gt; &lt;High&gt; &lt;Low&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Sets the PDL Response Rage of memory module &#8216;DimmNo&#8217; and PDL &#8216;PDLNo&#8217; to &#8216;High&#8217; and &#8216;Low&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetPDLRespRange &lt;DimmNo&gt; &lt;PDLNo&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the PDL response range of memory module &#8216;DimmNo&#8217; and PDL &#8216;PDLNo&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetPDLData &lt;DimmNo&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Lists the PDL data of memory module &#8216;DimmNo&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetConfig</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Displays DIMM configuration details, like &#8216;PdlRespRange&#8217;, &#8216;MBBaseAddr&#8217;, &#8216;OutOfRangeResp&#8217; and &#8216;PdlErrorSim&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetMaxDimms</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the maximum number of DIMMs that can be simulated.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SetMaxDimms &lt;num&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Sets the maximum number of DIMMs that can be simulated.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetDimmDescription &lt;DimmNo&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns a short description of the memory module &#8216;DimmNo&#8217;. It displays memory type, total size, number of banks and device data width in bits. </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetDimmType &lt;DimmNo&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the DIMM type of memory module &#8216;DimmNo&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetDimmSize &lt;DimmNo&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the DIMM size of memory module &#8216;DimmNo&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetDimmBanks &lt;DimmNo&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the DIMM banks of memory module &#8216;DimmNo&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetDimmWidth &lt;DimmNo&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the DIMM width of memory module &#8216;DimmNo&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetSpdData &lt;DimmNo&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns SPD data of memory module &#8216;DimmNo&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">DeleteDimm &lt;DimmNo&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Deletes memory module &#8216;DimmNo&#8217; from current configuration.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetSpdDataByte &lt;DimmNo&gt; &lt;Addr&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns a specific SPD data byte stored at &lt;Addr&gt; on Dimm &lt;DimmNo&gt;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SetSpdDataByte &lt;DimmNo&gt; &lt;Addr&gt; &lt;Data&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Sets the SPD data byte &lt;Data&gt; at SPD-Address &lt;Addr&gt; on DIMM &lt;DimmNo&gt;.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10722_425641"></a>1.7.26 Keyboard and Mouse</b></font></p>
+
+  </ul></ul><p><font face="Times New Roman">By default the GUI uses <i>keyboard.key</i> and <i>keyboard.mousemove</i> commands to send input to the simulator. These can be overridden using the <i>Gui_Key_Device</i> and <i>Gui_Mouse_Device</i> registry keys. For example, if you connect a USB keyboard device to the simulation, you can have keystrokes use the USB keyboard rather than the old keyboard.</font></p>
+
+</ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; keyboard.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="228"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="348"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Key &lt;XX&gt; [XX...]</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Forwards the specified key to the simulated system. E.g., the following command forwards the ENTER keystroke to the simulated system: <i>keyboard.ke</i>y 1C.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">MouseMove &lt;DeltaX&gt; &lt;DeltaY&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Moves the mouse cursor to relative position <i>DeltaX</i> and <i>DeltaY</i>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">MouseLeftDown</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Generates a left-mouse-button-down event.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">MouseRightDown</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Generates a right-mouse-button-down event.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">MouseLeftUp</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Generates a left-mouse-button-up event.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">MouseRightUp</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Generates a right-mouse-button-up event.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">MouseMoveAbs &lt;X&gt; &lt;Y&gt;</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Moves the mouse cursor to absolute x-y position.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Log enable|disable id</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables or disables logging.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Text</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">This command injects keyboard input from the command line. It takes basic text such as 'keyboard.text &quot;dir\r&quot;'. This command can handle more complex sequences with other '\' prefixed strings (see <a href="#P10810_427401">Table 15-14</a>).</font></p>
+</td></tr></table></center></ul>
+
+<p><a name="P10749_426845"></a></p>
+
+<ul><p><font face="Times New Roman"><a href="#P10810_427401">Table 15-14</a> shows the currently defined prefix sequences:</font></p></ul>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="64"><p align="center"><font face="Times New Roman"><b>Prefix</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="165"><p align="center"><b><font face="Times New Roman">Action</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="88"><p align="center"><b><font face="Times New Roman">Prefix</font></b></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="165"><p align="center"><b><font face="Times New Roman">Action</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p><font face="Courier New">\r</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;RETURN&gt;</font></p>
+</td>
+<td valign="top" width="88"><p><font face="Courier New">\{f8}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;FUNCTION KEY 8&gt;</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p><font face="Courier New">\t</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;TAB&gt;</font></p>
+</td>
+<td valign="top" width="88"><p><font face="Courier New">\{f9}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;FUNCTION KEY 9&gt;</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p><font face="Courier New">\\</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;BACKSLASH&gt;</font></p>
+</td>
+<td valign="top" width="88"><p><font face="Courier New">\{f10}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;FUNCTION KEY 10&gt;</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p><font face="Courier New">\&#8221;</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;DOUBLE QUOTE&gt;</font></p>
+</td>
+<td valign="top" width="88"><p><font face="Courier New">\{tab}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;TAB&gt;</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p><font face="Courier New">\&#8217;</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;SINGLE QUOTE&gt;</font></p>
+</td>
+<td valign="top" width="88"><p><font face="Courier New">\{del}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;DELETE&gt;</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p><font face="Courier New">\{esc}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;ESCAPE&gt;</font></p>
+</td>
+<td valign="top" width="88"><p><font face="Courier New">\{up}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;UP ARROW&gt;</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p><font face="Courier New">\{f1}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;FUNCTION KEY 1&gt;</font></p>
+</td>
+<td valign="top" width="88"><p><font face="Courier New">\{down}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;DOWN ARROW&gt;</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p><font face="Courier New">\{f2}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;FUNCTION KEY 2&gt;</font></p>
+</td>
+<td valign="top" width="88"><p><font face="Courier New">\{left}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;LEFT ARROW&gt;</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p><font face="Courier New">\{f3}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;FUNCTION KEY 3&gt;</font></p>
+</td>
+<td valign="top" width="88"><p><font face="Courier New">\{right}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;RIGHT ARROW&gt;</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p><font face="Courier New">\{f4}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;FUNCTION KEY 4&gt;</font></p>
+</td>
+<td valign="top" width="88"><p><font face="Courier New">\{ctrl-m}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;CONTROL make&gt;</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p><font face="Courier New">\{f5}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;FUNCTION KEY 5&gt;</font></p>
+</td>
+<td valign="top" width="88"><p><font face="Courier New">\{ctrl-b}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;CONTROL BRAKE&gt;</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p><font face="Courier New">\{f6}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;FUNCTION KEY 6&gt;</font></p>
+</td>
+<td valign="top" width="88"><p><font face="Courier New">\{alt-m}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;ALT MAKE&gt;</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="64"><p><font face="Courier New">\{f7}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;FUNCTION KEY 7&gt;</font></p>
+</td>
+<td valign="top" width="88"><p><font face="Courier New">\{alt-b}</font></p>
+</td>
+<td valign="top" width="165"><p><font face="Courier New">&lt;ALT BRAKE&gt;</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p align="center"><font face="Times New Roman"><b><a name="P10810_427401"></a>Table 15-14: Prefix Sequences (keyboard.text)</b></font></p>
+
+      <ul><ul><p><b><font face="Arial" size="+1"><a name="P10811_427446"></a>1.7.27 JumpDrive</font></b></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; jumpdrive.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="306"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="270"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">LoadImage &lt;HostFileName&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Loads the contents of the specified image file &lt;<i>HostFileName</i>&gt; to the memory.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">SaveImage &lt;HostFileName&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Saves the contents of the memory to an image file on the host specified by &lt;<i>HostFileName</i>&gt;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">ImportFile &lt;HostFileName&gt; &lt;ImageFileName&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Imports the requested file into the image &lt;<i>ImageFileName</i>&gt; using the given host file name &lt;<i>HostFileName</i>&gt;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">ExportFile &lt;ImageFileName&gt; &lt;HostFileName&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Exports the requested file from the image &lt;<i>ImageFileName</i>&gt; to the given host file name &lt;<i>HostFileName</i>&gt;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">Initialize &lt;SizeInMB&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Initialize the jump drive image with a single partition of the requested size specified by &lt;<i>SizeInMB</i>&gt;. The JumpDrive supports image-sizes from 64-Mbytes to 8192-Mbytes (8-Gbytes).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">ImportDir &lt;HostPathName&gt; &lt;ImagePathName&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Imports a directory from the host system  into the jump drive. The host path name &lt;<i>HostPathName</i>&gt; can contain wildcards in the last element. If the last element of the &lt;<i>HostPathName</i>&gt; does not contain wildcards, and points to a directory, then &#8220;*&#8221; is assumed. The image path name &lt;<i>ImagePathName</i>&gt; must be the name of a directory. If it does not exist, it will be created.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">ExportDir &lt; ImagePathName&gt; &lt;HostPathName&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Exports a directory from the jump drive to the host system. The image path name &lt;<i>ImagePathName</i>&gt; can contain wildcards in the last element. If the last element of the &lt;<i>ImagePathName</i>&gt; does not contain wildcards, and points to a directory, then &#8220;*&#8221; is assumed. The host path name &lt;<i>HostPathName</i>&gt; must be the name of a directory. If it does not exist, it will be created.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">Dir &lt;ImagePathName&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Shows the contents of the directory path given by &lt;<i>ImagePathName</i>&gt;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">Free</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Shows the amount of free space on the JumpDrive device.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">Size &lt;Size in MB&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">This command is identical to the <i>Initialize</i> command, only it does not create a FAT32 partition on the drive. It simply sets the physical size of the device. Any formatting or initialization will still need to be done (presumably by the simulated operating system).</font></p>
+</td></tr></table></center></ul>
+
+  <ul><p><font face="Times New Roman">To initialize the JumpDrive, and copy data to it:</font></p>
+
+      <blockquote><ul><p><font face="Courier">1 simnow&gt;jumpdrive.initialize 64</font></p>
+
+  </ul></blockquote><p><font face="Times New Roman">This creates a 64-Mbyte FAT32 partition on the JumpDrive. </font></p>
+
+  <p><font face="Times New Roman">The following example copies the file &#8220;C:\test.bin&#8220; to the JumpDrive and places it in the &#8220;\tmp&#8220; directory. If the &#8220;\tmp&#8220; directory does not exits on the JumpDrive, it is created automatically.</font></p>
+
+      <blockquote><ul><p><font face="Courier">1 simnow&gt;jumpdrive.importfile c:\test.bin \tmp\test.bin</font></p>
+
+      <p><font face="Courier">62.99 Mbytes Available</font></p>
+
+      <p><font face="Courier">1 simnow&gt;</font></p>
+
+  </ul></blockquote><p><font face="Times New Roman">This copies all files from &#8220;C:\tmp&#8220; into the root of the JumpDrive. Any subdirectories are also copied.</font></p>
+
+      <blockquote><ul><p><font face="Courier">1 simnow&gt;jumpdrive.importdir c:\tmp \</font></p>
+
+      <p><font face="Courier">Importing c:\tmp\test.bin ---&gt; \test1.bin</font></p>
+
+      <p><font face="Courier">62.89 Mbytes Available</font></p>
+
+  </ul></blockquote><p><font face="Times New Roman">This example shows how to import all &#8220;*.exe&#8221; files from &#8220;C:\tmp&#8221; into the root of the JumpDrive.</font></p>
+
+      <blockquote><ul><p><font face="Courier">1 simnow&gt;jumpdrive.importdir c:\tmp\*.exe \</font></p>
+
+      <p><font face="Courier">Importing c:\tmp\app1.exe ---&gt; \app1.exe</font></p>
+
+      <p><font face="Courier">Importing c:\tmp\app2.exe ---&gt; \app2.exe</font></p>
+
+      <p><font face="Courier">62.60 Mbytes Available</font></p>
+
+  </ul></blockquote><p><font face="Times New Roman"><u>This example shows how to export the &#8220;app1.exe&#8221; file from the root of the JumpDrive into &#8220;C:\tmp&#8221; on the host.</u></font></p>
+
+      <blockquote><ul><p><u><font face="Courier">1 simnow&gt;jumpdrive.</font><font face="Courier">exportfile \app1.exe c:\tmp\</font></u></p>
+
+      <p><u><font face="Courier">Exporting \app1.exe ---&gt; c:\tmp\app1.exe</font></u></p>
+
+  </ul></blockquote><p><font face="Times New Roman">To find out what is already stored in the root of the JumpDrive device, enter the following: </font></p>
+
+      <blockquote><ul><p><font face="Courier">1 simnow&gt; jumpdrive.dir \</font></p>
+
+      <p><font face="Courier">Directory of: \</font></p>
+
+          <ul><ul><p><font face="Courier">&lt;DIR&gt;  tmp</font></p>
+
+          <p><font face="Courier">103936 test.bin</font></p>
+
+          <p><font face="Courier">103936 app1.exe</font></p>
+
+          <p><font face="Courier">103936 app2.exe</font></p>
+
+      </ul></ul><p><font face="Courier">62.60 Mbytes Available</font></p>
+
+  </ul></blockquote><p><font face="Times New Roman">To get information about how much space is left on the JumpDrive device, enter the following:</font></p>
+
+      <blockquote><ul><p><font face="Courier">1 simnow&gt;jumpdrive.free</font></p>
+
+      <p><font face="Courier">62.60 Mbytes Available</font></p>
+
+  </ul></blockquote><p><font face="Times New Roman">To save the contents of the JumpDrive to the image file &#8220;C:\test.img&#8221; on the host&#8217;s hard-disk, enter</font></p>
+
+      <blockquote><ul><p><font face="Courier">1 simnow&gt;jumpdrive.saveimage c:\test.img</font></p>
+
+  </ul></blockquote><p><font face="Times New Roman">This example shows how to load the saved JumpDrive image &#8220;C:\test.img&#8221; from the host&#8217;s hard-disk into the JumpDrive</font></p>
+
+      <blockquote><ul><p><font face="Courier">1 simnow&gt;jumpdrive.loadimage c:\test.img</font></p>
+
+      </ul></blockquote><ul><ul><p><font face="Arial" size="+1"><b><a name="P10895_431206"></a>1.7.28 E1000</b></font></p>
+
+  </ul></ul><p><font face="Times New Roman">The NIC device provides the following automation commands that can be used to configure the device.</font></p>
+
+</ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; e1000.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="306"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="270"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">log enable|disable cmoidtr</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Enables or disables message logging for PCI Config (c), MMIO (m), I/O (o), Unmasked Interrupts (i), MDI (d), Frame Transfers (t), or Frame Receptions (r).</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">logStatus</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Displays the current log-status.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">setMediatorHost [domain@]hostname[:port]</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Sets the mediator connect string.  The domain string and the port number are optional.  The default domain string is null.  The default port is 8196.  The hostname is the host in which the mediator is running.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">getMediatorHost</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Outputs the current mediator connect string.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">setMACAddress XX:XX:XX:XX:XX:XX</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Sets the MAC Address to be used by the adapter.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">getMACAddress</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Retrieves the MAC Address being used by the adapter.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">linkConnect auto|down</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Restarts link negotiation (auto) for the adapter, or forces a link disconnect (down).  </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">tune {intthrtl|rxdelay|txdelay} value</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Sets certain synthetic delay- and throttle-values which gives the user the opportunity to change the default settings to get optimal results. <i>intthrt</i> sets the interrupt throttle rate to <i>value</i>. <i>rxdelay</i> sets the amount of link idle time required before generating an rx interrupt to <i>value</i>. <i>txdelay</i> sets the amount of link idle time required before generating an tx interrupt to <i>value</i>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">getTuneValues</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Displays the values set by using the automation command <i>tune</i>.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10922_432640"></a>1.7.29 XTR</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; xtrnb.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="306"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="270"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">xtrfile &lt;filename.xml&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Sets XTR&#8211;XML file to use during playback.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">debug &lt;0|1&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Enables (1) or Disables (0) extended debug information for XTR Playback.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">xtrlogfile &lt;filename.log&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Sets name of the log file where XTR messages should be logged. This is optional and if not used the log is directed to the simulators log. </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">status</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Displays the status of XTR playback</font></p>
+</td></tr></table></center></ul>
+
+<blockquote><blockquote><p><font face="Courier New">1 simnow&gt; xtrsvc.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="306"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="270"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Arial">xtrenable &lt;0|1&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Arial">Enables (1) or Disables (0) XTR Record. All other values are invalid.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Arial">xtrfile &lt;filename.xml&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Arial">Sets the XTR-XML file for XTR Record.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Arial">XTRMemBits n</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Arial">Sets number of bits for memory address bits to scan. n= 16, 32 or 48. Default is 32.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Arial">Xtrstatus</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Arial">Displays the status of XTR Record.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10954_433386"></a>1.7.30 ATI SB400/SB600/SB700/SB800</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; sb600.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="228"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="348"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">HtInterrupts (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) HyperTransport interrupts.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">HtIntStatus</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns &#8216;<i>enabled</i>&#8217; if HyperTransport interrupts are enabled; otherwise it returns &#8216;<i>disabled</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">IoLog (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) IO logging.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">IoLogStatus</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns &#8216;<i>enabled</i>&#8217; if IO Logging is enabled; otherwise it returns &#8216;<i>disabled</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">MemLog (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) IO logging.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">MemLogStatus</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns &#8216;<i>enabled</i>&#8217; if Memory Logging is enabled; otherwise it returns &#8216;<i>disabled</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SmiSciLog (0|1)</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Enables (1) or disables (0) IO logging.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SmiSciLogStatus</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns &#8216;<i>enabled</i>&#8217; if SMI SCI Logging is enabled; otherwise it returns &#8216;<i>disabled</i>&#8217;.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">Version</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Displays the binary revision of the RD790 model.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">SetPciIrqMap {BasePciIrq(0-3)} {ChipPciIrq(0-7)}</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Depending on platform configuration, it maps base PCIIRQ#A/B/C/D (0-3) from PCI bridge to ATI chip internal PCIIRQ#A/B/C/D/E/F/G/H (0-7). </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetPciIrqMap {BasePciIrq(0-3)}</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the ATI chip internal PCIIRQ#A/B/C/D/E/F/G/H (0-7) which the specific base PCIIRQ#A/B/C/D(0-3) is mapped to.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="228"><p><font face="Times New Roman">GetPciIrqTotal</font></p>
+</td>
+<td valign="top" width="348"><p><font face="Times New Roman">Returns the total number of chip internal PCIIRQs.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10987_434558"></a>1.7.31 ATI RS480</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; rs780.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="306"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="270"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">SetRev &lt;rev &gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Sets the internal chip revision number of RS480 device to &lt;<i>rev</i>&gt;. </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">GetRev</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Displays the internal chip revision number of the RS480 device.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P10999_434771"></a>1.7.32 ATI Radeon HD 3870</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; rv670.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="306"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="270"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">Version</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Displays the binary revision of the ATI Radeon HD 3870 model.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">LoadEDID { DVI0 | DVI1} &lt;FileName&gt; [Desc]</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Loads EDID information &lt;<i>Filename</i>&gt;, creates a user defined display device [<i>Desc</i>] and connects it to one of the specificed <i>DVI</i> connectors.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">SetEDID { DVI0 | DVI1} &lt;DeviceID&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Sets EDID &lt;<i>DeviceID</i>&gt; and connects it to one of the specified <i>DVI</i> connectors.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">GetEDID { DVI0 | DVI1} </font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Lists all display devices on specified <i>DVI</i> connector.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">DelEDID { DVI | DVI1} &lt;DeviceID&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Deletes previously imported user defined display device &lt;DeviceID&gt; from specified <i>DVI</i> connector.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">TCache { 0 | 1 }</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Disables (0) or enables (1) texture cache.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">VCache { 0 | 1 }</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Disables (0) or enables (1) vertex cache.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">Lt { 0 | 1 }</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Disables (0) or enables (1) linear transform and color space conversion engine.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">Settings</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Displays enabled and disabled settings.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">DumpVGA &lt;FileName&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Dumps frame buffer contents to file &lt;<i>FileName</i>&gt;.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P11028_435722"></a>1.7.33 ATI RS780</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; rs780.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="306"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="270"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">SetRev &lt;rev &gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Sets the internal chip revision number of RS780 device to &lt;<i>rev</i>&gt;. </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">GetRev</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Displays the internal chip revision number of the RS780 device.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">Version</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Displays the binary revision of the RS780 model.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P11043_435990"></a>1.7.34 ATI RD790/RD780/RX780</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; rd790.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="306"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="270"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">SetRev &lt;rev &gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Sets the internal chip revision number of RD790 device to &lt;<i>rev</i>&gt;. </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">GetRev</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Displays the internal chip revision number of the RD790 device.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">Version</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Displays the binary revision of the RD790 model.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">SetPackageType &lt;RD790 | RX780&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Sets package type to <i>RD790</i> or <i>RX780</i>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">GetPackageType</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Displays current package type.</font></p>
+</td></tr></table></center></ul>
+
+      <ul><ul><ul><p><font face="Arial" size="+1"><b><a name="P11062_436380"></a>1.7.35 ATI RD890S/RD890/RD780S/RX880</b></font></p>
+
+</ul></ul></ul><blockquote><blockquote><p><font face="Courier New">1 simnow&gt; rd890.usage</font></p></blockquote></blockquote>
+<p><ul>
+<center><table>
+<tr>
+<td bgcolor="#e0e0e0" valign="top" width="306"><p align="center"><font face="Times New Roman"><b>Automation Command</b></font></p>
+</td>
+<td bgcolor="#e0e0e0" valign="top" width="270"><p align="center"><b><font face="Times New Roman">Description</font></b></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">SetRev &lt;rev &gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Sets the internal chip revision number to &lt;<i>rev</i>&gt;. </font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">GetRev</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Displays the internal chip revision number.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">Version</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Displays the binary revision.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">SetPackageType &lt;RD890S | RD890 | RD870S | RX880&gt;</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Sets package type to <i>RD890S,</i> <i>RD890, RD870S, or RX880</i>.</font></p>
+</td></tr>
+<tr>
+<td valign="top" width="306"><p><font face="Times New Roman">GetPackageType</font></p>
+</td>
+<td valign="top" width="270"><p><font face="Times New Roman">Displays current package type.</font></p>
+</td></tr></table></center></ul>
+
+<ul><p><font face="Times New Roman"> </font></p></ul>
+
+<p><font face="Times New Roman" size="-1"><sup><a name="P10259_404059" href="#P10259_404060">12</a> </sup></font><font face="Times New Roman"> </font><font face="Arial">This only applies to the Windows® version of the simulator and not to the Linux version.</font></p><p align="left"><a href="help-58.htm#TopOfPage"><img src="images/back.png" alt="Previous Page" border="0"></a><a href="#TopOfPage"><img src="images/top.png" alt="Top Of Page" border="0"></a><a href="help-60.htm#TopOfPage"><img src="images/forward.png" alt="Next Page" border="0"></a></p><!-- TRANSIT - INFOAFTER -->
+</body>
+</html>
